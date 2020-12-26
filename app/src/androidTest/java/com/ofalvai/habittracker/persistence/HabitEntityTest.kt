@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ofalvai.habittracker.persistence.entity.Action
 import com.ofalvai.habittracker.persistence.entity.Habit
+import com.ofalvai.habittracker.persistence.entity.HabitWithActions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
@@ -100,6 +101,26 @@ class HabitEntityTest {
 
         val actions = habitDao.getActionsAfter(Instant.parse("2020-12-24T20:00:00Z"))
         assertEquals(listOf(action3, action4), actions)
+    }
+
+    @Test
+    fun readAllHabitsWithActions() = testCoroutineScope.runBlockingTest {
+        val habit1 = Habit(id = 1, name = "New habit")
+        val habit2 = Habit(id = 2, name = "Other new habit")
+        val action1 = Action(id = 1, habit_id = habit1.id, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
+        val action2 = Action(id = 2, habit_id = habit2.id, timestamp = Instant.parse("2020-12-24T18:16:40Z"))
+        val action3 = Action(id = 3, habit_id = habit2.id, timestamp = Instant.parse("2020-12-25T10:18:42Z"))
+        val action4 = Action(id = 4, habit_id = habit1.id, timestamp = Instant.parse("2020-12-26T10:19:10Z"))
+
+        habitDao.insertHabit(habit1, habit2)
+        habitDao.insertAction(action1, action2, action3, action4)
+
+        val habitsWithActions = habitDao.getHabitsWithActions()
+        val expectedHabitsWithActions = listOf(
+            HabitWithActions(habit1, listOf(action1, action4)),
+            HabitWithActions(habit2, listOf(action2, action3))
+        )
+        assertEquals(expectedHabitsWithActions, habitsWithActions)
     }
 
 }

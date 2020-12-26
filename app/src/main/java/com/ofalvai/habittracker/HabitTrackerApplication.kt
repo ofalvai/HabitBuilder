@@ -1,6 +1,7 @@
 package com.ofalvai.habittracker
 
 import android.app.Application
+import timber.log.Timber
 
 class HabitTrackerApplication : Application() {
 
@@ -12,5 +13,9 @@ class HabitTrackerApplication : Application() {
         super.onCreate()
 
         INSTANCE = this
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 }

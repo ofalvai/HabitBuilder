@@ -1,11 +1,9 @@
 package com.ofalvai.habittracker.persistence
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.ofalvai.habittracker.persistence.entity.Action
 import com.ofalvai.habittracker.persistence.entity.Habit
+import com.ofalvai.habittracker.persistence.entity.HabitWithActions
 import java.time.Instant
 
 @Dao
@@ -20,6 +18,11 @@ interface HabitDao {
     @Delete
     suspend fun deleteHabit(habit: Habit)
 
+    // TODO: limit by timestamp
+    @Transaction
+    @Query("SELECT * FROM habit")
+    suspend fun getHabitsWithActions(): List<HabitWithActions>
+
     @Query("SELECT * FROM `action` WHERE habit_id = :habitId")
     suspend fun getActionsForHabit(habitId: Int): List<Action>
 
@@ -29,6 +32,6 @@ interface HabitDao {
     @Insert
     suspend fun insertAction(vararg action: Action)
 
-    @Delete
-    suspend fun deleteAction(action: Action)
+    @Query("DELETE FROM `action` WHERE id = :id")
+    suspend fun deleteAction(id: Int)
 }
