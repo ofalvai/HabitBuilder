@@ -29,7 +29,7 @@ class DashboardViewModel(
 
     fun addHabit(habit: Habit) {
         coroutineScope.launch {
-            val habitEntity = HabitEntity(name = habit.name)
+            val habitEntity = HabitEntity(name = habit.name, color = habit.color.toEntityColor())
             dao.insertHabit(habitEntity)
 
             loadHabitsWithHistory()
@@ -56,7 +56,7 @@ class DashboardViewModel(
         coroutineScope.launch {
             habitsWithActions.value = dao.getHabitsWithActions().map {
                 HabitWithActions(
-                    Habit(it.habit.id, it.habit.name),
+                    Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
                     actionsToRecentDays(it.actions)
                 )
             }
@@ -80,4 +80,22 @@ class DashboardViewModel(
             Action(id = actionOnDay?.id ?: 0, toggled = actionOnDay != null)
         }
     }
+}
+
+fun HabitEntity.Color.toUIColor(): Habit.Color = when (this) {
+    HabitEntity.Color.Red -> Habit.Color.Red
+    HabitEntity.Color.Green -> Habit.Color.Green
+    HabitEntity.Color.Blue -> Habit.Color.Blue
+    HabitEntity.Color.Yellow -> Habit.Color.Yellow
+    HabitEntity.Color.Gray -> Habit.Color.Gray
+    HabitEntity.Color.White -> Habit.Color.White
+}
+
+fun Habit.Color.toEntityColor(): HabitEntity.Color = when (this) {
+    Habit.Color.Red -> HabitEntity.Color.Red
+    Habit.Color.Green -> HabitEntity.Color.Green
+    Habit.Color.Blue -> HabitEntity.Color.Blue
+    Habit.Color.Yellow -> HabitEntity.Color.Yellow
+    Habit.Color.Gray -> HabitEntity.Color.Gray
+    Habit.Color.White -> HabitEntity.Color.White
 }

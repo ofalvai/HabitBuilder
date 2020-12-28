@@ -32,7 +32,10 @@ fun HabitCard(
     actions: List<Action>,
     onActionToggle: (Action, Habit, Int) -> Unit
 ) {
-    Card(Modifier.fillMaxWidth()) {
+    Card(
+        Modifier.fillMaxWidth(),
+        backgroundColor = habit.color.composeColor // TODO: dark/light mode
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = habit.name,
@@ -132,11 +135,13 @@ fun PreviewDayLabels() {
 fun PreviewHabitCard() {
     val habit1 = Habit(
         id = 1,
-        name = "Meditation"
+        name = "Meditation",
+        color = Habit.Color.Yellow
     )
     val habit2 = Habit(
         id = 2,
-        name = "Workout"
+        name = "Workout",
+        color = Habit.Color.White
     )
 
     val actions1 = (1..5).map {

@@ -3,6 +3,7 @@ package com.ofalvai.habittracker.ui.dashboard
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -11,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -33,17 +35,28 @@ fun AddHabitForm(
 ) {
     var name by savedInstanceState { "" }
 
+    val onSaveClick: () -> Unit = {
+        val randomColor = Habit.Color.values().random()
+        val habit = Habit(
+            name = name,
+            color = randomColor
+        )
+        onSave(habit)
+    }
+
     Column(Modifier.padding(32.dp).fillMaxWidth()) {
+        // TODO: keyboard IME actions, focus
         TextField(
             value = name,
             onValueChange = { name = it },
             label = { Text("Habit name") },
-            singleLine = true
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
         )
 
         Button(
             modifier = Modifier.padding(top = 16.dp),
-            onClick = { onSave(Habit(name = name)) }
+            onClick = onSaveClick
         ) {
             Text("Save")
         }
