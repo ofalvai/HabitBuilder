@@ -1,4 +1,4 @@
-package com.ofalvai.habittracker.ui.composable
+package com.ofalvai.habittracker.ui.dashboard
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable

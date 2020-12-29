@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
-import com.ofalvai.habittracker.ui.composable.DayLabels
-import com.ofalvai.habittracker.ui.composable.HabitCard
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
