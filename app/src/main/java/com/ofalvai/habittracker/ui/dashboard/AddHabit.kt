@@ -16,11 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.Suggestions
 
 @Composable
-fun AddHabitScreen(viewModel: DashboardViewModel, navController: NavController) {
+fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
     val onSave: (Habit) -> Unit = {
         viewModel.addHabit(it)
         navController.popBackStack()

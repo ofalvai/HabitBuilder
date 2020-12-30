@@ -14,16 +14,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
+import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.Screen
-import com.ofalvai.habittracker.ui.composable.DayLabels
-import com.ofalvai.habittracker.ui.composable.HabitCard
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import java.time.LocalDate
 
 @Composable
-fun Dashboard(viewModel: DashboardViewModel, navController: NavController) {
+fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
     val habits by viewModel.habitsWithActions.observeAsState(emptyList())
 
     val onActionToggle: (Action, Habit, Int) -> Unit = { action, habit, dayIndex ->

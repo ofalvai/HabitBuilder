@@ -15,18 +15,11 @@ import androidx.navigation.compose.rememberNavController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
-import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
-import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val dashboardViewModel by viewModels<DashboardViewModel> {
-        Dependencies.viewModelFactory
-    }
-    private val habitDetailViewModel by viewModels<HabitDetailViewModel> {
-        Dependencies.viewModelFactory
-    }
+    private val viewModel by viewModels<HabitViewModel> { Dependencies.viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +31,12 @@ class MainActivity : AppCompatActivity() {
                     topBar = { MainTopBar(onNewHabit = { navController.navigate(Screen.AddHabit.route) }) }
                 ) {
                     NavHost(navController, startDestination = Screen.Dashboard.route) {
-                        composable(Screen.Dashboard.route) { Dashboard(dashboardViewModel, navController) }
-                        composable(Screen.AddHabit.route) { AddHabitScreen(dashboardViewModel, navController) }
+                        composable(Screen.Dashboard.route) { Dashboard(viewModel, navController) }
+                        composable(Screen.AddHabit.route) { AddHabitScreen(viewModel, navController) }
                         composable(Screen.HabitDetails.route, arguments = Screen.HabitDetails.arguments) { backStackEntry ->  
                             HabitDetailScreen(
                                 habitId = Screen.HabitDetails.idFrom(backStackEntry.arguments),
-                                viewModel = habitDetailViewModel
+                                viewModel = viewModel
                             )
                         }
                     }

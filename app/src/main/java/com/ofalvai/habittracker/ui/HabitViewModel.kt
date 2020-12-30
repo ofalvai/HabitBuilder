@@ -1,4 +1,4 @@
-package com.ofalvai.habittracker.ui.dashboard
+package com.ofalvai.habittracker.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +8,7 @@ import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -16,12 +17,13 @@ import java.time.temporal.ChronoUnit
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
-class DashboardViewModel(
+class HabitViewModel(
     private val dao: HabitDao,
     private val coroutineScope: CoroutineScope
-): ViewModel() {
+) : ViewModel() {
 
     val habitsWithActions = MutableLiveData<List<HabitWithActions>>()
+    val actionsForHabit = MutableLiveData<List<Action>>()
 
     init {
         loadHabitsWithHistory()
@@ -52,6 +54,21 @@ class DashboardViewModel(
         }
     }
 
+    fun fetchActions(habitId: Int) {
+        // Clear previous result (for a possibly different habit ID)
+        actionsForHabit.value = emptyList()
+
+        coroutineScope.launch {
+            actionsForHabit.value = dao.getActionsForHabit(habitId).map {
+                Action(
+                    id = it.id,
+                    toggled = true,
+                    timestamp = it.timestamp
+                )
+            }
+        }
+    }
+
     private fun loadHabitsWithHistory() {
         coroutineScope.launch {
             habitsWithActions.value = dao.getHabitsWithActions().map {
@@ -77,7 +94,7 @@ class DashboardViewModel(
                 actionDate == targetDate
             }
 
-            Action(id = actionOnDay?.id ?: 0, toggled = actionOnDay != null)
+            Action(id = actionOnDay?.id ?: 0, toggled = actionOnDay != null, actionOnDay?.timestamp)
         }
     }
 }

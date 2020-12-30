@@ -19,6 +19,7 @@ import com.ofalvai.habittracker.ui.blue
 import com.ofalvai.habittracker.ui.green
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
+import java.time.Instant
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.*
@@ -148,7 +149,8 @@ fun PreviewHabitCard() {
     val actions1 = (1..5).map {
         Action(
             id = it,
-            toggled = Random.Default.nextBoolean()
+            toggled = Random.Default.nextBoolean(),
+            timestamp = Instant.now()
         )
     }
     val actions2 = actions1.shuffled()

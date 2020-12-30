@@ -5,8 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.ofalvai.habittracker.persistence.AppDatabase
 import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
-import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
+import com.ofalvai.habittracker.ui.HabitViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -31,10 +30,8 @@ class AppViewModelFactory(
     private val coroutineScope: CoroutineScope
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (DashboardViewModel::class.java.isAssignableFrom(modelClass)) {
-            return DashboardViewModel(habitDao, coroutineScope) as T
-        } else if (HabitDetailViewModel::class.java.isAssignableFrom(modelClass)) {
-            return HabitDetailViewModel(habitDao, coroutineScope) as T
+        if (HabitViewModel::class.java.isAssignableFrom(modelClass)) {
+            return HabitViewModel(habitDao, coroutineScope) as T
         }
         throw IllegalArgumentException("No matching ViewModel for ${modelClass.canonicalName}")
     }

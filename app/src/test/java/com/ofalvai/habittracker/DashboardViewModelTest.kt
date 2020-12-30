@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
+import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
@@ -26,7 +26,7 @@ class DashboardViewModelTest {
 
     private val dao = mock<HabitDao>()
 
-    private lateinit var viewModel: DashboardViewModel
+    private lateinit var viewModel: HabitViewModel
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -41,9 +41,9 @@ class DashboardViewModelTest {
             HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.White), emptyList())
         ))
 
-        viewModel = DashboardViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope)
 
-        val expectedActionHistory = (1..5).map { Action(0, false) }
+        val expectedActionHistory = (1..5).map { Action(0, false, null) }
         val expectedHabits = listOf(
             HabitWithActions(Habit(0, "Meditation", Habit.Color.White), expectedActionHistory),
             HabitWithActions(Habit(1, "Running", Habit.Color.White), expectedActionHistory),
@@ -54,23 +54,24 @@ class DashboardViewModelTest {
 
     @Test
     fun `Given habit with actions in the last 5 days When VM loaded Then actions are visible`() = testCoroutineScope.runBlockingTest {
+        val now = Instant.now()
         val actions = listOf(
-            ActionEntity(id = 1, habit_id = 0, timestamp = Instant.now()),
-            ActionEntity(id = 2, habit_id = 0, timestamp = Instant.now().minus(1, ChronoUnit.DAYS)),
-            ActionEntity(id = 3, habit_id = 0, timestamp = Instant.now().minus(3, ChronoUnit.DAYS))
+            ActionEntity(id = 1, habit_id = 0, timestamp = now),
+            ActionEntity(id = 2, habit_id = 0, timestamp = now.minus(1, ChronoUnit.DAYS)),
+            ActionEntity(id = 3, habit_id = 0, timestamp = now.minus(3, ChronoUnit.DAYS))
         )
         given(dao.getHabitsWithActions()).willReturn(listOf(
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.White), actions),
         ))
 
-        viewModel = DashboardViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope)
 
         val expectedActionHistory = listOf(
-            Action(0, false),
-            Action(3, true),
-            Action(0, false),
-            Action(2, true),
-            Action(1, true)
+            Action(0, false, null),
+            Action(3, true, now.minus(3, ChronoUnit.DAYS)),
+            Action(0, false, null),
+            Action(2, true, now.minus(1, ChronoUnit.DAYS)),
+            Action(1, true, now)
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.White),
@@ -89,9 +90,9 @@ class DashboardViewModelTest {
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.White), actions),
         ))
 
-        viewModel = DashboardViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope)
 
-        val expectedActionHistory = (1..5).map { Action(0, false) }
+        val expectedActionHistory = (1..5).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.White),
             expectedActionHistory
@@ -101,25 +102,26 @@ class DashboardViewModelTest {
 
     @Test
     fun `Given habit with action in last 5 days and before When VM loaded Then only actions from last 5 days are visible`() = testCoroutineScope.runBlockingTest {
+        val now = Instant.now()
         val actions = listOf(
-            ActionEntity(id = 1, habit_id = 0, timestamp = Instant.now()),
-            ActionEntity(id = 2, habit_id = 0, timestamp = Instant.now().minus(3, ChronoUnit.DAYS)),
-            ActionEntity(id = 3, habit_id = 0, timestamp = Instant.now().minus(1, ChronoUnit.DAYS)),
-            ActionEntity(id = 4, habit_id = 0, timestamp = Instant.now().minus(5, ChronoUnit.DAYS)),
-            ActionEntity(id = 5, habit_id = 0, timestamp = Instant.now().minus(19, ChronoUnit.DAYS))
+            ActionEntity(id = 1, habit_id = 0, timestamp = now),
+            ActionEntity(id = 2, habit_id = 0, timestamp = now.minus(3, ChronoUnit.DAYS)),
+            ActionEntity(id = 3, habit_id = 0, timestamp = now.minus(1, ChronoUnit.DAYS)),
+            ActionEntity(id = 4, habit_id = 0, timestamp = now.minus(5, ChronoUnit.DAYS)),
+            ActionEntity(id = 5, habit_id = 0, timestamp = now.minus(19, ChronoUnit.DAYS))
         )
         given(dao.getHabitsWithActions()).willReturn(listOf(
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.White), actions),
         ))
 
-        viewModel = DashboardViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope)
 
         val expectedActionHistory = listOf(
-            Action(0, false),
-            Action(2, true),
-            Action(0, false),
-            Action(3, true),
-            Action(1, true)
+            Action(0, false, null),
+            Action(2, true, now.minus(3, ChronoUnit.DAYS)),
+            Action(0, false, null),
+            Action(3, true, now.minus(1, ChronoUnit.DAYS)),
+            Action(1, true, now)
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.White),
