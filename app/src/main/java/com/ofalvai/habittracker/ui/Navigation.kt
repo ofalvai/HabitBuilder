@@ -11,6 +11,8 @@ sealed class Screen(
 ) {
     object Dashboard : Screen("screen")
 
+    object Insights : Screen("insights")
+
     object AddHabit : Screen("add_habit")
 
     object HabitDetails : Screen(
