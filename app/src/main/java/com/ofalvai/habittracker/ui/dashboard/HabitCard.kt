@@ -30,10 +30,11 @@ private val SIZE_ACTION = 48.dp
 fun HabitCard(
     habit: Habit,
     actions: List<Action>,
-    onActionToggle: (Action, Habit, Int) -> Unit
+    onActionToggle: (Action, Habit, Int) -> Unit,
+    onDetailClick: (Habit) -> Unit
 ) {
     Card(
-        Modifier.fillMaxWidth(),
+        Modifier.fillMaxWidth().clickable(onClick = { onDetailClick(habit) }),
         backgroundColor = habit.color.composeColor // TODO: dark/light mode
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -155,9 +156,9 @@ fun PreviewHabitCard() {
 
     HabitTrackerTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitCard(habit1, actions1, { action, habit, dayIndex -> })
+            HabitCard(habit1, actions1, { action, habit, dayIndex -> }, {})
             Spacer(modifier = Modifier.height(16.dp))
-            HabitCard(habit2, actions2, { action, habit, dayIndex -> })
+            HabitCard(habit2, actions2, { action, habit, dayIndex -> }, {})
         }
     }
 }

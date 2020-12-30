@@ -11,7 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.navigate
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
+import com.ofalvai.habittracker.ui.Screen
 import com.ofalvai.habittracker.ui.composable.DayLabels
 import com.ofalvai.habittracker.ui.composable.HabitCard
 import com.ofalvai.habittracker.ui.model.Action
@@ -20,18 +23,22 @@ import com.ofalvai.habittracker.ui.model.HabitWithActions
 import java.time.LocalDate
 
 @Composable
-fun Dashboard(viewModel: DashboardViewModel) {
+fun Dashboard(viewModel: DashboardViewModel, navController: NavController) {
     val habits by viewModel.habitsWithActions.observeAsState(emptyList())
 
     val onActionToggle: (Action, Habit, Int) -> Unit = { action, habit, dayIndex ->
         viewModel.toggleAction(action, habit, dayIndex)
     }
 
+    val onHabitDetail: (Habit) -> (Unit) = {
+        navController.navigate(Screen.HabitDetails.buildRoute(it.id))
+    }
+
     ContentWithPlaceholder(
         showPlaceholder = habits.isEmpty(),
         placeholder = { DashboardPlaceholder() }
     ) {
-        HabitList(habits, onActionToggle)
+        HabitList(habits, onActionToggle, onHabitDetail)
     }
 }
 
@@ -48,7 +55,8 @@ fun DashboardPlaceholder() {
 @Composable
 fun HabitList(
     habits: List<HabitWithActions>,
-    onActionToggle: (Action, Habit, Int) -> Unit
+    onActionToggle: (Action, Habit, Int) -> Unit,
+    onHabitClick: (Habit) -> Unit
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -64,7 +72,8 @@ fun HabitList(
                 HabitCard(
                     habit = it.habit,
                     actions = it.actions,
-                    onActionToggle = onActionToggle
+                    onActionToggle = onActionToggle,
+                    onDetailClick = onHabitClick
                 )
             }
         }

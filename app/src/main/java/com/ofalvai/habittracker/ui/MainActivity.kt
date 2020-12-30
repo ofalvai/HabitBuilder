@@ -16,11 +16,16 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
+import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
+import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<DashboardViewModel> {
-        Dependencies.dashboardViewModelFactory
+    private val dashboardViewModel by viewModels<DashboardViewModel> {
+        Dependencies.viewModelFactory
+    }
+    private val habitDetailViewModel by viewModels<HabitDetailViewModel> {
+        Dependencies.viewModelFactory
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,11 +35,17 @@ class MainActivity : AppCompatActivity() {
             HabitTrackerTheme {
                 val navController = rememberNavController()
                 Scaffold(
-                    topBar = { MainTopBar(onNewHabit = { navController.navigate(Routes.addHabit) }) }
+                    topBar = { MainTopBar(onNewHabit = { navController.navigate(Screen.AddHabit.route) }) }
                 ) {
-                    NavHost(navController, startDestination = Routes.dashboard) {
-                        composable(Routes.dashboard) { Dashboard(viewModel) }
-                        composable(Routes.addHabit) { AddHabitScreen(viewModel, navController) }
+                    NavHost(navController, startDestination = Screen.Dashboard.route) {
+                        composable(Screen.Dashboard.route) { Dashboard(dashboardViewModel, navController) }
+                        composable(Screen.AddHabit.route) { AddHabitScreen(dashboardViewModel, navController) }
+                        composable(Screen.HabitDetails.route, arguments = Screen.HabitDetails.arguments) { backStackEntry ->  
+                            HabitDetailScreen(
+                                habitId = Screen.HabitDetails.idFrom(backStackEntry.arguments),
+                                viewModel = habitDetailViewModel
+                            )
+                        }
                     }
                 }
             }
