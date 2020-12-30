@@ -5,7 +5,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.Composable
@@ -14,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.setContent
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigate
@@ -35,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             HabitTrackerTheme {
                 val navController = rememberNavController()
                 Scaffold(
-                    topBar = { MainTopBar(onNewHabit = { navController.navigate(Screen.AddHabit.route) }) },
+                    topBar = { MainTopBar() },
                     bottomBar = {
                         AppBottomNavigation(
                             onDashboardSelected = { navController.navigate(Screen.Dashboard.route) },
@@ -69,14 +67,9 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-fun MainTopBar(onNewHabit: () -> Unit) {
+fun MainTopBar() {
     TopAppBar(
-        title = { Text("Habit Builder") },
-        actions = {
-            IconButton(onClick = onNewHabit) {
-                Icon(Icons.Filled.Add)
-            }
-        }
+        title = { Text("Habit Builder") }
     )
 }
 
