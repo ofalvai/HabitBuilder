@@ -8,15 +8,20 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.blue
 import com.ofalvai.habittracker.ui.green
+import com.ofalvai.habittracker.ui.habitRed
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import java.time.Instant
@@ -35,8 +40,7 @@ fun HabitCard(
     onDetailClick: (Habit) -> Unit
 ) {
     Card(
-        Modifier.fillMaxWidth().clickable(onClick = { onDetailClick(habit) }),
-        backgroundColor = habit.color.composeColor // TODO: dark/light mode
+        Modifier.fillMaxWidth().clickable(onClick = { onDetailClick(habit) })
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -47,6 +51,7 @@ fun HabitCard(
             ActionCircles(
                 modifier = Modifier.align(Alignment.End).padding(top = 16.dp),
                 actions = actions,
+                habitColor = habit.color,
                 onActionToggle = { action, dayIndex ->
                     onActionToggle(action, habit, dayIndex)
                 })
@@ -58,12 +63,13 @@ fun HabitCard(
 fun ActionCircles(
     modifier: Modifier,
     actions: List<Action>,
+    habitColor: Habit.Color,
     onActionToggle: (Action, Int) -> Unit
 ) {
     Row(modifier) {
         actions.mapIndexed { index, action ->
             ActionCircle(
-                modifier = Modifier.size(SIZE_ACTION).padding(4.dp),
+                activeColor = habitColor.composeColor,
                 toggled = action.toggled,
                 onToggle = { newState -> onActionToggle(action.copy(toggled = newState), index) }
             )
@@ -72,20 +78,26 @@ fun ActionCircles(
 }
 
 @Composable
-fun ActionCircle(modifier: Modifier = Modifier, toggled: Boolean, onToggle: (Boolean) -> Unit) {
-    if (toggled) {
-        Surface(
-            shape = CircleShape,
-            modifier = modifier.clickable(onClick = { onToggle(false) }),
-            color = green
-        ) { }
-    } else {
-        Surface(
-            shape = CircleShape,
-            modifier = modifier.clickable(onClick = { onToggle(true) }),
-            border = BorderStroke(2.dp, blue)
-        ) { }
-    }
+fun ActionCircle(
+    activeColor: Color,
+    toggled: Boolean,
+    onToggle: (Boolean) -> Unit
+) {
+    val color = if (toggled) activeColor else Color.Transparent
+    val borderColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
+
+    Surface(
+        shape = CircleShape,
+        modifier = Modifier
+            .clickable(
+                onClick = { onToggle(!toggled) },
+                indication = rememberRipple(radius = SIZE_ACTION / 2, bounded = false)
+            )
+            .size(SIZE_ACTION)
+            .padding(4.dp),
+        color = color,
+        border = BorderStroke(2.dp, borderColor)
+    ) { }
 }
 
 @Composable
@@ -110,13 +122,13 @@ fun DayLabel(
             modifier = Modifier.fillMaxWidth(),
             text = day.dayOfMonth.toString(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.caption.copy(fontSize = 14.sp)
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Bold)
         )
     }
 }
@@ -127,7 +139,8 @@ fun PreviewDayLabels() {
     HabitTrackerTheme {
         DayLabels(
             modifier = Modifier.padding(horizontal = 16.dp),
-            mostRecentDay = LocalDate.now())
+            mostRecentDay = LocalDate.now()
+        )
     }
 }
 
