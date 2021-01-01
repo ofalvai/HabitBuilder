@@ -6,9 +6,9 @@ object Suggestions {
     val habits = listOf(
         Habit(name = "Meditation", color = Habit.Color.Red),
         Habit(name = "Workout", color = Habit.Color.Blue),
-        Habit(name = "Reading", color = Habit.Color.White),
+        Habit(name = "Reading", color = Habit.Color.Green),
         Habit(name = "Go for a walk", color = Habit.Color.Green),
-        Habit(name = "Do something DIY", color = Habit.Color.Gray),
+        Habit(name = "Do something DIY", color = Habit.Color.Red),
         Habit(name = "Morning exercise", color = Habit.Color.Blue)
     )
 

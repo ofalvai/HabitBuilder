@@ -14,9 +14,7 @@ data class Habit(
         Red,
         Green,
         Blue,
-        Yellow,
-        Gray,
-        White
+        Yellow
     }
 
 }

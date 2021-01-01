@@ -46,8 +46,8 @@ class HabitEntityTest {
 
     @Test
     fun insertAndReadHabits() = testCoroutineScope.runBlockingTest {
-        val newHabit1 = Habit(name = "New habit", color = Habit.Color.White)
-        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.White)
+        val newHabit1 = Habit(name = "New habit", color = Habit.Color.Green)
+        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.Green)
 
         habitDao.insertHabit(newHabit1, newHabit2)
 
@@ -59,7 +59,7 @@ class HabitEntityTest {
     @Test
     fun insertAndReadActions() = testCoroutineScope.runBlockingTest {
         val habitId = 51
-        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.White)
+        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green)
         val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T10:15:30Z"))
         val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T10:16:30Z"))
 
@@ -74,9 +74,9 @@ class HabitEntityTest {
     @Test
     fun readActionsByHabit() = testCoroutineScope.runBlockingTest {
         val habitId = 875
-        val habit1 = Habit(id = habitId, name = "Meditation", color = Habit.Color.White)
-        val habit2 = Habit(name = "Drinking enough water", color = Habit.Color.White)
-        val habit3 = Habit(name = "Workout", color = Habit.Color.White)
+        val habit1 = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green)
+        val habit2 = Habit(name = "Drinking enough water", color = Habit.Color.Green)
+        val habit3 = Habit(name = "Workout", color = Habit.Color.Green)
         val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T18:16:40Z"))
         val action3 = Action(habit_id = 876, timestamp = Instant.parse("2020-12-23T10:18:42Z"))
@@ -105,8 +105,8 @@ class HabitEntityTest {
 
     @Test
     fun readAllHabitsWithActions() = testCoroutineScope.runBlockingTest {
-        val habit1 = Habit(id = 1, name = "New habit", color = Habit.Color.White)
-        val habit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.White)
+        val habit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green)
+        val habit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.Green)
         val action1 = Action(id = 1, habit_id = habit1.id, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(id = 2, habit_id = habit2.id, timestamp = Instant.parse("2020-12-24T18:16:40Z"))
         val action3 = Action(id = 3, habit_id = habit2.id, timestamp = Instant.parse("2020-12-25T10:18:42Z"))

@@ -36,18 +36,18 @@ class DashboardViewModelTest {
     @Test
     fun `Given habits without actions When VM loaded Then list contains habits with empty history`() = testCoroutineScope.runBlockingTest {
         given(dao.getHabitsWithActions()).willReturn(listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.White), emptyList()),
-            HabitWithActionsEntity(HabitEntity(1, "Running", ColorEntity.White), emptyList()),
-            HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.White), emptyList())
+            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), emptyList()),
+            HabitWithActionsEntity(HabitEntity(1, "Running", ColorEntity.Green), emptyList()),
+            HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.Green), emptyList())
         ))
 
         viewModel = HabitViewModel(dao, testCoroutineScope)
 
         val expectedActionHistory = (1..5).map { Action(0, false, null) }
         val expectedHabits = listOf(
-            HabitWithActions(Habit(0, "Meditation", Habit.Color.White), expectedActionHistory),
-            HabitWithActions(Habit(1, "Running", Habit.Color.White), expectedActionHistory),
-            HabitWithActions(Habit(2, "Workout", Habit.Color.White), expectedActionHistory)
+            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory),
+            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory),
+            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory)
         )
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
@@ -61,7 +61,7 @@ class DashboardViewModelTest {
             ActionEntity(id = 3, habit_id = 0, timestamp = now.minus(3, ChronoUnit.DAYS))
         )
         given(dao.getHabitsWithActions()).willReturn(listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.White), actions),
+            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), actions),
         ))
 
         viewModel = HabitViewModel(dao, testCoroutineScope)
@@ -74,7 +74,7 @@ class DashboardViewModelTest {
             Action(1, true, now)
         )
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.White),
+            Habit(0, "Meditation", Habit.Color.Green),
             expectedActionHistory
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
@@ -87,14 +87,14 @@ class DashboardViewModelTest {
             ActionEntity(id = 2, habit_id = 0, timestamp = Instant.now().minus(19, ChronoUnit.DAYS))
         )
         given(dao.getHabitsWithActions()).willReturn(listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.White), actions),
+            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), actions),
         ))
 
         viewModel = HabitViewModel(dao, testCoroutineScope)
 
         val expectedActionHistory = (1..5).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.White),
+            Habit(0, "Meditation", Habit.Color.Green),
             expectedActionHistory
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
@@ -111,7 +111,7 @@ class DashboardViewModelTest {
             ActionEntity(id = 5, habit_id = 0, timestamp = now.minus(19, ChronoUnit.DAYS))
         )
         given(dao.getHabitsWithActions()).willReturn(listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.White), actions),
+            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), actions),
         ))
 
         viewModel = HabitViewModel(dao, testCoroutineScope)
@@ -124,7 +124,7 @@ class DashboardViewModelTest {
             Action(1, true, now)
         )
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.White),
+            Habit(0, "Meditation", Habit.Color.Green),
             expectedActionHistory
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)

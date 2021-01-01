@@ -143,7 +143,7 @@ fun PreviewHabitCard() {
     val habit2 = Habit(
         id = 2,
         name = "Workout",
-        color = Habit.Color.White
+        color = Habit.Color.Green
     )
 
     val actions1 = (1..5).map {

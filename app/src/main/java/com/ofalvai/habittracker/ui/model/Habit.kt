@@ -9,12 +9,17 @@ data class Habit(
     val name: String,
     val color: Color
 ) {
+
+    companion object {
+        val DEFAULT_COLOR = Color.Green
+    }
+
     enum class Color(val composeColor: ComposeColor) {
-        Red(habitRed),
+        // Note: enum order determines order on UI!
+
         Green(habitGreen),
         Blue(habitBlue),
         Yellow(habitYellow),
-        Gray(habitGray),
-        White(habitWhite)
+        Red(habitRed)
     }
 }
