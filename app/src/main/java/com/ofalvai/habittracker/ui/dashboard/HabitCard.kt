@@ -18,10 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ofalvai.habittracker.ui.HabitTrackerTheme
-import com.ofalvai.habittracker.ui.blue
-import com.ofalvai.habittracker.ui.green
-import com.ofalvai.habittracker.ui.habitRed
+import com.ofalvai.habittracker.ui.*
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import java.time.Instant
@@ -71,7 +68,8 @@ fun ActionCircles(
             ActionCircle(
                 activeColor = habitColor.composeColor,
                 toggled = action.toggled,
-                onToggle = { newState -> onActionToggle(action.copy(toggled = newState), index) }
+                onToggle = { newState -> onActionToggle(action.copy(toggled = newState), index) },
+                isHighlighted = index == actions.size - 1
             )
         }
     }
@@ -81,10 +79,11 @@ fun ActionCircles(
 fun ActionCircle(
     activeColor: Color,
     toggled: Boolean,
-    onToggle: (Boolean) -> Unit
+    onToggle: (Boolean) -> Unit,
+    isHighlighted: Boolean
 ) {
     val color = if (toggled) activeColor else Color.Transparent
-    val borderColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
+    val secondaryColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
 
     Surface(
         shape = CircleShape,
@@ -96,8 +95,16 @@ fun ActionCircle(
             .size(SIZE_ACTION)
             .padding(4.dp),
         color = color,
-        border = BorderStroke(2.dp, borderColor)
-    ) { }
+        border = BorderStroke(2.dp, secondaryColor)
+    ) {
+        if (isHighlighted) {
+            Surface(
+                shape = CircleShape,
+                modifier = Modifier.size(8.dp),
+                color = secondaryColor
+            ) {  }
+        }
+    }
 }
 
 @Composable
@@ -108,16 +115,21 @@ fun DayLabels(
 ) {
     Row(modifier.padding(horizontal = 16.dp).wrapContentWidth(Alignment.End)) {
         (pastDayCount downTo 0).map {
-            DayLabel(day = mostRecentDay.minusDays(it.toLong()))
+            DayLabel(day = mostRecentDay.minusDays(it.toLong()), isHighlighted = it == 0)
         }
     }
 }
 
 @Composable
 fun DayLabel(
-    day: LocalDate
+    day: LocalDate,
+    isHighlighted: Boolean
 ) {
-    Column(Modifier.size(SIZE_ACTION).wrapContentHeight(Alignment.CenterVertically)) {
+    val modifier = Modifier
+        .size(width = SIZE_ACTION, height = SIZE_ACTION + 16.dp)
+        .wrapContentHeight(Alignment.Top)
+        .padding(vertical = 8.dp)
+    Column(modifier) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = day.dayOfMonth.toString(),
@@ -130,6 +142,16 @@ fun DayLabel(
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Bold)
         )
+        if (isHighlighted) {
+            Surface(
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .size(4.dp)
+                    .align(Alignment.CenterHorizontally),
+                shape = CircleShape,
+                color = MaterialTheme.colors.primary
+            ) {}
+        }
     }
 }
 
