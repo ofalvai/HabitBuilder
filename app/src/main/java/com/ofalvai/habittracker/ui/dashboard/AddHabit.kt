@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.HabitViewModel
+import com.ofalvai.habittracker.ui.TextFieldError
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.Suggestions
 
@@ -45,13 +46,18 @@ fun AddHabitForm(
 ) {
     var name by savedInstanceState { "" }
     var color by savedInstanceState { Habit.DEFAULT_COLOR }
+    var isNameValid by remember { mutableStateOf (true) }
 
     val onSaveClick: () -> Unit = {
-        val habit = Habit(
-            name = name,
-            color = color
-        )
-        onSave(habit)
+        if (name.isEmpty()) {
+            isNameValid = false
+        } else {
+            val habit = Habit(
+                name = name,
+                color = color
+            )
+            onSave(habit)
+        }
     }
 
     Column(Modifier.fillMaxWidth()) {
@@ -64,6 +70,13 @@ fun AddHabitForm(
             singleLine = true,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
         )
+
+        if (!isNameValid) {
+            TextFieldError(
+                modifier = Modifier.padding(horizontal = 32.dp),
+                textError = "Enter a name for new habit"
+            )
+        }
 
         HabitColorPicker(onColorPick = { color = it })
 
