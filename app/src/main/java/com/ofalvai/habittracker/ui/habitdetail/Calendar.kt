@@ -17,13 +17,18 @@ import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.ui.model.Action
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.temporal.WeekFields
 import java.util.*
 
 @Composable
 fun HabitCalendar(
-    habitColor: Color
+    habitColor: Color,
+    actions: List<Action>
 ) {
     val context = AmbientContext.current
 
@@ -43,7 +48,7 @@ fun HabitCalendar(
     }
 
     AndroidView({ view }) { calendarView ->
-        calendarView.dayBinder = HabitDayBinder(habitColor)
+        calendarView.dayBinder = HabitDayBinder(habitColor, actions)
     }
 }
 
@@ -57,10 +62,14 @@ private class DayViewContainer(view: View) : ViewContainer(view) {
         }
     }
 
-    fun bind(day: CalendarDay, habitColor: Color) {
+    fun bind(day: CalendarDay, habitColor: Color, hasAction: Boolean) {
         if (day.owner == DayOwner.THIS_MONTH) {
             textView.text = day.date.dayOfMonth.toString()
-            textView.background = backgroundFrom(habitColor)
+            if (hasAction) {
+                textView.background = backgroundFrom(habitColor)
+            } else {
+                textView.background = null
+            }
         } else {
             textView.visibility = View.INVISIBLE
         }
@@ -75,12 +84,19 @@ private class DayViewContainer(view: View) : ViewContainer(view) {
 }
 
 private class HabitDayBinder(
-    private val habitColor: Color
+    private val habitColor: Color,
+    private val actions: List<Action>
 ) : DayBinder<DayViewContainer> {
     override fun create(view: View) = DayViewContainer(view)
 
     override fun bind(container: DayViewContainer, day: CalendarDay) {
-        container.bind(day, habitColor)
+        val hasAction = actions.find {
+            val dateOfAction = LocalDateTime
+                .ofInstant(it.timestamp, ZoneId.systemDefault())
+                .toLocalDate()
+            dateOfAction == day.date
+        } != null
+        container.bind(day, habitColor, hasAction)
     }
 }
 

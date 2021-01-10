@@ -27,7 +27,7 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
 
         ActionLog(actions = actions)
 
-        HabitCalendar(habitColor = habitColor.composeColor)
+        HabitCalendar(habitColor = habitColor.composeColor, actions = actions)
     }
 }
 
