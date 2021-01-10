@@ -28,10 +28,10 @@ import com.ofalvai.habittracker.ui.model.Habit
 
 @Composable
 fun HabitColorPicker(
+    color: Habit.Color,
     onColorPick: (Habit.Color) -> Unit
 ) {
     val colors = remember { Habit.Color.values().toList() }
-    var selectionIndex by remember { mutableStateOf(0) }
 
     LazyRow(
         Modifier.padding(vertical = 32.dp).fillMaxWidth(),
@@ -40,7 +40,7 @@ fun HabitColorPicker(
         verticalAlignment = Alignment.CenterVertically
     ) {
         items(colors) {
-            val isSelected = selectionIndex == colors.indexOf(it)
+            val isSelected = it == color
             val state = transition(
                 definition = colorPickerTransition,
                 toState = if (isSelected) ColorPickerState.Selected else ColorPickerState.Default,
@@ -50,10 +50,7 @@ fun HabitColorPicker(
                 color = it,
                 isSelected = isSelected,
                 state = state,
-                onClick = {
-                    selectionIndex = colors.indexOf(it)
-                    onColorPick(it)
-                }
+                onClick = { onColorPick(it) }
             )
         }
     }
@@ -90,7 +87,7 @@ fun HabitColor(
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 fun PreviewHabitColorPicker() {
     HabitTrackerTheme {
-        HabitColorPicker(onColorPick = { })
+        HabitColorPicker(color = Habit.Color.Green, onColorPick = { })
     }
 }
 

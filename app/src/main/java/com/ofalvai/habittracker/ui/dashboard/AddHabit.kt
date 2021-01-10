@@ -82,7 +82,7 @@ fun AddHabitForm(
             )
         }
 
-        HabitColorPicker(onColorPick = { color = it })
+        HabitColorPicker(color = color, onColorPick = { color = it })
 
         Button(
             modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
