@@ -16,6 +16,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+        
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
