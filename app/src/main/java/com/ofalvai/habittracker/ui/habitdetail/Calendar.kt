@@ -4,10 +4,21 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.kizitonwose.calendarview.CalendarView
@@ -17,16 +28,17 @@ import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.model.Action
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import java.time.ZoneId
+import java.time.*
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 import java.util.*
 
 @Composable
 fun HabitCalendar(
+    yearMonth: YearMonth,
     habitColor: Color,
     actions: List<Action>
 ) {
@@ -37,18 +49,52 @@ fun HabitCalendar(
             orientation = LinearLayout.HORIZONTAL
             scrollMode = ScrollMode.PAGED
             dayViewResource = R.layout.item_calendar_day
-
-            val currentMonth = YearMonth.now()
-            // TODO: based on action entries, plus a few empty months (to allow past edits)
-            val firstMonth = currentMonth.minusMonths(12)
-            val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-            setup(firstMonth, currentMonth, firstDayOfWeek)
-            scrollToMonth(currentMonth)
         }
     }
 
     AndroidView({ view }) { calendarView ->
         calendarView.dayBinder = HabitDayBinder(habitColor, actions)
+        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+        calendarView.setup(yearMonth, yearMonth, firstDayOfWeek)
+    }
+}
+
+@Composable
+fun CalendarPager(
+    yearMonth: YearMonth,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit
+) {
+    val month = yearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    val year = yearMonth.year
+    val label = if (year == Year.now().value) month else "$month $year"
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = onPreviousClick) {
+            Icon(Icons.Filled.KeyboardArrowLeft)
+        }
+
+        Text(text = label)
+
+        IconButton(onClick = onNextClick) {
+            Icon(Icons.Filled.KeyboardArrowRight)
+        }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Composable
+fun PreviewCalendarPager() {
+    HabitTrackerTheme {
+        CalendarPager(
+            yearMonth = YearMonth.now(),
+            onPreviousClick = {},
+            onNextClick = {}
+        )
     }
 }
 
