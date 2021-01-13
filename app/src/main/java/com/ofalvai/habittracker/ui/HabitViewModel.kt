@@ -9,11 +9,9 @@ import com.ofalvai.habittracker.ui.model.HabitWithActions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 import java.time.temporal.ChronoUnit
+import java.util.*
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
@@ -38,18 +36,19 @@ class HabitViewModel(
         }
     }
 
-    fun toggleAction(action: Action, habit: Habit, dayIndex: Int) {
+    fun toggleAction(habitId: Int, action: Action, date: LocalDate) {
         coroutineScope.launch {
             if (!action.toggled) {
                 dao.deleteAction(action.id)
             } else {
                 val newAction = ActionEntity(
-                    habit_id = habit.id,
-                    timestamp = Instant.now().minus((4 - dayIndex).toLong(), ChronoUnit.DAYS)
+                    habit_id = habitId,
+                    timestamp = LocalDateTime.of(date, LocalTime.now()).toInstant(OffsetDateTime.now().offset)
                 )
                 dao.insertAction(newAction)
             }
 
+            // TODO: only reload one habit
             loadHabitsWithHistory()
         }
     }

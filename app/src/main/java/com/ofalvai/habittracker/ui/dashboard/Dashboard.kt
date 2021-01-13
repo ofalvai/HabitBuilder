@@ -21,13 +21,15 @@ import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 @Composable
 fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
     val habits by viewModel.habitsWithActions.observeAsState(emptyList())
 
     val onActionToggle: (Action, Habit, Int) -> Unit = { action, habit, dayIndex ->
-        viewModel.toggleAction(action, habit, dayIndex)
+        val date = LocalDate.now().minus((4 - dayIndex).toLong(), ChronoUnit.DAYS)
+        viewModel.toggleAction(habit.id, action, date)
     }
     val onHabitDetail: (Habit) -> (Unit) = {
         navController.navigate(Screen.HabitDetails.buildRoute(it.id))

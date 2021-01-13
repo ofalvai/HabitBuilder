@@ -40,7 +40,8 @@ import java.util.*
 fun HabitCalendar(
     yearMonth: YearMonth,
     habitColor: Color,
-    actions: List<Action>
+    actions: List<Action>,
+    onDayToggle: (LocalDate, Action) -> Unit
 ) {
     val context = AmbientContext.current
 
@@ -53,7 +54,7 @@ fun HabitCalendar(
     }
 
     AndroidView({ view }) { calendarView ->
-        calendarView.dayBinder = HabitDayBinder(habitColor, actions)
+        calendarView.dayBinder = HabitDayBinder(habitColor, actions, onDayToggle)
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         calendarView.setup(yearMonth, yearMonth, firstDayOfWeek)
     }
@@ -98,20 +99,29 @@ fun PreviewCalendarPager() {
     }
 }
 
-private class DayViewContainer(view: View) : ViewContainer(view) {
+private class DayViewContainer(
+    view: View,
+    private val onDayToggle: (LocalDate, Action) -> Unit
+) : ViewContainer(view) {
 
     val textView = view.findViewById<TextView>(R.id.calendarDayText)!!
 
+    lateinit var day: CalendarDay
+    lateinit var action: Action
+
     init {
         textView.setOnClickListener {
-            // TODO
+            onDayToggle(day.date, action.copy(toggled = !action.toggled))
         }
     }
 
-    fun bind(day: CalendarDay, habitColor: Color, hasAction: Boolean) {
+    fun bind(day: CalendarDay, habitColor: Color, action: Action) {
+        this.day = day
+        this.action = action
+
         if (day.owner == DayOwner.THIS_MONTH) {
             textView.text = day.date.dayOfMonth.toString()
-            if (hasAction) {
+            if (action.toggled) {
                 textView.background = backgroundFrom(habitColor)
             } else {
                 textView.background = null
@@ -131,18 +141,19 @@ private class DayViewContainer(view: View) : ViewContainer(view) {
 
 private class HabitDayBinder(
     private val habitColor: Color,
-    private val actions: List<Action>
+    private val actions: List<Action>,
+    private val onDayToggle: (LocalDate, Action) -> Unit
 ) : DayBinder<DayViewContainer> {
-    override fun create(view: View) = DayViewContainer(view)
+    override fun create(view: View) = DayViewContainer(view, onDayToggle)
 
     override fun bind(container: DayViewContainer, day: CalendarDay) {
-        val hasAction = actions.find {
+        val actionOnDay = actions.find {
             val dateOfAction = LocalDateTime
                 .ofInstant(it.timestamp, ZoneId.systemDefault())
                 .toLocalDate()
             dateOfAction == day.date
-        } != null
-        container.bind(day, habitColor, hasAction)
+        } ?: Action(0, false, null)
+        container.bind(day, habitColor, actionOnDay)
     }
 }
 

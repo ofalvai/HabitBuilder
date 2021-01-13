@@ -15,6 +15,7 @@ import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.habitBlue
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
+import java.time.LocalDate
 import java.time.YearMonth
 
 @Composable
@@ -27,10 +28,13 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
         viewModel.fetchActions(habitId)
     }
 
+    val onDayToggle: (LocalDate, Action) -> Unit = { date, action ->
+        viewModel.toggleAction(habitId, action, date)
+        viewModel.fetchActions(habitId)
+    }
+
     Column(Modifier.padding(32.dp)) {
         HabitColorPicker(color = habitColor, onColorPick = { habitColor = it })
-
-        ActionLog(actions = actions)
 
         CalendarPager(
             yearMonth = yearMonth,
@@ -41,15 +45,7 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
             yearMonth = yearMonth,
             habitColor = habitColor.composeColor,
             actions = actions,
+            onDayToggle = onDayToggle
         )
-    }
-}
-
-@Composable
-fun ActionLog(actions: List<Action>) {
-    LazyColumn {
-        items(actions) {
-            Text(it.timestamp.toString())
-        }
     }
 }
