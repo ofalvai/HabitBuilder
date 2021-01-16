@@ -20,6 +20,12 @@ plugins {
     id "com.osacky.doctor" version "0.7.0"
 }
 
+doctor {
+    javaHome {
+        failOnError.set(false)
+    }
+}
+
 allprojects {
     repositories {
         google()
