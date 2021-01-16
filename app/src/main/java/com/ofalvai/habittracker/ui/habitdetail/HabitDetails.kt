@@ -2,42 +2,41 @@ package com.ofalvai.habittracker.ui.habitdetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ofalvai.habittracker.ui.HabitTrackerTheme
+import androidx.lifecycle.Transformations
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
-import com.ofalvai.habittracker.ui.habitBlue
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.model.HabitWithActions
 import java.time.LocalDate
 import java.time.YearMonth
 
 @Composable
 fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
-    val actions: List<Action> by viewModel.actionsForHabit.observeAsState(emptyList())
-    var habitColor by remember(habitId) { mutableStateOf(Habit.Color.Blue) } // TODO: from viewModel
+    val initialState = HabitWithActions(Habit(name = "", color = Habit.Color.Blue), actions = emptyList()) // TODO: default color
+    val habitWithActions by Transformations.map(viewModel.habitWithActions) { it ?: initialState }
+        .observeAsState(initialState)
+
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
 
     onCommit(habitId) {
-        viewModel.fetchActions(habitId)
-    }
-    onCommit(habitColor) {
-//        viewModel.updateHabit()
+        viewModel.fetchHabitDetails(habitId)
     }
 
     val onDayToggle: (LocalDate, Action) -> Unit = { date, action ->
         viewModel.toggleAction(habitId, action, date)
-        viewModel.fetchActions(habitId)
+        viewModel.fetchHabitDetails(habitId)
     }
 
     Column(Modifier.padding(32.dp)) {
-        HabitColorPicker(color = habitColor, onColorPick = { habitColor = it })
+        HabitColorPicker(initialColor = habitWithActions.habit.color, onColorPick = {
+            val newHabit = habitWithActions.habit.copy(color = it)
+            viewModel.updateHabit(newHabit)
+        })
 
         CalendarPager(
             yearMonth = yearMonth,
@@ -46,8 +45,8 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
         )
         HabitCalendar(
             yearMonth = yearMonth,
-            habitColor = habitColor.composeColor,
-            actions = actions,
+            habitColor = habitWithActions.habit.color.composeColor,
+            actions = habitWithActions.actions,
             onDayToggle = onDayToggle
         )
     }

@@ -18,7 +18,7 @@ class HabitViewModel(
 ) : ViewModel() {
 
     val habitsWithActions = MutableLiveData<List<HabitWithActions>>()
-    val actionsForHabit = MutableLiveData<List<Action>>()
+    val habitWithActions = MutableLiveData<HabitWithActions?>()
 
     init {
         loadHabitsWithHistory()
@@ -50,18 +50,20 @@ class HabitViewModel(
         }
     }
 
-    fun fetchActions(habitId: Int) {
+    fun fetchHabitDetails(habitId: Int) {
         // Clear previous result (for a possibly different habit ID)
-        actionsForHabit.value = emptyList()
+        habitWithActions.value = null
 
         coroutineScope.launch {
-            actionsForHabit.value = dao.getActionsForHabit(habitId).map {
-                Action(
-                    id = it.id,
-                    toggled = true,
-                    timestamp = it.timestamp
+            val habit = dao.getHabitWithActions(habitId).let {
+                HabitWithActions(
+                    Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
+                    it.actions.map { action ->
+                        Action(action.id, toggled = true, timestamp = action.timestamp)
+                    }
                 )
             }
+            habitWithActions.value = habit
         }
     }
 
@@ -74,6 +76,7 @@ class HabitViewModel(
                     color = habit.color.toEntityColor()
                 )
             )
+            fetchHabitDetails(habit.id)
         }
     }
 

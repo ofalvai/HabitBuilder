@@ -28,10 +28,15 @@ import com.ofalvai.habittracker.ui.model.Habit
 
 @Composable
 fun HabitColorPicker(
-    color: Habit.Color,
+    initialColor: Habit.Color,
     onColorPick: (Habit.Color) -> Unit
 ) {
     val colors = remember { Habit.Color.values().toList() }
+
+    // Note: state is duplicated to make color picking responsive:
+    // - UI is wired to this local state (otherwise UI would only update after the source of truth (DB) is updated)
+    // - But remember() is invalidated if the outside state (source of truth) changes
+    var color by remember(initialColor) { mutableStateOf(initialColor) }
 
     LazyRow(
         Modifier.padding(vertical = 32.dp).fillMaxWidth(),
@@ -50,7 +55,10 @@ fun HabitColorPicker(
                 color = it,
                 isSelected = isSelected,
                 state = state,
-                onClick = { onColorPick(it) }
+                onClick = {
+                    color = it
+                    onColorPick(it)
+                }
             )
         }
     }
@@ -87,7 +95,7 @@ fun HabitColor(
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 fun PreviewHabitColorPicker() {
     HabitTrackerTheme {
-        HabitColorPicker(color = Habit.Color.Green, onColorPick = { })
+        HabitColorPicker(initialColor = Habit.Color.Green, onColorPick = { })
     }
 }
 

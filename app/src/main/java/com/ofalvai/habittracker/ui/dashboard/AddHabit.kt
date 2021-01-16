@@ -1,27 +1,16 @@
 package com.ofalvai.habittracker.ui.dashboard
 
-import androidx.compose.animation.DpPropKey
-import androidx.compose.animation.core.*
-import androidx.compose.animation.transition
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
@@ -82,7 +71,7 @@ fun AddHabitForm(
             )
         }
 
-        HabitColorPicker(color = color, onColorPick = { color = it })
+        HabitColorPicker(initialColor = color, onColorPick = { color = it })
 
         Button(
             modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
