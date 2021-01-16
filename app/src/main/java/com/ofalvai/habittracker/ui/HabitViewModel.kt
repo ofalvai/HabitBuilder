@@ -8,10 +8,7 @@ import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.*
-import java.time.temporal.ChronoUnit
-import java.util.*
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
@@ -65,6 +62,18 @@ class HabitViewModel(
                     timestamp = it.timestamp
                 )
             }
+        }
+    }
+
+    fun updateHabit(habit: Habit) {
+        coroutineScope.launch {
+            dao.updateHabit(
+                HabitEntity(
+                    id = habit.id,
+                    name = habit.name,
+                    color = habit.color.toEntityColor()
+                )
+            )
         }
     }
 

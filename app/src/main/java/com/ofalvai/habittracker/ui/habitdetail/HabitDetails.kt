@@ -27,6 +27,9 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
     onCommit(habitId) {
         viewModel.fetchActions(habitId)
     }
+    onCommit(habitColor) {
+//        viewModel.updateHabit()
+    }
 
     val onDayToggle: (LocalDate, Action) -> Unit = { date, action ->
         viewModel.toggleAction(habitId, action, date)

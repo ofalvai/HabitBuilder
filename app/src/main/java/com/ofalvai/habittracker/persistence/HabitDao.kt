@@ -18,6 +18,9 @@ interface HabitDao {
     @Delete
     suspend fun deleteHabit(habit: Habit)
 
+    @Update
+    suspend fun updateHabit(habit: Habit)
+
     // TODO: limit by timestamp
     @Transaction
     @Query("SELECT * FROM habit")
