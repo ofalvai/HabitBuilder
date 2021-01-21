@@ -1,14 +1,16 @@
 package com.ofalvai.habittracker.ui.habitdetail
 
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -20,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
@@ -30,11 +32,8 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
-import com.ofalvai.habittracker.ui.calendarInactive
-import com.ofalvai.habittracker.ui.habitGreen
 import com.ofalvai.habittracker.ui.model.Action
 import java.time.*
-import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 import java.util.*
@@ -90,6 +89,25 @@ fun CalendarPager(
     }
 }
 
+@Composable
+fun CalendarDayLegend(weekFields: WeekFields) {
+    // TODO: use a Grid-like layout for perfect alignment
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        (0..6).map {
+            val day = weekFields.firstDayOfWeek.plus(it.toLong())
+            val label = day.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+            Text(
+                text = label,
+                style = MaterialTheme.typography.caption
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
 fun PreviewCalendarPager() {
@@ -99,6 +117,14 @@ fun PreviewCalendarPager() {
             onPreviousClick = {},
             onNextClick = {}
         )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Composable
+fun PreviewCalendarDayLegend() {
+    HabitTrackerTheme {
+        CalendarDayLegend(WeekFields.ISO)
     }
 }
 

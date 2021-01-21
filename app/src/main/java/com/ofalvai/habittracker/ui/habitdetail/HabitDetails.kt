@@ -14,6 +14,8 @@ import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.temporal.WeekFields
+import java.util.*
 
 @Composable
 fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
@@ -43,6 +45,9 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
             onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
             onNextClick = { yearMonth = yearMonth.plusMonths(1) }
         )
+
+        CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
+
         HabitCalendar(
             yearMonth = yearMonth,
             habitColor = habitWithActions.habit.color.composeColor,
