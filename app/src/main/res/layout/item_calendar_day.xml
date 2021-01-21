@@ -4,7 +4,7 @@
     android:id="@+id/calendarDayText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="4dp"
+    android:layout_margin="1dp"
     android:gravity="center"
     android:textSize="16sp"
     tools:text="22" />

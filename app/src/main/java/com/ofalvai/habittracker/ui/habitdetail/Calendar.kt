@@ -1,5 +1,6 @@
 package com.ofalvai.habittracker.ui.habitdetail
 
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
@@ -29,6 +30,8 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.calendarInactive
+import com.ofalvai.habittracker.ui.habitGreen
 import com.ofalvai.habittracker.ui.model.Action
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -121,21 +124,21 @@ private class DayViewContainer(
 
         if (day.owner == DayOwner.THIS_MONTH) {
             textView.text = day.date.dayOfMonth.toString()
+
             if (action.toggled) {
-                textView.background = backgroundFrom(habitColor)
+                textView.setBackgroundColor(habitColor.toColorInt())
             } else {
-                textView.background = null
+                textView.setBackgroundColor(android.graphics.Color.parseColor("#bdbdbd"))
+            }
+
+            if (day.date == LocalDate.now()) {
+                textView.setTypeface(Typeface.DEFAULT_BOLD)
+            } else {
+                textView.setTypeface(Typeface.DEFAULT)
             }
         } else {
             textView.visibility = View.INVISIBLE
         }
-    }
-
-    private fun backgroundFrom(habitColor: Color): Drawable {
-        val background =
-            ContextCompat.getDrawable(view.context, R.drawable.bg_calendar_item_active)!!
-        background.setTint(habitColor.toColorInt())
-        return background
     }
 }
 
