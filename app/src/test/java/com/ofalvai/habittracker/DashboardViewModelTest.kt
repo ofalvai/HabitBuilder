@@ -45,9 +45,9 @@ class DashboardViewModelTest {
 
         val expectedActionHistory = (1..5).map { Action(0, false, null) }
         val expectedHabits = listOf(
-            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory),
-            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory),
-            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory)
+            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory, 0),
+            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0),
+            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0)
         )
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
@@ -75,7 +75,8 @@ class DashboardViewModelTest {
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Green),
-            expectedActionHistory
+            expectedActionHistory,
+            3
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
@@ -95,7 +96,8 @@ class DashboardViewModelTest {
         val expectedActionHistory = (1..5).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Green),
-            expectedActionHistory
+            expectedActionHistory,
+            2
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
@@ -125,7 +127,8 @@ class DashboardViewModelTest {
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Green),
-            expectedActionHistory
+            expectedActionHistory,
+            5
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
