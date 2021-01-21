@@ -19,7 +19,7 @@ import java.util.*
 
 @Composable
 fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
-    val initialState = HabitWithActions(Habit(name = "", color = Habit.Color.Blue), actions = emptyList()) // TODO: default color
+    val initialState = HabitWithActions(Habit(name = "", color = Habit.Color.Blue), actions = emptyList(), totalActionCount = 0) // TODO: default color
     val habitWithActions by Transformations.map(viewModel.habitWithActions) { it ?: initialState }
         .observeAsState(initialState)
 

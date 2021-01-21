@@ -33,6 +33,7 @@ private val SIZE_ACTION = 48.dp
 fun HabitCard(
     habit: Habit,
     actions: List<Action>,
+    totalActionCount: Int,
     onActionToggle: (Action, Habit, Int) -> Unit,
     onDetailClick: (Habit) -> Unit
 ) {
@@ -45,13 +46,23 @@ fun HabitCard(
                 style = MaterialTheme.typography.h5
             )
 
-            ActionCircles(
-                modifier = Modifier.align(Alignment.End).padding(top = 16.dp),
-                actions = actions,
-                habitColor = habit.color,
-                onActionToggle = { action, dayIndex ->
-                    onActionToggle(action, habit, dayIndex)
-                })
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "$totalActionCount total",
+                    style = MaterialTheme.typography.caption
+                )
+
+                ActionCircles(
+                    modifier = Modifier.padding(top = 16.dp),
+                    actions = actions,
+                    habitColor = habit.color,
+                    onActionToggle = { action, dayIndex ->
+                        onActionToggle(action, habit, dayIndex)
+                    })
+            }
         }
     }
 }
@@ -193,9 +204,9 @@ fun PreviewHabitCard() {
 
     HabitTrackerTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitCard(habit1, actions1, { action, habit, dayIndex -> }, {})
+            HabitCard(habit1, actions1, 14, { action, habit, dayIndex -> }, {})
             Spacer(modifier = Modifier.height(16.dp))
-            HabitCard(habit2, actions2, { action, habit, dayIndex -> }, {})
+            HabitCard(habit2, actions2, 3, { action, habit, dayIndex -> }, {})
         }
     }
 }

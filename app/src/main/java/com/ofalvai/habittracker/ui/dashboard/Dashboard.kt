@@ -79,6 +79,7 @@ fun HabitList(
                 HabitCard(
                     habit = it.habit,
                     actions = it.actions,
+                    totalActionCount = it.totalActionCount,
                     onActionToggle = onActionToggle,
                     onDetailClick = onHabitClick
                 )

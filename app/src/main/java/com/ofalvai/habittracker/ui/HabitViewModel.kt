@@ -60,7 +60,8 @@ class HabitViewModel(
                     Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
                     it.actions.map { action ->
                         Action(action.id, toggled = true, timestamp = action.timestamp)
-                    }
+                    },
+                    it.actions.size
                 )
             }
             habitWithActions.value = habit
@@ -85,7 +86,8 @@ class HabitViewModel(
             habitsWithActions.value = dao.getHabitsWithActions().map {
                 HabitWithActions(
                     Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
-                    actionsToRecentDays(it.actions)
+                    actionsToRecentDays(it.actions),
+                    totalActionCount = it.actions.size
                 )
             }
         }
