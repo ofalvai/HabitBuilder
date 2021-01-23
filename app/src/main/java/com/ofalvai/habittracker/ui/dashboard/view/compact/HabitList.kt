@@ -1,0 +1,49 @@
+package com.ofalvai.habittracker.ui.dashboard.view.compact
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.ofalvai.habittracker.ui.dashboard.view.CreateHabitButton
+import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
+import com.ofalvai.habittracker.ui.model.Action
+import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.model.HabitWithActions
+import java.time.LocalDate
+
+@Composable
+fun CompactHabitList(
+    habits: List<HabitWithActions>,
+    onActionToggle: (Action, Habit, LocalDate) -> Unit,
+    onHabitClick: (Habit) -> Unit,
+    onAddHabitClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
+        DayLegend(
+            modifier = Modifier.fillMaxWidth(),
+            mostRecentDay = LocalDate.now(),
+            pastDayCount = 6
+        )
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(bottom = 48.dp)
+        ) {
+            items(habits) {
+                HabitItem(
+                    habit = it.habit,
+                    actions = it.actions,
+                    totalActionCount = it.totalActionCount,
+                    onActionToggle = onActionToggle,
+                    onDetailClick = onHabitClick
+                )
+            }
+            item {
+                CreateHabitButton(onClick = onAddHabitClick)
+            }
+        }
+    }
+}
