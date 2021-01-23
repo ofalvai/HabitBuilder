@@ -1,15 +1,11 @@
 package com.ofalvai.habittracker.ui.dashboard.view.compact
 
 import android.os.Vibrator
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,9 +15,11 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
-import com.ofalvai.habittracker.ui.dashboard.view.fiveday.satisfyingToggleable
+import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
+import com.ofalvai.habittracker.ui.inactiveDay
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import java.time.LocalDate
@@ -31,7 +29,6 @@ import java.time.temporal.ChronoUnit
 fun HabitItem(
     habit: Habit,
     actions: List<Action>,
-    totalActionCount: Int,
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
     onDetailClick: (Habit) -> Unit
 ) {
@@ -41,10 +38,21 @@ fun HabitItem(
             .fillMaxWidth()
             .clickable(onClick = { onDetailClick(habit) })
     ) {
-        Text(
-            text = habit.name,
-            style = MaterialTheme.typography.h5
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                modifier = Modifier.padding(start = 16.dp).align(Alignment.CenterVertically),
+                text = habit.name,
+                style = MaterialTheme.typography.subtitle1
+            )
+            IconButton(
+                onClick = { onDetailClick(habit) }
+            ) {
+                Icon(Icons.Filled.KeyboardArrowRight)
+            }
+        }
 
         ActionSquares(
             actions = actions,
@@ -81,12 +89,11 @@ fun ActionSquares(
                 )
             }
         }
-        // TODO
         if (singlePressCounter >= 3) {
             Text(
-                modifier = Modifier.align(Alignment.End),
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(horizontal = 16.dp),
                 text = "Long press to toggle",
-                style = MaterialTheme.typography.caption,
+                style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Center
             )
         }
@@ -123,17 +130,15 @@ fun ActionSquare(
     onToggle: (Boolean) -> Unit,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else Color.Transparent // TODO
-    val secondaryColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
+    val color = if (toggled) activeColor else inactiveDay
     val vibrator = AmbientContext.current.getSystemService<Vibrator>()!!
 
     Surface(
         shape = RectangleShape,
         modifier = Modifier
-            .satisfyingToggleable(vibrator, toggled, onToggle, onSinglePress)
+            .satisfyingToggleable(vibrator, Dp.Unspecified, true, toggled, onToggle, onSinglePress)
             .aspectRatio(1f)
             .padding(1.dp),
         color = color,
-        border = BorderStroke(2.dp, secondaryColor)
     ) { }
 }

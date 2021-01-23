@@ -15,3 +15,5 @@ val habitRed = Color(0xFFef9a9a)
 val habitGreen = Color(0xFFa5d6a7)
 val habitBlue = Color(0xFF90caf9)
 val habitYellow = Color(0xFFfff59d)
+
+val inactiveDay = Color(0xFFBDBDBD)

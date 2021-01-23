@@ -1,22 +1,17 @@
 package com.ofalvai.habittracker.ui.dashboard.view.fiveday
 
-import android.os.Build
-import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.gesture.longPressGestureFilter
-import androidx.compose.ui.gesture.pressIndicatorGestureFilter
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.text.style.TextAlign
@@ -24,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import java.time.Instant
@@ -120,11 +116,12 @@ fun ActionCircle(
     val color = if (toggled) activeColor else Color.Transparent
     val secondaryColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
     val vibrator = AmbientContext.current.getSystemService<Vibrator>()!!
+    val rippleRadius = remember { Constants.SIZE_CIRCLE / 1.7f } // Make it a bit bigger than D / 2
 
     Surface(
         shape = CircleShape,
         modifier = Modifier
-            .satisfyingToggleable(vibrator, toggled, onToggle, onSinglePress)
+            .satisfyingToggleable(vibrator, rippleRadius, false, toggled, onToggle, onSinglePress)
             .size(Constants.SIZE_CIRCLE)
             .padding(Constants.PADDING_CIRCLE),
         color = color,
@@ -137,46 +134,6 @@ fun ActionCircle(
                 color = secondaryColor
             ) { }
         }
-    }
-}
-
-fun Modifier.satisfyingToggleable(
-    vibrator: Vibrator,
-    toggled: Boolean,
-    onToggle: (Boolean) -> Unit,
-    onSinglePress: () -> Unit
-): Modifier {
-    return composed {
-        val interactionState = remember { InteractionState() }
-        val rippleRadius = remember { Constants.SIZE_CIRCLE / 1.7f } // Make it a bit bigger than D / 2
-        var isSinglePress by remember { mutableStateOf(false) }
-
-        this
-            .pressIndicatorGestureFilter(
-                onStart = {
-                    isSinglePress = true
-                    vibrator.vibrateCompat(longArrayOf(0, 50))
-                    interactionState.addInteraction(Interaction.Pressed, it)
-                },
-                onStop = {
-                    if (isSinglePress) {
-                        onSinglePress()
-                    }
-                    isSinglePress = false
-                    interactionState.removeInteraction(Interaction.Pressed)
-                },
-                onCancel = {
-                    isSinglePress = false
-                    interactionState.removeInteraction(Interaction.Pressed)
-                }
-            )
-
-            .longPressGestureFilter {
-                isSinglePress = false
-                vibrator.vibrateCompat(longArrayOf(0, 75, 50, 75))
-                onToggle(!toggled)
-            }
-            .indication(interactionState, rememberRipple(radius = rippleRadius, bounded = false))
     }
 }
 
@@ -210,14 +167,5 @@ fun PreviewHabitCard() {
             Spacer(modifier = Modifier.height(16.dp))
             HabitCard(habit2, actions2, 3, { action, habit, dayIndex -> }, {})
         }
-    }
-}
-
-private fun Vibrator.vibrateCompat(timings: LongArray, repeat: Int = -1) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrate(VibrationEffect.createWaveform(timings, repeat))
-    } else {
-        @Suppress("DEPRECATION")
-        vibrate(timings, repeat)
     }
 }
