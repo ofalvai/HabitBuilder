@@ -1,4 +1,4 @@
-package com.ofalvai.habittracker.ui.dashboard
+package com.ofalvai.habittracker.ui.dashboard.view.fiveday
 
 import android.os.Build
 import android.os.VibrationEffect
@@ -31,6 +31,7 @@ import com.ofalvai.habittracker.ui.model.Habit
 import java.time.Instant
 import java.time.LocalDate
 import java.time.format.TextStyle
+import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.random.Random
 
@@ -41,7 +42,7 @@ fun HabitCard(
     habit: Habit,
     actions: List<Action>,
     totalActionCount: Int,
-    onActionToggle: (Action, Habit, Int) -> Unit,
+    onActionToggle: (Action, Habit, LocalDate) -> Unit,
     onDetailClick: (Habit) -> Unit
 ) {
     Card(
@@ -67,7 +68,8 @@ fun HabitCard(
                     actions = actions,
                     habitColor = habit.color,
                     onActionToggle = { action, dayIndex ->
-                        onActionToggle(action, habit, dayIndex)
+                        val date = LocalDate.now().minus((4 - dayIndex).toLong(), ChronoUnit.DAYS)
+                        onActionToggle(action, habit, date)
                     })
             }
         }
