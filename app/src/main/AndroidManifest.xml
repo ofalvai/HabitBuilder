@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ofalvai.habittracker">
 
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
         android:name=".HabitTrackerApplication"
         android:allowBackup="true"
