@@ -19,23 +19,17 @@ import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.gesture.pressIndicatorGestureFilter
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import java.time.Instant
 import java.time.LocalDate
-import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
-import java.util.*
 import kotlin.random.Random
-
-private val SIZE_ACTION = 48.dp
 
 @Composable
 fun HabitCard(
@@ -131,8 +125,8 @@ fun ActionCircle(
         shape = CircleShape,
         modifier = Modifier
             .satisfyingToggleable(vibrator, toggled, onToggle, onSinglePress)
-            .size(SIZE_ACTION)
-            .padding(4.dp),
+            .size(Constants.SIZE_CIRCLE)
+            .padding(Constants.PADDING_CIRCLE),
         color = color,
         border = BorderStroke(2.dp, secondaryColor)
     ) {
@@ -154,7 +148,7 @@ fun Modifier.satisfyingToggleable(
 ): Modifier {
     return composed {
         val interactionState = remember { InteractionState() }
-        val rippleRadius = remember { SIZE_ACTION / 1.7f } // Make it a bit bigger than D / 2
+        val rippleRadius = remember { Constants.SIZE_CIRCLE / 1.7f } // Make it a bit bigger than D / 2
         var isSinglePress by remember { mutableStateOf(false) }
 
         this
@@ -186,65 +180,6 @@ fun Modifier.satisfyingToggleable(
     }
 }
 
-@Composable
-fun DayLabels(
-    modifier: Modifier = Modifier,
-    mostRecentDay: LocalDate,
-    pastDayCount: Int = 4
-) {
-    Row(modifier.padding(horizontal = 16.dp).wrapContentWidth(Alignment.End)) {
-        (pastDayCount downTo 0).map {
-            DayLabel(day = mostRecentDay.minusDays(it.toLong()), isHighlighted = it == 0)
-        }
-    }
-}
-
-@Composable
-fun DayLabel(
-    day: LocalDate,
-    isHighlighted: Boolean
-) {
-    val modifier = Modifier
-        .size(width = SIZE_ACTION, height = SIZE_ACTION + 16.dp)
-        .wrapContentHeight(Alignment.Top)
-        .padding(vertical = 8.dp)
-    Column(modifier) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = day.dayOfMonth.toString(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption.copy(fontSize = 14.sp)
-        )
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Bold)
-        )
-        if (isHighlighted) {
-            Surface(
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .size(4.dp)
-                    .align(Alignment.CenterHorizontally),
-                shape = CircleShape,
-                color = MaterialTheme.colors.primary
-            ) {}
-        }
-    }
-}
-
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
-@Composable
-fun PreviewDayLabels() {
-    HabitTrackerTheme {
-        DayLabels(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            mostRecentDay = LocalDate.now()
-        )
-    }
-}
-
 
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
@@ -268,7 +203,6 @@ fun PreviewHabitCard() {
         )
     }
     val actions2 = actions1.shuffled()
-
 
     HabitTrackerTheme {
         Column(Modifier.padding(16.dp)) {

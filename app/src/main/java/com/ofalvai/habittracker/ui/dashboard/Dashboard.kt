@@ -17,6 +17,7 @@ import androidx.navigation.compose.navigate
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.DashboardConfig
@@ -45,7 +46,9 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
             DashboardConfig.FiveDay -> {
                 FiveDayHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
             }
-            DashboardConfig.Compact -> TODO()
+            DashboardConfig.Compact -> {
+                CompactHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
+            }
         }
     }
 }
