@@ -7,9 +7,8 @@ import com.ofalvai.habittracker.ui.model.Habit
 
 object Suggestions {
 
-    @Composable
     val habits: List<Habit>
-        get() = listOf(
+        @Composable get() = listOf(
             Habit(name = stringResource(R.string.habit_suggestion_meditation), color = Habit.Color.Red),
             Habit(name = stringResource(R.string.habit_suggestion_workout), color = Habit.Color.Blue),
             Habit(name = stringResource(R.string.habit_suggestion_reading), color = Habit.Color.Green),

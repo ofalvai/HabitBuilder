@@ -169,9 +169,9 @@ fun PreviewHabitCard() {
 
     HabitTrackerTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitCard(habit1, actions1, 14, { action, habit, dayIndex -> }, {})
+            HabitCard(habit1, actions1, 14, { _, _, _ -> }, {})
             Spacer(modifier = Modifier.height(16.dp))
-            HabitCard(habit2, actions2, 3, { action, habit, dayIndex -> }, {})
+            HabitCard(habit2, actions2, 3, { _, _, _ -> }, {})
         }
     }
 }

@@ -13,6 +13,7 @@ import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import kotlinx.coroutines.cancel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -26,8 +27,9 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
 
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
 
-    onCommit(habitId) {
-        viewModel.fetchHabitDetails(habitId)
+    DisposableEffect(habitId) {
+        val job = viewModel.fetchHabitDetails(habitId)
+        onDispose { job.cancel("Cancelled by Composable") }
     }
 
     val onDayToggle: (LocalDate, Action) -> Unit = { date, action ->

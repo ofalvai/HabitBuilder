@@ -8,6 +8,7 @@ import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.*
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
@@ -41,11 +42,11 @@ class HabitViewModel(
         }
     }
 
-    fun fetchHabitDetails(habitId: Int) {
+    fun fetchHabitDetails(habitId: Int): Job {
         // Clear previous result (for a possibly different habit ID)
         habitWithActions.value = null
 
-        coroutineScope.launch {
+        return coroutineScope.launch {
             val habit = dao.getHabitWithActions(habitId).let {
                 HabitWithActions(
                     Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
