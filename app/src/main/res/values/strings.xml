@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">HabitTracker</string>
+    <string name="addhabit_name_label">Habit name</string>
+    <string name="addhabit_name_error">Enter a name for new habit</string>
+    <string name="addhabit_save">Save</string>
+    <string name="addhabit_suggestions_title">Try one of these:</string>
+
+    <string name="dashboard_fiveday_total_actions">%d total</string>
+    <string name="dashboard_toggle_help">Long press to toggle</string>
+    <string name="dashboard_create_habit">Create new habit</string>
+    <string name="dashboard_create_habit_first">Create your first habit</string>
+
+    <string name="habit_suggestion_meditation">Meditation</string>
+    <string name="habit_suggestion_workout">Workout</string>
+    <string name="habit_suggestion_reading">Reading</string>
+    <string name="habit_suggestion_walk">Go for a walk</string>
+    <string name="habit_suggestion_diy">Do something DIY</string>
+    <string name="habit_suggestion_morning_exercise">Morning exercise</string>
 </resources>

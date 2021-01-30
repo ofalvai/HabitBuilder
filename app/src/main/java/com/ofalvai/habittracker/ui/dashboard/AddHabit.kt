@@ -9,16 +9,17 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.TextFieldError
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.Suggestions
 
 @Composable
 fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
@@ -59,7 +60,7 @@ fun AddHabitForm(
             modifier = Modifier.padding(horizontal = 32.dp),
             value = name,
             onValueChange = { name = it },
-            label = { Text("Habit name") },
+            label = { Text(stringResource(R.string.addhabit_name_label)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
         )
@@ -67,7 +68,7 @@ fun AddHabitForm(
         if (!isNameValid) {
             TextFieldError(
                 modifier = Modifier.padding(horizontal = 32.dp),
-                textError = "Enter a name for new habit"
+                textError = stringResource(R.string.addhabit_name_error)
             )
         }
 
@@ -77,7 +78,7 @@ fun AddHabitForm(
             modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
             onClick = onSaveClick
         ) {
-            Text("Save")
+            Text(stringResource(R.string.addhabit_save))
         }
     }
 }
@@ -89,7 +90,7 @@ fun Suggestions(habits: List<Habit>, onSelect: (Habit) -> Unit) {
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 32.dp),
-            text = "Try one of these:",
+            text = stringResource(R.string.addhabit_suggestions_title),
             style = MaterialTheme.typography.subtitle1
         )
 

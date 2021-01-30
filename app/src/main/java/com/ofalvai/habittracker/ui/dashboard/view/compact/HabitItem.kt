@@ -13,11 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.AppColor
 import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
@@ -44,7 +46,9 @@ fun HabitItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                modifier = Modifier.padding(start = 16.dp).align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .align(Alignment.CenterVertically),
                 text = habit.name,
                 style = MaterialTheme.typography.subtitle1
             )
@@ -92,8 +96,10 @@ fun ActionSquares(
         }
         if (singlePressCounter >= 3) {
             Text(
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(horizontal = 16.dp),
-                text = "Long press to toggle",
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(horizontal = 16.dp),
+                text = stringResource(R.string.dashboard_toggle_help),
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Center
             )

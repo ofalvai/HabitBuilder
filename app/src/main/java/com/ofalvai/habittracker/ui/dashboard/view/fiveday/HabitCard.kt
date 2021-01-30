@@ -14,10 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
@@ -37,7 +39,9 @@ fun HabitCard(
     onDetailClick: (Habit) -> Unit
 ) {
     Card(
-        Modifier.fillMaxWidth().clickable(onClick = { onDetailClick(habit) })
+        Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onDetailClick(habit) })
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -50,7 +54,7 @@ fun HabitCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "$totalActionCount total",
+                    text = stringResource(R.string.dashboard_fiveday_total_actions, totalActionCount),
                     style = MaterialTheme.typography.caption
                 )
 
@@ -98,7 +102,7 @@ fun ActionCircles(
         if (singlePressCounter >= 3) {
             Text(
                 modifier = Modifier.align(Alignment.End),
-                text = "Long press to toggle",
+                text = stringResource(R.string.dashboard_toggle_help),
                 style = MaterialTheme.typography.caption,
                 textAlign = TextAlign.Center
             )

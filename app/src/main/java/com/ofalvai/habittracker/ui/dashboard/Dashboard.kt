@@ -11,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
+import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.Screen
@@ -62,7 +64,7 @@ fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
         ) {
             Icon(Icons.Filled.Add, Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text("Create your first habit")
+            Text(stringResource(R.string.dashboard_create_habit_first))
         }
     }
 }

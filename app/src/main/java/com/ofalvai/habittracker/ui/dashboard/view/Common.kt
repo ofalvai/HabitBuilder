@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.gesture.pressIndicatorGestureFilter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -40,7 +42,7 @@ fun CreateHabitButton(
         ) {
             Icon(Icons.Filled.Add, Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text("Create new habit")
+            Text(stringResource(R.string.dashboard_create_habit))
         }
     }
 }
