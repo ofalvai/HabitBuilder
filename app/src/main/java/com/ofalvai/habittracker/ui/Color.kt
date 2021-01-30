@@ -1,19 +1,65 @@
 package com.ofalvai.habittracker.ui
 
+import androidx.compose.material.Colors
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.ofalvai.habittracker.ui.AppColor.Light.habitGreen
+import com.ofalvai.habittracker.ui.model.Habit
 
-val purple200 = Color(0xFFBB86FC)
-val purple500 = Color(0xFF6200EE)
-val purple700 = Color(0xFF3700B3)
-val teal200 = Color(0xFF03DAC5)
+object AppColor {
 
-val beige = Color(0xFFFDEDCE)
-val green = Color(0xFF7cb342)
-val blue = Color(0xFFA8D3E6)
+    val primary = Color(0xFFFFCC79)
+    val primaryVariant = Color(0xFFFFF5E5)
+    val secondary = Color.Cyan // TODO
 
-val habitRed = Color(0xFFef9a9a)
-val habitGreen = Color(0xFFa5d6a7)
-val habitBlue = Color(0xFF90caf9)
-val habitYellow = Color(0xFFfff59d)
+    object Light {
+        val background = Color(0xFFFFF1D6)
+        val surface = Color(0xFFFFF8EA)
+        val onSurface = Color(0xFF262626)
+        val onBackground = Color(0xFF262626)
 
-val inactiveDay = Color(0xFFBDBDBD)
+        val habitRed = Color(0xFFE08F8F)
+        val habitGreen = Color(0xFFAEC2B8)
+        val habitBlue = Color(0xFF9EB2D1)
+        val habitYellow = Color(0xFFFFCC79)
+        val habitPink = Color(0xFFE08FB8)
+    }
+
+    object Dark {
+        // TODO: check colors on dark background
+        val habitRed = Color(0xFFE08F8F)
+        val habitGreen = Color(0xFFAEC2B8)
+        val habitBlue = Color(0xFF9EB2D1)
+        val habitYellow = Color(0xFFFFCC79)
+        val habitPink = Color(0xFFE08FB8)
+    }
+
+    val inactiveDay = Color(0xFFD9D4D4)
+}
+
+val Colors.habitRed: Color
+    @Composable
+    get() = if (isLight) AppColor.Light.habitRed else AppColor.Dark.habitRed
+
+val Colors.habitGreen: Color
+    @Composable
+    get() = if (isLight) AppColor.Light.habitGreen else AppColor.Dark.habitGreen
+
+val Colors.habitBlue: Color
+    @Composable
+    get() = if (isLight) AppColor.Light.habitBlue else AppColor.Dark.habitBlue
+
+val Colors.habitYellow: Color
+    @Composable
+    get() = if (isLight) AppColor.Light.habitYellow else AppColor.Dark.habitYellow
+
+
+val Habit.Color.composeColor: Color
+    @Composable
+    get() = when (this) {
+        Habit.Color.Green -> MaterialTheme.colors.habitGreen
+        Habit.Color.Blue -> MaterialTheme.colors.habitBlue
+        Habit.Color.Yellow -> MaterialTheme.colors.habitYellow
+        Habit.Color.Red -> MaterialTheme.colors.habitRed
+    }

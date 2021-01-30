@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -75,7 +76,9 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MainTopBar() {
     TopAppBar(
-        title = { Text("Habit Builder") }
+        title = { Text("Habit Builder") },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
     )
 }
 
@@ -115,7 +118,7 @@ fun AppBottomNavigation(
     var selectedIndex by remember { mutableStateOf(0) }
 
 
-    BottomNavigation {
+    BottomNavigation(backgroundColor = Color.White) {
         BottomNavigationItem(
             icon = { Icon(Icons.Filled.CheckCircle) },
             selected = selectedIndex == 0,

@@ -24,7 +24,7 @@ import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.model.Habit
 import java.time.LocalDate
 
-val dashboardConfig = DashboardConfig.Compact
+val dashboardConfig = DashboardConfig.FiveDay
 
 @Composable
 fun Dashboard(viewModel: HabitViewModel, navController: NavController) {

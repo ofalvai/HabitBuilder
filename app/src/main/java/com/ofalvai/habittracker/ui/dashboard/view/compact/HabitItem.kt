@@ -18,8 +18,9 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import com.ofalvai.habittracker.ui.AppColor
+import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
-import com.ofalvai.habittracker.ui.inactiveDay
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import java.time.LocalDate
@@ -130,7 +131,7 @@ fun ActionSquare(
     onToggle: (Boolean) -> Unit,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else inactiveDay
+    val color = if (toggled) activeColor else AppColor.inactiveDay
     val vibrator = AmbientContext.current.getSystemService<Vibrator>()!!
 
     Surface(

@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Transformations
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
+import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions

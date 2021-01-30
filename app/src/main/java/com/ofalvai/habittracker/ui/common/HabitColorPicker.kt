@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.model.Habit
 
 @Composable
