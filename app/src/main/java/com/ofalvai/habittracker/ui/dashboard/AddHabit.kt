@@ -99,8 +99,8 @@ fun Suggestions(habits: List<Habit>, onSelect: (Habit) -> Unit) {
             contentPadding = PaddingValues(start = 32.dp, end = 32.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(habits) {
-                SuggestionChip(habit = it, onClick = { onSelect(it) })
+            items(habits.size) { index ->
+                SuggestionChip(habit = habits[index], onClick = { onSelect(habits[index]) })
             }
         }
     }

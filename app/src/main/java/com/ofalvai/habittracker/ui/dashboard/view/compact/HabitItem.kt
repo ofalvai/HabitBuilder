@@ -55,7 +55,10 @@ fun HabitItem(
             IconButton(
                 onClick = { onDetailClick(habit) }
             ) {
-                Icon(Icons.Filled.KeyboardArrowRight)
+                Icon(
+                    Icons.Filled.KeyboardArrowRight,
+                    contentDescription = stringResource(R.string.dashboard_item_details)
+                )
             }
         }
 

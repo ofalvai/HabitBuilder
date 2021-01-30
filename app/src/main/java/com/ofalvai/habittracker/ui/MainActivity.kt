@@ -19,12 +19,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigate
 import androidx.navigation.compose.rememberNavController
 import com.ofalvai.habittracker.Dependencies
+import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
@@ -120,22 +122,22 @@ fun AppBottomNavigation(
 
     BottomNavigation(backgroundColor = Color.White) {
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.CheckCircle) },
+            icon = { Icon(Icons.Filled.CheckCircle, stringResource(R.string.tab_dashboard)) },
             selected = selectedIndex == 0,
             onClick = {
                 selectedIndex = 0
                 onDashboardSelected()
             },
-            label = { Text("Dashboard") }
+            label = { Text(stringResource(R.string.tab_dashboard)) }
         )
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.DateRange) },
+            icon = { Icon(Icons.Filled.DateRange, stringResource(R.string.tab_dashboard)) },
             selected = selectedIndex == 1,
             onClick = {
                 selectedIndex = 1
                 onInsightsSelected()
             },
-            label = { Text("Insights") }
+            label = { Text(stringResource(R.string.tab_insights)) }
         )
     }
 }

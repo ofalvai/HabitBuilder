@@ -35,11 +35,11 @@ fun FiveDayHabitList(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(bottom = 48.dp)
         ) {
-            items(habits) {
+            items(habits.size) { index ->
                 HabitCard(
-                    habit = it.habit,
-                    actions = it.actions,
-                    totalActionCount = it.totalActionCount,
+                    habit = habits[index].habit,
+                    actions = habits[index].actions,
+                    totalActionCount = habits[index].totalActionCount,
                     onActionToggle = onActionToggle,
                     onDetailClick = onHabitClick
                 )

@@ -7,4 +7,5 @@
     android:layout_margin="1dp"
     android:gravity="center"
     android:textSize="16sp"
+    android:textColor="@color/black"
     tools:text="22" />

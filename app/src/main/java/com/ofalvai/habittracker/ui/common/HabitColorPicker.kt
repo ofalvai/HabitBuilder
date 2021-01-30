@@ -7,6 +7,7 @@ import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -45,20 +46,20 @@ fun HabitColorPicker(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        items(colors) {
-            val isSelected = it == color
+        items(colors.size) { index ->
+            val isSelected = colors[index] == color
             val state = transition(
                 definition = colorPickerTransition,
                 toState = if (isSelected) ColorPickerState.Selected else ColorPickerState.Default,
             )
 
             HabitColor(
-                color = it,
+                color = colors[index],
                 isSelected = isSelected,
                 state = state,
                 onClick = {
-                    color = it
-                    onColorPick(it)
+                    color = colors[index]
+                    onColorPick(colors[index])
                 }
             )
         }
@@ -78,6 +79,7 @@ fun HabitColor(
         .size(size)
         .clickable(
             onClick = onClick,
+            interactionState = remember { InteractionState() },
             indication = rememberRipple(radius = size / 2, bounded = false)
         )
     Surface(
@@ -87,7 +89,11 @@ fun HabitColor(
         border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.15f))
     ) {
         if (isSelected) {
-            Icon(Icons.Filled.Check, tint = Color.Black.copy(alpha = 0.75f))
+            Icon(
+                Icons.Filled.Check,
+                tint = Color.Black.copy(alpha = 0.75f),
+                contentDescription = null
+            )
         }
     }
 }

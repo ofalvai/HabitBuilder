@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -78,13 +79,19 @@ fun CalendarPager(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onPreviousClick) {
-            Icon(Icons.Filled.KeyboardArrowLeft)
+            Icon(
+                Icons.Filled.KeyboardArrowLeft,
+                contentDescription = stringResource(R.string.calendar_previous_month)
+            )
         }
 
         Text(text = label)
 
         IconButton(onClick = onNextClick) {
-            Icon(Icons.Filled.KeyboardArrowRight)
+            Icon(
+                Icons.Filled.KeyboardArrowRight,
+                contentDescription = stringResource(R.string.calendar_next_month)
+            )
         }
     }
 }

@@ -40,7 +40,7 @@ fun CreateHabitButton(
             modifier = Modifier.padding(16.dp),
             onClick = onClick
         ) {
-            Icon(Icons.Filled.Add, Modifier.size(ButtonDefaults.IconSize))
+            Icon(Icons.Filled.Add, null, Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
             Text(stringResource(R.string.dashboard_create_habit))
         }

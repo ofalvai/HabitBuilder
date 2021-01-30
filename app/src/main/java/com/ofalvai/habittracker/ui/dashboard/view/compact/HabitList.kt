@@ -33,10 +33,10 @@ fun CompactHabitList(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(bottom = 48.dp)
         ) {
-            items(habits) {
+            items(habits.size) { index ->
                 HabitItem(
-                    habit = it.habit,
-                    actions = it.actions.takeLast(Constants.DAY_COUNT),
+                    habit = habits[index].habit,
+                    actions = habits[index].actions.takeLast(Constants.DAY_COUNT),
                     onActionToggle = onActionToggle,
                     onDetailClick = onHabitClick
                 )
