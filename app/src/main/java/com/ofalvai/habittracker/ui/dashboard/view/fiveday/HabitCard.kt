@@ -55,10 +55,11 @@ fun HabitCard(
 
                 ActionCircles(
                     modifier = Modifier.padding(top = 16.dp),
-                    actions = actions,
+                    actions = actions.takeLast(Constants.DAY_COUNT),
                     habitColor = habit.color,
                     onActionToggle = { action, dayIndex ->
-                        val date = LocalDate.now().minus((4 - dayIndex).toLong(), ChronoUnit.DAYS)
+                        val date = LocalDate.now()
+                            .minus((Constants.DAY_COUNT - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
                         onActionToggle(action, habit, date)
                     })
             }

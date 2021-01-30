@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ofalvai.habittracker.persistence.entity.Action
 import com.ofalvai.habittracker.persistence.entity.Habit
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions
+import com.ofalvai.habittracker.persistence.util.testObserver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
@@ -112,10 +113,11 @@ class HabitEntityTest {
         val action3 = Action(id = 3, habit_id = habit2.id, timestamp = Instant.parse("2020-12-25T10:18:42Z"))
         val action4 = Action(id = 4, habit_id = habit1.id, timestamp = Instant.parse("2020-12-26T10:19:10Z"))
 
+        val observer = habitDao.getHabitsWithActions().testObserver()
         habitDao.insertHabit(habit1, habit2)
         habitDao.insertAction(action1, action2, action3, action4)
 
-        val habitsWithActions = habitDao.getHabitsWithActions()
+        val habitsWithActions = observer.observedValues.last()
         val expectedHabitsWithActions = listOf(
             HabitWithActions(habit1, listOf(action1, action4)),
             HabitWithActions(habit2, listOf(action2, action3))

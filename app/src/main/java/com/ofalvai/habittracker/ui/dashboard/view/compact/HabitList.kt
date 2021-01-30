@@ -36,7 +36,7 @@ fun CompactHabitList(
             items(habits) {
                 HabitItem(
                     habit = it.habit,
-                    actions = it.actions,
+                    actions = it.actions.takeLast(Constants.DAY_COUNT),
                     onActionToggle = onActionToggle,
                     onDetailClick = onHabitClick
                 )

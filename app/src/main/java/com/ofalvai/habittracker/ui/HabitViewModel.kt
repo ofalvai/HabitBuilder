@@ -1,6 +1,7 @@
 package com.ofalvai.habittracker.ui
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.model.Action
@@ -11,42 +12,32 @@ import kotlinx.coroutines.launch
 import java.time.*
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
+import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
+
+private const val ACTION_DAYS_TO_FETCH = 7
 
 class HabitViewModel(
     private val dao: HabitDao,
     private val coroutineScope: CoroutineScope
 ) : ViewModel() {
 
-    val habitsWithActions = MutableLiveData<List<HabitWithActions>>()
-    val habitWithActions = MutableLiveData<HabitWithActions?>()
+    val habitsWithActions = Transformations.map(
+        Transformations.distinctUntilChanged(dao.getHabitsWithActions()),
+        this::mapHabitEntityToModel
+    )
 
-    init {
-        loadHabitsWithHistory()
-    }
+    val habitWithActions = MutableLiveData<HabitWithActions?>()
 
     fun addHabit(habit: Habit) {
         coroutineScope.launch {
             val habitEntity = HabitEntity(name = habit.name, color = habit.color.toEntityColor())
             dao.insertHabit(habitEntity)
-
-            loadHabitsWithHistory()
         }
     }
 
-    fun toggleAction(habitId: Int, action: Action, date: LocalDate) {
+    fun toggleActionFromDashboard(habitId: Int, action: Action, date: LocalDate) {
         coroutineScope.launch {
-            if (!action.toggled) {
-                dao.deleteAction(action.id)
-            } else {
-                val newAction = ActionEntity(
-                    habit_id = habitId,
-                    timestamp = LocalDateTime.of(date, LocalTime.now()).toInstant(OffsetDateTime.now().offset)
-                )
-                dao.insertAction(newAction)
-            }
-
-            // TODO: only reload one habit
-            loadHabitsWithHistory()
+            toggleAction(habitId, action, date)
         }
     }
 
@@ -68,6 +59,13 @@ class HabitViewModel(
         }
     }
 
+    fun toggleActionFromDetail(habitId: Int, action: Action, date: LocalDate) {
+        coroutineScope.launch {
+            toggleAction(habitId, action, date)
+            fetchHabitDetails(habitId)
+        }
+    }
+
     fun updateHabit(habit: Habit) {
         coroutineScope.launch {
             dao.updateHabit(
@@ -81,15 +79,30 @@ class HabitViewModel(
         }
     }
 
-    private fun loadHabitsWithHistory() {
-        coroutineScope.launch {
-            habitsWithActions.value = dao.getHabitsWithActions().map {
-                HabitWithActions(
-                    Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
-                    actionsToRecentDays(it.actions),
-                    totalActionCount = it.actions.size
-                )
-            }
+    private suspend fun toggleAction(
+        habitId: Int,
+        updatedAction: Action,
+        date: LocalDate,
+    ) {
+        if (updatedAction.toggled) {
+            val newAction = ActionEntity(
+                habit_id = habitId,
+                timestamp = LocalDateTime.of(date, LocalTime.now())
+                    .toInstant(OffsetDateTime.now().offset)
+            )
+            dao.insertAction(newAction)
+        } else {
+            dao.deleteAction(updatedAction.id)
+        }
+    }
+
+    private fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): List<HabitWithActions> {
+        return habitsWithActions.map {
+            HabitWithActions(
+                Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
+                actionsToRecentDays(it.actions),
+                totalActionCount = it.actions.size
+            )
         }
     }
 
@@ -97,7 +110,7 @@ class HabitViewModel(
         val lastDay = LocalDate.now()
 
         val sortedActions = actions.sortedByDescending { action -> action.timestamp }
-        return (4 downTo 0).map { i ->
+        return (ACTION_DAYS_TO_FETCH - 1 downTo 0).map { i ->
             val targetDate = lastDay.minusDays(i.toLong())
             val actionOnDay = sortedActions.find { action ->
                 val actionDate = LocalDateTime

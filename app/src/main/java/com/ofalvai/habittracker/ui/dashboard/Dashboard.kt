@@ -31,7 +31,7 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
     val habits by viewModel.habitsWithActions.observeAsState(emptyList())
 
     val onActionToggle: (Action, Habit, LocalDate) -> Unit = { action, habit, date ->
-        viewModel.toggleAction(habit.id, action, date)
+        viewModel.toggleActionFromDashboard(habit.id, action, date)
     }
     val onHabitDetail: (Habit) -> (Unit) = {
         navController.navigate(Screen.HabitDetails.buildRoute(it.id))

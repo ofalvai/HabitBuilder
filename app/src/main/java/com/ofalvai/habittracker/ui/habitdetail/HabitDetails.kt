@@ -30,8 +30,7 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel) {
     }
 
     val onDayToggle: (LocalDate, Action) -> Unit = { date, action ->
-        viewModel.toggleAction(habitId, action, date)
-        viewModel.fetchHabitDetails(habitId)
+        viewModel.toggleActionFromDetail(habitId, action, date)
     }
 
     Column(Modifier.padding(32.dp)) {
