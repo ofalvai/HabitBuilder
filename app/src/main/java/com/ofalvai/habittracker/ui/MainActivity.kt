@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
             HabitTrackerTheme {
                 val navController = rememberNavController()
                 Scaffold(
-                    topBar = { MainTopBar() },
                     bottomBar = {
                         AppBottomNavigation(
                             onDashboardSelected = { navController.navigate(Screen.Dashboard.route) },
@@ -65,7 +64,8 @@ class MainActivity : AppCompatActivity() {
                         ) { backStackEntry ->
                             HabitDetailScreen(
                                 habitId = Screen.HabitDetails.idFrom(backStackEntry.arguments),
-                                viewModel = viewModel
+                                viewModel = viewModel,
+                                navController = navController
                             )
                         }
                     }
@@ -73,15 +73,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
-
-@Composable
-fun MainTopBar() {
-    TopAppBar(
-        title = { Text("Habit Builder") },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
-    )
 }
 
 @Composable

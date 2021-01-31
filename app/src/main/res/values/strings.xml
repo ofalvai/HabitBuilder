@@ -2,6 +2,9 @@
     <string name="app_name">HabitTracker</string>
     <string name="app_name_debug">HabitTracker Debug</string>
 
+    <string name="common_back">Back</string>
+    <string name="common_edit">Edit</string>
+
     <string name="addhabit_name_label">Habit name</string>
     <string name="addhabit_name_error">Enter a name for new habit</string>
     <string name="addhabit_save">Save</string>
@@ -25,4 +28,6 @@
 
     <string name="calendar_previous_month">Previous month</string>
     <string name="calendar_next_month">Next month</string>
+
+    <string name="habitdetail_total_actions">Done %d times</string>
 </resources>
