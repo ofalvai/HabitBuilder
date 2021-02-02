@@ -26,6 +26,10 @@ android {
         }
     }
 
+    lintOptions {
+        enable "DuplicateStrings", "NewerVersionAvailable"
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
