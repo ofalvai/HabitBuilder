@@ -56,7 +56,8 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel, navController: Na
         onBack = { navController.popBackStack() },
         onEdit = { viewModel.updateHabit(it) },
         onDelete = {
-            // TODO
+            viewModel.deleteHabit(it)
+            navController.popBackStack()
         },
         onDayToggle = onDayToggle
     )

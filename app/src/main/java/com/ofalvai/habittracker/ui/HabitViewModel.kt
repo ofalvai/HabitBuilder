@@ -80,6 +80,16 @@ class HabitViewModel(
         }
     }
 
+    fun deleteHabit(habit: Habit) {
+        coroutineScope.launch {
+            dao.deleteHabit(HabitEntity(
+                id = habit.id,
+                name = habit.name,
+                color = habit.color.toEntityColor()
+            ))
+        }
+    }
+
     private suspend fun toggleAction(
         habitId: Int,
         updatedAction: Action,
