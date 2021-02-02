@@ -4,6 +4,8 @@
 
     <string name="common_back">Back</string>
     <string name="common_edit">Edit</string>
+    <string name="common_save">Save</string>
+    <string name="common_delete">Delete</string>
 
     <string name="addhabit_name_label">Habit name</string>
     <string name="addhabit_name_error">Enter a name for new habit</string>

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -49,15 +51,13 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel, navController: Na
         viewModel.toggleActionFromDetail(habitId, action, date)
     }
 
-    val onColorPick: (Habit.Color) -> Unit = {
-        val newHabit = habitWithActions.habit.copy(color = it)
-        viewModel.updateHabit(newHabit)
-    }
-
     HabitDetailScreen(
         habitWithActions = habitWithActions,
         onBack = { navController.popBackStack() },
-        onColorPick = onColorPick,
+        onEdit = { viewModel.updateHabit(it) },
+        onDelete = {
+            // TODO
+        },
         onDayToggle = onDayToggle
     )
 }
@@ -66,17 +66,16 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel, navController: Na
 fun HabitDetailScreen(
     habitWithActions: HabitWithActions,
     onBack: () -> Unit,
-    onColorPick: (Habit.Color) -> Unit,
+    onEdit: (Habit) -> Unit,
+    onDelete: (Habit) -> Unit,
     onDayToggle: (LocalDate, Action) -> Unit,
 ) {
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
 
     Column {
-        HabitDetailHeader(habitWithActions, onBack = onBack, onEdit = { })
+        HabitDetailHeader(habitWithActions, onBack, onEdit, onDelete)
 
         Column(Modifier.padding(32.dp)) {
-            HabitColorPicker(initialColor = habitWithActions.habit.color, onColorPick = onColorPick)
-
             CalendarPager(
                 yearMonth = yearMonth,
                 onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
@@ -99,42 +98,78 @@ fun HabitDetailScreen(
 fun HabitDetailHeader(
     habitWithActions: HabitWithActions,
     onBack: () -> Unit,
-    onEdit: () -> Unit
+    onSave: (Habit) -> Unit,
+    onDelete: (Habit) -> Unit
 ) {
     val habitColor = habitWithActions.habit.color.composeColor
     val surfaceColor = habitColor.copy(alpha = 0.5f)
+    var isEditing by remember { mutableStateOf(false) }
+    var editingName by remember(habitWithActions.habit.name) {
+        mutableStateOf(habitWithActions.habit.name)
+    }
+    var editingColor by remember(habitWithActions.habit.color) {
+        mutableStateOf(habitWithActions.habit.color)
+    }
 
-    Surface(
-        color = surfaceColor
-    ) {
+    val onSaveClick = {
+        isEditing = false
+        val newValue = habitWithActions.habit.copy(name = editingName, color = editingColor)
+        onSave(newValue)
+    }
+
+
+    Surface(color = if (isEditing) MaterialTheme.colors.surface else surfaceColor) {
         Column(Modifier.padding(bottom = 32.dp)) {
             HabitDetailAppBar(
+                isEditing = isEditing,
                 onBack = onBack,
-                onEdit = onEdit
+                onEdit = { isEditing = true },
+                onSave = onSaveClick,
+                onDelete = { onDelete(habitWithActions.habit) }
             )
 
-            Text(
-                text = habitWithActions.habit.name,
-                modifier = Modifier.padding(horizontal = 32.dp),
-                style = MaterialTheme.typography.h3
-            )
+            if (isEditing) {
+                TextField(
+                    modifier = Modifier.padding(horizontal = 32.dp),
+                    value = editingName,
+                    onValueChange = { editingName = it }
+                )
+            } else {
+                Text(
+                    text = habitWithActions.habit.name,
+                    modifier = Modifier.padding(horizontal = 32.dp),
+                    style = MaterialTheme.typography.h3
+                )
+            }
 
-            Text(
-                text = stringResource(
-                    R.string.habitdetail_total_actions,
-                    habitWithActions.totalActionCount
-                ),
-                modifier = Modifier.padding(horizontal = 32.dp),
-                style = MaterialTheme.typography.body1
-            )
+            if (!isEditing) {
+                Text(
+                    text = stringResource(
+                        R.string.habitdetail_total_actions,
+                        habitWithActions.totalActionCount
+                    ),
+                    modifier = Modifier.padding(horizontal = 32.dp),
+                    style = MaterialTheme.typography.body1
+                )
+            }
+
+            if (isEditing) {
+                HabitColorPicker(
+                    initialColor = habitWithActions.habit.color,
+                    onColorPick = { editingColor = it }
+                )
+            }
         }
     }
 }
 
 @Composable
 fun HabitDetailAppBar(
+    isEditing: Boolean,
     onBack: () -> Unit,
-    onEdit: () -> Unit
+    onEdit: () -> Unit,
+    onSave: () -> Unit,
+    onDelete: () -> Unit
 ) {
     TopAppBar(
         title = { },
@@ -144,8 +179,17 @@ fun HabitDetailAppBar(
             }
         },
         actions = {
-            IconButton(onClick = onEdit) {
-                Icon(Icons.Default.Edit, stringResource(R.string.common_edit))
+            if (isEditing) {
+                IconButton(onClick = onSave) {
+                    Icon(Icons.Default.Check, stringResource(R.string.common_save))
+                }
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Default.Delete, stringResource(R.string.common_delete))
+                }
+            } else {
+                IconButton(onClick = onEdit) {
+                    Icon(Icons.Default.Edit, stringResource(R.string.common_edit))
+                }
             }
         },
         backgroundColor = Color.Transparent,
@@ -153,7 +197,7 @@ fun HabitDetailAppBar(
     )
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview(showBackground = true, widthDp = 400)
 @Composable
 fun PreviewHabitDetailScreen() {
     HabitTrackerTheme {
@@ -164,7 +208,8 @@ fun PreviewHabitDetailScreen() {
                 2
             ),
             onBack = { },
-            onColorPick = { },
+            onEdit = { },
+            onDelete = { },
             onDayToggle = { _, _ -> }
         )
     }
