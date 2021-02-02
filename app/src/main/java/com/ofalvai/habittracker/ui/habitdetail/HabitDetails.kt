@@ -111,11 +111,14 @@ fun HabitDetailHeader(
     var editingColor by remember(habitWithActions.habit.color) {
         mutableStateOf(habitWithActions.habit.color)
     }
+    var isNameValid by remember { mutableStateOf(true) }
 
     val onSaveClick = {
-        isEditing = false
-        val newValue = habitWithActions.habit.copy(name = editingName, color = editingColor)
-        onSave(newValue)
+        if (isNameValid) {
+            isEditing = false
+            val newValue = habitWithActions.habit.copy(name = editingName, color = editingColor)
+            onSave(newValue)
+        }
     }
 
 
@@ -133,7 +136,11 @@ fun HabitDetailHeader(
                 TextField(
                     modifier = Modifier.padding(horizontal = 32.dp),
                     value = editingName,
-                    onValueChange = { editingName = it }
+                    onValueChange = {
+                        editingName = it
+                        isNameValid = it.isNotBlank()
+                    },
+                    isErrorValue = !isNameValid
                 )
             } else {
                 Text(
