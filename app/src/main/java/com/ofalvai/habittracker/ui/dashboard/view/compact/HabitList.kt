@@ -31,7 +31,6 @@ fun CompactHabitList(
         )
 
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(bottom = 48.dp)
         ) {
             items(habits.size) { index ->

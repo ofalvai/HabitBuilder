@@ -2,13 +2,17 @@ package com.ofalvai.habittracker.ui.dashboard.view.fiveday
 
 import android.os.Vibrator
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +47,8 @@ fun HabitCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clickable(onClick = { onDetailClick(habit) }),
-        elevation = 2.dp
+        elevation = 2.dp,
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(

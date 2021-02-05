@@ -1,6 +1,7 @@
 package com.ofalvai.habittracker.ui.dashboard.view.compact
 
 import android.os.Vibrator
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -50,9 +51,10 @@ fun HabitItem(
                     .padding(start = 16.dp)
                     .align(Alignment.CenterVertically),
                 text = habit.name,
-                style = MaterialTheme.typography.subtitle1
+                style = MaterialTheme.typography.subtitle2
             )
             IconButton(
+                modifier = Modifier.size(36.dp),
                 onClick = { onDetailClick(habit) }
             ) {
                 Icon(
@@ -140,7 +142,7 @@ fun ActionSquare(
     onToggle: (Boolean) -> Unit,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else AppColor.inactiveDay
+    val color = if (toggled) activeColor else Color.Black.copy(alpha = 0.1f)
     val vibrator = AmbientContext.current.getSystemService<Vibrator>()!!
 
     Surface(

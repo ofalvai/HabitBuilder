@@ -33,8 +33,6 @@ object AppColor {
         val habitYellow = Color(0xFFFFCC79)
         val habitPink = Color(0xFFE08FB8)
     }
-
-    val inactiveDay = Color(0xFFD9D4D4)
 }
 
 val Colors.habitRed: Color
