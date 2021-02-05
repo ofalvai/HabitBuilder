@@ -83,9 +83,8 @@ dependencies {
     implementation "androidx.compose.animation:animation:$compose_version"
     implementation "androidx.navigation:navigation-compose:1.0.0-alpha06"
 
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
 

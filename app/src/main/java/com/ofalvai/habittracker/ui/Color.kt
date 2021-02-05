@@ -4,18 +4,17 @@ import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.ofalvai.habittracker.ui.AppColor.Light.habitGreen
 import com.ofalvai.habittracker.ui.model.Habit
 
 object AppColor {
 
-    val primary = Color(0xFFFFCC79)
+    val primary = Color(0xFF2B3940)
     val primaryVariant = Color(0xFFFFF5E5)
     val secondary = Color.Cyan // TODO
 
     object Light {
-        val background = Color(0xFFFFF1D6)
-        val surface = Color(0xFFFFF8EA)
+        val background = Color(0xFFFFF8EA)
+        val surface = Color.White
         val onSurface = Color(0xFF262626)
         val onBackground = Color(0xFF262626)
 
