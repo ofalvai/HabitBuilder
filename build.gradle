@@ -29,7 +29,8 @@ doctor {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        maven { url "https://kotlin.bintray.com/kotlinx" } // kotlinx artifacts required by Compose Runtime
         maven { url "https://jitpack.io" }
     }
 }
