@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.HabitTracker" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 </resources>

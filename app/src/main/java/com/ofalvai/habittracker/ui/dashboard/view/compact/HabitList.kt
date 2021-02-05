@@ -13,6 +13,7 @@ import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
 
 @Composable
@@ -24,7 +25,7 @@ fun CompactHabitList(
 ) {
     Column {
         DayLegend(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().statusBarsPadding(),
             mostRecentDay = LocalDate.now(),
             pastDayCount = 6
         )

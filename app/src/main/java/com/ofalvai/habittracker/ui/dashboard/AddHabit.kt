@@ -20,6 +20,7 @@ import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.TextFieldError
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.model.Habit
+import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable
 fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
@@ -28,7 +29,7 @@ fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
         navController.popBackStack()
     }
 
-    Column {
+    Column(Modifier.statusBarsPadding()) {
         Suggestions(habits = Suggestions.habits, onSelect = onSave)
         AddHabitForm(onSave)
     }

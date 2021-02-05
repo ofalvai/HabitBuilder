@@ -25,6 +25,7 @@ import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.cancel
 import java.time.Instant
 import java.time.LocalDate
@@ -123,7 +124,7 @@ fun HabitDetailHeader(
 
 
     Surface(color = if (isEditing) MaterialTheme.colors.surface else surfaceColor) {
-        Column(Modifier.padding(bottom = 32.dp)) {
+        Column(Modifier.padding(bottom = 32.dp).statusBarsPadding()) {
             HabitDetailAppBar(
                 isEditing = isEditing,
                 onBack = onBack,

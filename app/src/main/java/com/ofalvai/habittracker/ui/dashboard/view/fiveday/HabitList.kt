@@ -11,6 +11,7 @@ import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
 
 @Composable
@@ -21,7 +22,7 @@ fun FiveDayHabitList(
     onAddHabitClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp).statusBarsPadding(),
         horizontalAlignment = Alignment.End
     ) {
         val width = Constants.SIZE_CIRCLE * 5 + Constants.PADDING_CIRCLE * 8
