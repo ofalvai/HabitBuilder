@@ -41,12 +41,14 @@ fun HabitCard(
     Card(
         Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onDetailClick(habit) })
+            .padding(horizontal = 16.dp)
+            .clickable(onClick = { onDetailClick(habit) }),
+        elevation = 2.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = habit.name,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h6
             )
 
             Row(

@@ -134,8 +134,10 @@ fun AppBottomNavigation(
                 icon = { Icon(Icons.Filled.CheckCircle, stringResource(R.string.tab_dashboard)) },
                 selected = selectedIndex == 0,
                 onClick = {
-                    selectedIndex = 0
-                    onDashboardSelected()
+                    if (selectedIndex != 0) {
+                        selectedIndex = 0
+                        onDashboardSelected()
+                    }
                 },
                 label = { Text(stringResource(R.string.tab_dashboard)) }
             )
@@ -143,8 +145,10 @@ fun AppBottomNavigation(
                 icon = { Icon(Icons.Filled.DateRange, stringResource(R.string.tab_dashboard)) },
                 selected = selectedIndex == 1,
                 onClick = {
-                    selectedIndex = 1
-                    onInsightsSelected()
+                    if (selectedIndex != 1) {
+                        selectedIndex = 1
+                        onInsightsSelected()
+                    }
                 },
                 label = { Text(stringResource(R.string.tab_insights)) }
             )

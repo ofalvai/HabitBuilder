@@ -25,7 +25,7 @@ fun CompactHabitList(
 ) {
     Column {
         DayLegend(
-            modifier = Modifier.fillMaxWidth().statusBarsPadding(),
+            modifier = Modifier.fillMaxWidth(),
             mostRecentDay = LocalDate.now(),
             pastDayCount = 6
         )

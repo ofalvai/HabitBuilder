@@ -22,12 +22,11 @@ fun FiveDayHabitList(
     onAddHabitClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp).statusBarsPadding(),
         horizontalAlignment = Alignment.End
     ) {
         val width = Constants.SIZE_CIRCLE * 5 + Constants.PADDING_CIRCLE * 8
         DayLegend(
-            modifier = Modifier.wrapContentWidth(Alignment.End).preferredWidth(width).padding(horizontal = 16.dp),
+            modifier = Modifier.wrapContentWidth(Alignment.End).preferredWidth(width).padding(end = 32.dp),
             mostRecentDay = LocalDate.now(),
             pastDayCount = 4
         )

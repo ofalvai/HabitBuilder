@@ -2,10 +2,7 @@ package com.ofalvai.habittracker.ui.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -29,7 +26,9 @@ import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.model.Habit
+import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
+import java.time.LocalTime
 
 val dashboardConfig = DashboardConfig.FiveDay
 
@@ -55,7 +54,12 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
         showPlaceholder = habits.isEmpty(),
         placeholder = { DashboardPlaceholder(onAddHabitClick) }
     ) {
-        Box(Modifier.fillMaxSize().background(backgroundBrush)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(backgroundBrush)
+                .statusBarsPadding()) {
+
             when (dashboardConfig) {
                 DashboardConfig.FiveDay -> {
                     FiveDayHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
@@ -70,7 +74,12 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
 
 @Composable
 fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
-    Box(Modifier.fillMaxWidth().wrapContentWidth().padding(top = 48.dp)) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .wrapContentWidth()
+            .padding(top = 48.dp)
+    ) {
         Button(
             modifier = Modifier.padding(16.dp),
             onClick = onAddHabitClick
