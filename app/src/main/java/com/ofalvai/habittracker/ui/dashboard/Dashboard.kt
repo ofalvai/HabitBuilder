@@ -5,22 +5,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.AppColor
-import com.ofalvai.habittracker.ui.ContentWithPlaceholder
-import com.ofalvai.habittracker.ui.HabitViewModel
-import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.*
 import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.Action
@@ -30,8 +31,6 @@ import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
 import java.time.LocalTime
 
-val dashboardConfig = DashboardConfig.FiveDay
-
 private val backgroundBrush = Brush.linearGradient(
     colors = listOf(Color(0xFFFFCC79), AppColor.Light.background),
     start = Offset.Zero,
@@ -40,6 +39,7 @@ private val backgroundBrush = Brush.linearGradient(
 
 @Composable
 fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
+    var config by remember { mutableStateOf(DashboardConfig.FiveDay) }
     val habits by viewModel.habitsWithActions.observeAsState(emptyList())
 
     val onActionToggle: (Action, Habit, LocalDate) -> Unit = { action, habit, date ->
@@ -54,19 +54,69 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
         showPlaceholder = habits.isEmpty(),
         placeholder = { DashboardPlaceholder(onAddHabitClick) }
     ) {
-        Box(
+        Column(
             Modifier
                 .fillMaxSize()
                 .background(backgroundBrush)
-                .statusBarsPadding()) {
+                .statusBarsPadding()
+        ) {
+            DashboardAppBar(
+                config = config,
+                onConfigChange = { config = it }
+            )
 
-            when (dashboardConfig) {
+            when (config) {
                 DashboardConfig.FiveDay -> {
                     FiveDayHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
                 }
                 DashboardConfig.Compact -> {
                     CompactHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun DashboardAppBar(
+    config: DashboardConfig,
+    onConfigChange: (DashboardConfig) -> Unit
+) {
+    var menuExpanded by remember { mutableStateOf(false) }
+    val onConfigChangeClick = {
+        when (config) {
+            DashboardConfig.FiveDay -> onConfigChange(DashboardConfig.Compact)
+            DashboardConfig.Compact -> onConfigChange(DashboardConfig.FiveDay)
+        }
+    }
+
+    Row(modifier = Modifier.height(48.dp)) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(start = 16.dp),
+            text = stringResource(R.string.dashboard_title),
+            style = MaterialTheme.typography.h6
+        )
+
+        Spacer(Modifier.weight(1f))
+
+        IconButton(onClick = onConfigChangeClick) {
+            Icon(vectorResource(R.drawable.ic_dashboard_layout), null)
+        }
+
+        DropdownMenu(
+            toggle = {
+                IconButton(onClick = { menuExpanded = true }) {
+                    Icon(Icons.Default.MoreVert, stringResource(R.string.common_more))
+                }
+            },
+            expanded = menuExpanded,
+            onDismissRequest = { menuExpanded = false },
+            dropdownOffset = DpOffset(8.dp, 0.dp)
+        ) {
+            DropdownMenuItem(onClick = { }) {
+                Text("Settings")
             }
         }
     }

@@ -6,12 +6,14 @@
     <string name="common_edit">Edit</string>
     <string name="common_save">Save</string>
     <string name="common_delete">Delete</string>
+    <string name="common_more">More</string>
 
     <string name="addhabit_name_label">Habit name</string>
     <string name="addhabit_name_error">Enter a name for new habit</string>
     <string name="addhabit_save">Save</string>
     <string name="addhabit_suggestions_title">Try one of these:</string>
 
+    <string name="dashboard_title">My habits</string>
     <string name="dashboard_fiveday_total_actions">%d total</string>
     <string name="dashboard_toggle_help">Long press to toggle</string>
     <string name="dashboard_create_habit">Create new habit</string>

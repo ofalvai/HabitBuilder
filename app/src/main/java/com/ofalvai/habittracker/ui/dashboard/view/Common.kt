@@ -58,7 +58,7 @@ fun DayLegend(
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         (pastDayCount downTo 0).map {
-            DayLabel(day = mostRecentDay.minusDays(it.toLong()), isHighlighted = it == 0)
+            DayLabel(day = mostRecentDay.minusDays(it.toLong()))
         }
     }
 }
@@ -66,7 +66,6 @@ fun DayLegend(
 @Composable
 fun DayLabel(
     day: LocalDate,
-    isHighlighted: Boolean
 ) {
     val modifier = Modifier
         .wrapContentHeight(Alignment.Top)
@@ -75,23 +74,13 @@ fun DayLabel(
         Text(
             text = day.dayOfMonth.toString(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption.copy(fontSize = 14.sp)
+            style = MaterialTheme.typography.caption
         )
         Text(
             text = day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Bold)
         )
-        if (isHighlighted) {
-            Surface(
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .size(4.dp)
-                    .align(Alignment.CenterHorizontally),
-                shape = CircleShape,
-                color = MaterialTheme.colors.primary
-            ) {}
-        }
     }
 }
 
