@@ -4,7 +4,6 @@ plugins {
 }
 
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.bitrise.trace.plugin'
 
 android {
     compileSdkVersion 30
@@ -92,8 +91,6 @@ dependencies {
     implementation 'com.github.kizitonwose:CalendarView:1.0.1'
 
     implementation "dev.chrisbanes.accompanist:accompanist-insets:0.5.0"
-
-    implementation 'io.bitrise.trace:trace-sdk:0.0.5'
 
     testImplementation 'junit:junit:4.13.1'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_test_version"
