@@ -13,15 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.*
+import com.ofalvai.habittracker.ui.AppColor
+import com.ofalvai.habittracker.ui.ContentWithPlaceholder
+import com.ofalvai.habittracker.ui.HabitViewModel
+import com.ofalvai.habittracker.ui.Screen
 import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.Action
@@ -29,7 +31,6 @@ import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.model.Habit
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
-import java.time.LocalTime
 
 private val backgroundBrush = Brush.linearGradient(
     colors = listOf(Color(0xFFFFCC79), AppColor.Light.background),
@@ -102,21 +103,21 @@ fun DashboardAppBar(
         Spacer(Modifier.weight(1f))
 
         IconButton(onClick = onConfigChangeClick) {
-            Icon(vectorResource(R.drawable.ic_dashboard_layout), null)
+            Icon(painterResource(R.drawable.ic_dashboard_layout), null)
         }
 
-        DropdownMenu(
-            toggle = {
-                IconButton(onClick = { menuExpanded = true }) {
-                    Icon(Icons.Default.MoreVert, stringResource(R.string.common_more))
+        Box {
+            IconButton(onClick = { menuExpanded = true }) {
+                Icon(Icons.Default.MoreVert, stringResource(R.string.common_more))
+            }
+            DropdownMenu(
+                expanded = menuExpanded,
+                onDismissRequest = { menuExpanded = false },
+                offset = DpOffset(8.dp, 0.dp)
+            ) {
+                DropdownMenuItem(onClick = { }) {
+                    Text("Settings")
                 }
-            },
-            expanded = menuExpanded,
-            onDismissRequest = { menuExpanded = false },
-            dropdownOffset = DpOffset(8.dp, 0.dp)
-        ) {
-            DropdownMenuItem(onClick = { }) {
-                Text("Settings")
             }
         }
     }

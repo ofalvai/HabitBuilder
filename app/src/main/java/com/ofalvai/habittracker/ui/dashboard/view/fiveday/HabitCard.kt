@@ -2,22 +2,19 @@ package com.ofalvai.habittracker.ui.dashboard.view.fiveday
 
 import android.os.Vibrator
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -128,7 +125,7 @@ fun ActionCircle(
 ) {
     val color = if (toggled) activeColor else Color.Transparent
     val secondaryColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
-    val vibrator = AmbientContext.current.getSystemService<Vibrator>()!!
+    val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
     val rippleRadius = remember { Constants.SIZE_CIRCLE / 1.7f } // Make it a bit bigger than D / 2
 
     Surface(

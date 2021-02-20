@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -39,8 +39,8 @@ fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
 fun AddHabitForm(
     onSave: (Habit) -> Unit
 ) {
-    var name by savedInstanceState { "" }
-    var color by savedInstanceState { Habit.DEFAULT_COLOR }
+    var name by rememberSaveable { mutableStateOf("") }
+    var color by rememberSaveable { mutableStateOf(Habit.DEFAULT_COLOR) }
     var isNameValid by remember { mutableStateOf(true) }
 
     val onSaveClick: () -> Unit = {

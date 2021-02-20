@@ -112,9 +112,10 @@ fun HabitColor(
     ) {
         if (isSelected) {
             Icon(
-                Icons.Filled.Check,
+                imageVector = Icons.Filled.Check,
                 tint = Color.Black.copy(alpha = 0.75f),
-                contentDescription = null
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
             )
         }
     }

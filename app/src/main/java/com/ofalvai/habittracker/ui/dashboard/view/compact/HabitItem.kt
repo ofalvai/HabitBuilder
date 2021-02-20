@@ -1,7 +1,6 @@
 package com.ofalvai.habittracker.ui.dashboard.view.compact
 
 import android.os.Vibrator
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.AppColor
 import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
@@ -143,7 +141,7 @@ fun ActionSquare(
     onSinglePress: () -> Unit
 ) {
     val color = if (toggled) activeColor else Color.Black.copy(alpha = 0.1f)
-    val vibrator = AmbientContext.current.getSystemService<Vibrator>()!!
+    val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
     Surface(
         shape = RectangleShape,

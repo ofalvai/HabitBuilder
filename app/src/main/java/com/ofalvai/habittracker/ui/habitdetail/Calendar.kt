@@ -20,7 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,7 +46,7 @@ fun HabitCalendar(
     actions: List<Action>,
     onDayToggle: (LocalDate, Action) -> Unit
 ) {
-    val context = AmbientContext.current
+    val context = LocalContext.current
 
     val view = remember {
         CalendarView(context).apply {
@@ -165,9 +165,9 @@ private class DayViewContainer(
             }
 
             if (day.date == LocalDate.now()) {
-                textView.setTypeface(Typeface.DEFAULT_BOLD)
+                textView.typeface = Typeface.DEFAULT_BOLD
             } else {
-                textView.setTypeface(Typeface.DEFAULT)
+                textView.typeface = Typeface.DEFAULT
             }
         } else {
             textView.visibility = View.INVISIBLE
