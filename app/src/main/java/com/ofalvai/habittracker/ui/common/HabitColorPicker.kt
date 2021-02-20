@@ -1,16 +1,12 @@
 package com.ofalvai.habittracker.ui.common
 
-import androidx.compose.animation.DpPropKey
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.TransitionState
-import androidx.compose.animation.core.transitionDefinition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.transition
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -27,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.model.Habit
+
+enum class ColorPickerState { Default, Selected }
 
 @Composable
 fun HabitColorPicker(
@@ -46,20 +44,19 @@ fun HabitColorPicker(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        items(colors.size) { index ->
-            val isSelected = colors[index] == color
-            val state = transition(
-                definition = colorPickerTransition,
-                toState = if (isSelected) ColorPickerState.Selected else ColorPickerState.Default,
+        items(colors) {
+            val isSelected = it == color
+            val transition: Transition<ColorPickerState> = updateTransition(
+                targetState = if (isSelected) ColorPickerState.Selected else ColorPickerState.Default
             )
 
             HabitColor(
-                color = colors[index],
+                color = it,
                 isSelected = isSelected,
-                state = state,
+                transition = transition,
                 onClick = {
-                    color = colors[index]
-                    onColorPick(colors[index])
+                    color = it
+                    onColorPick(it)
                 }
             )
         }
@@ -70,12 +67,37 @@ fun HabitColorPicker(
 fun HabitColor(
     color: Habit.Color,
     isSelected: Boolean,
-    state: TransitionState,
+    transition: Transition<ColorPickerState>,
     onClick: () -> Unit
 ) {
-    val size = state[sizeKey]
+    val animationSpec = tween<Dp>(easing = LinearOutSlowInEasing, durationMillis = 250)
+    val size: Dp by transition.animateDp(
+        transitionSpec = { animationSpec }
+    ) { state ->
+        when (state) {
+            ColorPickerState.Default -> 48.dp
+            ColorPickerState.Selected -> 56.dp
+        }
+    }
+    val horizontalPadding: Dp by transition.animateDp(
+        transitionSpec = { animationSpec }
+    ) { state ->
+        when (state) {
+            ColorPickerState.Default -> 4.dp
+            ColorPickerState.Selected -> 0.dp
+        }
+    }
+    val verticalPadding: Dp by transition.animateDp(
+        transitionSpec = { animationSpec }
+    ) { state ->
+        when (state) {
+            ColorPickerState.Default -> 8.dp
+            ColorPickerState.Selected -> 0.dp
+        }
+    }
+
     val modifier = Modifier
-        .padding(horizontal = state[horizontalPaddingKey], vertical = state[verticalPaddingKey])
+        .padding(horizontal = horizontalPadding, vertical = verticalPadding)
         .size(size)
         .clickable(
             onClick = onClick,
@@ -103,38 +125,5 @@ fun HabitColor(
 fun PreviewHabitColorPicker() {
     HabitTrackerTheme {
         HabitColorPicker(initialColor = Habit.Color.Green, onColorPick = { })
-    }
-}
-
-private enum class ColorPickerState { Default, Selected }
-
-private val sizeKey = DpPropKey("size")
-private val horizontalPaddingKey = DpPropKey("horizontal_padding")
-private val verticalPaddingKey = DpPropKey("vertical_padding")
-
-private val colorPickerTransition = transitionDefinition<ColorPickerState> {
-    state(ColorPickerState.Default) {
-        this[sizeKey] = 48.dp
-        this[horizontalPaddingKey] = 4.dp
-        this[verticalPaddingKey] = 8.dp
-    }
-
-    state(ColorPickerState.Selected) {
-        this[sizeKey] = 56.dp
-        this[horizontalPaddingKey] = 0.dp
-        this[verticalPaddingKey] = 0.dp
-    }
-
-    val animationSpec = tween<Dp>(easing = LinearOutSlowInEasing, durationMillis = 250)
-    transition(fromState = ColorPickerState.Default, toState = ColorPickerState.Selected) {
-        sizeKey using animationSpec
-        horizontalPaddingKey using animationSpec
-        verticalPaddingKey using animationSpec
-    }
-
-    transition(fromState = ColorPickerState.Selected, toState = ColorPickerState.Default) {
-        sizeKey using animationSpec
-        horizontalPaddingKey using animationSpec
-        verticalPaddingKey using animationSpec
     }
 }
