@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.ofalvai.habittracker"
-        minSdkVersion 21
+        minSdkVersion 22 // Trace minSdk is 22
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
