@@ -113,12 +113,17 @@ fun DashboardAppBar(
 
 @Composable
 fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
-    Box(
+    Column(
         Modifier
             .fillMaxWidth()
             .wrapContentWidth()
-            .padding(top = 48.dp)
+            .padding(top = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        DashboardAppBar(config = DashboardConfig.FiveDay, onConfigChange = { })
+
+        Spacer(Modifier.padding(top = 32.dp))
+
         Button(
             modifier = Modifier.padding(16.dp),
             onClick = onAddHabitClick
