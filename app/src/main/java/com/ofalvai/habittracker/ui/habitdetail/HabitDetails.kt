@@ -1,6 +1,7 @@
 package com.ofalvai.habittracker.ui.habitdetail
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -134,13 +135,13 @@ fun HabitDetailHeader(
             )
 
             if (isEditing) {
-                TextField(
+                OutlinedTextField(
                     value = editingName,
                     onValueChange = {
                         editingName = it
                         isNameValid = it.isNotBlank()
                     },
-                    modifier = Modifier.padding(horizontal = 32.dp),
+                    modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
                     isError = !isNameValid
                 )
             } else {

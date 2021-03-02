@@ -13,7 +13,7 @@ object AppColor {
     val secondary = Color.Cyan // TODO
 
     object Light {
-        val background = Color(0xFFFFF8EA)
+        val background = Color(0xFFFFF1DD)
         val surface = Color.White
         val onSurface = Color(0xFF262626)
         val onBackground = Color(0xFF262626)

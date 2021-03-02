@@ -1,6 +1,5 @@
 package com.ofalvai.habittracker.ui.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,9 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
@@ -20,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.AppColor
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.Screen
@@ -31,12 +26,6 @@ import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.model.Habit
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
-
-private val backgroundBrush = Brush.linearGradient(
-    colors = listOf(Color(0xFFFFCC79), AppColor.Light.background),
-    start = Offset.Zero,
-    end = Offset.Infinite
-)
 
 @Composable
 fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
@@ -58,7 +47,6 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
         Column(
             Modifier
                 .fillMaxSize()
-                .background(backgroundBrush)
                 .statusBarsPadding()
         ) {
             DashboardAppBar(

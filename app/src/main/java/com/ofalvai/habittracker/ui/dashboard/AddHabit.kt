@@ -6,9 +6,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +33,7 @@ fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
     }
 
     Column(Modifier.statusBarsPadding()) {
+        AddHabitAppBar(onBack = { navController.popBackStack() })
         Suggestions(habits = Suggestions.habits, onSelect = onSave)
         AddHabitForm(onSave)
     }
@@ -57,8 +61,8 @@ fun AddHabitForm(
 
     Column(Modifier.fillMaxWidth()) {
         // TODO: keyboard IME actions, focus
-        TextField(
-            modifier = Modifier.padding(horizontal = 32.dp),
+        OutlinedTextField(
+            modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
             value = name,
             onValueChange = { name = it },
             label = { Text(stringResource(R.string.addhabit_name_label)) },
@@ -105,6 +109,20 @@ fun Suggestions(habits: List<Habit>, onSelect: (Habit) -> Unit) {
             }
         }
     }
+}
+
+@Composable
+fun AddHabitAppBar(onBack: () -> Unit) {
+    TopAppBar(
+        title = { Text(stringResource(R.string.addhabit_appbar_title)) },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowBack, stringResource(R.string.common_back))
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
+    )
 }
 
 @Composable
