@@ -58,7 +58,10 @@ fun HabitCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(R.string.dashboard_fiveday_total_actions, totalActionCount),
+                    text = stringResource(
+                        R.string.dashboard_fiveday_total_actions,
+                        totalActionCount
+                    ),
                     style = MaterialTheme.typography.caption
                 )
 
@@ -140,7 +143,7 @@ fun ActionCircle(
         if (isHighlighted) {
             Surface(
                 shape = CircleShape,
-                modifier = Modifier.size(8.dp),
+                modifier = Modifier.requiredSize(8.dp),
                 color = secondaryColor
             ) { }
         }

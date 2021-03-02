@@ -96,7 +96,7 @@ fun TextFieldError(
     textError: String
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.preferredWidth(16.dp))
+        Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = textError,
             modifier = Modifier.fillMaxWidth(),
@@ -121,7 +121,7 @@ fun AppBottomNavigation(
         elevation = 8.dp,
     ) {
         Row(
-            Modifier.fillMaxWidth().navigationBarsPadding().preferredHeight(56.dp),
+            Modifier.fillMaxWidth().navigationBarsPadding().height(56.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             BottomNavigationItem(

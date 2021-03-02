@@ -2,8 +2,8 @@ package com.ofalvai.habittracker.ui.common
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -101,7 +101,7 @@ fun HabitColor(
         .size(size)
         .clickable(
             onClick = onClick,
-            interactionState = remember { InteractionState() },
+            interactionSource = remember { MutableInteractionSource() },
             indication = rememberRipple(radius = size / 2, bounded = false)
         )
     Surface(
@@ -115,7 +115,7 @@ fun HabitColor(
                 imageVector = Icons.Filled.Check,
                 tint = Color.Black.copy(alpha = 0.75f),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.requiredSize(24.dp)
             )
         }
     }

@@ -135,13 +135,13 @@ fun HabitDetailHeader(
 
             if (isEditing) {
                 TextField(
-                    modifier = Modifier.padding(horizontal = 32.dp),
                     value = editingName,
                     onValueChange = {
                         editingName = it
                         isNameValid = it.isNotBlank()
                     },
-                    isErrorValue = !isNameValid
+                    modifier = Modifier.padding(horizontal = 32.dp),
+                    isError = !isNameValid
                 )
             } else {
                 Text(

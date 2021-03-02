@@ -3,11 +3,11 @@ package com.ofalvai.habittracker.ui.dashboard.view
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.compose.foundation.Interaction
-import androidx.compose.foundation.InteractionState
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -16,15 +16,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.gesture.longPressGestureFilter
-import androidx.compose.ui.gesture.pressIndicatorGestureFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import java.time.LocalDate
@@ -105,33 +103,39 @@ fun Modifier.satisfyingToggleable(
     onSinglePress: () -> Unit
 ): Modifier {
     return composed {
-        val interactionState = remember { InteractionState() }
+        val interactionState = remember { MutableInteractionSource() }
         var isSinglePress by remember { mutableStateOf(false) }
 
         this
-            .pressIndicatorGestureFilter(
-                onStart = {
-                    isSinglePress = true
-                    vibrator.vibrateCompat(longArrayOf(0, 50))
-                    interactionState.addInteraction(Interaction.Pressed, it)
-                },
-                onStop = {
-                    if (isSinglePress) {
-                        onSinglePress()
-                    }
-                    isSinglePress = false
-                    interactionState.removeInteraction(Interaction.Pressed)
-                },
-                onCancel = {
-                    isSinglePress = false
-                    interactionState.removeInteraction(Interaction.Pressed)
-                }
-            )
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        isSinglePress = true
 
-            .longPressGestureFilter {
-                isSinglePress = false
-                vibrator.vibrateCompat(longArrayOf(0, 75, 50, 75))
-                onToggle(!toggled)
+                        vibrator.vibrateCompat(longArrayOf(0, 50))
+                        val press = PressInteraction.Press(it)
+                        interactionState.emit(press)
+
+                        val released = tryAwaitRelease()
+
+                        if (isSinglePress) {
+                            onSinglePress()
+                        }
+                        isSinglePress = false
+
+                        val endInteraction = if (released) {
+                            PressInteraction.Release(press)
+                        } else {
+                            PressInteraction.Cancel(press)
+                        }
+                        interactionState.emit(endInteraction)
+                    },
+                    onLongPress = {
+                        isSinglePress = false
+                        vibrator.vibrateCompat(longArrayOf(0, 75, 50, 75))
+                        onToggle(!toggled)
+                    }
+                )
             }
             .indication(interactionState, rememberRipple(radius = rippleRadius, bounded = rippleBounded))
     }

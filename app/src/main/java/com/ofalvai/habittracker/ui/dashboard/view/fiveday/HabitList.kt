@@ -11,7 +11,6 @@ import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
 
 @Composable
@@ -26,7 +25,7 @@ fun FiveDayHabitList(
     ) {
         val width = Constants.SIZE_CIRCLE * 5 + Constants.PADDING_CIRCLE * 8
         DayLegend(
-            modifier = Modifier.wrapContentWidth(Alignment.End).preferredWidth(width).padding(end = 32.dp),
+            modifier = Modifier.wrapContentWidth(Alignment.End).width(width).padding(end = 32.dp),
             mostRecentDay = LocalDate.now(),
             pastDayCount = 4
         )
