@@ -25,11 +25,14 @@ import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 import com.ofalvai.habittracker.persistence.entity.Habit.Color as ColorEntity
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
+import com.ofalvai.habittracker.ui.AppPreferences
+import org.junit.Before
 
 @ExperimentalCoroutinesApi
 class DashboardViewModelTest {
 
     private val dao = mock<HabitDao>()
+    private val appPreferences = mock<AppPreferences>()
 
     private lateinit var viewModel: HabitViewModel
 
@@ -47,7 +50,7 @@ class DashboardViewModelTest {
         ))
         )
 
-        viewModel = HabitViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
         viewModel.habitsWithActions.testObserver()
 
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
@@ -71,7 +74,7 @@ class DashboardViewModelTest {
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), actions),
         )))
 
-        viewModel = HabitViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
         viewModel.habitsWithActions.testObserver()
 
         val expectedActionHistory = listOf(
@@ -101,7 +104,7 @@ class DashboardViewModelTest {
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), actions),
         )))
 
-        viewModel = HabitViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
         viewModel.habitsWithActions.testObserver()
 
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
@@ -128,7 +131,7 @@ class DashboardViewModelTest {
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), actions),
         )))
 
-        viewModel = HabitViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
         viewModel.habitsWithActions.testObserver()
 
         val expectedActionHistory = listOf(
@@ -157,7 +160,7 @@ class DashboardViewModelTest {
         ))
         )
 
-        viewModel = HabitViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
         val observer = viewModel.habitsWithActions.testObserver()
 
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
@@ -182,7 +185,7 @@ class DashboardViewModelTest {
         ))
         given(dao.getHabitsWithActions()).willReturn(daoLiveData)
 
-        viewModel = HabitViewModel(dao, testCoroutineScope)
+        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
         val observer = viewModel.habitsWithActions.testObserver()
 
         // When

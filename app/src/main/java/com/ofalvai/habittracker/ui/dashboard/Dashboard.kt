@@ -30,7 +30,7 @@ import java.time.LocalDate
 
 @Composable
 fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
-    var config by remember { mutableStateOf(DashboardConfig.FiveDay) }
+    var config by remember { mutableStateOf(viewModel.dashboardConfig) }
     val habits by viewModel.habitsWithActions.observeAsState(emptyList())
 
     val onActionToggle: (Action, Habit, LocalDate) -> Unit = { action, habit, date ->
@@ -40,6 +40,10 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
         navController.navigate(Screen.HabitDetails.buildRoute(it.id))
     }
     val onAddHabitClick = { navController.navigate(Screen.AddHabit.route) }
+    val onConfigChange: (DashboardConfig) -> Unit = {
+        config = it
+        viewModel.dashboardConfig = it
+    }
 
     ContentWithPlaceholder(
         showPlaceholder = habits.isEmpty(),
@@ -52,7 +56,7 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
         ) {
             DashboardAppBar(
                 config = config,
-                onConfigChange = { config = it }
+                onConfigChange = onConfigChange
             )
 
             Crossfade(targetState = config) {

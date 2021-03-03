@@ -19,7 +19,8 @@ private const val ACTION_DAYS_TO_FETCH = 7
 
 class HabitViewModel(
     private val dao: HabitDao,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
+    appPreferences: AppPreferences
 ) : ViewModel() {
 
     val habitsWithActions = Transformations.map(
@@ -28,6 +29,8 @@ class HabitViewModel(
     )
 
     val habitWithActions = MutableLiveData<HabitWithActions?>()
+
+    var dashboardConfig by appPreferences::dashboardConfig
 
     fun addHabit(habit: Habit) {
         coroutineScope.launch {
