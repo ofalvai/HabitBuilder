@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -42,38 +43,44 @@ fun HabitCard(
     Card(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clickable(onClick = { onDetailClick(habit) }),
+            .padding(horizontal = 16.dp),
         elevation = 2.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = habit.name,
-                style = MaterialTheme.typography.h6
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+        // clickable() needs clipping for the rounded corners and the ripple effect,
+        // but putting the clipping on Card would kill drop shadows. This extra Box solves this
+        Box(Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = { onDetailClick(habit) })
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = stringResource(
-                        R.string.dashboard_fiveday_total_actions,
-                        totalActionCount
-                    ),
-                    style = MaterialTheme.typography.caption
+                    text = habit.name,
+                    style = MaterialTheme.typography.h6
                 )
 
-                ActionCircles(
-                    modifier = Modifier.padding(top = 16.dp),
-                    actions = actions.takeLast(Constants.DAY_COUNT),
-                    habitColor = habit.color,
-                    onActionToggle = { action, dayIndex ->
-                        val date = LocalDate.now()
-                            .minus((Constants.DAY_COUNT - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
-                        onActionToggle(action, habit, date)
-                    })
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(
+                            R.string.dashboard_fiveday_total_actions,
+                            totalActionCount
+                        ),
+                        style = MaterialTheme.typography.caption
+                    )
+
+                    ActionCircles(
+                        modifier = Modifier.padding(top = 16.dp),
+                        actions = actions.takeLast(Constants.DAY_COUNT),
+                        habitColor = habit.color,
+                        onActionToggle = { action, dayIndex ->
+                            val date = LocalDate.now()
+                                .minus((Constants.DAY_COUNT - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
+                            onActionToggle(action, habit, date)
+                        })
+                }
             }
         }
     }

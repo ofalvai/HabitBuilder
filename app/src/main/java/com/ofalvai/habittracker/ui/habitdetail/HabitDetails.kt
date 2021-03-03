@@ -1,5 +1,7 @@
 package com.ofalvai.habittracker.ui.habitdetail
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -97,6 +99,7 @@ fun HabitDetailScreen(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HabitDetailHeader(
     habitWithActions: HabitWithActions,
@@ -125,7 +128,10 @@ fun HabitDetailHeader(
 
 
     Surface(color = if (isEditing) MaterialTheme.colors.surface else surfaceColor) {
-        Column(Modifier.padding(bottom = 32.dp).statusBarsPadding()) {
+        Column(
+            Modifier
+                .padding(bottom = 32.dp)
+                .statusBarsPadding()) {
             HabitDetailAppBar(
                 isEditing = isEditing,
                 onBack = onBack,
@@ -134,40 +140,42 @@ fun HabitDetailHeader(
                 onDelete = { onDelete(habitWithActions.habit) }
             )
 
-            if (isEditing) {
-                OutlinedTextField(
-                    value = editingName,
-                    onValueChange = {
-                        editingName = it
-                        isNameValid = it.isNotBlank()
-                    },
-                    modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
-                    isError = !isNameValid
-                )
-            } else {
-                Text(
-                    text = habitWithActions.habit.name,
-                    modifier = Modifier.padding(horizontal = 32.dp),
-                    style = MaterialTheme.typography.h3
-                )
+            AnimatedVisibility(visible = isEditing) {
+                Column {
+                    OutlinedTextField(
+                        value = editingName,
+                        onValueChange = {
+                            editingName = it
+                            isNameValid = it.isNotBlank()
+                        },
+                        modifier = Modifier
+                            .padding(horizontal = 32.dp)
+                            .fillMaxWidth(),
+                        isError = !isNameValid
+                    )
+                    HabitColorPicker(
+                        initialColor = habitWithActions.habit.color,
+                        onColorPick = { editingColor = it }
+                    )
+                }
             }
 
-            if (!isEditing) {
-                Text(
-                    text = stringResource(
-                        R.string.habitdetail_total_actions,
-                        habitWithActions.totalActionCount
-                    ),
-                    modifier = Modifier.padding(horizontal = 32.dp),
-                    style = MaterialTheme.typography.body1
-                )
-            }
-
-            if (isEditing) {
-                HabitColorPicker(
-                    initialColor = habitWithActions.habit.color,
-                    onColorPick = { editingColor = it }
-                )
+            AnimatedVisibility(visible = !isEditing) {
+                Column {
+                    Text(
+                        text = habitWithActions.habit.name,
+                        modifier = Modifier.padding(horizontal = 32.dp),
+                        style = MaterialTheme.typography.h3
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.habitdetail_total_actions,
+                            habitWithActions.totalActionCount
+                        ),
+                        modifier = Modifier.padding(horizontal = 32.dp),
+                        style = MaterialTheme.typography.body1
+                    )
+                }
             }
         }
     }

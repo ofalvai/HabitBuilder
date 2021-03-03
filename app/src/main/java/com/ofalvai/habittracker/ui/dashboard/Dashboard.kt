@@ -1,5 +1,6 @@
 package com.ofalvai.habittracker.ui.dashboard
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -54,12 +55,14 @@ fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
                 onConfigChange = { config = it }
             )
 
-            when (config) {
-                DashboardConfig.FiveDay -> {
-                    FiveDayHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
-                }
-                DashboardConfig.Compact -> {
-                    CompactHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
+            Crossfade(targetState = config) {
+                when (it) {
+                    DashboardConfig.FiveDay -> {
+                        FiveDayHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
+                    }
+                    DashboardConfig.Compact -> {
+                        CompactHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
+                    }
                 }
             }
         }
