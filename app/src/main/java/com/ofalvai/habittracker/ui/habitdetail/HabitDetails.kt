@@ -26,6 +26,7 @@ import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
@@ -165,7 +166,7 @@ fun HabitDetailHeader(
                     Text(
                         text = habitWithActions.habit.name,
                         modifier = Modifier.padding(horizontal = 32.dp),
-                        style = MaterialTheme.typography.h3
+                        style = AppTextStyle.habitTitle
                     )
                     Text(
                         text = stringResource(

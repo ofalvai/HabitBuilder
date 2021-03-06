@@ -25,6 +25,7 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
 import java.time.Instant
@@ -56,7 +57,7 @@ fun HabitCard(
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = habit.name,
-                    style = MaterialTheme.typography.h6
+                    style = AppTextStyle.habitSubtitle
                 )
 
                 Row(
