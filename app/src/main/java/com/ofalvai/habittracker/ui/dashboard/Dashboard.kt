@@ -4,19 +4,19 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.ui.AppIcons
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.Screen
@@ -98,12 +98,12 @@ fun DashboardAppBar(
         Spacer(Modifier.weight(1f))
 
         IconButton(onClick = onConfigChangeClick) {
-            Icon(painterResource(R.drawable.ic_dashboard_layout), null)
+            Icon(AppIcons.DashboardLayout, stringResource(R.string.dashboard_change_layout))
         }
 
         Box {
             IconButton(onClick = { menuExpanded = true }) {
-                Icon(Icons.Default.MoreVert, stringResource(R.string.common_more))
+                Icon(Icons.Rounded.MoreVert, stringResource(R.string.common_more))
             }
             DropdownMenu(
                 expanded = menuExpanded,
@@ -135,7 +135,7 @@ fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
             modifier = Modifier.padding(16.dp),
             onClick = onAddHabitClick
         ) {
-            Icon(Icons.Filled.Add, null, Modifier.size(ButtonDefaults.IconSize))
+            Icon(Icons.Rounded.Add, null, Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
             Text(stringResource(R.string.dashboard_create_habit_first))
         }

@@ -11,7 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -112,7 +112,7 @@ fun HabitColor(
     ) {
         if (isSelected) {
             Icon(
-                imageVector = Icons.Filled.Check,
+                imageVector = Icons.Rounded.Check,
                 tint = Color.Black.copy(alpha = 0.75f),
                 contentDescription = null,
                 modifier = Modifier.requiredSize(24.dp)

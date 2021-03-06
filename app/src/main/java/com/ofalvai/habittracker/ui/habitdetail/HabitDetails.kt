@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -193,20 +193,22 @@ fun HabitDetailAppBar(
         title = { },
         navigationIcon = {
             IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, stringResource(R.string.common_back))
+                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
             }
         },
         actions = {
-            if (isEditing) {
-                IconButton(onClick = onSave) {
-                    Icon(Icons.Default.Check, stringResource(R.string.common_save))
-                }
-                IconButton(onClick = onDelete) {
-                    Icon(Icons.Default.Delete, stringResource(R.string.common_delete))
-                }
-            } else {
-                IconButton(onClick = onEdit) {
-                    Icon(Icons.Default.Edit, stringResource(R.string.common_edit))
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
+                if (isEditing) {
+                    IconButton(onClick = onSave) {
+                        Icon(Icons.Rounded.Check, stringResource(R.string.common_save))
+                    }
+                    IconButton(onClick = onDelete) {
+                        Icon(Icons.Rounded.Delete, stringResource(R.string.common_delete))
+                    }
+                } else {
+                    IconButton(onClick = onEdit) {
+                        Icon(Icons.Rounded.Edit, stringResource(R.string.common_edit))
+                    }
                 }
             }
         },

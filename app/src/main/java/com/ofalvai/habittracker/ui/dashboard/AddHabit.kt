@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -34,8 +34,8 @@ fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
 
     Column(Modifier.statusBarsPadding()) {
         AddHabitAppBar(onBack = { navController.popBackStack() })
-        Suggestions(habits = Suggestions.habits, onSelect = onSave)
         AddHabitForm(onSave)
+        Suggestions(habits = Suggestions.habits, onSelect = onSave)
     }
 }
 
@@ -117,7 +117,7 @@ fun AddHabitAppBar(onBack: () -> Unit) {
         title = { Text(stringResource(R.string.addhabit_appbar_title)) },
         navigationIcon = {
             IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, stringResource(R.string.common_back))
+                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
             }
         },
         backgroundColor = Color.Transparent,

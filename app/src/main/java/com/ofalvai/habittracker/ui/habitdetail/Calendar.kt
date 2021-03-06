@@ -13,8 +13,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -80,7 +80,7 @@ fun CalendarPager(
     ) {
         IconButton(onClick = onPreviousClick) {
             Icon(
-                Icons.Filled.KeyboardArrowLeft,
+                Icons.Rounded.KeyboardArrowLeft,
                 contentDescription = stringResource(R.string.calendar_previous_month)
             )
         }
@@ -89,7 +89,7 @@ fun CalendarPager(
 
         IconButton(onClick = onNextClick) {
             Icon(
-                Icons.Filled.KeyboardArrowRight,
+                Icons.Rounded.KeyboardArrowRight,
                 contentDescription = stringResource(R.string.calendar_next_month)
             )
         }

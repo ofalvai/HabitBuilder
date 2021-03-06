@@ -5,7 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +56,7 @@ fun HabitItem(
                 onClick = { onDetailClick(habit) }
             ) {
                 Icon(
-                    Icons.Filled.KeyboardArrowRight,
+                    Icons.Rounded.KeyboardArrowRight,
                     contentDescription = stringResource(R.string.dashboard_item_details)
                 )
             }

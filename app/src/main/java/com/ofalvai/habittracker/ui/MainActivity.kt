@@ -6,9 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -125,7 +122,7 @@ fun AppBottomNavigation(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             BottomNavigationItem(
-                icon = { Icon(Icons.Filled.CheckCircle, stringResource(R.string.tab_dashboard)) },
+                icon = { Icon(AppIcons.Habits, stringResource(R.string.tab_dashboard)) },
                 selected = selectedIndex == 0,
                 onClick = {
                     if (selectedIndex != 0) {
@@ -136,7 +133,7 @@ fun AppBottomNavigation(
                 label = { Text(stringResource(R.string.tab_dashboard)) }
             )
             BottomNavigationItem(
-                icon = { Icon(Icons.Filled.DateRange, stringResource(R.string.tab_dashboard)) },
+                icon = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
                 selected = selectedIndex == 1,
                 onClick = {
                     if (selectedIndex != 1) {
