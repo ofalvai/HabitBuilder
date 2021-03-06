@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Transformations
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
-import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.composeColor
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.cancel
 import java.time.Instant

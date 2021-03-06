@@ -18,11 +18,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.TextFieldError
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable

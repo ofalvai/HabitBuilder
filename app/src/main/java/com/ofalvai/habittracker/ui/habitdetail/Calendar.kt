@@ -32,8 +32,8 @@ import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.model.Action
+import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import java.time.*
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields

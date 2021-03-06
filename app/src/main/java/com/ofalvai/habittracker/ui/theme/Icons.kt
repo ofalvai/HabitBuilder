@@ -1,4 +1,4 @@
-package com.ofalvai.habittracker.ui
+package com.ofalvai.habittracker.ui.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter

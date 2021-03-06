@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.AppIcons
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.Screen
@@ -25,6 +24,7 @@ import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.theme.AppIcons
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
 

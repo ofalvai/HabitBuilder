@@ -1,4 +1,4 @@
-package com.ofalvai.habittracker.ui
+package com.ofalvai.habittracker.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.composeColor
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.theme.composeColor
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 

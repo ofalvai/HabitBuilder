@@ -21,6 +21,8 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
+import com.ofalvai.habittracker.ui.theme.AppIcons
+import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding

@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.*
