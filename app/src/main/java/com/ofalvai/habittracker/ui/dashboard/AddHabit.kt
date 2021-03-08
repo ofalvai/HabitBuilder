@@ -11,6 +11,7 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -127,9 +128,10 @@ fun AddHabitAppBar(onBack: () -> Unit) {
 
 @Composable
 fun SuggestionChip(habit: Habit, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(percent = 50)
     Surface(
-        modifier = Modifier.clickable(onClick = onClick),
-        shape = RoundedCornerShape(percent = 50),
+        modifier = Modifier.clip(shape).clickable(onClick = onClick),
+        shape = shape,
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
