@@ -24,6 +24,7 @@ import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
+import com.ofalvai.habittracker.ui.model.ActionHistory
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
@@ -38,6 +39,7 @@ fun HabitCard(
     habit: Habit,
     actions: List<Action>,
     totalActionCount: Int,
+    actionHistory: ActionHistory,
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
     onDetailClick: (Habit) -> Unit
 ) {
@@ -54,34 +56,32 @@ fun HabitCard(
             .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = { onDetailClick(habit) })
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
                 Text(
                     text = habit.name,
                     style = AppTextStyle.habitSubtitle
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = stringResource(
-                            R.string.dashboard_fiveday_total_actions,
-                            totalActionCount
-                        ),
-                        style = MaterialTheme.typography.caption
-                    )
+                Text(
+                    text = LocalContext.current.resources.getQuantityString(
+                        R.plurals.common_action_count_total,
+                        totalActionCount, totalActionCount
+                    ),
+                    style = MaterialTheme.typography.caption
+                )
 
-                    ActionCircles(
-                        modifier = Modifier.padding(top = 16.dp),
-                        actions = actions.takeLast(Constants.DAY_COUNT),
-                        habitColor = habit.color,
-                        onActionToggle = { action, dayIndex ->
-                            val date = LocalDate.now()
-                                .minus((Constants.DAY_COUNT - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
-                            onActionToggle(action, habit, date)
-                        })
-                }
+                ActionHistoryLabel(actionHistory)
+
+                ActionCircles(
+                    modifier = Modifier.align(Alignment.End),
+                    actions = actions.takeLast(Constants.DAY_COUNT),
+                    habitColor = habit.color,
+                    onActionToggle = { action, dayIndex ->
+                        val date = LocalDate.now()
+                            .minus((Constants.DAY_COUNT - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
+                        onActionToggle(action, habit, date)
+                    }
+                )
             }
         }
     }
@@ -96,8 +96,8 @@ fun ActionCircles(
 ) {
     var singlePressCounter by remember { mutableStateOf(0) }
 
-    Column {
-        Row(modifier) {
+    Column(modifier) {
+        Row {
             actions.mapIndexed { index, action ->
                 ActionCircle(
                     activeColor = habitColor.composeColor,
@@ -158,6 +158,25 @@ fun ActionCircle(
     }
 }
 
+@Composable
+fun ActionHistoryLabel(actionHistory: ActionHistory) {
+    val resources = LocalContext.current.resources
+    val label = when (actionHistory) {
+        ActionHistory.Clean -> stringResource(R.string.common_action_count_clean)
+        is ActionHistory.MissedDays -> resources.getQuantityString(
+            R.plurals.common_action_count_missed_days, actionHistory.days, actionHistory.days
+        )
+        is ActionHistory.Streak -> resources.getQuantityString(
+            R.plurals.common_action_count_streak, actionHistory.days, actionHistory.days
+        )
+    }
+
+    Text(
+        text = label,
+        style = MaterialTheme.typography.caption
+    )
+}
+
 
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
@@ -184,9 +203,9 @@ fun PreviewHabitCard() {
 
     HabitTrackerTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitCard(habit1, actions1, 14, { _, _, _ -> }, {})
+            HabitCard(habit1, actions1, 14, ActionHistory.Clean, { _, _, _ -> }, {})
             Spacer(modifier = Modifier.height(16.dp))
-            HabitCard(habit2, actions2, 3, { _, _, _ -> }, {})
+            HabitCard(habit2, actions2, 3, ActionHistory.Streak(3), { _, _, _ -> }, {})
         }
     }
 }

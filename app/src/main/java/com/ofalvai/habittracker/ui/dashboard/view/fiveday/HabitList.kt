@@ -1,6 +1,7 @@
 package com.ofalvai.habittracker.ui.dashboard.view.fiveday
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,11 +35,12 @@ fun FiveDayHabitList(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(bottom = 48.dp)
         ) {
-            items(habits.size) { index ->
+            items(habits) {
                 HabitCard(
-                    habit = habits[index].habit,
-                    actions = habits[index].actions,
-                    totalActionCount = habits[index].totalActionCount,
+                    habit = it.habit,
+                    actions = it.actions,
+                    totalActionCount = it.totalActionCount,
+                    actionHistory = it.actionHistory,
                     onActionToggle = onActionToggle,
                     onDetailClick = onHabitClick
                 )

@@ -16,7 +16,6 @@
 
     <string name="dashboard_title">My habits</string>
     <string name="dashboard_change_layout">Change layout</string>
-    <string name="dashboard_fiveday_total_actions">%d total</string>
     <string name="dashboard_toggle_help">Long press to toggle</string>
     <string name="dashboard_create_habit">Create new habit</string>
     <string name="dashboard_create_habit_first">Create your first habit</string>
@@ -36,4 +35,19 @@
     <string name="calendar_next_month">Next month</string>
 
     <string name="habitdetail_total_actions">Done %d times</string>
+
+    <string name="common_action_count_clean">Start today</string>
+    <plurals name="common_action_count_total">
+        <item quantity="one">%d total</item>
+        <item quantity="other">%d total</item>
+    </plurals>
+    <plurals name="common_action_count_streak">
+        <item quantity="one">%d day streak</item>
+        <item quantity="other">%d day streak</item>
+    </plurals>
+    <plurals name="common_action_count_missed_days">
+        <item quantity="one">%d missed day</item>
+        <item quantity="other">%d missed days</item>
+    </plurals>
+    
 </resources>
