@@ -1,14 +1,14 @@
 package com.ofalvai.habittracker
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.model.Action
+import com.ofalvai.habittracker.ui.model.ActionHistory
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.util.testObserver
@@ -25,8 +25,6 @@ import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 import com.ofalvai.habittracker.persistence.entity.Habit.Color as ColorEntity
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
-import com.ofalvai.habittracker.ui.AppPreferences
-import org.junit.Before
 
 @ExperimentalCoroutinesApi
 class DashboardViewModelTest {
@@ -55,9 +53,9 @@ class DashboardViewModelTest {
 
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(
-            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory, 0),
-            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0),
-            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0)
+            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
+            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
+            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
         )
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
@@ -89,7 +87,8 @@ class DashboardViewModelTest {
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Green),
             expectedActionHistory,
-            3
+            3,
+            ActionHistory.Streak(2)
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
@@ -111,7 +110,8 @@ class DashboardViewModelTest {
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Green),
             expectedActionHistory,
-            2
+            2,
+            ActionHistory.MissedDays(10)
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
@@ -146,7 +146,8 @@ class DashboardViewModelTest {
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Green),
             expectedActionHistory,
-            6
+            6,
+            ActionHistory.Streak(2)
         ))
         assertEquals(expectedHabits, viewModel.habitsWithActions.value)
     }
@@ -165,9 +166,9 @@ class DashboardViewModelTest {
 
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(
-            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory, 0),
-            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0),
-            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0)
+            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
+            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
+            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
         )
         assertEquals(1, observer.observedValues.size)
         assertEquals(expectedHabits, observer.observedValues.first())
@@ -201,14 +202,14 @@ class DashboardViewModelTest {
         // Then
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits1 = listOf(
-            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory, 0),
-            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0),
-            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0)
+            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
+            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
+            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
         )
         val expectedHabits2 = listOf(
-            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory.take(6) + Action(0, true, instantNow), 1),
-            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0),
-            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0)
+            HabitWithActions(Habit(0, "Meditation", Habit.Color.Green), expectedActionHistory.take(6) + Action(0, true, instantNow), 1, ActionHistory.Streak(1)),
+            HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
+            HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
         )
         assertEquals(2, observer.observedValues.size)
         assertEquals(expectedHabits1, observer.observedValues[0])

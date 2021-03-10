@@ -24,6 +24,7 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.model.Action
+import com.ofalvai.habittracker.ui.model.ActionHistory
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
@@ -42,7 +43,8 @@ fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel, navController: Na
     val initialState = HabitWithActions(
         Habit(name = "", color = Habit.Color.Blue),
         actions = emptyList(),
-        totalActionCount = 0
+        totalActionCount = 0,
+        actionHistory = ActionHistory.Clean
     ) // TODO: default color
     val habitWithActions by Transformations.map(viewModel.habitWithActions) { it ?: initialState }
         .observeAsState(initialState)
@@ -226,7 +228,8 @@ fun PreviewHabitDetailScreen() {
             habitWithActions = HabitWithActions(
                 Habit(0, "Meditation", Habit.Color.Red),
                 listOf(Action(0, true, Instant.now())),
-                2
+                2,
+                ActionHistory.Clean
             ),
             onBack = { },
             onEdit = { },
