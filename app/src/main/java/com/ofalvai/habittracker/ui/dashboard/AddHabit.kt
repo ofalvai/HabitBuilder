@@ -12,7 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,9 +64,16 @@ fun AddHabitForm(
     }
 
     Column(Modifier.fillMaxWidth()) {
-        // TODO: keyboard IME actions, focus
+        val focusRequester = remember { FocusRequester() }
+        SideEffect {
+            focusRequester.requestFocus()
+        }
+
         OutlinedTextField(
-            modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .padding(horizontal = 32.dp)
+                .fillMaxWidth(),
             value = name,
             onValueChange = { name = it },
             label = { Text(stringResource(R.string.addhabit_name_label)) },
@@ -92,7 +102,9 @@ fun AddHabitForm(
 @Composable
 fun Suggestions(habits: List<Habit>, onSelect: (Habit) -> Unit) {
     Column(
-        Modifier.padding(vertical = 32.dp).fillMaxWidth()
+        Modifier
+            .padding(vertical = 32.dp)
+            .fillMaxWidth()
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 32.dp),
@@ -101,7 +113,9 @@ fun Suggestions(habits: List<Habit>, onSelect: (Habit) -> Unit) {
         )
 
         LazyRow(
-            Modifier.fillMaxWidth().padding(top = 16.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
             contentPadding = PaddingValues(start = 32.dp, end = 32.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -130,7 +144,9 @@ fun AddHabitAppBar(onBack: () -> Unit) {
 fun SuggestionChip(habit: Habit, onClick: () -> Unit) {
     val shape = RoundedCornerShape(percent = 50)
     Surface(
-        modifier = Modifier.clip(shape).clickable(onClick = onClick),
+        modifier = Modifier
+            .clip(shape)
+            .clickable(onClick = onClick),
         shape = shape,
     ) {
         Text(
