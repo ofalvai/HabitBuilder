@@ -29,8 +29,6 @@ import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<HabitViewModel> { Dependencies.viewModelFactory }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,13 +48,10 @@ class MainActivity : ComponentActivity() {
                         }
                     ) {
                         NavHost(navController, startDestination = Screen.Dashboard.route) {
-                            composable(Screen.Dashboard.route) { Dashboard(viewModel, navController) }
+                            composable(Screen.Dashboard.route) { Dashboard(navController) }
                             composable(Screen.Insights.route) { Text(modifier = Modifier.statusBarsPadding(), text = "Work In Progress") }
                             composable(Screen.AddHabit.route) {
-                                AddHabitScreen(
-                                    viewModel,
-                                    navController
-                                )
+                                AddHabitScreen(navController)
                             }
                             composable(
                                 Screen.HabitDetails.route,
@@ -64,7 +59,6 @@ class MainActivity : ComponentActivity() {
                             ) { backStackEntry ->
                                 HabitDetailScreen(
                                     habitId = Screen.HabitDetails.idFrom(backStackEntry.arguments),
-                                    viewModel = viewModel,
                                     navController = navController
                                 )
                             }

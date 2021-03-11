@@ -19,7 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
@@ -39,7 +41,9 @@ import java.time.temporal.WeekFields
 import java.util.*
 
 @Composable
-fun HabitDetailScreen(habitId: Int, viewModel: HabitViewModel, navController: NavController) {
+fun HabitDetailScreen(habitId: Int, navController: NavController) {
+    val viewModel: HabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
+
     val initialState = HabitWithActions(
         Habit(name = "", color = Habit.Color.Blue),
         actions = emptyList(),

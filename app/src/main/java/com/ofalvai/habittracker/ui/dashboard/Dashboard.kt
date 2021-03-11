@@ -13,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
+import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.HabitViewModel
@@ -29,7 +31,9 @@ import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
 
 @Composable
-fun Dashboard(viewModel: HabitViewModel, navController: NavController) {
+fun Dashboard(navController: NavController) {
+    val viewModel: HabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
+
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
     val habits by viewModel.habitsWithActions.observeAsState(emptyList())
 

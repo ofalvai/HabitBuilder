@@ -20,7 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.TextFieldError
@@ -30,7 +32,9 @@ import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable
-fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
+fun AddHabitScreen(navController: NavController) {
+    val viewModel: HabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
+
     val onSave: (Habit) -> Unit = {
         viewModel.addHabit(it)
         navController.popBackStack()
