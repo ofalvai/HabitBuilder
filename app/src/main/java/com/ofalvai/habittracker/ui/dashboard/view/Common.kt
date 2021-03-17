@@ -103,18 +103,20 @@ fun Modifier.satisfyingToggleable(
     onSinglePress: () -> Unit
 ): Modifier {
     return composed {
-        val interactionState = remember { MutableInteractionSource() }
+        // Using `toggled` as the cache key, otherwise the recomposition in the long press
+        // would leave the InteractionSource in the pressed state
+        val interactionSource = remember(toggled) { MutableInteractionSource() }
         var isSinglePress by remember { mutableStateOf(false) }
 
         this
-            .pointerInput(Unit) {
+            .pointerInput(key1 = toggled) {
                 detectTapGestures(
                     onPress = {
                         isSinglePress = true
 
                         vibrator.vibrateCompat(longArrayOf(0, 50))
                         val press = PressInteraction.Press(it)
-                        interactionState.emit(press)
+                        interactionSource.emit(press)
 
                         val released = tryAwaitRelease()
 
@@ -128,7 +130,7 @@ fun Modifier.satisfyingToggleable(
                         } else {
                             PressInteraction.Cancel(press)
                         }
-                        interactionState.emit(endInteraction)
+                        interactionSource.emit(endInteraction)
                     },
                     onLongPress = {
                         isSinglePress = false
@@ -137,7 +139,7 @@ fun Modifier.satisfyingToggleable(
                     }
                 )
             }
-            .indication(interactionState, rememberRipple(radius = rippleRadius, bounded = rippleBounded))
+            .indication(interactionSource, rememberRipple(radius = rippleRadius, bounded = rippleBounded))
     }
 }
 
