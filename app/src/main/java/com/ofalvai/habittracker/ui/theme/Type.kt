@@ -30,6 +30,10 @@ object AppTextStyle {
         @Composable
         get() = typography.h4.copy(fontFamily = patua, fontSize = 36.sp)
 
+    val habitCompactTitle: TextStyle
+        @Composable
+        get() = typography.subtitle2.copy(fontFamily = patua)
+
     val habitSubtitle: TextStyle
         @Composable
         get() = typography.h6.copy(fontFamily = patua)

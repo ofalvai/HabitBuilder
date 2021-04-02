@@ -1,6 +1,7 @@
 package com.ofalvai.habittracker.ui.dashboard.view.compact
 
 import android.os.Vibrator
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -23,6 +24,7 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.composeColor
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -39,6 +41,7 @@ fun HabitItem(
         Modifier
             .fillMaxWidth()
             .clickable(onClick = { onDetailClick(habit) })
+            .padding(top = 4.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -49,7 +52,7 @@ fun HabitItem(
                     .padding(start = 16.dp)
                     .align(Alignment.CenterVertically),
                 text = habit.name,
-                style = MaterialTheme.typography.subtitle2
+                style = AppTextStyle.habitCompactTitle
             )
             IconButton(
                 modifier = Modifier.size(36.dp),
@@ -140,7 +143,12 @@ fun ActionSquare(
     onToggle: (Boolean) -> Unit,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else Color.Black.copy(alpha = 0.1f)
+    val color = if (toggled) activeColor else Color.Black.copy(alpha = 0.05f)
+    val borderColor = if (toggled) activeColor.copy(
+        red = activeColor.red * 0.85f,
+        green = activeColor.green * 0.85f,
+        blue = activeColor.blue * 0.85f
+    ) else Color.Transparent
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
     Surface(
@@ -148,7 +156,8 @@ fun ActionSquare(
         modifier = Modifier
             .satisfyingToggleable(vibrator, Dp.Unspecified, true, toggled, onToggle, onSinglePress)
             .aspectRatio(1f)
-            .padding(1.dp),
+            .padding(1.dp)
+            .border(1.dp, borderColor),
         color = color,
     ) { }
 }
