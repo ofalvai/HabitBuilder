@@ -2,9 +2,7 @@ package com.ofalvai.habittracker.ui.habitdetail
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -25,10 +23,7 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.ActionHistory
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
@@ -52,9 +47,16 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
     ) // TODO: default color
     val habitWithActions by Transformations.map(viewModel.habitWithActions) { it ?: initialState }
         .observeAsState(initialState)
+    val habitStats by viewModel.habitStats.observeAsState(GeneralHabitStats(null, 0, 0f))
+    val actionCountByWeek by viewModel.actionCountByWeek.observeAsState(emptyList())
+    val actionCountByMonth by viewModel.actionCountByMonth.observeAsState(emptyList())
 
     DisposableEffect(habitId) {
         val job = viewModel.fetchHabitDetails(habitId)
+        onDispose { job.cancel("Cancelled by Composable") }
+    }
+    DisposableEffect(habitId) {
+        val job = viewModel.fetchHabitStats(habitId)
         onDispose { job.cancel("Cancelled by Composable") }
     }
 
@@ -64,6 +66,9 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 
     HabitDetailScreen(
         habitWithActions = habitWithActions,
+        habitStats = habitStats,
+        actionCountByWeek = actionCountByWeek,
+        actionCountByMonth = actionCountByMonth,
         onBack = { navController.popBackStack() },
         onEdit = { viewModel.updateHabit(it) },
         onDelete = {
@@ -77,6 +82,9 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 @Composable
 fun HabitDetailScreen(
     habitWithActions: HabitWithActions,
+    habitStats: GeneralHabitStats,
+    actionCountByWeek: List<ActionCountByWeek>,
+    actionCountByMonth: List<ActionCountByMonth>,
     onBack: () -> Unit,
     onEdit: (Habit) -> Unit,
     onDelete: (Habit) -> Unit,
@@ -103,6 +111,8 @@ fun HabitDetailScreen(
                 onDayToggle = onDayToggle
             )
         }
+
+        HabitStats(habitStats, actionCountByWeek, actionCountByMonth)
     }
 }
 
@@ -224,6 +234,37 @@ fun HabitDetailAppBar(
     )
 }
 
+@Composable
+fun HabitStats(
+    generalStats: GeneralHabitStats,
+    actionCountByWeek: List<ActionCountByWeek>,
+    actionCountByMonth: List<ActionCountByMonth>
+) {
+    Column(Modifier.padding(horizontal = 32.dp)) {
+        Text("First day: ${generalStats.firstDay.toString()}")
+        Text("Action count: ${generalStats.actionCount}")
+        Text("Completion rate: ${generalStats.completionRate * 100}%")
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Actions by week:")
+        actionCountByWeek.forEach {
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = "${it.year} W${it.weekOfYear}: ${it.actionCount}"
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+//        Text("Actions by month:")
+//        actionCountByMonth.forEach {
+//            Text(
+//                modifier = Modifier.padding(start = 8.dp),
+//                text = "${it.yearMonth}: ${it.actionCount}"
+//            )
+//        }
+    }
+}
+
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun PreviewHabitDetailScreen() {
@@ -235,6 +276,9 @@ fun PreviewHabitDetailScreen() {
                 2,
                 ActionHistory.Clean
             ),
+            habitStats = GeneralHabitStats(LocalDate.now(), 2, 0.15f),
+            actionCountByWeek = emptyList(),
+            actionCountByMonth = emptyList(),
             onBack = { },
             onEdit = { },
             onDelete = { },

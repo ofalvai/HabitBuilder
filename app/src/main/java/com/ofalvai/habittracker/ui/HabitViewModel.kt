@@ -26,6 +26,9 @@ class HabitViewModel(
     )
 
     val habitWithActions = MutableLiveData<HabitWithActions?>()
+    val habitStats = MutableLiveData<GeneralHabitStats>()
+    val actionCountByWeek = MutableLiveData<List<ActionCountByWeek>>()
+    val actionCountByMonth = MutableLiveData<List<ActionCountByMonth>>()
 
     var dashboardConfig by appPreferences::dashboardConfig
 
@@ -59,6 +62,15 @@ class HabitViewModel(
                 )
             }
             habitWithActions.value = habit
+        }
+    }
+
+    fun fetchHabitStats(habitId: Int): Job {
+        return coroutineScope.launch {
+            // TODO: parallel execution
+            habitStats.value = mapHabitStatsToModel(dao.getCompletionRate(habitId))
+            actionCountByWeek.value = mapActionCountByWeek(dao.getActionCountByWeek(habitId))
+            actionCountByMonth.value = mapActionCountByMonth(dao.getActionCountByMonth(habitId))
         }
     }
 
