@@ -161,7 +161,7 @@ private class DayViewContainer(
             if (action.toggled) {
                 textView.setBackgroundColor(habitColor.toColorInt())
             } else {
-                textView.setBackgroundColor(android.graphics.Color.parseColor("#bdbdbd"))
+                textView.setBackgroundColor(Color.Black.copy(alpha = 0.05f).toColorInt())
             }
 
             if (day.date == LocalDate.now()) {

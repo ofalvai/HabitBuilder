@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     android:layout_margin="1dp"
     android:gravity="center"
-    android:textSize="16sp"
+    android:textSize="14sp"
     android:textColor="@color/black"
     tools:text="22" />
