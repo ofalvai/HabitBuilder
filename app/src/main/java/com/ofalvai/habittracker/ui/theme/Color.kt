@@ -23,6 +23,7 @@ object AppColor {
         val habitBlue = Color(0xFF9EB2D1)
         val habitYellow = Color(0xFFFFCC79)
         val habitPink = Color(0xFFE08FB8)
+        val habitInactive = Color.Black.copy(alpha = 0.05f)
     }
 
     object Dark {
@@ -32,6 +33,7 @@ object AppColor {
         val habitBlue = Color(0xFF9EB2D1)
         val habitYellow = Color(0xFFFFCC79)
         val habitPink = Color(0xFFE08FB8)
+        val habitInactive = Color.White.copy(alpha = 0.05f)
     }
 }
 
@@ -51,6 +53,9 @@ val Colors.habitYellow: Color
     @Composable
     get() = if (isLight) AppColor.Light.habitYellow else AppColor.Dark.habitYellow
 
+val Colors.habitInactive: Color
+    @Composable
+    get() = if (isLight) AppColor.Light.habitInactive else AppColor.Dark.habitInactive
 
 val Habit.Color.composeColor: Color
     @Composable

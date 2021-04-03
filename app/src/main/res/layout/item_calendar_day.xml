@@ -7,5 +7,5 @@
     android:layout_margin="1dp"
     android:gravity="center"
     android:textSize="14sp"
-    android:textColor="@color/black"
+    android:textColor="@color/onBackground"
     tools:text="22" />

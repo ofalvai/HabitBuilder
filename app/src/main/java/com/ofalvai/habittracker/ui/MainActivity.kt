@@ -3,12 +3,10 @@ package com.ofalvai.habittracker.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -16,7 +14,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigate
 import androidx.navigation.compose.rememberNavController
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
@@ -110,7 +107,7 @@ fun AppBottomNavigation(
     // in the correct order. Otherwise the elevation bottom shadow will be rendered on top of the
     // background behind the navbar.
     Surface(
-        color = Color.White, // TODO theme
+        color = MaterialTheme.colors.surface,
         elevation = 8.dp,
     ) {
         Row(

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
@@ -141,6 +142,7 @@ private class DayViewContainer(
 ) : ViewContainer(view) {
 
     val textView = view.findViewById<TextView>(R.id.calendarDayText)!!
+    val backgroundColor = ContextCompat.getColor(view.context, R.color.calendarCellBackground)
 
     lateinit var day: CalendarDay
     lateinit var action: Action
@@ -161,7 +163,7 @@ private class DayViewContainer(
             if (action.toggled) {
                 textView.setBackgroundColor(habitColor.toColorInt())
             } else {
-                textView.setBackgroundColor(Color.Black.copy(alpha = 0.05f).toColorInt())
+                textView.setBackgroundColor(backgroundColor)
             }
 
             if (day.date == LocalDate.now()) {

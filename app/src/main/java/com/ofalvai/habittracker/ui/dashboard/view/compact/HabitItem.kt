@@ -26,6 +26,7 @@ import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.composeColor
+import com.ofalvai.habittracker.ui.theme.habitInactive
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -143,12 +144,8 @@ fun ActionSquare(
     onToggle: (Boolean) -> Unit,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else Color.Black.copy(alpha = 0.05f)
-    val borderColor = if (toggled) activeColor.copy(
-        red = activeColor.red * 0.85f,
-        green = activeColor.green * 0.85f,
-        blue = activeColor.blue * 0.85f
-    ) else Color.Transparent
+    val color = if (toggled) activeColor else MaterialTheme.colors.habitInactive
+    val borderColor = if (toggled) activeColor.darken() else Color.Transparent
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
     Surface(
@@ -161,3 +158,9 @@ fun ActionSquare(
         color = color,
     ) { }
 }
+
+private fun Color.darken() = this.copy(
+    red = this.red * 0.85f,
+    green = this.green * 0.85f,
+    blue = this.blue * 0.85f
+)
