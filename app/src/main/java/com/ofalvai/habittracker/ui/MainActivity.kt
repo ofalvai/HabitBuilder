@@ -18,6 +18,7 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
+import com.ofalvai.habittracker.ui.insights.InsightsScreen
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         NavHost(navController, startDestination = Screen.Dashboard.route) {
                             composable(Screen.Dashboard.route) { Dashboard(navController) }
-                            composable(Screen.Insights.route) { Text(modifier = Modifier.statusBarsPadding(), text = "Work In Progress") }
+                            composable(Screen.Insights.route) { InsightsScreen(navController) }
                             composable(Screen.AddHabit.route) {
                                 AddHabitScreen(navController)
                             }
@@ -111,7 +112,10 @@ fun AppBottomNavigation(
         elevation = 8.dp,
     ) {
         Row(
-            Modifier.fillMaxWidth().navigationBarsPadding().height(56.dp),
+            Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .height(56.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             BottomNavigationItem(
