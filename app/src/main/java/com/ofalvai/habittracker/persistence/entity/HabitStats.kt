@@ -33,3 +33,22 @@ data class ActionCompletionRate(
         return action_count / daysBetween.toFloat()
     }
 }
+
+data class SumActionCountByDay(
+    val date: LocalDate,
+    val action_count: Int
+)
+
+data class HabitActionCount(
+    val habit_id: Int,
+    val name: String,
+    val first_day: LocalDate?, // Used for compensating for different start days among habits
+    val count: Int
+)
+
+data class HabitTopDay(
+    val habit_id: Int,
+    val name: String,
+    val top_day_of_week: DayOfWeek,
+    val action_count_on_day: Int
+)

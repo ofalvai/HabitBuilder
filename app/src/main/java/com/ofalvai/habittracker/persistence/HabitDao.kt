@@ -76,4 +76,53 @@ interface HabitDao {
             GROUP BY year, week"""
     )
     suspend fun getActionCountByWeek(habitId: Int): List<ActionCountByWeek>
+
+    @Query(
+        """SELECT
+                date(timestamp / 1000, 'unixepoch', 'localtime') as date,
+                count(*) AS action_count
+            FROM `action`
+            GROUP BY date
+        """
+    )
+    // TODO: date range filter
+    suspend fun getSumActionCountByDay(): List<SumActionCountByDay>
+
+    @Query(
+        """SELECT
+                habit.id AS habit_id,
+                habit.name AS name,
+                date(min(`action`.timestamp) / 1000, 'unixepoch', 'localtime') as first_day,
+                count(habit_id) AS count
+            FROM habit
+            LEFT JOIN `action` ON habit.id = `action`.habit_id
+            GROUP BY habit.id
+            ORDER BY count DESC
+            LIMIT :count"""
+    )
+    suspend fun getMostSuccessfulHabits(count: Int): List<HabitActionCount>
+
+    @Query(
+        """SELECT
+                id as habit_id,
+                name,
+                (
+                    SELECT strftime('%w', `action`.timestamp / 1000, 'unixepoch', 'localtime') as day_of_week
+                    FROM `action`
+                    WHERE habit_id = habit.id
+                    GROUP BY day_of_week
+                    ORDER BY count(*) DESC
+                    LIMIT 1
+                ) as top_day_of_week,
+                (
+                    SELECT count(*) as count
+                    FROM `action`
+                    WHERE habit_id = habit.id
+                    GROUP BY strftime('%w', `action`.timestamp / 1000, 'unixepoch', 'localtime')
+                    ORDER BY count DESC
+                    LIMIT 1
+                ) as action_count_on_day
+            FROM habit"""
+    )
+    suspend fun getTopDayForHabits(): List<HabitTopDay>
 }

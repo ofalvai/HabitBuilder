@@ -19,28 +19,28 @@ import java.io.IOException
 import java.time.Instant
 import java.time.LocalDate
 
-private object TestData {
-    val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green)
-    val habit2 = Habit(id = 876, name = "Drinking enough water", color = Habit.Color.Green)
-    val habit3 = Habit(id = 877, name = "Workout", color = Habit.Color.Green)
-    val habit4 = Habit(id = 878, name = "Habit I never do", color = Habit.Color.Yellow)
-
-    val actions = arrayOf(
-        Action(habit_id = habit1.id, timestamp = Instant.parse("2019-12-23T18:16:30Z")),
-        Action(habit_id = habit1.id, timestamp = Instant.parse("2020-12-23T18:16:30Z")),
-        Action(habit_id = habit1.id, timestamp = Instant.parse("2020-12-24T18:16:40Z")),
-        Action(habit_id = habit2.id, timestamp = Instant.parse("2020-12-23T10:18:42Z")),
-        Action(habit_id = habit3.id, timestamp = Instant.parse("2020-12-23T10:19:10Z")),
-        Action(habit_id = habit1.id, timestamp = Instant.parse("2020-12-31T08:59:00Z")),
-        Action(habit_id = habit1.id, timestamp = Instant.parse("2021-01-01T11:56:10Z")),
-        Action(habit_id = habit1.id, timestamp = Instant.parse("2021-01-04T10:28:10Z")),
-        Action(habit_id = habit1.id, timestamp = Instant.parse("2021-03-29T10:28:10Z")),
-    )
-}
-
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class HabitStatsTest {
+
+    private object TestData {
+        val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green)
+        val habit2 = Habit(id = 876, name = "Drinking enough water", color = Habit.Color.Green)
+        val habit3 = Habit(id = 877, name = "Workout", color = Habit.Color.Green)
+        val habit4 = Habit(id = 878, name = "Habit I never do", color = Habit.Color.Yellow)
+
+        val actions = arrayOf(
+            Action(habit_id = habit1.id, timestamp = Instant.parse("2019-12-23T18:16:30Z")),
+            Action(habit_id = habit1.id, timestamp = Instant.parse("2020-12-23T18:16:30Z")),
+            Action(habit_id = habit1.id, timestamp = Instant.parse("2020-12-24T18:16:40Z")),
+            Action(habit_id = habit2.id, timestamp = Instant.parse("2020-12-23T10:18:42Z")),
+            Action(habit_id = habit3.id, timestamp = Instant.parse("2020-12-23T10:19:10Z")),
+            Action(habit_id = habit1.id, timestamp = Instant.parse("2020-12-31T08:59:00Z")),
+            Action(habit_id = habit1.id, timestamp = Instant.parse("2021-01-01T11:56:10Z")),
+            Action(habit_id = habit1.id, timestamp = Instant.parse("2021-01-04T10:28:10Z")),
+            Action(habit_id = habit1.id, timestamp = Instant.parse("2021-03-29T10:28:10Z")),
+        )
+    }
 
     private lateinit var habitDao: HabitDao
     private lateinit var db: AppDatabase
