@@ -11,6 +11,7 @@ import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.ActionHistory
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.util.MainCoroutineRule
 import com.ofalvai.habittracker.util.testObserver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -37,7 +38,8 @@ class DashboardViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val testCoroutineScope = TestCoroutineScope()
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     @Test
     fun `Given habits without actions When VM loaded Then list contains habits with empty history`() {
@@ -48,7 +50,7 @@ class DashboardViewModelTest {
         ))
         )
 
-        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
+        viewModel = HabitViewModel(dao, appPreferences)
         viewModel.habitsWithActions.testObserver()
 
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
@@ -69,7 +71,7 @@ class DashboardViewModelTest {
         ))
         )
 
-        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
+        viewModel = HabitViewModel(dao, appPreferences)
         val observer = viewModel.habitsWithActions.testObserver()
 
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
@@ -83,7 +85,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given observed habit list When a habit is updated Then observer is notified`() = testCoroutineScope.runBlockingTest {
+    fun `Given observed habit list When a habit is updated Then observer is notified`() = runBlockingTest {
         // Given
         val dateNow = LocalDate.now()
         val instantNow = Instant.now()
@@ -94,7 +96,7 @@ class DashboardViewModelTest {
         ))
         given(dao.getHabitsWithActions()).willReturn(daoLiveData)
 
-        viewModel = HabitViewModel(dao, testCoroutineScope, appPreferences)
+        viewModel = HabitViewModel(dao, appPreferences)
         val observer = viewModel.habitsWithActions.testObserver()
 
         // When

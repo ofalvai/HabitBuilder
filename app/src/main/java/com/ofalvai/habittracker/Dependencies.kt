@@ -1,6 +1,5 @@
 package com.ofalvai.habittracker
 
-import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,9 +8,7 @@ import com.ofalvai.habittracker.persistence.AppDatabase
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.HabitViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 
 object Dependencies {
 
@@ -21,24 +18,23 @@ object Dependencies {
         "app-db"
     ).build()
 
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(HabitTrackerApplication.INSTANCE)
     private val appPreferences = AppPreferences(sharedPreferences)
 
-    val viewModelFactory = AppViewModelFactory(db.habitDao(), coroutineScope, appPreferences)
-
+    val viewModelFactory = AppViewModelFactory(db.habitDao(), appPreferences)
 }
 
 @Suppress("UNCHECKED_CAST")
 class AppViewModelFactory(
     private val habitDao: HabitDao,
-    private val coroutineScope: CoroutineScope,
     private val appPreferences: AppPreferences
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (HabitViewModel::class.java.isAssignableFrom(modelClass)) {
-            return HabitViewModel(habitDao, coroutineScope, appPreferences) as T
+            return HabitViewModel(habitDao, appPreferences) as T
+        }
+        if (InsightsViewModel::class.java.isAssignableFrom(modelClass)) {
+            return InsightsViewModel(habitDao) as T
         }
         throw IllegalArgumentException("No matching ViewModel for ${modelClass.canonicalName}")
     }

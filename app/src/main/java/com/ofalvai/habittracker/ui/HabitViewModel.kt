@@ -3,20 +3,18 @@ package com.ofalvai.habittracker.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.*
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.model.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.*
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
-import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 
 class HabitViewModel(
     private val dao: HabitDao,
-    private val coroutineScope: CoroutineScope,
     appPreferences: AppPreferences
 ) : ViewModel() {
 
@@ -33,14 +31,14 @@ class HabitViewModel(
     var dashboardConfig by appPreferences::dashboardConfig
 
     fun addHabit(habit: Habit) {
-        coroutineScope.launch {
+        viewModelScope.launch {
             val habitEntity = HabitEntity(name = habit.name, color = habit.color.toEntityColor())
             dao.insertHabit(habitEntity)
         }
     }
 
     fun toggleActionFromDashboard(habitId: Int, action: Action, date: LocalDate) {
-        coroutineScope.launch {
+        viewModelScope.launch {
             toggleAction(habitId, action, date)
         }
     }
@@ -49,7 +47,7 @@ class HabitViewModel(
         // Clear previous result (for a possibly different habit ID)
         habitWithActions.value = null
 
-        return coroutineScope.launch {
+        return viewModelScope.launch {
             val habit = dao.getHabitWithActions(habitId).let {
                 // TODO: unify this with the regular mapping (where empty day action are filled)
                 HabitWithActions(
@@ -66,7 +64,7 @@ class HabitViewModel(
     }
 
     fun fetchHabitStats(habitId: Int): Job {
-        return coroutineScope.launch {
+        return viewModelScope.launch {
             // TODO: parallel execution
             habitStats.value = mapHabitStatsToModel(dao.getCompletionRate(habitId))
             actionCountByWeek.value = mapActionCountByWeek(dao.getActionCountByWeek(habitId))
@@ -75,21 +73,21 @@ class HabitViewModel(
     }
 
     fun toggleActionFromDetail(habitId: Int, action: Action, date: LocalDate) {
-        coroutineScope.launch {
+        viewModelScope.launch {
             toggleAction(habitId, action, date)
             fetchHabitDetails(habitId)
         }
     }
 
     fun updateHabit(habit: Habit) {
-        coroutineScope.launch {
+        viewModelScope.launch {
             dao.updateHabit(habit.toEntity())
             fetchHabitDetails(habit.id)
         }
     }
 
     fun deleteHabit(habit: Habit) {
-        coroutineScope.launch {
+        viewModelScope.launch {
             dao.deleteHabit(habit.toEntity())
         }
     }
