@@ -57,7 +57,7 @@ fun actionsToHistory(actions: List<ActionEntity>): ActionHistory {
             }
         }
         return ActionHistory.Streak(days)
-    } else {
+    } else if (firstActionDate.isBefore(LocalDate.now())) {
         // It's a missed day streak
         var days = 0
         var previousDate = LocalDate.now()
@@ -68,5 +68,8 @@ fun actionsToHistory(actions: List<ActionEntity>): ActionHistory {
         }
 
         return ActionHistory.MissedDays(days)
+    } else {
+        // firstActionDate is in the future. This should never happen
+        return ActionHistory.Clean
     }
 }

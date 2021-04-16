@@ -275,4 +275,29 @@ class HabitMapperTest {
         assertEquals(expectedHabits, mappedHabitsWithActions)
     }
 
+    @Test
+    fun `Given habit with action in the future When mapped to model Then nothing weird happens`() {
+        // Given
+        val now = Instant.now()
+        val actions = listOf(
+            ActionEntity(id = 1, habit_id = 0, timestamp = now.plus(1, ChronoUnit.DAYS)),
+        )
+        val habits = listOf(
+            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Red), actions),
+        )
+
+        // When
+        val mappedHabitsWithActions = mapHabitEntityToModel(habits)
+
+        // Then
+        val expectedActionHistory = (1..7).map { Action(0, false, null) }
+        val expectedHabits = listOf(HabitWithActions(
+            Habit(0, "Meditation", Habit.Color.Red),
+            expectedActionHistory,
+            1,
+            ActionHistory.Clean
+        ))
+        assertEquals(expectedHabits, mappedHabitsWithActions)
+    }
+
 }
