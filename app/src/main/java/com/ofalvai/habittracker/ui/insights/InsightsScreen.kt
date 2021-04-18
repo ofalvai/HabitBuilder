@@ -29,9 +29,6 @@ fun InsightsScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-
-        Text(text = "Most successful habits:")
-
         mostSuccessfulHabits.forEach {
             Text(
                 modifier = Modifier.padding(start = 16.dp),
@@ -41,7 +38,6 @@ fun InsightsScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text("Top days:")
         habitTopDays.forEach {
             Text(
                 modifier = Modifier.padding(start = 16.dp),

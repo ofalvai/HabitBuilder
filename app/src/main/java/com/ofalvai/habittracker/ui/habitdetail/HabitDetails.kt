@@ -257,13 +257,12 @@ fun HabitStats(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-//        Text("Actions by month:")
-//        actionCountByMonth.forEach {
-//            Text(
-//                modifier = Modifier.padding(start = 8.dp),
-//                text = "${it.yearMonth}: ${it.actionCount}"
-//            )
-//        }
+        actionCountByMonth.forEach {
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = "${it.yearMonth}: ${it.actionCount}"
+            )
+        }
     }
 }
 
