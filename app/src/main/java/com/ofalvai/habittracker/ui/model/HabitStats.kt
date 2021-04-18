@@ -20,3 +20,13 @@ data class ActionCountByMonth(
     val yearMonth: YearMonth,
     val actionCount: Int
 )
+
+data class HeatmapMonth(
+    val yearMonth: YearMonth,
+    val dayMap: Map<LocalDate, Bucket>
+) {
+
+    data class Bucket(
+        val index: Int
+    )
+}

@@ -22,6 +22,8 @@ import androidx.navigation.NavController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitViewModel
+import com.ofalvai.habittracker.ui.common.CalendarDayLegend
+import com.ofalvai.habittracker.ui.common.CalendarPager
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
