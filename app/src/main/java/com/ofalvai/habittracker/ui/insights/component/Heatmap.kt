@@ -1,6 +1,5 @@
 package com.ofalvai.habittracker.ui.insights.component
 
-import android.graphics.Color
 import android.graphics.Typeface
 import android.view.View
 import android.widget.LinearLayout
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -29,7 +29,7 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 
-private val initialState = HeatmapMonth(YearMonth.now(), emptyMap())
+private val initialState = HeatmapMonth(YearMonth.now(), emptyMap(), 0)
 
 @Composable
 fun Heatmap(viewModel: InsightsViewModel) {
@@ -76,7 +76,7 @@ fun HeatmapCalendar(
     }
 
     AndroidView({ view }) { calendarView ->
-        calendarView.dayBinder = HabitDayBinder()
+        calendarView.dayBinder = HabitDayBinder(heatmapData)
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         calendarView.setup(yearMonth, yearMonth, firstDayOfWeek)
     }
@@ -94,10 +94,11 @@ private class DayViewContainer(
 
     }
 
-    fun bind(day: CalendarDay) {
+    fun bind(day: CalendarDay, bucketInfo: HeatmapMonth.BucketInfo) {
         this.day = day
 
-        textView.setBackgroundColor(Color.MAGENTA)
+        val color = Color.Gray.copy(alpha = bucketInfo.bucketIndex / 5f)
+        textView.setBackgroundColor(color.toColorInt())
 
         if (day.owner == DayOwner.THIS_MONTH) {
             textView.text = day.date.dayOfMonth.toString()
@@ -114,10 +115,19 @@ private class DayViewContainer(
 }
 
 
-private class HabitDayBinder() : DayBinder<DayViewContainer> {
+private class HabitDayBinder(
+    private val heatmapData: HeatmapMonth
+) : DayBinder<DayViewContainer> {
     override fun create(view: View) = DayViewContainer(view)
 
     override fun bind(container: DayViewContainer, day: CalendarDay) {
-        container.bind(day)
+        val dayData = heatmapData.dayMap[day.date] ?: HeatmapMonth.BucketInfo(0, 0)
+        container.bind(day, dayData)
     }
+}
+
+@OptIn(ExperimentalUnsignedTypes::class)
+private fun Color.toColorInt(): Int {
+    // This isn't 100% correct, but works with SRGB color space
+    return (value shr 32).toInt()
 }

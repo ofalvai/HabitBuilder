@@ -8,6 +8,9 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.persistence.entity.HabitActionCount
 import com.ofalvai.habittracker.persistence.entity.HabitTopDay
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import java.time.YearMonth
 
@@ -18,6 +21,12 @@ class InsightsViewModel(
     val heatmapData = MutableLiveData<HeatmapMonth>()
     val mostSuccessfulHabits = MutableLiveData<List<HabitActionCount>>()
     val habitTopDays = MutableLiveData<List<HabitTopDay>>()
+
+    private val habitCount = habitDao.getHabitCount().shareIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        replay = 1
+    )
 
     init {
         fetchStats()
@@ -38,6 +47,10 @@ class InsightsViewModel(
     }
 
     private suspend fun reloadHeatmap(yearMonth: YearMonth) {
-        heatmapData.value = mapSumActionCountByDay(habitDao.getSumActionCountByDay(), yearMonth)
+        heatmapData.value = mapSumActionCountByDay(
+            entityList = habitDao.getSumActionCountByDay(),
+            yearMonth,
+            habitCount.first()
+        )
     }
 }

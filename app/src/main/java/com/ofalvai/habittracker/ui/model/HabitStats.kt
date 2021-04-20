@@ -23,10 +23,12 @@ data class ActionCountByMonth(
 
 data class HeatmapMonth(
     val yearMonth: YearMonth,
-    val dayMap: Map<LocalDate, Bucket>
+    val dayMap: Map<LocalDate, BucketInfo>,
+    val totalHabitCount: Int
 ) {
 
-    data class Bucket(
-        val index: Int
+    data class BucketInfo(
+        val bucketIndex: Int,
+        val value: Int // Actual value that bucketing is based on
     )
 }

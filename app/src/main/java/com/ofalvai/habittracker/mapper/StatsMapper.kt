@@ -42,14 +42,35 @@ fun mapActionCountByMonth(entityList: List<ActionCountByMonthEntity>): List<Acti
     }
 }
 
-fun mapSumActionCountByDay(entityList: List<SumActionCountByDay>, yearMonth: YearMonth): HeatmapMonth {
-    val dayMap = mutableMapOf<LocalDate, HeatmapMonth.Bucket>()
+fun mapSumActionCountByDay(
+    entityList: List<SumActionCountByDay>,
+    yearMonth: YearMonth,
+    totalHabitCount: Int
+): HeatmapMonth {
+    val dayMap = mutableMapOf<LocalDate, HeatmapMonth.BucketInfo>()
 
     entityList.forEach {
         if (it.date.yearMonth == yearMonth) {
-            dayMap[it.date] = HeatmapMonth.Bucket(it.action_count)
+            dayMap[it.date] = actionCountToBucket(totalHabitCount, it.action_count)
         }
     }
 
-    return HeatmapMonth(yearMonth, dayMap)
+    return HeatmapMonth(yearMonth, dayMap, totalHabitCount)
+}
+
+private fun actionCountToBucket(totalHabitCount: Int, actionCount: Int): HeatmapMonth.BucketInfo {
+    if (totalHabitCount == 0 || actionCount == 0) {
+        return HeatmapMonth.BucketInfo(bucketIndex = 0, value = 0)
+    }
+
+    val ratio = actionCount / totalHabitCount.toFloat()
+
+    val bucketIndex = when {
+        (0f..0.25f).contains(ratio) -> 1
+        (0.25f..0.5f).contains(ratio) -> 2
+        (0.5f..0.75f).contains(ratio) -> 3
+        else -> 4
+    }
+
+    return HeatmapMonth.BucketInfo(bucketIndex = bucketIndex, value = actionCount)
 }

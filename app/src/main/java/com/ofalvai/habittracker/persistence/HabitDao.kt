@@ -3,6 +3,7 @@ package com.ofalvai.habittracker.persistence
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.ofalvai.habittracker.persistence.entity.*
+import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
 @Dao
@@ -19,6 +20,9 @@ interface HabitDao {
 
     @Update
     suspend fun updateHabit(habit: Habit)
+
+    @Query("SELECT count(*) FROM habit")
+    fun getHabitCount(): Flow<Int>
 
     // TODO: limit by timestamp
     @Transaction
