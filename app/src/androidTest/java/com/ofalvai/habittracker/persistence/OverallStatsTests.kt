@@ -22,7 +22,7 @@ import java.time.LocalDate
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
-class OverallStatsTets {
+class OverallStatsTests {
 
     private object TestData {
         val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green)
@@ -79,7 +79,10 @@ class OverallStatsTets {
         habitDao.insertAction(*TestData.actions)
 
         // When
-        val actionCounts = habitDao.getSumActionCountByDay()
+        val actionCounts = habitDao.getSumActionCountByDay(
+            from = LocalDate.of(2019, 12, 1),
+            to = LocalDate.of(2021, 4, 30)
+        )
 
         // Then
         val expected = listOf(
@@ -102,11 +105,31 @@ class OverallStatsTets {
     }
 
     @Test
+    fun testActionCountForHabitsForOneMonth() = testCoroutineScope.runBlockingTest {
+        // Given
+        habitDao.insertHabit(*TestData.habits)
+        habitDao.insertAction(*TestData.actions)
+
+        // When
+        val actionCounts = habitDao.getSumActionCountByDay(
+            from = LocalDate.of(2021, 1, 1),
+            to = LocalDate.of(2021, 1, 31)
+        )
+
+        // Then
+        val expected = listOf(
+            SumActionCountByDay(LocalDate.of(2021, 1, 1), action_count = 1),
+            SumActionCountByDay(LocalDate.of(2021, 1, 4), action_count = 1),
+        )
+        assertEquals(expected, actionCounts)
+    }
+
+    @Test
     fun testActionCountForEmptyHabits() = testCoroutineScope.runBlockingTest {
         // Given
 
         // When
-        val actionCounts = habitDao.getSumActionCountByDay()
+        val actionCounts = habitDao.getSumActionCountByDay(from = LocalDate.now(), to = LocalDate.now().plusDays(1))
 
         // Then
         assertEquals(emptyList<SumActionCountByDay>(), actionCounts)

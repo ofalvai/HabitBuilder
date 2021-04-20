@@ -5,6 +5,7 @@ import androidx.room.*
 import com.ofalvai.habittracker.persistence.entity.*
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
+import java.time.LocalDate
 
 @Dao
 interface HabitDao {
@@ -86,11 +87,11 @@ interface HabitDao {
                 date(timestamp / 1000, 'unixepoch', 'localtime') as date,
                 count(*) AS action_count
             FROM `action`
+            WHERE date >= date(:from) AND date <= date(:to)
             GROUP BY date
         """
     )
-    // TODO: date range filter
-    suspend fun getSumActionCountByDay(): List<SumActionCountByDay>
+    suspend fun getSumActionCountByDay(from: LocalDate, to:LocalDate): List<SumActionCountByDay>
 
     @Query(
         """SELECT

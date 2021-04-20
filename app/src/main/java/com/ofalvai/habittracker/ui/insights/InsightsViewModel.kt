@@ -47,10 +47,14 @@ class InsightsViewModel(
     }
 
     private suspend fun reloadHeatmap(yearMonth: YearMonth) {
+        val startDate = yearMonth.atDay(1)
+        val endDate = yearMonth.atEndOfMonth()
+        val actionCountList = habitDao.getSumActionCountByDay(startDate, endDate)
+        val habitCount = habitCount.first()
         heatmapData.value = mapSumActionCountByDay(
-            entityList = habitDao.getSumActionCountByDay(),
+            entityList = actionCountList,
             yearMonth,
-            habitCount.first()
+            habitCount
         )
     }
 }

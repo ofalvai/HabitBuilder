@@ -24,9 +24,11 @@ class EntityTypeConverters {
     fun toDate(dateString: String?): LocalDate? = if (dateString == null) null else LocalDate.parse(dateString)
 
     @TypeConverter
+    fun fromDate(localDate: LocalDate): String = localDate.toString()
+
+    @TypeConverter
     fun toDayOfWeek(dayIndex: Int): DayOfWeek {
         // SQLite day of week: 0-6 with Sunday == 0
         return DayOfWeek.of(if (dayIndex == 0) 7 else dayIndex)
     }
-
 }

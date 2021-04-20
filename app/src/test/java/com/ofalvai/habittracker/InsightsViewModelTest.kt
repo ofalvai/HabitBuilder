@@ -1,6 +1,7 @@
 package com.ofalvai.habittracker
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
@@ -35,7 +36,7 @@ class InsightsViewModelTest {
         // Given
         val habitCountFlow = MutableStateFlow(1)
         given(dao.getHabitCount()).willReturn(habitCountFlow)
-        given(dao.getSumActionCountByDay()).willReturn(listOf(
+        given(dao.getSumActionCountByDay(any(), any())).willReturn(listOf(
             SumActionCountByDay(date = LocalDate.now(), action_count = 1)
         ))
 
@@ -53,7 +54,7 @@ class InsightsViewModelTest {
         // Given
         val habitCountFlow = MutableStateFlow(1)
         given(dao.getHabitCount()).willReturn(habitCountFlow)
-        given(dao.getSumActionCountByDay()).willReturn(listOf(
+        given(dao.getSumActionCountByDay(any(), any())).willReturn(listOf(
             SumActionCountByDay(date = LocalDate.now(), action_count = 1)
         ))
 
