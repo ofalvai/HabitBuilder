@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.vanniktech.android.junit.jacoco'
 
 android {
     compileSdkVersion 30
@@ -61,6 +62,11 @@ android {
         exclude "META-INF/AL2.0"
         exclude "META-INF/LGPL2.1"
     }
+}
+
+junitJacoco {
+    jacocoVersion = "0.8.6"
+    includeNoLocationClasses = false // TODO: enabling this fails on Java 11
 }
 
 dependencies {

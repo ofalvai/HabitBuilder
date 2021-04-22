@@ -34,9 +34,12 @@ compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "
 timber = "com.jakewharton.timber:timber:4.7.1"
 calendarview = "com.github.kizitonwose:CalendarView:1.0.1"
 accompanist-insets = "dev.chrisbanes.accompanist:accompanist-insets:0.6.0"
+
 junit = "junit:junit:4.13.1"
 mockito-core = "org.mockito:mockito-core:3.3.3"
 mockito-kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+
+jacoco = "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
 
 [bundles]
 compose = ["compose-ui", "compose-material", "compose-runtime-livedata", "compose-animation"]
