@@ -11,6 +11,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.kizitonwose.calendarview.CalendarView
@@ -24,6 +25,7 @@ import com.ofalvai.habittracker.ui.common.CalendarDayLegend
 import com.ofalvai.habittracker.ui.common.CalendarPager
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
+import com.ofalvai.habittracker.ui.theme.AppIcons
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -46,17 +48,24 @@ fun Heatmap(viewModel: InsightsViewModel) {
         viewModel.fetchHeatmap(yearMonth)
     }
 
-    // TODO: too many recompositions
-    Column(Modifier.padding(horizontal = 32.dp, vertical = 16.dp)) {
-        CalendarPager(
-            yearMonth = yearMonth,
-            onPreviousClick = onPreviousMonth,
-            onNextClick = onNextMonth
-        )
+    InsightCard(
+        iconPainter = AppIcons.Heatmap,
+        title = stringResource(R.string.insights_heatmap_title),
+        description = stringResource(R.string.insights_heatmap_description),
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
+    ) {
+        // TODO: too many recompositions
+        Column {
+            CalendarPager(
+                yearMonth = yearMonth,
+                onPreviousClick = onPreviousMonth,
+                onNextClick = onNextMonth
+            )
 
-        CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
+            CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
 
-        HeatmapCalendar(yearMonth, heatmapData)
+            HeatmapCalendar(yearMonth, heatmapData)
+        }
     }
 }
 

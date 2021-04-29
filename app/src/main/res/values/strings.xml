@@ -49,5 +49,9 @@
         <item quantity="one">%d missed day</item>
         <item quantity="other">%d missed days</item>
     </plurals>
-    
+
+    <string name="insights_more_info">More information</string>
+    <string name="insights_heatmap_title">Heatmap</string>
+    <string name="insights_heatmap_description">Heatmap shows you the number of habits done every day. Darker days mean more completed habits on a given day.</string>
+
 </resources>

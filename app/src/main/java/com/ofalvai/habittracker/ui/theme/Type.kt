@@ -38,4 +38,8 @@ object AppTextStyle {
         @Composable
         get() = typography.h6.copy(fontFamily = patua)
 
+    val insightCardTitle: TextStyle
+        @Composable
+        get() = typography.h6.copy(fontWeight = FontWeight.Bold) // Lato doesn't have medium
+
 }
