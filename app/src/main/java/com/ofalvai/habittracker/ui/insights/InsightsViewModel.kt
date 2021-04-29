@@ -8,6 +8,7 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.persistence.entity.HabitActionCount
 import com.ofalvai.habittracker.persistence.entity.HabitTopDay
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.shareIn
@@ -22,9 +23,9 @@ class InsightsViewModel(
     val mostSuccessfulHabits = MutableLiveData<List<HabitActionCount>>()
     val habitTopDays = MutableLiveData<List<HabitTopDay>>()
 
-    private val habitCount = habitDao.getHabitCount().shareIn(
+    private val habitCount: SharedFlow<Int> = habitDao.getHabitCount().shareIn(
         scope = viewModelScope,
-        started = SharingStarted.Lazily,
+        started = SharingStarted.Eagerly,
         replay = 1
     )
 

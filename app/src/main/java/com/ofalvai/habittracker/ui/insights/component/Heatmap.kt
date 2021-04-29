@@ -5,14 +5,11 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -52,7 +49,6 @@ fun Heatmap(viewModel: InsightsViewModel) {
         iconPainter = AppIcons.Heatmap,
         title = stringResource(R.string.insights_heatmap_title),
         description = stringResource(R.string.insights_heatmap_description),
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
     ) {
         // TODO: too many recompositions
         Column {
