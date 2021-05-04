@@ -29,7 +29,7 @@ fun InsightsScreen(navController: NavController) {
     ) {
         Heatmap(viewModel)
 
-        TopHabits(viewModel)
+        TopHabits(viewModel, navController)
 
         TopDays(viewModel)
     }

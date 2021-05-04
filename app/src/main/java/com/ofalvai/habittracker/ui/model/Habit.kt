@@ -1,7 +1,9 @@
 package com.ofalvai.habittracker.ui.model
 
+typealias HabitId = Int
+
 data class Habit(
-    val id: Int = 0,
+    val id: HabitId = 0,
     val name: String,
     val color: Color
 ) {

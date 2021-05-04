@@ -20,6 +20,8 @@ class InsightsViewModel(
 ): ViewModel() {
 
     val heatmapData = MutableLiveData<HeatmapMonth>()
+
+    // TODO: map entities to models
     val mostSuccessfulHabits = MutableLiveData<List<HabitActionCount>>()
     val habitTopDays = MutableLiveData<List<HabitTopDay>>()
 
