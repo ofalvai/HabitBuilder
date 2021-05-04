@@ -9,6 +9,7 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
+import timber.log.Timber
 
 object Dependencies {
 
@@ -16,12 +17,22 @@ object Dependencies {
         HabitTrackerApplication.INSTANCE.applicationContext,
         AppDatabase::class.java,
         "app-db"
-    ).build()
+    ).setQueryCallback(::roomQueryLogCallback, Runnable::run).build()
 
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(HabitTrackerApplication.INSTANCE)
+    private val sharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(HabitTrackerApplication.INSTANCE)
     private val appPreferences = AppPreferences(sharedPreferences)
 
     val viewModelFactory = AppViewModelFactory(db.habitDao(), appPreferences)
+}
+
+private fun roomQueryLogCallback(sqlQuery: String, bindArgs: List<Any>) {
+    Timber.tag("RoomQueryLog")
+    Timber.d("Query: %s", sqlQuery)
+    if (bindArgs.isNotEmpty()) {
+        Timber.tag("RoomQueryLog")
+        Timber.d("Args: %s", bindArgs.toString())
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

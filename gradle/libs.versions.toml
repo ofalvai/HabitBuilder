@@ -1,6 +1,6 @@
 [versions]
 compose = "1.0.0-beta04"
-room = "2.2.6"
+room = "2.3.0"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
