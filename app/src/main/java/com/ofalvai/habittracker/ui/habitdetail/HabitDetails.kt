@@ -1,7 +1,7 @@
 package com.ofalvai.habittracker.ui.habitdetail
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -37,18 +37,25 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 
+sealed class HabitDetailState {
+    object Loading: HabitDetailState()
+
+    data class Loaded(val habitDetails: HabitWithActions): HabitDetailState()
+}
+
 @Composable
 fun HabitDetailScreen(habitId: Int, navController: NavController) {
     val viewModel: HabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
-    val initialState = HabitWithActions(
-        Habit(name = "", color = Habit.Color.Blue),
-        actions = emptyList(),
-        totalActionCount = 0,
-        actionHistory = ActionHistory.Clean
-    ) // TODO: default color
-    val habitWithActions by Transformations.map(viewModel.habitWithActions) { it ?: initialState }
-        .observeAsState(initialState)
+    val initialState = HabitDetailState.Loading
+    val habitDetailState by Transformations.map(viewModel.habitWithActions) {
+        if (it == null) {
+            initialState
+        } else {
+            HabitDetailState.Loaded(it)
+        }
+    }.observeAsState(initialState)
+
     val habitStats by viewModel.habitStats.observeAsState(GeneralHabitStats(null, 0, 0f))
     val actionCountByWeek by viewModel.actionCountByWeek.observeAsState(emptyList())
     val actionCountByMonth by viewModel.actionCountByMonth.observeAsState(emptyList())
@@ -67,7 +74,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
     }
 
     HabitDetailScreen(
-        habitWithActions = habitWithActions,
+        habitDetailState = habitDetailState,
         habitStats = habitStats,
         actionCountByWeek = actionCountByWeek,
         actionCountByMonth = actionCountByMonth,
@@ -83,7 +90,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 
 @Composable
 fun HabitDetailScreen(
-    habitWithActions: HabitWithActions,
+    habitDetailState: HabitDetailState,
     habitStats: GeneralHabitStats,
     actionCountByWeek: List<ActionCountByWeek>,
     actionCountByMonth: List<ActionCountByMonth>,
@@ -95,23 +102,28 @@ fun HabitDetailScreen(
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
 
     Column {
-        HabitDetailHeader(habitWithActions, onBack, onEdit, onDelete)
+        HabitDetailHeader(habitDetailState, onBack, onEdit, onDelete)
 
         Column(Modifier.padding(32.dp)) {
-            CalendarPager(
-                yearMonth = yearMonth,
-                onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
-                onNextClick = { yearMonth = yearMonth.plusMonths(1) }
-            )
-
-            CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
-
-            HabitCalendar(
-                yearMonth = yearMonth,
-                habitColor = habitWithActions.habit.color.composeColor,
-                actions = habitWithActions.actions,
-                onDayToggle = onDayToggle
-            )
+            when (habitDetailState) {
+                is HabitDetailState.Loaded -> {
+                    CalendarPager(
+                        yearMonth = yearMonth,
+                        onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
+                        onNextClick = { yearMonth = yearMonth.plusMonths(1) }
+                    )
+                    HabitCalendar(
+                        yearMonth = yearMonth,
+                        habitColor = habitDetailState.habitDetails.habit.color.composeColor,
+                        actions = habitDetailState.habitDetails.actions,
+                        onDayToggle = onDayToggle
+                    )
+                    CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
+                }
+                HabitDetailState.Loading -> {
+                    // No calendar in loading state
+                }
+            }
         }
 
         HabitStats(habitStats, actionCountByWeek, actionCountByMonth)
@@ -121,78 +133,53 @@ fun HabitDetailScreen(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HabitDetailHeader(
-    habitWithActions: HabitWithActions,
+    habitDetailState: HabitDetailState,
     onBack: () -> Unit,
     onSave: (Habit) -> Unit,
     onDelete: (Habit) -> Unit
 ) {
-    val habitColor = habitWithActions.habit.color.composeColor
-    val surfaceColor = habitColor.copy(alpha = 0.5f)
     var isEditing by remember { mutableStateOf(false) }
-    var editingName by remember(habitWithActions.habit.name) {
-        mutableStateOf(habitWithActions.habit.name)
-    }
-    var editingColor by remember(habitWithActions.habit.color) {
-        mutableStateOf(habitWithActions.habit.color)
-    }
-    var isNameValid by remember { mutableStateOf(true) }
 
-    val onSaveClick = {
-        if (isNameValid) {
-            isEditing = false
-            val newValue = habitWithActions.habit.copy(name = editingName, color = editingColor)
-            onSave(newValue)
-        }
-    }
-
-
-    Surface(color = if (isEditing) MaterialTheme.colors.surface else surfaceColor) {
-        Column(
-            Modifier
-                .padding(bottom = 32.dp)
-                .statusBarsPadding()) {
-            HabitDetailAppBar(
-                isEditing = isEditing,
-                onBack = onBack,
-                onEdit = { isEditing = true },
-                onSave = onSaveClick,
-                onDelete = { onDelete(habitWithActions.habit) }
-            )
-
-            AnimatedVisibility(visible = isEditing) {
-                Column {
-                    OutlinedTextField(
-                        value = editingName,
-                        onValueChange = {
-                            editingName = it
-                            isNameValid = it.isNotBlank()
-                        },
-                        modifier = Modifier
-                            .padding(horizontal = 32.dp)
-                            .fillMaxWidth(),
-                        isError = !isNameValid
-                    )
-                    HabitColorPicker(
-                        initialColor = habitWithActions.habit.color,
-                        onColorPick = { editingColor = it }
-                    )
+    val backgroundColor by animateColorAsState(
+        targetValue = when (habitDetailState) {
+            is HabitDetailState.Loaded -> {
+                if (isEditing) MaterialTheme.colors.surface else {
+                    habitDetailState.habitDetails.habit.color.composeColor.copy(alpha = 0.5f)
                 }
             }
+            HabitDetailState.Loading -> MaterialTheme.colors.background
+        },
+        animationSpec = tween(durationMillis = 900)
+    )
 
-            AnimatedVisibility(visible = !isEditing) {
-                Column {
-                    Text(
-                        text = habitWithActions.habit.name,
-                        modifier = Modifier.padding(horizontal = 32.dp),
-                        style = AppTextStyle.habitTitle
+    Surface(color = backgroundColor) {
+        when (habitDetailState) {
+            HabitDetailState.Loading -> HabitDetailLoadingAppBar(onBack)
+
+            is HabitDetailState.Loaded -> {
+                AnimatedVisibility(
+                    visible = isEditing,
+                    enter = fadeIn() + expandVertically(),
+                    exit = shrinkVertically() + fadeOut()
+                ) {
+                    HabitHeaderEditingContent(
+                        habitName = habitDetailState.habitDetails.habit.name,
+                        habitDetails = habitDetailState.habitDetails,
+                        onBack = onBack,
+                        onSave = {
+                            isEditing = false
+                            onSave(it)
+                        },
+                        onDelete = onDelete
                     )
-                    Text(
-                        text = stringResource(
-                            R.string.habitdetail_total_actions,
-                            habitWithActions.totalActionCount
-                        ),
-                        modifier = Modifier.padding(horizontal = 32.dp),
-                        style = MaterialTheme.typography.body1
+                }
+
+                AnimatedVisibility(visible = !isEditing, enter = fadeIn(), exit = fadeOut()) {
+                    HabitHeaderContent(
+                        habitName = habitDetailState.habitDetails.habit.name,
+                        habitDetails = habitDetailState.habitDetails,
+                        onBack = onBack,
+                        onEdit = { isEditing = true }
                     )
                 }
             }
@@ -201,10 +188,112 @@ fun HabitDetailHeader(
 }
 
 @Composable
+fun HabitHeaderEditingContent(
+    habitName: String,
+    habitDetails: HabitWithActions,
+    onBack: () -> Unit,
+    onSave: (Habit) -> Unit,
+    onDelete: (Habit) -> Unit
+) {
+    var editingName by remember(habitName) {
+        mutableStateOf(habitName)
+    }
+    var editingColor by remember(habitDetails.habit.color) {
+        mutableStateOf(habitDetails.habit.color)
+    }
+    var isNameValid by remember { mutableStateOf(true) }
+    val onSaveClick = {
+        if (isNameValid) {
+            val newValue = habitDetails.habit.copy(name = editingName, color = editingColor)
+            onSave(newValue)
+        }
+    }
+
+    Column(modifier = Modifier
+        .padding(bottom = 32.dp)
+        .statusBarsPadding()
+    ) {
+        HabitDetailEditingAppBar(
+            onBack = onBack,
+            onSave = onSaveClick,
+            onDelete = { onDelete(habitDetails.habit) }
+        )
+        OutlinedTextField(
+            value = editingName,
+            onValueChange = {
+                editingName = it
+                isNameValid = it.isNotBlank()
+            },
+            modifier = Modifier
+                .padding(horizontal = 32.dp)
+                .fillMaxWidth(),
+            isError = !isNameValid
+        )
+        HabitColorPicker(
+            initialColor = habitDetails.habit.color,
+            onColorPick = { editingColor = it }
+        )
+    }
+}
+
+@Composable
+fun HabitHeaderContent(
+    habitName: String,
+    habitDetails: HabitWithActions,
+    onBack: () -> Unit,
+    onEdit: () -> Unit
+) {
+    Column(
+        Modifier
+            .padding(bottom = 32.dp)
+            .statusBarsPadding()) {
+        HabitDetailAppBar(
+            onBack = onBack,
+            onEdit = onEdit,
+        )
+        Text(
+            text = habitName,
+            modifier = Modifier.padding(horizontal = 32.dp),
+            style = AppTextStyle.habitTitle
+        )
+        Text(
+            text = stringResource(
+                R.string.habitdetail_total_actions,
+                habitDetails.totalActionCount
+            ),
+            modifier = Modifier.padding(horizontal = 32.dp),
+            style = MaterialTheme.typography.body1
+        )
+    }
+}
+
+@Composable
 fun HabitDetailAppBar(
-    isEditing: Boolean,
     onBack: () -> Unit,
     onEdit: () -> Unit,
+) {
+    TopAppBar(
+        title = { },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
+            }
+        },
+        actions = {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
+                IconButton(onClick = onEdit) {
+                    Icon(Icons.Rounded.Edit, stringResource(R.string.common_edit))
+                }
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
+    )
+}
+
+@Composable
+fun HabitDetailEditingAppBar(
+    onBack: () -> Unit,
     onSave: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -217,18 +306,27 @@ fun HabitDetailAppBar(
         },
         actions = {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                if (isEditing) {
-                    IconButton(onClick = onSave) {
-                        Icon(Icons.Rounded.Check, stringResource(R.string.common_save))
-                    }
-                    IconButton(onClick = onDelete) {
-                        Icon(Icons.Rounded.Delete, stringResource(R.string.common_delete))
-                    }
-                } else {
-                    IconButton(onClick = onEdit) {
-                        Icon(Icons.Rounded.Edit, stringResource(R.string.common_edit))
-                    }
+                IconButton(onClick = onSave) {
+                    Icon(Icons.Rounded.Check, stringResource(R.string.common_save))
                 }
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Rounded.Delete, stringResource(R.string.common_delete))
+                }
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
+    )
+}
+
+@Composable
+fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
+    TopAppBar(
+        modifier = Modifier.statusBarsPadding(),
+        title = { },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
             }
         },
         backgroundColor = Color.Transparent,
@@ -271,12 +369,12 @@ fun HabitStats(
 fun PreviewHabitDetailScreen() {
     HabitTrackerTheme {
         HabitDetailScreen(
-            habitWithActions = HabitWithActions(
+            habitDetailState = HabitDetailState.Loaded(HabitWithActions(
                 Habit(0, "Meditation", Habit.Color.Red),
                 listOf(Action(0, true, Instant.now())),
                 2,
                 ActionHistory.Clean
-            ),
+            )),
             habitStats = GeneralHabitStats(LocalDate.now(), 2, 0.15f),
             actionCountByWeek = emptyList(),
             actionCountByMonth = emptyList(),

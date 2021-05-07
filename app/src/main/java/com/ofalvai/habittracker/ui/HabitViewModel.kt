@@ -9,7 +9,10 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.time.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.OffsetDateTime
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
@@ -44,9 +47,6 @@ class HabitViewModel(
     }
 
     fun fetchHabitDetails(habitId: Int): Job {
-        // Clear previous result (for a possibly different habit ID)
-        habitWithActions.value = null
-
         return viewModelScope.launch {
             val habit = dao.getHabitWithActions(habitId).let {
                 // TODO: unify this with the regular mapping (where empty day action are filled)
