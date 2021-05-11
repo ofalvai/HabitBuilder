@@ -3,11 +3,9 @@ package com.ofalvai.habittracker.mapper
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.ofalvai.habittracker.persistence.entity.ActionCompletionRate
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
-import com.ofalvai.habittracker.ui.model.ActionCountByMonth
-import com.ofalvai.habittracker.ui.model.ActionCountByWeek
-import com.ofalvai.habittracker.ui.model.GeneralHabitStats
-import com.ofalvai.habittracker.ui.model.HeatmapMonth
+import com.ofalvai.habittracker.ui.model.*
 import java.time.*
+import kotlin.math.min
 import com.ofalvai.habittracker.persistence.entity.ActionCountByMonth as ActionCountByMonthEntity
 import com.ofalvai.habittracker.persistence.entity.ActionCountByWeek as ActionCountByWeekEntity
 
@@ -42,6 +40,8 @@ fun mapActionCountByMonth(entityList: List<ActionCountByMonthEntity>): List<Acti
     }
 }
 
+private const val maxBucketCount = 5
+
 fun mapSumActionCountByDay(
     entityList: List<SumActionCountByDay>,
     yearMonth: YearMonth,
@@ -55,12 +55,28 @@ fun mapSumActionCountByDay(
         }
     }
 
-    return HeatmapMonth(yearMonth, dayMap, totalHabitCount)
+    val bucketData = habitCountToBucketMaxValues(totalHabitCount)
+
+    return HeatmapMonth(
+        yearMonth,
+        dayMap,
+        totalHabitCount,
+        bucketCount = bucketData.size,
+        bucketMaxValues = bucketData
+    )
 }
 
 private fun actionCountToBucket(totalHabitCount: Int, actionCount: Int): HeatmapMonth.BucketInfo {
     if (totalHabitCount == 0 || actionCount == 0) {
         return HeatmapMonth.BucketInfo(bucketIndex = 0, value = 0)
+    }
+
+    if (totalHabitCount < maxBucketCount) {
+        // If habit count < 5 we use 1 bucket for each action count value (+1 for the value 0)
+        return HeatmapMonth.BucketInfo(
+            bucketIndex = min(actionCount, maxBucketCount - 1), // This should never happen
+            value = actionCount
+        )
     }
 
     val ratio = actionCount / totalHabitCount.toFloat()
@@ -73,4 +89,37 @@ private fun actionCountToBucket(totalHabitCount: Int, actionCount: Int): Heatmap
     }
 
     return HeatmapMonth.BucketInfo(bucketIndex = bucketIndex, value = actionCount)
+}
+
+private fun habitCountToBucketMaxValues(totalHabitCount: Int): List<Pair<BucketIndex, Int>> {
+    if (totalHabitCount == 0) {
+        return emptyList()
+    }
+
+    if (totalHabitCount < maxBucketCount) {
+        // If habit count < 5 we use 1 bucket for each action count value + 1 bucket for 0
+        return (0..totalHabitCount).map {
+            if (it == 0) {
+                Pair(0, 0) // First bucket is always for the value 0
+            } else {
+                Pair(it, it)
+            }
+        }
+    } else {
+        // If habit count >= 5 we use 5 buckets and group values to find the largest in each bucket
+        val bucketMap = mutableMapOf<BucketIndex, MutableSet<Int>>()
+        (0.until(maxBucketCount)).forEach {
+            // Initialize empty sets for every bucket index
+            bucketMap[it] = mutableSetOf()
+        }
+        (0..totalHabitCount).forEach {
+            // Put each possible action count value into a bucket
+            val bucketInfo = actionCountToBucket(totalHabitCount, it)
+            bucketMap[bucketInfo.bucketIndex]!!.add(bucketInfo.value)
+        }
+
+        return bucketMap
+            .map { entry -> Pair(entry.key, entry.value.maxOrNull() ?: 0) }
+            .sortedBy { it.first } // Sort by bucket index
+    }
 }

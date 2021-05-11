@@ -44,7 +44,9 @@ class InsightsViewModel(
     private fun fetchStats() {
         viewModelScope.launch {
             fetchHeatmap(yearMonth = YearMonth.now())
-            mostSuccessfulHabits.value = habitDao.getMostSuccessfulHabits(10)
+            mostSuccessfulHabits.value = habitDao
+                .getMostSuccessfulHabits(10)
+                .filter { it.first_day != null }
             habitTopDays.value = habitDao.getTopDayForHabits()
         }
     }

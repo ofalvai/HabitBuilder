@@ -53,6 +53,7 @@
     <string name="insights_more_info">More information</string>
     <string name="insights_heatmap_title">Heatmap</string>
     <string name="insights_heatmap_description">Heatmap shows you the number of habits done every day. Darker days mean more completed habits on a given day.</string>
+    <string name="insights_heatmap_legend_label">Number of habits</string>
     <string name="insights_tophabits_title">Top habits</string>
     <string name="insights_topdays_title">Top days</string>
     <string name="insights_tophabits_navigate">Navigate to %s</string>
