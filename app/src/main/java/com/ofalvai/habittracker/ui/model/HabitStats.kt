@@ -1,5 +1,6 @@
 package com.ofalvai.habittracker.ui.model
 
+import androidx.annotation.FloatRange
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
@@ -35,3 +36,10 @@ data class HeatmapMonth(
         val value: Int // Actual value (habit count on day) that bucketing is based on
     )
 }
+
+data class TopHabitItem(
+    val habitId: HabitId,
+    val name: String,
+    val count: Int,
+    @FloatRange(from = 0.0, to = 1.0) val progress: Float
+)

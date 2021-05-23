@@ -2,9 +2,11 @@ package com.ofalvai.habittracker.mapper
 
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.ofalvai.habittracker.persistence.entity.ActionCompletionRate
+import com.ofalvai.habittracker.persistence.entity.HabitActionCount
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
 import com.ofalvai.habittracker.ui.model.*
 import java.time.*
+import java.time.temporal.ChronoUnit
 import kotlin.math.min
 import com.ofalvai.habittracker.persistence.entity.ActionCountByMonth as ActionCountByMonthEntity
 import com.ofalvai.habittracker.persistence.entity.ActionCountByWeek as ActionCountByWeekEntity
@@ -63,6 +65,18 @@ fun mapSumActionCountByDay(
         totalHabitCount,
         bucketCount = bucketData.size,
         bucketMaxValues = bucketData
+    )
+}
+
+fun mapHabitActionCount(entity: HabitActionCount, now: LocalDate): TopHabitItem {
+    val activeDays = ChronoUnit.DAYS.between(entity.first_day, now)
+    val progress = if (activeDays > 0) entity.count / activeDays.toFloat() else 0f
+
+    return TopHabitItem(
+        habitId = entity.habit_id,
+        name = entity.name,
+        count = entity.count,
+        progress = progress
     )
 }
 

@@ -4,7 +4,10 @@ import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
@@ -20,27 +23,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.persistence.entity.HabitActionCount
 import com.ofalvai.habittracker.ui.Screen
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HabitId
+import com.ofalvai.habittracker.ui.model.TopHabitItem
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.habitInactive
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 @Composable
 fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
-    val topHabits by viewModel.mostSuccessfulHabits.observeAsState(emptyList())
+    val topHabits by viewModel.topHabits.observeAsState(emptyList())
 
     val onHabitClick: (HabitId) -> Unit = {
         val route = Screen.HabitDetails.buildRoute(habitId = it)
         navController.navigate(route)
-    }
-
-    val onSeeAllClick = {
-        // TODO
     }
 
     InsightCard(
@@ -54,19 +51,19 @@ fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
                 onHabitClick = onHabitClick
             )
 
-            TextButton(
-                onClick = onSeeAllClick,
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                Text(text = stringResource(R.string.insights_tophabits_see_all))
-            }
+//            TextButton(
+//                onClick = onSeeAllClick,
+//                modifier = Modifier.align(Alignment.End)
+//            ) {
+//                Text(text = stringResource(R.string.insights_tophabits_see_all))
+//            }
         }
     }
 }
 
 @Composable
 fun TopHabitsTable(
-    habits: List<HabitActionCount>,
+    habits: List<TopHabitItem>,
     onHabitClick: (HabitId) -> Unit
 ) {
     Column(
@@ -75,7 +72,7 @@ fun TopHabitsTable(
         habits.forEachIndexed { index, element ->
             TopHabitsRow(
                 index = index + 1,
-                habitActionCount = element,
+                item = element,
                 onClick = onHabitClick
             )
         }
@@ -85,7 +82,7 @@ fun TopHabitsTable(
 @Composable
 fun TopHabitsRow(
     index: Int,
-    habitActionCount: HabitActionCount,
+    item: TopHabitItem,
     onClick: (HabitId) -> Unit
 ) {
     Row(
@@ -102,7 +99,7 @@ fun TopHabitsRow(
         Spacer(Modifier.width(16.dp))
 
         Text(
-            text = habitActionCount.name,
+            text = item.name,
             modifier = Modifier.weight(0.50f),
             overflow = TextOverflow.Ellipsis,
             softWrap = false,
@@ -110,7 +107,7 @@ fun TopHabitsRow(
         )
 
         Text(
-            text = habitActionCount.count.toString(),
+            text = item.count.toString(),
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.body1,
             modifier = Modifier.weight(0.2f)
@@ -118,19 +115,17 @@ fun TopHabitsRow(
 
         Spacer(Modifier.width(16.dp))
 
-        val activeDays = ChronoUnit.DAYS.between(habitActionCount.first_day, LocalDate.now())
-        val habitProgress = habitActionCount.count / activeDays.toFloat()
         HabitBar(
-            progress = habitProgress,
+            progress = item.progress,
             modifier = Modifier.weight(0.2f)
         )
 
-        IconButton(onClick = { onClick(habitActionCount.habit_id) }) {
+        IconButton(onClick = { onClick(item.habitId) }) {
             Icon(
                 imageVector = Icons.Rounded.KeyboardArrowRight,
                 contentDescription = stringResource(
                     R.string.insights_tophabits_navigate,
-                    habitActionCount.name
+                    item.name
                 )
             )
         }
@@ -164,33 +159,35 @@ fun HabitBar(
 @Composable
 fun PreviewTopHabitsTable() {
     val topHabits = listOf(
-        HabitActionCount(
-            habit_id = 1,
+        TopHabitItem(
+            habitId = 1,
             name = "Short name",
-            first_day = LocalDate.now(),
-            count = 1567
+            count = 1567,
+            progress = 1f
         ),
-        HabitActionCount(
-            habit_id = 1,
+        TopHabitItem(
+            habitId = 1,
             name = "Name",
-            first_day = LocalDate.now(),
-            count = 153
-        ),HabitActionCount(
-            habit_id = 1,
-            name = "Loooong name lorem ipsum dolor sit amet",
-            first_day = LocalDate.now(),
-            count = 10
-        ),HabitActionCount(
-            habit_id = 1,
-            name = "Meditation",
-            first_day = LocalDate.now(),
-            count = 9
+            count = 153,
+            progress = 0.8f
         ),
-        HabitActionCount(
-            habit_id = 1,
+        TopHabitItem(
+            habitId = 1,
+            name = "Loooong name lorem ipsum dolor sit amet",
+            count = 10,
+            progress = 0.5f
+        ),
+        TopHabitItem(
+            habitId = 1,
+            name = "Meditation",
+            count = 9,
+            progress = 0.1f
+        ),
+        TopHabitItem(
+            habitId = 1,
             name = "Workout",
-            first_day = LocalDate.now(),
-            count = 3
+            count = 3,
+            progress = 0f
         )
     )
 

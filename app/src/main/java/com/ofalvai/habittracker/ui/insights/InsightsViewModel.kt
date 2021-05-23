@@ -3,16 +3,18 @@ package com.ofalvai.habittracker.ui.insights
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.mapper.mapHabitActionCount
 import com.ofalvai.habittracker.mapper.mapSumActionCountByDay
 import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.persistence.entity.HabitActionCount
 import com.ofalvai.habittracker.persistence.entity.HabitTopDay
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
+import com.ofalvai.habittracker.ui.model.TopHabitItem
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.YearMonth
 
 class InsightsViewModel(
@@ -20,9 +22,9 @@ class InsightsViewModel(
 ): ViewModel() {
 
     val heatmapData = MutableLiveData<HeatmapMonth>()
+    val topHabits = MutableLiveData<List<TopHabitItem>>()
 
     // TODO: map entities to models
-    val mostSuccessfulHabits = MutableLiveData<List<HabitActionCount>>()
     val habitTopDays = MutableLiveData<List<HabitTopDay>>()
 
     private val habitCount: SharedFlow<Int> = habitDao.getHabitCount().shareIn(
@@ -43,10 +45,9 @@ class InsightsViewModel(
 
     private fun fetchStats() {
         viewModelScope.launch {
-            fetchHeatmap(yearMonth = YearMonth.now())
-            mostSuccessfulHabits.value = habitDao
-                .getMostSuccessfulHabits(10)
-                .filter { it.first_day != null }
+            // TODO: parallel coroutines
+            reloadHeatmap(yearMonth = YearMonth.now())
+            reloadTopHabits()
             habitTopDays.value = habitDao.getTopDayForHabits()
         }
     }
@@ -61,5 +62,12 @@ class InsightsViewModel(
             yearMonth,
             habitCount
         )
+    }
+
+    private suspend fun reloadTopHabits() {
+        topHabits.value = habitDao
+            .getMostSuccessfulHabits(100) // TODO: smaller number when "See all" screen is done
+            .filter { it.first_day != null }
+            .map { mapHabitActionCount(it, LocalDate.now()) }
     }
 }

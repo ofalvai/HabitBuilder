@@ -1,8 +1,11 @@
 package com.ofalvai.habittracker
 
+import com.ofalvai.habittracker.mapper.mapHabitActionCount
 import com.ofalvai.habittracker.mapper.mapSumActionCountByDay
+import com.ofalvai.habittracker.persistence.entity.HabitActionCount
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
+import com.ofalvai.habittracker.ui.model.TopHabitItem
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.LocalDate
@@ -340,5 +343,53 @@ class StatsMapperTest {
             )
         )
         assertEquals(expected, heatmap)
+    }
+
+    @Test
+    fun `Given habit with first action today When mapped to top habit item Then progress and count are 0`() {
+        // Given
+        val now = LocalDate.of(2021, 5, 23)
+        val habitActionCount = HabitActionCount(
+            habit_id = 1,
+            name = "New habit",
+            first_day = now,
+            count = 1
+        )
+
+        // When
+        val topHabitItem = mapHabitActionCount(habitActionCount, now)
+
+        // Then
+        val expected = TopHabitItem(
+            habitId = 1,
+            name = "New habit",
+            count = 1,
+            progress = 0f
+        )
+        assertEquals(expected, topHabitItem)
+    }
+
+    @Test
+    fun `Given habit with many actions in the past When mapped to top habit item Then progress and count are correct`() {
+        // Given
+        val now = LocalDate.of(2021, 5, 23)
+        val habitActionCount = HabitActionCount(
+            habit_id = 1,
+            name = "Old habit",
+            first_day = LocalDate.of(2021, 2, 14),
+            count = 16
+        )
+
+        // When
+        val topHabitItem = mapHabitActionCount(habitActionCount, now)
+
+        // Then
+        val expected = TopHabitItem(
+            habitId = 1,
+            name = "Old habit",
+            count = 16,
+            progress = 0.1632653f
+        )
+        assertEquals(expected, topHabitItem)
     }
 }
