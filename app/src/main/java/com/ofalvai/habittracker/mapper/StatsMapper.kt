@@ -3,6 +3,7 @@ package com.ofalvai.habittracker.mapper
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.ofalvai.habittracker.persistence.entity.ActionCompletionRate
 import com.ofalvai.habittracker.persistence.entity.HabitActionCount
+import com.ofalvai.habittracker.persistence.entity.HabitTopDay
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
 import com.ofalvai.habittracker.ui.model.*
 import java.time.*
@@ -77,6 +78,15 @@ fun mapHabitActionCount(entity: HabitActionCount, now: LocalDate): TopHabitItem 
         name = entity.name,
         count = entity.count,
         progress = progress
+    )
+}
+
+fun mapHabitTopDay(entity: HabitTopDay): TopDayItem {
+    return TopDayItem(
+        habitId = entity.habit_id,
+        name = entity.name,
+        day = entity.top_day_of_week,
+        count = entity.action_count_on_day
     )
 }
 

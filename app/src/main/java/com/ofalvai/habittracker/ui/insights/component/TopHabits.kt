@@ -43,7 +43,7 @@ fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
     InsightCard(
         iconPainter = AppIcons.Habits,
         title = stringResource(R.string.insights_tophabits_title),
-        description = "See your most often performed habits", // TODO: bar explanation
+        description = stringResource(R.string.insights_tophabits_description)
     ) {
         Column {
             TopHabitsTable(
@@ -62,7 +62,7 @@ fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
 }
 
 @Composable
-fun TopHabitsTable(
+private fun TopHabitsTable(
     habits: List<TopHabitItem>,
     onHabitClick: (HabitId) -> Unit
 ) {
@@ -80,7 +80,7 @@ fun TopHabitsTable(
 }
 
 @Composable
-fun TopHabitsRow(
+private fun TopHabitsRow(
     index: Int,
     item: TopHabitItem,
     onClick: (HabitId) -> Unit
@@ -133,7 +133,7 @@ fun TopHabitsRow(
 }
 
 @Composable
-fun HabitBar(
+private fun HabitBar(
     @FloatRange(from = 0.0, to = 1.0) progress: Float,
     modifier: Modifier = Modifier,
 ) {
@@ -157,7 +157,7 @@ fun HabitBar(
 
 @Preview(showBackground = true, widthDp = 300, backgroundColor = 0xFFFDEDCE)
 @Composable
-fun PreviewTopHabitsTable() {
+private fun PreviewTopHabitsTable() {
     val topHabits = listOf(
         TopHabitItem(
             habitId = 1,

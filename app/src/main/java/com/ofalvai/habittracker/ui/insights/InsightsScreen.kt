@@ -31,6 +31,6 @@ fun InsightsScreen(navController: NavController) {
 
         TopHabits(viewModel, navController)
 
-        TopDays(viewModel)
+        TopDays(viewModel, navController)
     }
 }

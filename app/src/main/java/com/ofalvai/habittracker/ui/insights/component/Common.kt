@@ -41,7 +41,7 @@ fun InsightHeader(
     title: String,
     description: String
 ) {
-    Column(Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+    Column(Modifier.fillMaxWidth()) {
         var expanded by remember { mutableStateOf(false) }
 
         Row {

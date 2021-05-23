@@ -26,5 +26,9 @@ object AppIcons {
     val Heatmap: Painter
         @Composable
         get() = painterResource(R.drawable.ic_heatmap)
+
+    val TopDays: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_topdays)
 }
 
