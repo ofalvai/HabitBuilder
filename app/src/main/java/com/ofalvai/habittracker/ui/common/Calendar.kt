@@ -79,7 +79,7 @@ fun CalendarDayLegend(weekFields: WeekFields) {
 
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
-fun PreviewCalendarPager() {
+private fun PreviewCalendarPager() {
     HabitTrackerTheme {
         CalendarPager(
             yearMonth = YearMonth.now(),
@@ -91,7 +91,7 @@ fun PreviewCalendarPager() {
 
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
-fun PreviewCalendarDayLegend() {
+private fun PreviewCalendarDayLegend() {
     HabitTrackerTheme {
         CalendarDayLegend(WeekFields.ISO)
     }

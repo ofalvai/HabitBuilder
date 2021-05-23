@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
@@ -35,17 +36,48 @@ fun HabitCalendar(
     val context = LocalContext.current
 
     val view = remember {
+        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         CalendarView(context).apply {
             orientation = LinearLayout.HORIZONTAL
             scrollMode = ScrollMode.PAGED
             dayViewResource = R.layout.item_calendar_day
+            dayBinder = HabitDayBinder(habitColor, onDayToggle)
+            itemAnimator = DefaultItemAnimator().apply {
+                // Avoid flashes on recomposition
+                supportsChangeAnimations = false
+            }
+            setup(startMonth = yearMonth, endMonth = yearMonth, firstDayOfWeek)
         }
     }
 
     AndroidView({ view }) { calendarView ->
-        calendarView.dayBinder = HabitDayBinder(habitColor, actions, onDayToggle)
-        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-        calendarView.setup(yearMonth, yearMonth, firstDayOfWeek)
+        (calendarView.dayBinder as HabitDayBinder).also {
+            it.habitColor = habitColor
+            it.currentMonthActions = actions
+        }
+
+        calendarView.updateMonthRange(startMonth = yearMonth, endMonth = yearMonth)
+        calendarView.notifyCalendarChanged()
+    }
+}
+
+private class HabitDayBinder(
+    var habitColor: Color,
+    private val onDayToggle: (LocalDate, Action) -> Unit
+) : DayBinder<DayViewContainer> {
+
+    var currentMonthActions: List<Action> = emptyList()
+
+    override fun create(view: View) = DayViewContainer(view, onDayToggle)
+
+    override fun bind(container: DayViewContainer, day: CalendarDay) {
+        val actionOnDay = currentMonthActions.find {
+            val dateOfAction = LocalDateTime
+                .ofInstant(it.timestamp, ZoneId.systemDefault())
+                .toLocalDate()
+            dateOfAction == day.date
+        } ?: Action(0, false, null)
+        container.bind(day, habitColor, actionOnDay)
     }
 }
 
@@ -87,24 +119,6 @@ private class DayViewContainer(
         } else {
             textView.visibility = View.INVISIBLE
         }
-    }
-}
-
-private class HabitDayBinder(
-    private val habitColor: Color,
-    private val actions: List<Action>,
-    private val onDayToggle: (LocalDate, Action) -> Unit
-) : DayBinder<DayViewContainer> {
-    override fun create(view: View) = DayViewContainer(view, onDayToggle)
-
-    override fun bind(container: DayViewContainer, day: CalendarDay) {
-        val actionOnDay = actions.find {
-            val dateOfAction = LocalDateTime
-                .ofInstant(it.timestamp, ZoneId.systemDefault())
-                .toLocalDate()
-            dateOfAction == day.date
-        } ?: Action(0, false, null)
-        container.bind(day, habitColor, actionOnDay)
     }
 }
 

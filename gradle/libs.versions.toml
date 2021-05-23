@@ -32,7 +32,7 @@ compose-animation = { module = "androidx.compose.animation:animation", version.r
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 
 timber = "com.jakewharton.timber:timber:4.7.1"
-calendarview = "com.github.kizitonwose:CalendarView:1.0.1"
+calendarview = "com.github.kizitonwose:CalendarView:1.0.4"
 accompanist-insets = "com.google.accompanist:accompanist-insets:0.10.0"
 
 junit = "junit:junit:4.13.1"

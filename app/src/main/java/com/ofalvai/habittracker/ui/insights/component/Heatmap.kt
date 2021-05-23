@@ -86,16 +86,6 @@ private fun HeatmapCalendar(
     yearMonth: YearMonth,
     heatmapData: HeatmapMonth
 ) {
-    val context = LocalContext.current
-
-    val view = remember {
-        CalendarView(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            scrollMode = ScrollMode.PAGED
-            dayViewResource = R.layout.item_calendar_day_heatmap
-        }
-    }
-
     var showPopup by remember { mutableStateOf(false) }
     var popupActionCount by remember { mutableStateOf(0) }
     val onDayClick: (HeatmapMonth.BucketInfo) -> Unit = {
@@ -107,10 +97,22 @@ private fun HeatmapCalendar(
         DayPopup(popupActionCount, onDismiss = { showPopup = false })
     }
 
-    AndroidView({ view }) { calendarView ->
-        calendarView.dayBinder = HabitDayBinder(heatmapData, onDayClick)
+    val context = LocalContext.current
+    val view = remember {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-        calendarView.setup(yearMonth, yearMonth, firstDayOfWeek)
+        CalendarView(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            scrollMode = ScrollMode.PAGED
+            dayViewResource = R.layout.item_calendar_day_heatmap
+            dayBinder = HeatmapDayBinder(heatmapData, onDayClick)
+            setup(startMonth = yearMonth, endMonth = yearMonth, firstDayOfWeek)
+        }
+    }
+
+    AndroidView({ view }) { calendarView ->
+        (calendarView.dayBinder as HeatmapDayBinder).heatmapData = heatmapData
+        calendarView.updateMonthRange(startMonth = yearMonth, endMonth = yearMonth)
+        calendarView.notifyCalendarChanged()
     }
 }
 
@@ -179,6 +181,18 @@ private fun HeatmapLegend(
     }
 }
 
+private class HeatmapDayBinder(
+    var heatmapData: HeatmapMonth,
+    private val onDayClick: (HeatmapMonth.BucketInfo) -> Unit
+) : DayBinder<DayViewContainer> {
+    override fun create(view: View) = DayViewContainer(view, onDayClick)
+
+    override fun bind(container: DayViewContainer, day: CalendarDay) {
+        val dayData = heatmapData.dayMap[day.date] ?: HeatmapMonth.BucketInfo(0, 0)
+        container.bind(day, dayData, heatmapData.bucketCount)
+    }
+}
+
 private class DayViewContainer(
     view: View,
     private val onDayClick: (HeatmapMonth.BucketInfo) -> Unit
@@ -213,19 +227,6 @@ private class DayViewContainer(
         } else {
             textView.visibility = View.INVISIBLE
         }
-    }
-}
-
-
-private class HabitDayBinder(
-    private val heatmapData: HeatmapMonth,
-    private val onDayClick: (HeatmapMonth.BucketInfo) -> Unit
-) : DayBinder<DayViewContainer> {
-    override fun create(view: View) = DayViewContainer(view, onDayClick)
-
-    override fun bind(container: DayViewContainer, day: CalendarDay) {
-        val dayData = heatmapData.dayMap[day.date] ?: HeatmapMonth.BucketInfo(0, 0)
-        container.bind(day, dayData, heatmapData.bucketCount)
     }
 }
 

@@ -89,7 +89,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 }
 
 @Composable
-fun HabitDetailScreen(
+private fun HabitDetailScreen(
     habitDetailState: HabitDetailState,
     habitStats: GeneralHabitStats,
     actionCountByWeek: List<ActionCountByWeek>,
@@ -112,13 +112,13 @@ fun HabitDetailScreen(
                         onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
                         onNextClick = { yearMonth = yearMonth.plusMonths(1) }
                     )
+                    CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
                     HabitCalendar(
                         yearMonth = yearMonth,
                         habitColor = habitDetailState.habitDetails.habit.color.composeColor,
                         actions = habitDetailState.habitDetails.actions,
                         onDayToggle = onDayToggle
                     )
-                    CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
                 }
                 HabitDetailState.Loading -> {
                     // No calendar in loading state
@@ -132,7 +132,7 @@ fun HabitDetailScreen(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun HabitDetailHeader(
+private fun HabitDetailHeader(
     habitDetailState: HabitDetailState,
     onBack: () -> Unit,
     onSave: (Habit) -> Unit,
@@ -188,7 +188,7 @@ fun HabitDetailHeader(
 }
 
 @Composable
-fun HabitHeaderEditingContent(
+private fun HabitHeaderEditingContent(
     habitName: String,
     habitDetails: HabitWithActions,
     onBack: () -> Unit,
@@ -237,7 +237,7 @@ fun HabitHeaderEditingContent(
 }
 
 @Composable
-fun HabitHeaderContent(
+private fun HabitHeaderContent(
     habitName: String,
     habitDetails: HabitWithActions,
     onBack: () -> Unit,
@@ -268,7 +268,7 @@ fun HabitHeaderContent(
 }
 
 @Composable
-fun HabitDetailAppBar(
+private fun HabitDetailAppBar(
     onBack: () -> Unit,
     onEdit: () -> Unit,
 ) {
@@ -292,7 +292,7 @@ fun HabitDetailAppBar(
 }
 
 @Composable
-fun HabitDetailEditingAppBar(
+private fun HabitDetailEditingAppBar(
     onBack: () -> Unit,
     onSave: () -> Unit,
     onDelete: () -> Unit
@@ -320,7 +320,7 @@ fun HabitDetailEditingAppBar(
 }
 
 @Composable
-fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
+private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
     TopAppBar(
         modifier = Modifier.statusBarsPadding(),
         title = { },
@@ -335,7 +335,7 @@ fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
 }
 
 @Composable
-fun HabitStats(
+private fun HabitStats(
     generalStats: GeneralHabitStats,
     actionCountByWeek: List<ActionCountByWeek>,
     actionCountByMonth: List<ActionCountByMonth>
@@ -366,7 +366,7 @@ fun HabitStats(
 
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-fun PreviewHabitDetailScreen() {
+private fun PreviewHabitDetailScreen() {
     HabitTrackerTheme {
         HabitDetailScreen(
             habitDetailState = HabitDetailState.Loaded(HabitWithActions(
