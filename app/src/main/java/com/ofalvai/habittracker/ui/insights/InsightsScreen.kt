@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.ui.insights.component.Heatmap
 import com.ofalvai.habittracker.ui.insights.component.TopDays
 import com.ofalvai.habittracker.ui.insights.component.TopHabits
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable
 fun InsightsScreen(navController: NavController) {

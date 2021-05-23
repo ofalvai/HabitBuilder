@@ -1,6 +1,5 @@
 package com.ofalvai.habittracker.ui.dashboard.view.compact
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,6 @@ import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import java.time.LocalDate
 
 @Composable

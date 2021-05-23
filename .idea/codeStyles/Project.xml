@@ -1,5 +1,8 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
+    <ComposeCustomCodeStyleSettings>
+      <option name="USE_CUSTOM_FORMATTING_FOR_MODIFIERS" value="false" />
+    </ComposeCustomCodeStyleSettings>
     <JetCodeStyleSettings>
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>

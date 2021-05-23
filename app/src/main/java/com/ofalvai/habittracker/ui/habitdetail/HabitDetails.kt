@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.HabitViewModel
@@ -29,7 +30,6 @@ import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.cancel
 import java.time.Instant
 import java.time.LocalDate
