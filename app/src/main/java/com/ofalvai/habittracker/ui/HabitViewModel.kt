@@ -27,7 +27,7 @@ class HabitViewModel(
     )
 
     val habitWithActions = MutableLiveData<HabitWithActions?>()
-    val habitStats = MutableLiveData<GeneralHabitStats>()
+    val singleStats = MutableLiveData<SingleStats>()
     val actionCountByWeek = MutableLiveData<List<ActionCountByWeek>>()
     val actionCountByMonth = MutableLiveData<List<ActionCountByMonth>>()
 
@@ -64,11 +64,15 @@ class HabitViewModel(
     }
 
     fun fetchHabitStats(habitId: Int): Job {
+        // TODO: parallel execution
         return viewModelScope.launch {
-            // TODO: parallel execution
-            habitStats.value = mapHabitStatsToModel(dao.getCompletionRate(habitId))
-            actionCountByWeek.value = mapActionCountByWeek(dao.getActionCountByWeek(habitId))
-            actionCountByMonth.value = mapActionCountByMonth(dao.getActionCountByMonth(habitId))
+            val completionRate = dao.getCompletionRate(habitId)
+            val actionCountByWeekEntity = dao.getActionCountByWeek(habitId)
+            val actionCountByMonthEntity = dao.getActionCountByMonth(habitId)
+
+            singleStats.value = mapHabitSingleStats(completionRate, actionCountByWeekEntity, LocalDate.now())
+            actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity)
+            actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity)
         }
     }
 

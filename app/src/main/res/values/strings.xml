@@ -34,8 +34,6 @@
     <string name="calendar_previous_month">Previous month</string>
     <string name="calendar_next_month">Next month</string>
 
-    <string name="habitdetail_total_actions">Done %d times</string>
-
     <string name="common_action_count_clean">Start today</string>
     <plurals name="common_action_count_total">
         <item quantity="one">%d total</item>
@@ -49,6 +47,10 @@
         <item quantity="one">%d missed day</item>
         <item quantity="other">%d missed days</item>
     </plurals>
+
+    <string name="habitdetails_singlestat_total">Total times done</string>
+    <string name="habitdetails_singlestat_weekly">Done this week</string>
+    <string name="habitdetails_singlestat_completionrate">Completion rate</string>
 
     <string name="insights_more_info">More information</string>
     <string name="insights_heatmap_title">Heatmap</string>

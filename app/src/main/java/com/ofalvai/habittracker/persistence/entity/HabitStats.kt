@@ -25,12 +25,9 @@ data class ActionCompletionRate(
         }
 
         val firstDayDate = LocalDateTime.ofInstant(first_day, ZoneId.systemDefault()).toLocalDate()
-        val daysBetween = ChronoUnit.DAYS.between(firstDayDate, date)
-        if (daysBetween == 0L) {
-            return 1f
-        }
+        val daysBetweenInclusive = ChronoUnit.DAYS.between(firstDayDate, date) + 1
 
-        return action_count / daysBetween.toFloat()
+        return action_count / daysBetweenInclusive.toFloat()
     }
 }
 

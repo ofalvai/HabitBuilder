@@ -8,19 +8,30 @@ import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
 import com.ofalvai.habittracker.ui.model.*
 import java.time.*
 import java.time.temporal.ChronoUnit
+import java.time.temporal.WeekFields
+import java.util.*
 import kotlin.math.min
 import com.ofalvai.habittracker.persistence.entity.ActionCountByMonth as ActionCountByMonthEntity
 import com.ofalvai.habittracker.persistence.entity.ActionCountByWeek as ActionCountByWeekEntity
 
-fun mapHabitStatsToModel(completionRate: ActionCompletionRate): GeneralHabitStats {
+fun mapHabitSingleStats(
+    completionRate: ActionCompletionRate,
+    actionCountByWeekEntity: List<ActionCountByWeekEntity>,
+    now: LocalDate
+): SingleStats {
     val firstDayDate = LocalDateTime.ofInstant(
         completionRate.first_day, ZoneId.systemDefault()
     ).toLocalDate()
+    val lastWeekActions = actionCountByWeekEntity.lastOrNull {
+        val weekFields = WeekFields.of(Locale.getDefault())
+        it.year == now.year && it.week == now.get(weekFields.weekOfWeekBasedYear())
+    }
 
-    return GeneralHabitStats(
+    return SingleStats(
         firstDay = if (completionRate.first_day == Instant.EPOCH) null else firstDayDate,
         actionCount = completionRate.action_count,
-        completionRate = completionRate.rateAsOf(LocalDate.now())
+        weeklyActionCount = lastWeekActions?.action_count ?: 0,
+        completionRate = completionRate.rateAsOf(now)
     )
 }
 

@@ -6,10 +6,11 @@ import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
 
-data class GeneralHabitStats(
+data class SingleStats(
     val firstDay: LocalDate?,
     val actionCount: Int,
-    val completionRate: Float // TODO: move computation from entity to mapper
+    val weeklyActionCount: Int,
+    @FloatRange(from = 0.0, to = 1.0) val completionRate: Float,
 )
 
 data class ActionCountByWeek(

@@ -78,7 +78,8 @@ interface HabitDao {
                 count(*) as action_count
             FROM `action`
             WHERE habit_id = :habitId
-            GROUP BY year, week"""
+            GROUP BY year, week
+            ORDER BY year ASC, week ASC"""
     )
     suspend fun getActionCountByWeek(habitId: Int): List<ActionCountByWeek>
 

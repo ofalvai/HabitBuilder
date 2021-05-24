@@ -115,7 +115,7 @@ class HabitStatsTest {
             action_count = 7
         )
         val today = LocalDate.of(2021, 3, 29)
-        val expectedRate = 7 / 462f
+        val expectedRate = 0.015118791f
         assertEquals(expectedCompletion, completionRate)
         assertEquals(expectedRate, expectedCompletion.rateAsOf(today))
     }
@@ -144,7 +144,7 @@ class HabitStatsTest {
         )
         assertEquals(expectedCompletion, completionRate)
         val today = LocalDate.of(2021, 3, 29)
-        val expectedRate = 1 / 96f
+        val expectedRate = 0.010309278f
         assertEquals(expectedRate, expectedCompletion.rateAsOf(today))
     }
 

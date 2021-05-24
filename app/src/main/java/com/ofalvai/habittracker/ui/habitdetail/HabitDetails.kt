@@ -1,5 +1,6 @@
 package com.ofalvai.habittracker.ui.habitdetail
 
+import androidx.annotation.FloatRange
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -11,9 +12,11 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Transformations
@@ -36,6 +39,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
+import kotlin.math.roundToInt
 
 sealed class HabitDetailState {
     object Loading: HabitDetailState()
@@ -56,7 +60,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
         }
     }.observeAsState(initialState)
 
-    val habitStats by viewModel.habitStats.observeAsState(GeneralHabitStats(null, 0, 0f))
+    val singleStats by viewModel.singleStats.observeAsState(SingleStats(null, 0, 0, 0f))
     val actionCountByWeek by viewModel.actionCountByWeek.observeAsState(emptyList())
     val actionCountByMonth by viewModel.actionCountByMonth.observeAsState(emptyList())
 
@@ -75,7 +79,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 
     HabitDetailScreen(
         habitDetailState = habitDetailState,
-        habitStats = habitStats,
+        singleStats = singleStats,
         actionCountByWeek = actionCountByWeek,
         actionCountByMonth = actionCountByMonth,
         onBack = { navController.popBackStack() },
@@ -91,7 +95,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 @Composable
 private fun HabitDetailScreen(
     habitDetailState: HabitDetailState,
-    habitStats: GeneralHabitStats,
+    singleStats: SingleStats,
     actionCountByWeek: List<ActionCountByWeek>,
     actionCountByMonth: List<ActionCountByMonth>,
     onBack: () -> Unit,
@@ -102,7 +106,7 @@ private fun HabitDetailScreen(
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
 
     Column {
-        HabitDetailHeader(habitDetailState, onBack, onEdit, onDelete)
+        HabitDetailHeader(habitDetailState, singleStats, onBack, onEdit, onDelete)
 
         Column(Modifier.padding(32.dp)) {
             when (habitDetailState) {
@@ -126,7 +130,7 @@ private fun HabitDetailScreen(
             }
         }
 
-        HabitStats(habitStats, actionCountByWeek, actionCountByMonth)
+        HabitStats(actionCountByWeek, actionCountByMonth)
     }
 }
 
@@ -134,6 +138,7 @@ private fun HabitDetailScreen(
 @Composable
 private fun HabitDetailHeader(
     habitDetailState: HabitDetailState,
+    singleStats: SingleStats,
     onBack: () -> Unit,
     onSave: (Habit) -> Unit,
     onDelete: (Habit) -> Unit
@@ -176,8 +181,8 @@ private fun HabitDetailHeader(
 
                 AnimatedVisibility(visible = !isEditing, enter = fadeIn(), exit = fadeOut()) {
                     HabitHeaderContent(
-                        habitName = habitDetailState.habitDetails.habit.name,
                         habitDetails = habitDetailState.habitDetails,
+                        singleStats = singleStats,
                         onBack = onBack,
                         onEdit = { isEditing = true }
                     )
@@ -238,8 +243,8 @@ private fun HabitHeaderEditingContent(
 
 @Composable
 private fun HabitHeaderContent(
-    habitName: String,
     habitDetails: HabitWithActions,
+    singleStats: SingleStats,
     onBack: () -> Unit,
     onEdit: () -> Unit
 ) {
@@ -252,17 +257,15 @@ private fun HabitHeaderContent(
             onEdit = onEdit,
         )
         Text(
-            text = habitName,
-            modifier = Modifier.padding(horizontal = 32.dp),
-            style = AppTextStyle.habitTitle
+            text = habitDetails.habit.name,
+            modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
+            style = AppTextStyle.habitTitle,
+            textAlign = TextAlign.Center
         )
-        Text(
-            text = stringResource(
-                R.string.habitdetail_total_actions,
-                habitDetails.totalActionCount
-            ),
-            modifier = Modifier.padding(horizontal = 32.dp),
-            style = MaterialTheme.typography.body1
+        SingleStatRow(
+            totalCount = singleStats.actionCount,
+            weeklyCount = singleStats.weeklyActionCount,
+            completionRate = singleStats.completionRate
         )
     }
 }
@@ -336,15 +339,10 @@ private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
 
 @Composable
 private fun HabitStats(
-    generalStats: GeneralHabitStats,
     actionCountByWeek: List<ActionCountByWeek>,
     actionCountByMonth: List<ActionCountByMonth>
 ) {
     Column(Modifier.padding(horizontal = 32.dp)) {
-        Text("First day: ${generalStats.firstDay.toString()}")
-        Text("Action count: ${generalStats.actionCount}")
-        Text("Completion rate: ${generalStats.completionRate * 100}%")
-
         Spacer(modifier = Modifier.height(16.dp))
         Text("Actions by week:")
         actionCountByWeek.forEach {
@@ -364,6 +362,59 @@ private fun HabitStats(
     }
 }
 
+@Composable
+private fun SingleStatRow(
+    totalCount: Int,
+    weeklyCount: Int,
+    @FloatRange(from = 0.0, to = 1.0) completionRate: Float
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 32.dp, end = 16.dp, top = 32.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        SingleStat(
+            value = totalCount.toString(),
+            label = stringResource(R.string.habitdetails_singlestat_total),
+            modifier = Modifier.weight(0.33f)
+        )
+        SingleStat(
+            value = weeklyCount.toString(),
+            label = stringResource(R.string.habitdetails_singlestat_weekly),
+            modifier = Modifier.weight(0.33f)
+        )
+        SingleStat(
+            value = (completionRate * 100).roundToInt().toString() + "%",
+            label = stringResource(R.string.habitdetails_singlestat_completionrate),
+            modifier = Modifier.weight(0.33f)
+        )
+    }
+}
+
+@Composable
+private fun SingleStat(
+    value: String,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier.padding(horizontal = 4.dp)
+    ) {
+        Text(
+            text = value,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = AppTextStyle.singleStatValue
+        )
+        Text(
+            text = label,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.caption,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 private fun PreviewHabitDetailScreen() {
@@ -375,7 +426,7 @@ private fun PreviewHabitDetailScreen() {
                 2,
                 ActionHistory.Clean
             )),
-            habitStats = GeneralHabitStats(LocalDate.now(), 2, 0.15f),
+            singleStats = SingleStats(LocalDate.now(), 2, 1, 0.15f),
             actionCountByWeek = emptyList(),
             actionCountByMonth = emptyList(),
             onBack = { },
@@ -383,5 +434,13 @@ private fun PreviewHabitDetailScreen() {
             onDelete = { },
             onDayToggle = { _, _ -> }
         )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 400)
+@Composable
+private fun PreviewSingleStats() {
+    HabitTrackerTheme {
+        SingleStatRow(totalCount = 18, weeklyCount = 2, completionRate = 0.423555f)
     }
 }

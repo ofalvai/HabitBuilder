@@ -42,4 +42,8 @@ object AppTextStyle {
         @Composable
         get() = typography.h6.copy(fontWeight = FontWeight.Bold) // Lato doesn't have medium
 
+    val singleStatValue: TextStyle
+        @Composable
+        get() = typography.h5.copy(fontFamily = patua)
+
 }
