@@ -17,13 +17,14 @@ import com.ofalvai.habittracker.persistence.entity.ActionCountByWeek as ActionCo
 fun mapHabitSingleStats(
     completionRate: ActionCompletionRate,
     actionCountByWeekEntity: List<ActionCountByWeekEntity>,
-    now: LocalDate
+    now: LocalDate,
+    locale: Locale
 ): SingleStats {
     val firstDayDate = LocalDateTime.ofInstant(
         completionRate.first_day, ZoneId.systemDefault()
     ).toLocalDate()
     val lastWeekActions = actionCountByWeekEntity.lastOrNull {
-        val weekFields = WeekFields.of(Locale.getDefault())
+        val weekFields = WeekFields.of(locale)
         it.year == now.year && it.week == now.get(weekFields.weekOfWeekBasedYear())
     }
 

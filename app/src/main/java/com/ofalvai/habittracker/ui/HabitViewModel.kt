@@ -14,6 +14,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.OffsetDateTime
+import java.util.*
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
@@ -73,7 +74,12 @@ class HabitViewModel(
             val actionCountByWeekEntity = dao.getActionCountByWeek(habitId)
             val actionCountByMonthEntity = dao.getActionCountByMonth(habitId)
 
-            singleStats.value = mapHabitSingleStats(completionRate, actionCountByWeekEntity, LocalDate.now())
+            singleStats.value = mapHabitSingleStats(
+                completionRate,
+                actionCountByWeekEntity,
+                LocalDate.now(),
+                Locale.getDefault()
+            )
             actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity)
             actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity)
         }
