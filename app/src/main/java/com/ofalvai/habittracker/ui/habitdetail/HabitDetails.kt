@@ -29,6 +29,7 @@ import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.common.CalendarDayLegend
 import com.ofalvai.habittracker.ui.common.CalendarPager
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
+import com.ofalvai.habittracker.ui.common.observeAsEffect
 import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
@@ -60,6 +61,10 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
         }
     }.observeAsState(initialState)
 
+    viewModel.backNavigationEvent.observeAsEffect {
+        navController.popBackStack()
+    }
+
     val singleStats by viewModel.singleStats.observeAsState(SingleStats(null, 0, 0, 0f))
     val actionCountByWeek by viewModel.actionCountByWeek.observeAsState(emptyList())
     val actionCountByMonth by viewModel.actionCountByMonth.observeAsState(emptyList())
@@ -84,10 +89,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
         actionCountByMonth = actionCountByMonth,
         onBack = { navController.popBackStack() },
         onEdit = { viewModel.updateHabit(it) },
-        onDelete = {
-            viewModel.deleteHabit(it)
-            navController.popBackStack()
-        },
+        onDelete = { viewModel.deleteHabit(it) },
         onDayToggle = onDayToggle
     )
 }

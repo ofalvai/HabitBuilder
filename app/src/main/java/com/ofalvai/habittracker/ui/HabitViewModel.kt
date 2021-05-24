@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.*
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class HabitViewModel(
     val singleStats = MutableLiveData<SingleStats>()
     val actionCountByWeek = MutableLiveData<List<ActionCountByWeek>>()
     val actionCountByMonth = MutableLiveData<List<ActionCountByMonth>>()
+    val backNavigationEvent = SingleLiveEvent<Void>()
 
     var dashboardConfig by appPreferences::dashboardConfig
 
@@ -37,6 +39,7 @@ class HabitViewModel(
         viewModelScope.launch {
             val habitEntity = HabitEntity(name = habit.name, color = habit.color.toEntityColor())
             dao.insertHabit(habitEntity)
+            backNavigationEvent.call()
         }
     }
 
@@ -80,6 +83,7 @@ class HabitViewModel(
         viewModelScope.launch {
             toggleAction(habitId, action, date)
             fetchHabitDetails(habitId)
+            fetchHabitStats(habitId)
         }
     }
 
@@ -93,6 +97,7 @@ class HabitViewModel(
     fun deleteHabit(habit: Habit) {
         viewModelScope.launch {
             dao.deleteHabit(habit.toEntity())
+            backNavigationEvent.call()
         }
     }
 
