@@ -1,5 +1,6 @@
 package com.ofalvai.habittracker.ui.habitdetail
 
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.View
 import android.widget.LinearLayout
@@ -94,7 +95,9 @@ private class DayViewContainer(
 
     init {
         textView.setOnClickListener {
-            onDayToggle(day.date, action.copy(toggled = !action.toggled))
+            if (!day.date.isAfter(LocalDate.now())) {
+                onDayToggle(day.date, action.copy(toggled = !action.toggled))
+            }
         }
     }
 
@@ -102,22 +105,31 @@ private class DayViewContainer(
         this.day = day
         this.action = action
 
-        if (day.owner == DayOwner.THIS_MONTH) {
-            textView.text = day.date.dayOfMonth.toString()
+        val today = LocalDate.now()
 
-            if (action.toggled) {
-                textView.setBackgroundColor(habitColor.toColorInt())
-            } else {
-                textView.setBackgroundColor(backgroundColor)
-            }
-
-            if (day.date == LocalDate.now()) {
-                textView.typeface = Typeface.DEFAULT_BOLD
-            } else {
-                textView.typeface = Typeface.DEFAULT
-            }
+        textView.visibility = if (day.owner == DayOwner.THIS_MONTH) {
+            View.VISIBLE
         } else {
-            textView.visibility = View.INVISIBLE
+            View.INVISIBLE // View.GONE would mess up the grid-like layout
+        }
+
+        textView.setBackgroundColor(
+            if (action.toggled) habitColor.toColorInt() else backgroundColor
+        )
+
+        textView.alpha = if (day.date.isAfter(today)) 0.5f else 1f
+
+        textView.typeface = if (day.date == today) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+
+        textView.paintFlags = if (day.date == today) {
+            textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        } else {
+            textView.paintFlags
+        }
+        textView.text = if (day.owner == DayOwner.THIS_MONTH) {
+            day.date.dayOfMonth.toString()
+        } else {
+            null
         }
     }
 }

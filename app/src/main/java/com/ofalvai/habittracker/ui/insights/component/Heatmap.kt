@@ -1,5 +1,6 @@
 package com.ofalvai.habittracker.ui.insights.component
 
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.View
 import android.widget.LinearLayout
@@ -213,19 +214,29 @@ private class DayViewContainer(
         this.day = day
         this.bucketInfo = bucketInfo
 
+        val today = LocalDate.now()
         val color = bucketIndexToColor(bucketInfo.bucketIndex, bucketCount)
         textView.setBackgroundColor(color.toColorInt())
 
-        if (day.owner == DayOwner.THIS_MONTH) {
-            textView.text = day.date.dayOfMonth.toString()
-
-            if (day.date == LocalDate.now()) {
-                textView.typeface = Typeface.DEFAULT_BOLD
-            } else {
-                textView.typeface = Typeface.DEFAULT
-            }
+        textView.visibility = if (day.owner == DayOwner.THIS_MONTH) {
+            View.VISIBLE
         } else {
-            textView.visibility = View.INVISIBLE
+            View.INVISIBLE // View.GONE would mess up the grid-like layout
+        }
+
+        textView.alpha = if (day.date.isAfter(today)) 0.5f else 1f
+
+        textView.typeface = if (day.date == today) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+
+        textView.paintFlags = if (day.date == today) {
+            textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        } else {
+            textView.paintFlags
+        }
+        textView.text = if (day.owner == DayOwner.THIS_MONTH) {
+            day.date.dayOfMonth.toString()
+        } else {
+            null
         }
     }
 }
