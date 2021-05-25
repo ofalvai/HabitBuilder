@@ -3,8 +3,10 @@ package com.ofalvai.habittracker.ui.dashboard
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -41,7 +43,7 @@ fun AddHabitScreen(navController: NavController) {
         viewModel.addHabit(it)
     }
 
-    Column(Modifier.statusBarsPadding()) {
+    Column(Modifier.statusBarsPadding().verticalScroll(rememberScrollState())) {
         AddHabitAppBar(onBack = { navController.popBackStack() })
         AddHabitForm(onSave)
         Suggestions(habits = Suggestions.habits, onSelect = onSave)

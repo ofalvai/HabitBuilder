@@ -4,6 +4,8 @@ import androidx.annotation.FloatRange
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -110,7 +112,7 @@ private fun HabitDetailScreen(
     Column {
         HabitDetailHeader(habitDetailState, singleStats, onBack, onEdit, onDelete)
 
-        Column(Modifier.padding(32.dp)) {
+        Column(Modifier.verticalScroll(rememberScrollState()).padding(32.dp)) {
             when (habitDetailState) {
                 is HabitDetailState.Loaded -> {
                     CalendarPager(
@@ -125,14 +127,14 @@ private fun HabitDetailScreen(
                         actions = habitDetailState.habitDetails.actions,
                         onDayToggle = onDayToggle
                     )
+
+                    HabitStats(actionCountByWeek, actionCountByMonth)
                 }
                 HabitDetailState.Loading -> {
-                    // No calendar in loading state
+                    // No calendar and stats in loading state
                 }
             }
         }
-
-        HabitStats(actionCountByWeek, actionCountByMonth)
     }
 }
 
