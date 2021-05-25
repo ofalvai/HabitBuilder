@@ -1,6 +1,7 @@
 [versions]
 compose = "1.0.0-beta07"
 room = "2.3.0"
+accompanist = "0.10.0"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
@@ -33,7 +34,9 @@ compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "
 
 timber = "com.jakewharton.timber:timber:4.7.1"
 calendarview = "com.github.kizitonwose:CalendarView:1.0.4"
-accompanist-insets = "com.google.accompanist:accompanist-insets:0.10.0"
+
+accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 junit = "junit:junit:4.13.1"
 mockito-core = "org.mockito:mockito-core:3.3.3"

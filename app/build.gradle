@@ -80,7 +80,6 @@ dependencies {
 
     implementation libs.androidx.core.ktx
     implementation libs.androidx.activity.ktx
-    implementation libs.androidx.appcompat // TODO: get rid of Theme.AppCompat then remove this
 
     implementation libs.bundles.compose
     implementation libs.androidx.navigation.compose
@@ -93,6 +92,7 @@ dependencies {
     implementation libs.timber
     implementation libs.calendarview
     implementation libs.accompanist.insets
+    implementation libs.accompanist.systemuicontroller
 
     // Required by layout inspector
     implementation libs.compose.uitooling // TODO: kapt fails building release variant when this is `debugImplementation`

@@ -7,14 +7,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
@@ -35,6 +38,16 @@ class MainActivity : ComponentActivity() {
             HabitTrackerTheme {
                 ProvideWindowInsets {
                     val navController = rememberNavController()
+                    val systemUiController = rememberSystemUiController()
+                    val useDarkIcons = MaterialTheme.colors.isLight
+
+                    SideEffect {
+                        systemUiController.setSystemBarsColor(
+                            color = Color.Transparent,
+                            darkIcons = useDarkIcons
+                        )
+                    }
+
                     Scaffold(
                         bottomBar = {
                             AppBottomNavigation(
@@ -43,25 +56,28 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     ) {
-                        NavHost(navController, startDestination = Screen.Dashboard.route) {
-                            composable(Screen.Dashboard.route) { Dashboard(navController) }
-                            composable(Screen.Insights.route) { InsightsScreen(navController) }
-                            composable(Screen.AddHabit.route) {
-                                AddHabitScreen(navController)
-                            }
-                            composable(
-                                Screen.HabitDetails.route,
-                                arguments = Screen.HabitDetails.arguments
-                            ) { backStackEntry ->
-                                HabitDetailScreen(
-                                    habitId = Screen.HabitDetails.idFrom(backStackEntry.arguments),
-                                    navController = navController
-                                )
-                            }
-                        }
+                        Screens(navController)
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun Screens(navController: NavHostController) {
+    NavHost(navController, startDestination = Screen.Dashboard.route) {
+        composable(Screen.Dashboard.route) { Dashboard(navController) }
+        composable(Screen.Insights.route) { InsightsScreen(navController) }
+        composable(Screen.AddHabit.route) { AddHabitScreen(navController) }
+        composable(
+            Screen.HabitDetails.route,
+            arguments = Screen.HabitDetails.arguments
+        ) { backStackEntry ->
+            HabitDetailScreen(
+                habitId = Screen.HabitDetails.idFrom(backStackEntry.arguments),
+                navController = navController
+            )
         }
     }
 }
@@ -95,7 +111,7 @@ fun TextFieldError(
 }
 
 @Composable
-fun AppBottomNavigation(
+private fun AppBottomNavigation(
     onDashboardSelected: () -> Unit,
     onInsightsSelected: () -> Unit
 ) {
