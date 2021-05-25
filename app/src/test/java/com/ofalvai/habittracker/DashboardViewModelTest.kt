@@ -14,14 +14,12 @@ import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.util.MainCoroutineRule
 import com.ofalvai.habittracker.util.testObserver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import java.time.Instant
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 import com.ofalvai.habittracker.persistence.entity.Habit.Color as ColorEntity

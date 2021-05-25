@@ -47,7 +47,8 @@ fun HabitColorPicker(
         items(colors) {
             val isSelected = it == color
             val transition: Transition<ColorPickerState> = updateTransition(
-                targetState = if (isSelected) ColorPickerState.Selected else ColorPickerState.Default
+                targetState = if (isSelected) ColorPickerState.Selected else ColorPickerState.Default,
+                label = "ColorPickerTransition"
             )
 
             HabitColor(
@@ -72,7 +73,7 @@ fun HabitColor(
 ) {
     val animationSpec = tween<Dp>(easing = LinearOutSlowInEasing, durationMillis = 250)
     val size: Dp by transition.animateDp(
-        transitionSpec = { animationSpec }
+        transitionSpec = { animationSpec }, label = "ColorPickerSize"
     ) { state ->
         when (state) {
             ColorPickerState.Default -> 48.dp
@@ -80,7 +81,7 @@ fun HabitColor(
         }
     }
     val horizontalPadding: Dp by transition.animateDp(
-        transitionSpec = { animationSpec }
+        transitionSpec = { animationSpec }, label = "ColorPickerHorizontalPadding"
     ) { state ->
         when (state) {
             ColorPickerState.Default -> 4.dp
@@ -88,7 +89,7 @@ fun HabitColor(
         }
     }
     val verticalPadding: Dp by transition.animateDp(
-        transitionSpec = { animationSpec }
+        transitionSpec = { animationSpec }, label = "ColorPickerVerticalPadding"
     ) { state ->
         when (state) {
             ColorPickerState.Default -> 8.dp
