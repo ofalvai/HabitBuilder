@@ -10,8 +10,8 @@ import com.ofalvai.habittracker.persistence.entity.Habit
     entities = [
         Habit::class, Action::class
     ],
-    version = 1,
-    exportSchema = false
+    version = 2,
+    exportSchema = true,
 )
 @TypeConverters(EntityTypeConverters::class)
 abstract class AppDatabase : RoomDatabase() {

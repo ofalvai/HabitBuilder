@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.ofalvai.habittracker.persistence.AppDatabase
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.persistence.MIGRATIONS
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
@@ -17,7 +18,10 @@ object Dependencies {
         HabitTrackerApplication.INSTANCE.applicationContext,
         AppDatabase::class.java,
         "app-db"
-    ).setQueryCallback(::roomQueryLogCallback, Runnable::run).build()
+    )
+        .setQueryCallback(::roomQueryLogCallback, Runnable::run)
+        .addMigrations(*MIGRATIONS)
+        .build()
 
     private val sharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(HabitTrackerApplication.INSTANCE)

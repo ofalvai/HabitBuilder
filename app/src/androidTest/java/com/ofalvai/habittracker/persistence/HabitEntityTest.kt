@@ -93,11 +93,13 @@ class HabitEntityTest {
 
     @Test
     fun readActionsAfterTime() = testCoroutineScope.runBlockingTest {
+        val habit = Habit(id = 1, name = "New habit", color = Habit.Color.Green)
         val action1 = Action(id = 1, habit_id = 1, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(id = 2, habit_id = 1, timestamp = Instant.parse("2020-12-24T18:16:40Z"))
         val action3 = Action(id = 3, habit_id = 1, timestamp = Instant.parse("2020-12-25T10:18:42Z"))
         val action4 = Action(id = 4, habit_id = 1, timestamp = Instant.parse("2020-12-26T10:19:10Z"))
 
+        habitDao.insertHabit(habit)
         habitDao.insertAction(action1, action2, action3, action4)
 
         val actions = habitDao.getActionsAfter(Instant.parse("2020-12-24T20:00:00Z"))
@@ -123,6 +125,26 @@ class HabitEntityTest {
             HabitWithActions(habit2, listOf(action2, action3))
         )
         assertEquals(expectedHabitsWithActions, habitsWithActions)
+    }
+
+    @Test
+    fun deleteHabitWithActions() = testCoroutineScope.runBlockingTest {
+        val habitId = 51
+        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green)
+        val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2021-05-31T10:15:30Z"))
+        val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2021-05-31T10:16:30Z"))
+
+        habitDao.insertHabit(habit)
+        habitDao.insertAction(action1, action2)
+        habitDao.deleteHabit(habit)
+
+        val actions = habitDao.getActionsForHabit(habitId)
+        val expectedActions = emptyList<Action>()
+        assertEquals(expectedActions, actions)
+
+        val habits = habitDao.getHabits()
+        val expectedHabits = emptyList<Habit>()
+        assertEquals(expectedHabits, habits)
     }
 
 }
