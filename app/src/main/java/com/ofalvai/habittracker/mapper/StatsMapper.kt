@@ -110,7 +110,7 @@ private fun actionCountToBucket(totalHabitCount: Int, actionCount: Int): Heatmap
     if (totalHabitCount < maxBucketCount) {
         // If habit count < 5 we use 1 bucket for each action count value (+1 for the value 0)
         return HeatmapMonth.BucketInfo(
-            bucketIndex = min(actionCount, maxBucketCount - 1), // This should never happen
+            bucketIndex = min(actionCount, totalHabitCount), // This should never happen
             value = actionCount
         )
     }
