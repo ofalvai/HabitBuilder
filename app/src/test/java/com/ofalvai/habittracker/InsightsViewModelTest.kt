@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
+import com.ofalvai.habittracker.ui.insights.HeatmapState
 import com.ofalvai.habittracker.util.MainCoroutineRule
 import com.ofalvai.habittracker.util.testObserver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,11 +43,11 @@ class InsightsViewModelTest {
 
         // When
         viewModel = InsightsViewModel(dao)
-        val observer = viewModel.heatmapData.testObserver()
+        val observer = viewModel.heatmapState.testObserver()
 
         // Then
         assertEquals(1, observer.observedValues.size)
-        assertEquals(1, observer.observedValues[0]!!.totalHabitCount)
+        assertEquals(1, (observer.observedValues[0] as HeatmapState.Loaded).heatmapData.totalHabitCount)
     }
 
     @Test
@@ -60,13 +61,14 @@ class InsightsViewModelTest {
 
         // When
         viewModel = InsightsViewModel(dao)
-        val observer = viewModel.heatmapData.testObserver()
+        val observer = viewModel.heatmapState.testObserver()
         habitCountFlow.value = 2
         viewModel.fetchHeatmap(YearMonth.now().plusMonths(1))
 
         // Then
-        assertEquals(2, observer.observedValues.size)
-        assertEquals(1, observer.observedValues[0]!!.totalHabitCount)
-        assertEquals(2, observer.observedValues[1]!!.totalHabitCount)
+        assertEquals(3, observer.observedValues.size)
+        assertEquals(1, (observer.observedValues[0] as HeatmapState.Loaded).heatmapData.totalHabitCount)
+        assertEquals(HeatmapState.Loading, observer.observedValues[1]!!)
+        assertEquals(2, (observer.observedValues[2] as HeatmapState.Loaded).heatmapData.totalHabitCount)
     }
 }

@@ -35,6 +35,7 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.CalendarDayLegend
 import com.ofalvai.habittracker.ui.common.CalendarPager
+import com.ofalvai.habittracker.ui.insights.HeatmapState
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.theme.AppIcons
@@ -43,13 +44,15 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 
-private val initialState = HeatmapMonth(YearMonth.now(), emptyMap(), 0, 0, emptyList())
+
+private val initialState = HeatmapState.Loading // TODO: eliminate by switching to Flow
+private val loadingMonthData = HeatmapMonth(YearMonth.now(), emptyMap(), 0, 0, emptyList())
 
 @Composable
 fun Heatmap(viewModel: InsightsViewModel) {
 
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
-    val heatmapData by viewModel.heatmapData.observeAsState(initialState)
+    val heatmapState by viewModel.heatmapState.observeAsState(initialState)
 
     val onPreviousMonth = {
         yearMonth = yearMonth.minusMonths(1)
@@ -75,9 +78,25 @@ fun Heatmap(viewModel: InsightsViewModel) {
 
             CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
 
-            HeatmapCalendar(yearMonth, heatmapData)
+            when (heatmapState) {
+                is HeatmapState.Loaded -> {
+                    val heatmapData = (heatmapState as HeatmapState.Loaded).heatmapData // no smart cast :'(
 
-            HeatmapLegend(heatmapData, modifier = Modifier.align(Alignment.End).padding(top = 8.dp))
+                    HeatmapCalendar(yearMonth, heatmapData)
+
+                    if (hasEnoughData(heatmapData)) {
+                        HeatmapLegend(
+                            (heatmapState as HeatmapState.Loaded).heatmapData,
+                            modifier = Modifier.align(Alignment.End).padding(top = 8.dp)
+                        )
+                    } else {
+                        EmptyView()
+                    }
+                }
+                HeatmapState.Loading -> {
+                    HeatmapCalendar(yearMonth = yearMonth, heatmapData = loadingMonthData)
+                }
+            }
         }
     }
 }
@@ -180,6 +199,19 @@ private fun HeatmapLegend(
             }
         }
     }
+}
+
+@Composable
+private fun EmptyView() {
+    Text(
+        text = "Once you create habits and perform them, this calendar will show the number of habits performed each day.",
+        style = MaterialTheme.typography.caption,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+private fun hasEnoughData(heatmapData: HeatmapMonth): Boolean {
+    return heatmapData.totalHabitCount > 0
 }
 
 private class HeatmapDayBinder(

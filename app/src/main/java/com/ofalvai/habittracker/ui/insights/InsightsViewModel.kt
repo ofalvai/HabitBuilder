@@ -18,11 +18,16 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 
+sealed class HeatmapState {
+    object Loading: HeatmapState()
+    data class Loaded(val heatmapData: HeatmapMonth): HeatmapState()
+}
+
 class InsightsViewModel(
     private val habitDao: HabitDao
 ): ViewModel() {
 
-    val heatmapData = MutableLiveData<HeatmapMonth>()
+    val heatmapState = MutableLiveData<HeatmapState>(HeatmapState.Loading)
     val topHabits = MutableLiveData<List<TopHabitItem>>()
     val habitTopDays = MutableLiveData<List<TopDayItem>>()
 
@@ -52,14 +57,19 @@ class InsightsViewModel(
     }
 
     private suspend fun reloadHeatmap(yearMonth: YearMonth) {
+        heatmapState.value = HeatmapState.Loading
+
         val startDate = yearMonth.atDay(1)
         val endDate = yearMonth.atEndOfMonth()
         val actionCountList = habitDao.getSumActionCountByDay(startDate, endDate)
         val habitCount = habitCount.first()
-        heatmapData.value = mapSumActionCountByDay(
-            entityList = actionCountList,
-            yearMonth,
-            habitCount
+
+        heatmapState.value = HeatmapState.Loaded(
+            mapSumActionCountByDay(
+                entityList = actionCountList,
+                yearMonth,
+                habitCount
+            )
         )
     }
 
