@@ -13,7 +13,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,14 +44,13 @@ import java.time.temporal.WeekFields
 import java.util.*
 
 
-private val initialState = HeatmapState.Loading // TODO: eliminate by switching to Flow
 private val loadingMonthData = HeatmapMonth(YearMonth.now(), emptyMap(), 0, 0, emptyList())
 
 @Composable
 fun Heatmap(viewModel: InsightsViewModel) {
 
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
-    val heatmapState by viewModel.heatmapState.observeAsState(initialState)
+    val heatmapState by viewModel.heatmapState.collectAsState()
 
     val onPreviousMonth = {
         yearMonth = yearMonth.minusMonths(1)

@@ -10,10 +10,7 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.model.TopHabitItem
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
@@ -27,7 +24,7 @@ class InsightsViewModel(
     private val habitDao: HabitDao
 ): ViewModel() {
 
-    val heatmapState = MutableLiveData<HeatmapState>(HeatmapState.Loading)
+    val heatmapState = MutableStateFlow<HeatmapState>(HeatmapState.Loading)
     val topHabits = MutableLiveData<List<TopHabitItem>>()
     val habitTopDays = MutableLiveData<List<TopDayItem>>()
 
