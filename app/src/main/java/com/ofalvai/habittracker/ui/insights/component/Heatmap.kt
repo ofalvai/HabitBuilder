@@ -34,7 +34,7 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.CalendarDayLegend
 import com.ofalvai.habittracker.ui.common.CalendarPager
-import com.ofalvai.habittracker.ui.insights.HeatmapState
+import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.theme.AppIcons
@@ -77,22 +77,25 @@ fun Heatmap(viewModel: InsightsViewModel) {
             CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
 
             when (heatmapState) {
-                is HeatmapState.Loaded -> {
-                    val heatmapData = (heatmapState as HeatmapState.Loaded).heatmapData // no smart cast :'(
+                is Result.Success -> {
+                    val heatmapData = (heatmapState as Result.Success).value // no smart cast :'(
 
                     HeatmapCalendar(yearMonth, heatmapData)
 
                     if (hasEnoughData(heatmapData)) {
                         HeatmapLegend(
-                            (heatmapState as HeatmapState.Loaded).heatmapData,
+                            heatmapData,
                             modifier = Modifier.align(Alignment.End).padding(top = 8.dp)
                         )
                     } else {
                         EmptyView()
                     }
                 }
-                HeatmapState.Loading -> {
+                Result.Loading -> {
                     HeatmapCalendar(yearMonth = yearMonth, heatmapData = loadingMonthData)
+                }
+                is Result.Failure -> {
+                    // TODO
                 }
             }
         }

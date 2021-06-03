@@ -10,21 +10,17 @@ import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.model.TopHabitItem
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 
-sealed class HeatmapState {
-    object Loading: HeatmapState()
-    data class Loaded(val heatmapData: HeatmapMonth): HeatmapState()
-}
-
 class InsightsViewModel(
     private val habitDao: HabitDao
 ): ViewModel() {
 
-    val heatmapState = MutableStateFlow<HeatmapState>(HeatmapState.Loading)
+    val heatmapState = MutableStateFlow<Result<HeatmapMonth>>(Result.Loading)
     val topHabits = MutableStateFlow<Result<List<TopHabitItem>>>(Result.Success(emptyList()))
     val habitTopDays = MutableStateFlow<Result<List<TopDayItem>>>(Result.Success(emptyList()))
 
@@ -46,22 +42,26 @@ class InsightsViewModel(
 
     private fun fetchStats() {
         viewModelScope.launch {
-            // TODO: parallel coroutines
-            reloadHeatmap(yearMonth = YearMonth.now())
-            reloadTopHabits()
-            reloadHabitTopDays()
+            @Suppress("DeferredResultUnused")
+            async { reloadHeatmap(yearMonth = YearMonth.now()) }
+
+            @Suppress("DeferredResultUnused")
+            async { reloadTopHabits() }
+
+            @Suppress("DeferredResultUnused")
+            async { reloadHabitTopDays() }
         }
     }
 
     private suspend fun reloadHeatmap(yearMonth: YearMonth) {
-        heatmapState.value = HeatmapState.Loading
+        heatmapState.value = Result.Loading
 
         val startDate = yearMonth.atDay(1)
         val endDate = yearMonth.atEndOfMonth()
         val actionCountList = habitDao.getSumActionCountByDay(startDate, endDate)
         val habitCount = habitCount.first()
 
-        heatmapState.value = HeatmapState.Loaded(
+        heatmapState.value = Result.Success(
             mapSumActionCountByDay(
                 entityList = actionCountList,
                 yearMonth,

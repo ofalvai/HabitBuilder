@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
-import com.ofalvai.habittracker.ui.insights.HeatmapState
+import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.util.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,7 +52,7 @@ class InsightsViewModelTest {
         viewModel.heatmapState.test {
             // First item is Loading, but we only subscribe after the constructor has run
             // Which executes the fetching in a blocking way
-            assertEquals(1, (expectItem() as HeatmapState.Loaded).heatmapData.totalHabitCount)
+            assertEquals(1, (expectItem() as Result.Success).value.totalHabitCount)
         }
     }
 
@@ -73,15 +73,15 @@ class InsightsViewModelTest {
 
         // Then
         viewModel.heatmapState.test {
-            val loadedState = expectItem() as HeatmapState.Loaded
-            assertEquals(1, loadedState.heatmapData.totalHabitCount)
+            val loadedState = expectItem() as Result.Success
+            assertEquals(1, loadedState.value.totalHabitCount)
 
             habitCountFlow.value = 2
             viewModel.fetchHeatmap(YearMonth.now().plusMonths(1))
 
-            assertEquals(HeatmapState.Loading, expectItem())
-            val newLoadedState = expectItem() as HeatmapState.Loaded
-            assertEquals(2, newLoadedState.heatmapData.totalHabitCount)
+            assertEquals(Result.Loading, expectItem())
+            val newLoadedState = expectItem() as Result.Success
+            assertEquals(2, newLoadedState.value.totalHabitCount)
 
         }
     }
