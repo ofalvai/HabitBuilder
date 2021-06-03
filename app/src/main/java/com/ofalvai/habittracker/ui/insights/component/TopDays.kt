@@ -1,5 +1,6 @@
 package com.ofalvai.habittracker.ui.insights.component
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -8,8 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.TopDayItem
@@ -32,7 +34,7 @@ import java.util.*
 
 @Composable
 fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
-    val topDays by viewModel.habitTopDays.observeAsState(emptyList())
+    val topDays by viewModel.habitTopDays.collectAsState()
 
     val onHabitClick: (HabitId) -> Unit = {
         val route = Screen.HabitDetails.buildRoute(habitId = it)
@@ -44,10 +46,19 @@ fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
         title = stringResource(R.string.insights_topdays_title),
         description = stringResource(R.string.insights_topdays_description),
     ) {
-        TopDaysTable(
-            items = topDays,
-            onHabitClick = onHabitClick
-        )
+        Crossfade(targetState = topDays) {
+            when (it) {
+                is Result.Success -> {
+                    TopDaysTable(items = it.value, onHabitClick = onHabitClick)
+                }
+                Result.Loading -> {
+                    // TODO
+                }
+                is Result.Failure -> {
+                    // TODO
+                }
+            }
+        }
     }
 }
 

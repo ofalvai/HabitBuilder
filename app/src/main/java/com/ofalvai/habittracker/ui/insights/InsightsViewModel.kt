@@ -1,12 +1,12 @@
 package com.ofalvai.habittracker.ui.insights
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.mapHabitActionCount
 import com.ofalvai.habittracker.mapper.mapHabitTopDay
 import com.ofalvai.habittracker.mapper.mapSumActionCountByDay
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.model.TopHabitItem
@@ -25,8 +25,8 @@ class InsightsViewModel(
 ): ViewModel() {
 
     val heatmapState = MutableStateFlow<HeatmapState>(HeatmapState.Loading)
-    val topHabits = MutableLiveData<List<TopHabitItem>>()
-    val habitTopDays = MutableLiveData<List<TopDayItem>>()
+    val topHabits = MutableStateFlow<Result<List<TopHabitItem>>>(Result.Success(emptyList()))
+    val habitTopDays = MutableStateFlow<Result<List<TopDayItem>>>(Result.Success(emptyList()))
 
     private val habitCount: SharedFlow<Int> = habitDao.getHabitCount().shareIn(
         scope = viewModelScope,
@@ -71,15 +71,19 @@ class InsightsViewModel(
     }
 
     private suspend fun reloadTopHabits() {
+        topHabits.value = Result.Loading
         topHabits.value = habitDao
             .getMostSuccessfulHabits(100) // TODO: smaller number when "See all" screen is done
             .filter { it.first_day != null }
             .map { mapHabitActionCount(it, LocalDate.now()) }
+            .let { Result.Success(it) }
     }
 
     private suspend fun reloadHabitTopDays() {
+        habitTopDays.value = Result.Loading
         habitTopDays.value = habitDao
             .getTopDayForHabits()
             .map { mapHabitTopDay(it) }
+            .let { Result.Success(it) }
     }
 }
