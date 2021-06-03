@@ -51,6 +51,10 @@
     <string name="habitdetails_singlestat_total">Total times done</string>
     <string name="habitdetails_singlestat_weekly">Done this week</string>
     <string name="habitdetails_singlestat_completionrate">Completion rate</string>
+    <string name="habitdetails_delete_confirm">Delete</string>
+    <string name="habitdetails_confirm_cancel">Cancel</string>
+    <string name="habitdetails_confirm_title">Delete habit?</string>
+    <string name="habitdetails_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
 
     <string name="insights_more_info">More information</string>
     <string name="insights_heatmap_title">Heatmap</string>

@@ -84,6 +84,22 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
         viewModel.toggleActionFromDetail(habitId, action, date)
     }
 
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var pendingHabitToDelete by remember { mutableStateOf<Habit?>(null) }
+    val onDelete: (Habit) -> Unit = {
+        showDeleteDialog = true
+        pendingHabitToDelete = it
+    }
+
+    DeleteConfirmationDialog(
+        showDialog = showDeleteDialog,
+        onDismiss = { showDeleteDialog = false },
+        onConfirm = {
+            pendingHabitToDelete?.let { viewModel.deleteHabit(it) }
+            pendingHabitToDelete = null
+        }
+    )
+
     HabitDetailScreen(
         habitDetailState = habitDetailState,
         singleStats = singleStats,
@@ -91,7 +107,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
         actionCountByMonth = actionCountByMonth,
         onBack = { navController.popBackStack() },
         onEdit = { viewModel.updateHabit(it) },
-        onDelete = { viewModel.deleteHabit(it) },
+        onDelete = onDelete,
         onDayToggle = onDayToggle
     )
 }
@@ -415,6 +431,41 @@ private fun SingleStat(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.caption,
             textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun DeleteConfirmationDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            confirmButton = {
+                TextButton(onClick = onConfirm) {
+                    Text(text = stringResource(R.string.habitdetails_delete_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { onDismiss() }) {
+                    Text(text = stringResource(R.string.habitdetails_confirm_cancel))
+                }
+            },
+            title = {
+                Text(
+                    text = stringResource(R.string.habitdetails_confirm_title),
+                    style = MaterialTheme.typography.h6
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(R.string.habitdetails_delete_description),
+                    style = MaterialTheme.typography.body1
+                )
+            }
         )
     }
 }
