@@ -1,7 +1,6 @@
 package com.ofalvai.habittracker.ui
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.*
@@ -9,6 +8,9 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -23,10 +25,10 @@ class HabitViewModel(
     appPreferences: AppPreferences
 ) : ViewModel() {
 
-    val habitsWithActions = Transformations.map(
-        Transformations.distinctUntilChanged(dao.getHabitsWithActions()),
-        ::mapHabitEntityToModel
-    )
+    val habitsWithActions: Flow<List<HabitWithActions>> = dao
+        .getHabitsWithActions()
+        .distinctUntilChanged()
+        .map(::mapHabitEntityToModel)
 
     val habitWithActions = MutableLiveData<HabitWithActions?>()
     val singleStats = MutableLiveData<SingleStats>()

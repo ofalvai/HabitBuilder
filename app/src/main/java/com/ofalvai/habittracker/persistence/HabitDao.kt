@@ -1,6 +1,5 @@
 package com.ofalvai.habittracker.persistence
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.ofalvai.habittracker.persistence.entity.*
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +27,7 @@ interface HabitDao {
     // TODO: limit by timestamp
     @Transaction
     @Query("SELECT * FROM habit")
-    fun getHabitsWithActions(): LiveData<List<HabitWithActions>>
+    fun getHabitsWithActions(): Flow<List<HabitWithActions>>
 
     @Transaction
     @Query("SELECT * FROM habit WHERE id = :habitId")

@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,7 +33,7 @@ fun Dashboard(navController: NavController) {
     val viewModel: HabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
-    val habits by viewModel.habitsWithActions.observeAsState(emptyList())
+    val habits by viewModel.habitsWithActions.collectAsState(emptyList())
 
     val onActionToggle: (Action, Habit, LocalDate) -> Unit = { action, habit, date ->
         viewModel.toggleActionFromDashboard(habit.id, action, date)
