@@ -13,7 +13,6 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,16 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.common.CalendarDayLegend
-import com.ofalvai.habittracker.ui.common.CalendarPager
-import com.ofalvai.habittracker.ui.common.HabitColorPicker
-import com.ofalvai.habittracker.ui.common.observeAsEffect
+import com.ofalvai.habittracker.ui.common.*
 import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
@@ -43,32 +38,19 @@ import java.time.temporal.WeekFields
 import java.util.*
 import kotlin.math.roundToInt
 
-sealed class HabitDetailState {
-    object Loading: HabitDetailState()
-
-    data class Loaded(val habitDetails: HabitWithActions): HabitDetailState()
-}
-
 @Composable
 fun HabitDetailScreen(habitId: Int, navController: NavController) {
     val viewModel: HabitDetailViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
-    val initialState = HabitDetailState.Loading
-    val habitDetailState by Transformations.map(viewModel.habitWithActions) {
-        if (it == null) {
-            initialState
-        } else {
-            HabitDetailState.Loaded(it)
-        }
-    }.observeAsState(initialState)
+    val habitDetailState by viewModel.habitWithActions.collectAsState()
 
     viewModel.backNavigationEvent.observeAsEffect {
         navController.popBackStack()
     }
 
-    val singleStats by viewModel.singleStats.observeAsState(SingleStats(null, 0, 0, 0f))
-    val actionCountByWeek by viewModel.actionCountByWeek.observeAsState(emptyList())
-    val actionCountByMonth by viewModel.actionCountByMonth.observeAsState(emptyList())
+    val singleStats by viewModel.singleStats.collectAsState()
+    val actionCountByWeek by viewModel.actionCountByWeek.collectAsState()
+    val actionCountByMonth by viewModel.actionCountByMonth.collectAsState()
 
     DisposableEffect(habitId) {
         val job = viewModel.fetchHabitDetails(habitId)
@@ -113,7 +95,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 
 @Composable
 private fun HabitDetailScreen(
-    habitDetailState: HabitDetailState,
+    habitDetailState: Result<HabitWithActions>,
     singleStats: SingleStats,
     actionCountByWeek: List<ActionCountByWeek>,
     actionCountByMonth: List<ActionCountByMonth>,
@@ -129,7 +111,7 @@ private fun HabitDetailScreen(
 
         Column(Modifier.verticalScroll(rememberScrollState()).padding(32.dp)) {
             when (habitDetailState) {
-                is HabitDetailState.Loaded -> {
+                is Result.Success -> {
                     CalendarPager(
                         yearMonth = yearMonth,
                         onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
@@ -138,15 +120,18 @@ private fun HabitDetailScreen(
                     CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
                     HabitCalendar(
                         yearMonth = yearMonth,
-                        habitColor = habitDetailState.habitDetails.habit.color.composeColor,
-                        actions = habitDetailState.habitDetails.actions,
+                        habitColor = habitDetailState.value.habit.color.composeColor,
+                        actions = habitDetailState.value.actions,
                         onDayToggle = onDayToggle
                     )
 
                     HabitStats(actionCountByWeek, actionCountByMonth)
                 }
-                HabitDetailState.Loading -> {
+                Result.Loading -> {
                     // No calendar and stats in loading state
+                }
+                is Result.Failure -> {
+                    // TODO
                 }
             }
         }
@@ -156,7 +141,7 @@ private fun HabitDetailScreen(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun HabitDetailHeader(
-    habitDetailState: HabitDetailState,
+    habitDetailState: Result<HabitWithActions>,
     singleStats: SingleStats,
     onBack: () -> Unit,
     onSave: (Habit) -> Unit,
@@ -166,29 +151,31 @@ private fun HabitDetailHeader(
 
     val backgroundColor by animateColorAsState(
         targetValue = when (habitDetailState) {
-            is HabitDetailState.Loaded -> {
+            is Result.Success -> {
                 if (isEditing) MaterialTheme.colors.surface else {
-                    habitDetailState.habitDetails.habit.color.composeColor.copy(alpha = 0.5f)
+                    habitDetailState.value.habit.color.composeColor.copy(alpha = 0.5f)
                 }
             }
-            HabitDetailState.Loading -> MaterialTheme.colors.background
+            else -> MaterialTheme.colors.background
         },
         animationSpec = tween(durationMillis = 900)
     )
 
     Surface(color = backgroundColor) {
         when (habitDetailState) {
-            HabitDetailState.Loading -> HabitDetailLoadingAppBar(onBack)
-
-            is HabitDetailState.Loaded -> {
+            Result.Loading -> HabitDetailLoadingAppBar(onBack)
+            is Result.Failure -> {
+                // TODO
+            }
+            is Result.Success -> {
                 AnimatedVisibility(
                     visible = isEditing,
                     enter = fadeIn() + expandVertically(),
                     exit = shrinkVertically() + fadeOut()
                 ) {
                     HabitHeaderEditingContent(
-                        habitName = habitDetailState.habitDetails.habit.name,
-                        habitDetails = habitDetailState.habitDetails,
+                        habitName = habitDetailState.value.habit.name,
+                        habitDetails = habitDetailState.value,
                         onBack = onBack,
                         onSave = {
                             isEditing = false
@@ -200,7 +187,7 @@ private fun HabitDetailHeader(
 
                 AnimatedVisibility(visible = !isEditing, enter = fadeIn(), exit = fadeOut()) {
                     HabitHeaderContent(
-                        habitDetails = habitDetailState.habitDetails,
+                        habitDetails = habitDetailState.value,
                         singleStats = singleStats,
                         onBack = onBack,
                         onEdit = { isEditing = true }
@@ -474,7 +461,7 @@ private fun DeleteConfirmationDialog(
 private fun PreviewHabitDetailScreen() {
     HabitTrackerTheme {
         HabitDetailScreen(
-            habitDetailState = HabitDetailState.Loaded(HabitWithActions(
+            habitDetailState = Result.Success(HabitWithActions(
                 Habit(0, "Meditation", Habit.Color.Red),
                 listOf(Action(0, true, Instant.now())),
                 2,

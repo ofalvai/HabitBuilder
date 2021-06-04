@@ -1,13 +1,14 @@
 package com.ofalvai.habittracker.ui.habitdetail
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.*
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -15,14 +16,16 @@ import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.util.*
 
+private val initialSingleStats = SingleStats(null, 0, 0, 0f)
+
 class HabitDetailViewModel(
     private val dao: HabitDao
 ) : ViewModel() {
 
-    val habitWithActions = MutableLiveData<HabitWithActions?>()
-    val singleStats = MutableLiveData<SingleStats>()
-    val actionCountByWeek = MutableLiveData<List<ActionCountByWeek>>()
-    val actionCountByMonth = MutableLiveData<List<ActionCountByMonth>>()
+    val habitWithActions = MutableStateFlow<Result<HabitWithActions>>(Result.Loading)
+    val singleStats = MutableStateFlow(initialSingleStats)
+    val actionCountByWeek = MutableStateFlow<List<ActionCountByWeek>>(emptyList())
+    val actionCountByMonth = MutableStateFlow<List<ActionCountByMonth>>(emptyList())
     val backNavigationEvent = SingleLiveEvent<Void>()
 
     fun fetchHabitDetails(habitId: Int): Job {
@@ -38,7 +41,7 @@ class HabitDetailViewModel(
                     actionsToHistory(it.actions)
                 )
             }
-            habitWithActions.value = habit
+            habitWithActions.value = Result.Success(habit)
         }
     }
 
