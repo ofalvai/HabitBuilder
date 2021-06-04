@@ -8,6 +8,7 @@ import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -46,20 +47,19 @@ class HabitDetailViewModel(
     }
 
     fun fetchHabitStats(habitId: Int): Job {
-        // TODO: parallel execution
         return viewModelScope.launch {
-            val completionRate = dao.getCompletionRate(habitId)
-            val actionCountByWeekEntity = dao.getActionCountByWeek(habitId)
-            val actionCountByMonthEntity = dao.getActionCountByMonth(habitId)
+            val completionRate = async { dao.getCompletionRate(habitId) }
+            val actionCountByWeekEntity = async { dao.getActionCountByWeek(habitId) }
+            val actionCountByMonthEntity = async { dao.getActionCountByMonth(habitId) }
 
             singleStats.value = mapHabitSingleStats(
-                completionRate,
-                actionCountByWeekEntity,
+                completionRate.await(),
+                actionCountByWeekEntity.await(),
                 LocalDate.now(),
                 Locale.getDefault()
             )
-            actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity)
-            actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity)
+            actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity.await())
+            actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity.await())
         }
     }
 
