@@ -8,7 +8,9 @@ import com.ofalvai.habittracker.persistence.AppDatabase
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.persistence.MIGRATIONS
 import com.ofalvai.habittracker.ui.AppPreferences
-import com.ofalvai.habittracker.ui.HabitViewModel
+import com.ofalvai.habittracker.ui.dashboard.AddHabitViewModel
+import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
+import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import timber.log.Timber
 
@@ -45,8 +47,14 @@ class AppViewModelFactory(
     private val appPreferences: AppPreferences
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (HabitViewModel::class.java.isAssignableFrom(modelClass)) {
-            return HabitViewModel(habitDao, appPreferences) as T
+        if (AddHabitViewModel::class.java.isAssignableFrom(modelClass)) {
+            return AddHabitViewModel(habitDao) as T
+        }
+        if (DashboardViewModel::class.java.isAssignableFrom(modelClass)) {
+            return DashboardViewModel(habitDao, appPreferences) as T
+        }
+        if (HabitDetailViewModel::class.java.isAssignableFrom(modelClass)) {
+            return HabitDetailViewModel(habitDao) as T
         }
         if (InsightsViewModel::class.java.isAssignableFrom(modelClass)) {
             return InsightsViewModel(habitDao) as T

@@ -1,4 +1,4 @@
-package com.ofalvai.habittracker.ui
+package com.ofalvai.habittracker.ui.habitdetail
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,49 +8,22 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.util.*
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
-import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
-class HabitViewModel(
-    private val dao: HabitDao,
-    appPreferences: AppPreferences
+class HabitDetailViewModel(
+    private val dao: HabitDao
 ) : ViewModel() {
-
-    val habitsWithActions: Flow<List<HabitWithActions>> = dao
-        .getHabitsWithActions()
-        .distinctUntilChanged()
-        .map(::mapHabitEntityToModel)
 
     val habitWithActions = MutableLiveData<HabitWithActions?>()
     val singleStats = MutableLiveData<SingleStats>()
     val actionCountByWeek = MutableLiveData<List<ActionCountByWeek>>()
     val actionCountByMonth = MutableLiveData<List<ActionCountByMonth>>()
     val backNavigationEvent = SingleLiveEvent<Void>()
-
-    var dashboardConfig by appPreferences::dashboardConfig
-
-    fun addHabit(habit: Habit) {
-        viewModelScope.launch {
-            val habitEntity = HabitEntity(name = habit.name, color = habit.color.toEntityColor())
-            dao.insertHabit(habitEntity)
-            backNavigationEvent.call()
-        }
-    }
-
-    fun toggleActionFromDashboard(habitId: Int, action: Action, date: LocalDate) {
-        viewModelScope.launch {
-            toggleAction(habitId, action, date)
-        }
-    }
 
     fun fetchHabitDetails(habitId: Int): Job {
         return viewModelScope.launch {
@@ -115,7 +88,7 @@ class HabitViewModel(
         date: LocalDate,
     ) {
         if (updatedAction.toggled) {
-            val newAction = ActionEntity(
+            val newAction = com.ofalvai.habittracker.persistence.entity.Action(
                 habit_id = habitId,
                 timestamp = LocalDateTime.of(date, LocalTime.now())
                     .toInstant(OffsetDateTime.now().offset)
@@ -125,4 +98,5 @@ class HabitViewModel(
             dao.deleteAction(updatedAction.id)
         }
     }
+
 }

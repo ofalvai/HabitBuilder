@@ -27,7 +27,6 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.common.CalendarDayLegend
 import com.ofalvai.habittracker.ui.common.CalendarPager
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
@@ -52,7 +51,7 @@ sealed class HabitDetailState {
 
 @Composable
 fun HabitDetailScreen(habitId: Int, navController: NavController) {
-    val viewModel: HabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
+    val viewModel: HabitDetailViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     val initialState = HabitDetailState.Loading
     val habitDetailState by Transformations.map(viewModel.habitWithActions) {

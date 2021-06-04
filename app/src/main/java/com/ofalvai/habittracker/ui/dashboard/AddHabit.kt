@@ -26,7 +26,6 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.TextFieldError
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.common.observeAsEffect
@@ -35,7 +34,7 @@ import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 
 @Composable
 fun AddHabitScreen(navController: NavController) {
-    val viewModel: HabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
+    val viewModel: AddHabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     viewModel.backNavigationEvent.observeAsEffect { navController.popBackStack() }
 

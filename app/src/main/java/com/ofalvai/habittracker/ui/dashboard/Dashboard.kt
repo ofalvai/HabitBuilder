@@ -18,7 +18,6 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
-import com.ofalvai.habittracker.ui.HabitViewModel
 import com.ofalvai.habittracker.ui.Screen
 import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
@@ -30,7 +29,7 @@ import java.time.LocalDate
 
 @Composable
 fun Dashboard(navController: NavController) {
-    val viewModel: HabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
+    val viewModel: DashboardViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
     val habits by viewModel.habitsWithActions.collectAsState(emptyList())

@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.AppPreferences
-import com.ofalvai.habittracker.ui.HabitViewModel
+import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.ActionHistory
 import com.ofalvai.habittracker.ui.model.Habit
@@ -33,7 +33,7 @@ class DashboardViewModelTest {
     private val dao = mock<HabitDao>()
     private val appPreferences = mock<AppPreferences>()
 
-    private lateinit var viewModel: HabitViewModel
+    private lateinit var viewModel: DashboardViewModel
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -52,7 +52,7 @@ class DashboardViewModelTest {
         )))
 
         // When
-        viewModel = HabitViewModel(dao, appPreferences)
+        viewModel = DashboardViewModel(dao, appPreferences)
 
         // Then
         viewModel.habitsWithActions.test {
@@ -78,7 +78,7 @@ class DashboardViewModelTest {
         ))))
 
         // When
-        viewModel = HabitViewModel(dao, appPreferences)
+        viewModel = DashboardViewModel(dao, appPreferences)
 
         // Then
         viewModel.habitsWithActions.test {
@@ -116,7 +116,7 @@ class DashboardViewModelTest {
         }
 
         // When
-        viewModel = HabitViewModel(dao, appPreferences)
+        viewModel = DashboardViewModel(dao, appPreferences)
 
         // Then
         viewModel.habitsWithActions.test {
