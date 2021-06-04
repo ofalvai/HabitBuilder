@@ -110,4 +110,5 @@ dependencies {
     androidTestImplementation libs.androidx.junit.ext
     androidTestImplementation libs.androidx.espresso
     androidTestImplementation libs.androidx.core.testing
+    androidTestImplementation libs.turbine
 }

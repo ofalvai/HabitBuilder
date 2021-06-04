@@ -69,7 +69,7 @@ class DashboardViewModelTest {
 
     @ExperimentalTime
     @Test
-    fun `Given habits and actions in DB When LiveData is observed Then observer is notified once`() = runBlockingTest {
+    fun `Given habits and actions in DB When Flow is observed Then collector is notified once`() = runBlockingTest {
         // Given
         given(dao.getHabitsWithActions()).willReturn(flowOf((listOf(
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), emptyList()),
@@ -95,7 +95,7 @@ class DashboardViewModelTest {
 
     @ExperimentalTime
     @Test
-    fun `Given observed habit list When a habit is updated Then observer is notified`() = runBlockingTest {
+    fun `Given observed habit list When a habit is updated Then collector is notified`() = runBlockingTest {
         // Given
         val dateNow = LocalDate.now()
         val instantNow = Instant.now()

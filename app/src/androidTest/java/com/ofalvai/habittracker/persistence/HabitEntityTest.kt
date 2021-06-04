@@ -5,10 +5,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.turbine.test
 import com.ofalvai.habittracker.persistence.entity.Action
 import com.ofalvai.habittracker.persistence.entity.Habit
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions
-import com.ofalvai.habittracker.persistence.util.testObserver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
@@ -20,6 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 import java.time.Instant
+import kotlin.time.ExperimentalTime
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -106,6 +107,7 @@ class HabitEntityTest {
         assertEquals(listOf(action3, action4), actions)
     }
 
+    @ExperimentalTime
     @Test
     fun readAllHabitsWithActions() = testCoroutineScope.runBlockingTest {
         val habit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green)
@@ -115,16 +117,16 @@ class HabitEntityTest {
         val action3 = Action(id = 3, habit_id = habit2.id, timestamp = Instant.parse("2020-12-25T10:18:42Z"))
         val action4 = Action(id = 4, habit_id = habit1.id, timestamp = Instant.parse("2020-12-26T10:19:10Z"))
 
-        val observer = habitDao.getHabitsWithActions().testObserver()
         habitDao.insertHabit(habit1, habit2)
         habitDao.insertAction(action1, action2, action3, action4)
 
-        val habitsWithActions = observer.observedValues.last()
-        val expectedHabitsWithActions = listOf(
-            HabitWithActions(habit1, listOf(action1, action4)),
-            HabitWithActions(habit2, listOf(action2, action3))
-        )
-        assertEquals(expectedHabitsWithActions, habitsWithActions)
+        habitDao.getHabitsWithActions().test {
+            val expectedHabitsWithActions = listOf(
+                HabitWithActions(habit1, listOf(action1, action4)),
+                HabitWithActions(habit2, listOf(action2, action3))
+            )
+            assertEquals(expectedHabitsWithActions, expectItem())
+        }
     }
 
     @Test
