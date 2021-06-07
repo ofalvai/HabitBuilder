@@ -19,11 +19,13 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import java.time.LocalDate
 
@@ -32,7 +34,7 @@ fun Dashboard(navController: NavController) {
     val viewModel: DashboardViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
-    val habits by viewModel.habitsWithActions.collectAsState(emptyList())
+    val habits by viewModel.habitsWithActions.collectAsState(Result.Loading)
 
     val onActionToggle: (Action, Habit, LocalDate) -> Unit = { action, habit, date ->
         viewModel.toggleActionFromDashboard(habit.id, action, date)
@@ -46,14 +48,41 @@ fun Dashboard(navController: NavController) {
         viewModel.dashboardConfig = it
     }
 
+    when (habits) {
+        is Result.Success -> {
+            LoadedDashboard(
+                habits = (habits as Result.Success<List<HabitWithActions>>).value,
+                config = config,
+                onAddHabitClick,
+                onConfigChange,
+                onActionToggle,
+                onHabitDetail
+            )
+        }
+        is Result.Failure -> {
+            // TODO
+        }
+        Result.Loading -> {
+            // TODO
+        }
+    }
+}
+
+@Composable
+private fun LoadedDashboard(
+    habits: List<HabitWithActions>,
+    config: DashboardConfig,
+    onAddHabitClick: () -> Unit,
+    onConfigChange: (DashboardConfig) -> Unit,
+    onActionToggle: (Action, Habit, LocalDate) -> Unit,
+    onHabitDetail: (Habit) -> (Unit)
+) {
     ContentWithPlaceholder(
         showPlaceholder = habits.isEmpty(),
         placeholder = { DashboardPlaceholder(onAddHabitClick) }
     ) {
         Column(
-            Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
+            Modifier.fillMaxSize().statusBarsPadding()
         ) {
             DashboardAppBar(
                 config = config,
@@ -75,7 +104,7 @@ fun Dashboard(navController: NavController) {
 }
 
 @Composable
-fun DashboardAppBar(
+private fun DashboardAppBar(
     config: DashboardConfig,
     onConfigChange: (DashboardConfig) -> Unit
 ) {
@@ -120,7 +149,7 @@ fun DashboardAppBar(
 }
 
 @Composable
-fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
+private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()

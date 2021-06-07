@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.AppPreferences
+import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.ActionHistory
@@ -14,6 +15,7 @@ import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.util.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -27,6 +29,7 @@ import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 import com.ofalvai.habittracker.persistence.entity.Habit.Color as ColorEntity
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 class DashboardViewModelTest {
 
@@ -41,7 +44,6 @@ class DashboardViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @ExperimentalTime
     @Test
     fun `Given habits without actions When VM loaded Then list contains habits with empty history`() = runBlockingTest {
         // Given
@@ -67,7 +69,6 @@ class DashboardViewModelTest {
         }
     }
 
-    @ExperimentalTime
     @Test
     fun `Given habits and actions in DB When Flow is observed Then collector is notified once`() = runBlockingTest {
         // Given
@@ -93,7 +94,6 @@ class DashboardViewModelTest {
         }
     }
 
-    @ExperimentalTime
     @Test
     fun `Given observed habit list When a habit is updated Then collector is notified`() = runBlockingTest {
         // Given
@@ -139,6 +139,41 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
             assertEquals(expectedHabits2, expectItem())
+        }
+    }
+
+    @Test
+    fun `Given exception when toggling action When action is toggled Then error event is sent to UI`() = runBlockingTest {
+        // Given
+        val exception = RuntimeException("Mocked error")
+        given(dao.insertAction()).willThrow(exception)
+        viewModel = DashboardViewModel(dao, appPreferences)
+        val action = Action(id = 0, toggled = true, timestamp = Instant.EPOCH)
+
+        // When
+        viewModel.toggleActionFromDashboard(habitId = 0, action = action, date = LocalDate.of(2021, 6, 7))
+
+        // Then
+        viewModel.toggleActionErrorEvent.value = exception
+    }
+
+    @Test
+    fun `Given exception when loading habits When habits are loaded Then ViewModel state is Failure`() = runBlockingTest {
+        // Given
+        val exception = RuntimeException("Mocked error")
+        val habitFlow = flow<List<HabitWithActionsEntity>> {
+            throw exception
+        }
+        given(dao.getHabitsWithActions()).willReturn(habitFlow)
+
+        // When
+        viewModel = DashboardViewModel(dao, appPreferences)
+
+        // Then
+        viewModel.habitsWithActions.test {
+            val expected = Result.Failure(exception)
+            assertEquals(expected, expectItem())
+            expectComplete()
         }
     }
 }
