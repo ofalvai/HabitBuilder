@@ -64,7 +64,7 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
-            assertEquals(expectedHabits, expectItem())
+            assertEquals(Result.Success(expectedHabits), expectItem())
             expectComplete()
         }
     }
@@ -89,7 +89,7 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
-            assertEquals(expectedHabits, expectItem())
+            assertEquals(Result.Success(expectedHabits), expectItem())
             expectComplete()
         }
     }
@@ -128,7 +128,7 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
-            assertEquals(expectedHabits1, expectItem())
+            assertEquals(Result.Success(expectedHabits1), expectItem())
 
             viewModel.toggleActionFromDashboard(0, Action(0, true, instantNow), dateNow)
             mockFlow.emit(modifiedHabitWithActions)
@@ -138,7 +138,7 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
-            assertEquals(expectedHabits2, expectItem())
+            assertEquals(Result.Success(expectedHabits2), expectItem())
         }
     }
 
