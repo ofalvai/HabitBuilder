@@ -1,7 +1,7 @@
 package com.ofalvai.habittracker.ui.common
 
 sealed class Result<out T> {
-    class Success<R>(val value: R) : Result<R>()
+    data class Success<R>(val value: R) : Result<R>()
     object Loading : Result<Nothing>()
-    class Failure(error: Throwable) : Result<Nothing>()
+    data class Failure(val error: Throwable) : Result<Nothing>()
 }

@@ -13,6 +13,7 @@ import com.ofalvai.habittracker.ui.model.TopHabitItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -56,34 +57,51 @@ class InsightsViewModel(
     private suspend fun reloadHeatmap(yearMonth: YearMonth) {
         heatmapState.value = Result.Loading
 
-        val startDate = yearMonth.atDay(1)
-        val endDate = yearMonth.atEndOfMonth()
-        val actionCountList = habitDao.getSumActionCountByDay(startDate, endDate)
-        val habitCount = habitCount.first()
+        try {
+            val startDate = yearMonth.atDay(1)
+            val endDate = yearMonth.atEndOfMonth()
+            val actionCountList = habitDao.getSumActionCountByDay(startDate, endDate)
+            val habitCount = habitCount.first()
 
-        heatmapState.value = Result.Success(
-            mapSumActionCountByDay(
-                entityList = actionCountList,
-                yearMonth,
-                habitCount
+            heatmapState.value = Result.Success(
+                mapSumActionCountByDay(
+                    entityList = actionCountList,
+                    yearMonth,
+                    habitCount
+                )
             )
-        )
+        } catch (e: Throwable) {
+            Timber.e(e)
+            heatmapState.value = Result.Failure(e)
+        }
     }
 
     private suspend fun reloadTopHabits() {
         topHabits.value = Result.Loading
-        topHabits.value = habitDao
-            .getMostSuccessfulHabits(100) // TODO: smaller number when "See all" screen is done
-            .filter { it.first_day != null }
-            .map { mapHabitActionCount(it, LocalDate.now()) }
-            .let { Result.Success(it) }
+
+        try {
+            topHabits.value = habitDao
+                .getMostSuccessfulHabits(100) // TODO: smaller number when "See all" screen is done
+                .filter { it.first_day != null }
+                .map { mapHabitActionCount(it, LocalDate.now()) }
+                .let { Result.Success(it) }
+        } catch (e: Throwable) {
+            Timber.e(e)
+            topHabits.value = Result.Failure(e)
+        }
     }
 
     private suspend fun reloadHabitTopDays() {
         habitTopDays.value = Result.Loading
-        habitTopDays.value = habitDao
-            .getTopDayForHabits()
-            .map { mapHabitTopDay(it) }
-            .let { Result.Success(it) }
+
+        try {
+            habitTopDays.value = habitDao
+                .getTopDayForHabits()
+                .map { mapHabitTopDay(it) }
+                .let { Result.Success(it) }
+        } catch (e: Throwable) {
+            Timber.e(e)
+            habitTopDays.value = Result.Failure(e)
+        }
     }
 }
