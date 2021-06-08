@@ -34,8 +34,9 @@ jobs:
       - name: Debug build
         run: ./gradlew assembleDebug --stacktrace
         
-      - name: Debug lint
-        run: ./gradlew lintDebug
+# https://github.com/JakeWharton/timber/issues/408
+#       - name: Debug lint
+#         run: ./gradlew lintDebug
         
       - name: Upload lint report
         uses: actions/upload-artifact@v2
