@@ -13,7 +13,7 @@ buildscript {
 
 plugins {
     id "com.osacky.doctor" version "0.7.0"
-    id "com.asarkar.gradle.build-time-tracker" version "2.0.4"
+    id "com.asarkar.gradle.build-time-tracker" version "3.0.0"
 }
 
 doctor {
