@@ -11,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -31,35 +32,45 @@ class HabitDetailViewModel(
 
     fun fetchHabitDetails(habitId: Int): Job {
         return viewModelScope.launch {
-            val habit = dao.getHabitWithActions(habitId).let {
-                // TODO: unify this with the regular mapping (where empty day action are filled)
-                HabitWithActions(
-                    Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
-                    it.actions.map { action ->
-                        Action(action.id, toggled = true, timestamp = action.timestamp)
-                    },
-                    it.actions.size,
-                    actionsToHistory(it.actions)
-                )
+            try {
+                val habit = dao.getHabitWithActions(habitId).let {
+                    // TODO: unify this with the regular mapping (where empty day action are filled)
+                    HabitWithActions(
+                        Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
+                        it.actions.map { action ->
+                            Action(action.id, toggled = true, timestamp = action.timestamp)
+                        },
+                        it.actions.size,
+                        actionsToHistory(it.actions)
+                    )
+                }
+                habitWithActions.value = Result.Success(habit)
+            } catch (e: Throwable) {
+                Timber.e(e)
+                habitWithActions.value = Result.Failure(e)
             }
-            habitWithActions.value = Result.Success(habit)
         }
     }
 
     fun fetchHabitStats(habitId: Int): Job {
         return viewModelScope.launch {
-            val completionRate = async { dao.getCompletionRate(habitId) }
-            val actionCountByWeekEntity = async { dao.getActionCountByWeek(habitId) }
-            val actionCountByMonthEntity = async { dao.getActionCountByMonth(habitId) }
+            try {
+                val completionRate = async { dao.getCompletionRate(habitId) }
+                val actionCountByWeekEntity = async { dao.getActionCountByWeek(habitId) }
+                val actionCountByMonthEntity = async { dao.getActionCountByMonth(habitId) }
 
-            singleStats.value = mapHabitSingleStats(
-                completionRate.await(),
-                actionCountByWeekEntity.await(),
-                LocalDate.now(),
-                Locale.getDefault()
-            )
-            actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity.await())
-            actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity.await())
+                singleStats.value = mapHabitSingleStats(
+                    completionRate.await(),
+                    actionCountByWeekEntity.await(),
+                    LocalDate.now(),
+                    Locale.getDefault()
+                )
+                actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity.await())
+                actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity.await())
+            } catch (e: Throwable) {
+                // Fail silently
+                Timber.e(e)
+            }
         }
     }
 
