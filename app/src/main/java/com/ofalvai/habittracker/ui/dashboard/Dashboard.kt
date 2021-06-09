@@ -19,7 +19,9 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
+import com.ofalvai.habittracker.ui.common.observeAsEffect
 import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.Action
@@ -27,14 +29,23 @@ import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.ui.theme.AppIcons
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
-fun Dashboard(navController: NavController) {
+fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
     val viewModel: DashboardViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
     val habits by viewModel.habitsWithActions.collectAsState(Result.Loading)
+
+    val snackbarCoroutineScope = rememberCoroutineScope()
+    val errorMessage = stringResource(R.string.dashboard_error_toggle_action)
+    viewModel.toggleActionErrorEvent.observeAsEffect {
+        snackbarCoroutineScope.launch {
+            scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
+        }
+    }
 
     val onActionToggle: (Action, Habit, LocalDate) -> Unit = { action, habit, date ->
         viewModel.toggleActionFromDashboard(habit.id, action, date)
@@ -59,12 +70,8 @@ fun Dashboard(navController: NavController) {
                 onHabitDetail
             )
         }
-        is Result.Failure -> {
-            // TODO
-        }
-        Result.Loading -> {
-            // TODO
-        }
+        is Result.Failure -> ErrorView(label = stringResource(R.string.dashboard_error))
+        Result.Loading -> { }
     }
 }
 

@@ -40,7 +40,7 @@ class DashboardViewModel(
 
     var dashboardConfig by appPreferences::dashboardConfig
 
-    val toggleActionErrorEvent = SingleLiveEvent<Throwable>() // TODO: bind to UI
+    val toggleActionErrorEvent = SingleLiveEvent<Throwable>()
 
     fun toggleActionFromDashboard(habitId: Int, action: Action, date: LocalDate) {
         viewModelScope.launch {

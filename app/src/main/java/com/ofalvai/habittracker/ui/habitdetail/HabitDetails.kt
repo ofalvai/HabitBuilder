@@ -131,7 +131,10 @@ private fun HabitDetailScreen(
                     // No calendar and stats in loading state
                 }
                 is Result.Failure -> {
-                    // TODO
+                    ErrorView(
+                        label = stringResource(R.string.habitdetails_error_stats),
+                        modifier = Modifier.padding(top = 64.dp)
+                    )
                 }
             }
         }
@@ -165,7 +168,10 @@ private fun HabitDetailHeader(
         when (habitDetailState) {
             Result.Loading -> HabitDetailLoadingAppBar(onBack)
             is Result.Failure -> {
-                // TODO
+                ErrorView(
+                    label = stringResource(R.string.habitdetails_error),
+                    modifier = Modifier.statusBarsPadding()
+                )
             }
             is Result.Success -> {
                 AnimatedVisibility(

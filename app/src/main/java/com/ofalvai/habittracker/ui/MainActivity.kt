@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val systemUiController = rememberSystemUiController()
                     val useDarkIcons = MaterialTheme.colors.isLight
+                    val scaffoldState = rememberScaffoldState()
 
                     SideEffect {
                         systemUiController.setSystemBarsColor(
@@ -54,9 +55,10 @@ class MainActivity : ComponentActivity() {
                                 onDashboardSelected = { navController.navigate(Screen.Dashboard.route) },
                                 onInsightsSelected = { navController.navigate(Screen.Insights.route) }
                             )
-                        }
+                        },
+                        scaffoldState = scaffoldState
                     ) {
-                        Screens(navController)
+                        Screens(navController, scaffoldState)
                     }
                 }
             }
@@ -65,9 +67,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun Screens(navController: NavHostController) {
+private fun Screens(navController: NavHostController, scaffoldState: ScaffoldState) {
     NavHost(navController, startDestination = Screen.Dashboard.route) {
-        composable(Screen.Dashboard.route) { Dashboard(navController) }
+        composable(Screen.Dashboard.route) { Dashboard(navController, scaffoldState) }
         composable(Screen.Insights.route) { InsightsScreen(navController) }
         composable(Screen.AddHabit.route) { AddHabitScreen(navController) }
         composable(

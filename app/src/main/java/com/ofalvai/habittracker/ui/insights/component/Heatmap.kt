@@ -34,6 +34,7 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.CalendarDayLegend
 import com.ofalvai.habittracker.ui.common.CalendarPager
+import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
@@ -95,7 +96,7 @@ fun Heatmap(viewModel: InsightsViewModel) {
                     HeatmapCalendar(yearMonth = yearMonth, heatmapData = loadingMonthData)
                 }
                 is Result.Failure -> {
-                    // TODO
+                    ErrorView(label = stringResource(R.string.insights_heatmap_error))
                 }
             }
         }

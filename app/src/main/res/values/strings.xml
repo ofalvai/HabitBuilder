@@ -7,6 +7,7 @@
     <string name="common_save">Save</string>
     <string name="common_delete">Delete</string>
     <string name="common_more">More</string>
+    <string name="common_error">Error</string>
 
     <string name="addhabit_appbar_title">Create new habit</string>
     <string name="addhabit_name_label">Habit name</string>
@@ -20,6 +21,8 @@
     <string name="dashboard_create_habit">Create new habit</string>
     <string name="dashboard_create_habit_first">Create your first habit</string>
     <string name="dashboard_item_details">Habit details</string>
+    <string name="dashboard_error">Failed to load habit list</string>
+    <string name="dashboard_error_toggle_action">Failed to save action</string>
 
     <string name="habit_suggestion_meditation">Meditation</string>
     <string name="habit_suggestion_workout">Workout</string>
@@ -55,6 +58,8 @@
     <string name="habitdetails_confirm_cancel">Cancel</string>
     <string name="habitdetails_confirm_title">Delete habit?</string>
     <string name="habitdetails_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
+    <string name="habitdetails_error">Failed to load habit details</string>
+    <string name="habitdetails_error_stats">Failed to load habit statistics</string>
 
     <string name="insights_more_info">More information</string>
     <string name="insights_heatmap_title">Heatmap</string>
@@ -64,11 +69,15 @@
         <item quantity="one">%d completed habit</item>
         <item quantity="other">%d completed habits</item>
     </plurals>
+    <string name="insights_heatmap_error">Failed to load heatmap</string>
     <string name="insights_tophabits_title">Top habits</string>
     <string name="insights_tophabits_description">Your most often performed habits. Shows the number of times you completed each habit. The strength bar shows the ratio of completed or missed days since you first performed the habit (the bar is full if you have a perfect streak since the first day).</string>
     <string name="insights_tophabits_navigate">Navigate to %s</string>
     <string name="insights_tophabits_see_all">See all</string>
+    <string name="insights_tophabits_error">Failed to top habits</string>
     <string name="insights_topdays_title">Top days</string>
     <string name="insights_topdays_description">Your most successful days. The list shows the day of week when each habit is performed most often and the number of completed habits on those days.</string>
+    <string name="insights_topdays_error">Failed to load top days</string>
+    <string name="menu_settings">Settings</string>
 
 </resources>

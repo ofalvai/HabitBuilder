@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HabitId
@@ -53,11 +54,9 @@ fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
                     is Result.Success -> {
                         TopHabitsTable(habits = it.value, onHabitClick = onHabitClick)
                     }
-                    Result.Loading -> {
-                        // TODO
-                    }
+                    Result.Loading -> Spacer(modifier = Modifier.height(200.dp))
                     is Result.Failure -> {
-                        // TODO
+                        ErrorView(label = stringResource(R.string.insights_tophabits_error))
                     }
                 }
             }

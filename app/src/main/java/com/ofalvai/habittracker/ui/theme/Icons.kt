@@ -30,5 +30,9 @@ object AppIcons {
     val TopDays: Painter
         @Composable
         get() = painterResource(R.drawable.ic_topdays)
+
+    val Error: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_error)
 }
 
