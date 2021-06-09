@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,9 +51,13 @@ fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
         Crossfade(targetState = topDays) {
             when (it) {
                 is Result.Success -> {
-                    TopDaysTable(items = it.value, onHabitClick = onHabitClick)
+                    if (hasEnoughData(it.value)) {
+                        TopDaysTable(items = it.value, onHabitClick = onHabitClick)
+                    } else {
+                        EmptyView()
+                    }
                 }
-                Result.Loading -> Spacer(modifier = Modifier.height(200.dp))
+                Result.Loading -> Spacer(modifier = Modifier.height(45.dp))
                 is Result.Failure -> {
                     ErrorView(label = stringResource(R.string.insights_topdays_error))
                 }
@@ -120,6 +125,20 @@ private fun TopDaysRow(
             )
         }
     }
+}
+
+@Composable
+private fun EmptyView() {
+    // TODO: Illustration
+    Text(
+        text = stringResource(R.string.insights_topdays_empty_label),
+        style = MaterialTheme.typography.caption.copy(fontStyle = FontStyle.Italic),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+    )
+}
+
+private fun hasEnoughData(days: List<TopDayItem>): Boolean {
+    return days.any { it.count >= 2 }
 }
 
 @Preview(showBackground = true, widthDp = 300, backgroundColor = 0xFFFDEDCE)

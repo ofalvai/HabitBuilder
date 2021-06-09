@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -75,24 +76,29 @@ fun Heatmap(viewModel: InsightsViewModel) {
                 onNextClick = onNextMonth
             )
 
-            CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
-
             when (heatmapState) {
                 is Result.Success -> {
                     val heatmapData = (heatmapState as Result.Success).value // no smart cast :'(
+                    val enoughData = hasEnoughData(heatmapData)
+
+                    if (!enoughData) {
+                        EmptyView()
+                    }
+
+                    CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
 
                     HeatmapCalendar(yearMonth, heatmapData)
 
-                    if (hasEnoughData(heatmapData)) {
+                    if (enoughData) {
                         HeatmapLegend(
                             heatmapData,
                             modifier = Modifier.align(Alignment.End).padding(top = 8.dp)
                         )
-                    } else {
-                        EmptyView()
                     }
                 }
                 Result.Loading -> {
+                    CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
+
                     HeatmapCalendar(yearMonth = yearMonth, heatmapData = loadingMonthData)
                 }
                 is Result.Failure -> {
@@ -206,9 +212,9 @@ private fun HeatmapLegend(
 @Composable
 private fun EmptyView() {
     Text(
-        text = "Once you create habits and perform them, this calendar will show the number of habits performed each day.",
-        style = MaterialTheme.typography.caption,
-        modifier = Modifier.fillMaxWidth()
+        text = stringResource(R.string.insights_heatmap_empty_label),
+        style = MaterialTheme.typography.caption.copy(fontStyle = FontStyle.Italic),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
     )
 }
 
