@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults.textButtonColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
@@ -437,7 +438,10 @@ private fun DeleteConfirmationDialog(
         AlertDialog(
             onDismissRequest = { onDismiss() },
             confirmButton = {
-                TextButton(onClick = onConfirm) {
+                TextButton(
+                    onClick = onConfirm,
+                    colors = textButtonColors(contentColor = MaterialTheme.colors.error)
+                ) {
                     Text(text = stringResource(R.string.habitdetails_delete_confirm))
                 }
             },
