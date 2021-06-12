@@ -57,8 +57,8 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                         scaffoldState = scaffoldState
-                    ) {
-                        Screens(navController, scaffoldState)
+                    ) { innerPadding ->
+                        Screens(navController, scaffoldState, innerPadding)
                     }
                 }
             }
@@ -67,8 +67,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun Screens(navController: NavHostController, scaffoldState: ScaffoldState) {
-    NavHost(navController, startDestination = Screen.Dashboard.route) {
+private fun Screens(navController: NavHostController,
+                    scaffoldState: ScaffoldState,
+                    padding: PaddingValues
+) {
+    NavHost(
+        navController,
+        startDestination = Screen.Dashboard.route,
+        modifier = Modifier.padding(padding)
+    ) {
         composable(Screen.Dashboard.route) { Dashboard(navController, scaffoldState) }
         composable(Screen.Insights.route) { InsightsScreen(navController) }
         composable(Screen.AddHabit.route) { AddHabitScreen(navController) }
