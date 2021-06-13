@@ -2,13 +2,14 @@ package com.ofalvai.habittracker.ui.dashboard.view.fiveday
 
 import android.os.Vibrator
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,6 +35,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HabitCard(
     habit: Habit,
@@ -44,45 +46,39 @@ fun HabitCard(
     onDetailClick: (Habit) -> Unit
 ) {
     Card(
-        Modifier
+        onClick = { onDetailClick(habit) },
+        elevation = 2.dp,
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        elevation = 2.dp,
-        shape = RoundedCornerShape(16.dp)
     ) {
-        // clickable() needs clipping for the rounded corners and the ripple effect,
-        // but putting the clipping on Card would kill drop shadows. This extra Box solves this
-        Box(Modifier
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = { onDetailClick(habit) })
-        ) {
-            Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-                Text(
-                    text = habit.name,
-                    style = AppTextStyle.habitSubtitle
-                )
+        Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+            Text(
+                text = habit.name,
+                style = AppTextStyle.habitSubtitle
+            )
 
-                Text(
-                    text = LocalContext.current.resources.getQuantityString(
-                        R.plurals.common_action_count_total,
-                        totalActionCount, totalActionCount
-                    ),
-                    style = MaterialTheme.typography.caption
-                )
+            Text(
+                text = LocalContext.current.resources.getQuantityString(
+                    R.plurals.common_action_count_total,
+                    totalActionCount, totalActionCount
+                ),
+                style = MaterialTheme.typography.caption
+            )
 
-                ActionHistoryLabel(actionHistory)
+            ActionHistoryLabel(actionHistory)
 
-                ActionCircles(
-                    modifier = Modifier.align(Alignment.End),
-                    actions = actions.takeLast(Constants.DAY_COUNT),
-                    habitColor = habit.color,
-                    onActionToggle = { action, dayIndex ->
-                        val date = LocalDate.now()
-                            .minus((Constants.DAY_COUNT - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
-                        onActionToggle(action, habit, date)
-                    }
-                )
-            }
+            ActionCircles(
+                modifier = Modifier.align(Alignment.End),
+                actions = actions.takeLast(Constants.DAY_COUNT),
+                habitColor = habit.color,
+                onActionToggle = { action, dayIndex ->
+                    val date = LocalDate.now()
+                        .minus((Constants.DAY_COUNT - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
+                    onActionToggle(action, habit, date)
+                }
+            )
         }
     }
 }
@@ -138,22 +134,25 @@ fun ActionCircle(
     val secondaryColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
     val rippleRadius = remember { Constants.SIZE_CIRCLE / 1.7f } // Make it a bit bigger than D / 2
+    val shape = CircleShape
 
-    Surface(
-        shape = CircleShape,
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .satisfyingToggleable(vibrator, rippleRadius, false, toggled, onToggle, onSinglePress)
             .size(Constants.SIZE_CIRCLE)
-            .padding(Constants.PADDING_CIRCLE),
-        color = color,
-        border = BorderStroke(2.dp, secondaryColor)
+            .padding(Constants.PADDING_CIRCLE)
+            .border(BorderStroke(2.dp, secondaryColor), shape)
+            .background(color, shape)
+            .clip(shape)
     ) {
         if (isHighlighted) {
-            Surface(
-                shape = CircleShape,
-                modifier = Modifier.requiredSize(8.dp),
-                color = secondaryColor
-            ) { }
+            Box(
+                modifier = Modifier
+                    .requiredSize(8.dp)
+                    .clip(CircleShape)
+                    .background(color = secondaryColor, shape = CircleShape),
+            )
         }
     }
 }

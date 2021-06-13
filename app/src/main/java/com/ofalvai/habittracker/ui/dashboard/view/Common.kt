@@ -94,6 +94,8 @@ fun PreviewDayLabels() {
     }
 }
 
+// TODO: broken after beta-08 -> rewrite or wait for a fix
+// Most likely broken by https://android-review.googlesource.com/c/platform/frameworks/support/+/1714106
 fun Modifier.satisfyingToggleable(
     vibrator: Vibrator,
     rippleRadius: Dp,

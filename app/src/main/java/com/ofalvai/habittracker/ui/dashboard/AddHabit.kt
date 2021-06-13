@@ -1,6 +1,5 @@
 package com.ofalvai.habittracker.ui.dashboard
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -13,7 +12,6 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -146,14 +144,13 @@ fun AddHabitAppBar(onBack: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SuggestionChip(habit: Habit, onClick: () -> Unit) {
     val shape = RoundedCornerShape(percent = 50)
     Surface(
-        modifier = Modifier
-            .clip(shape)
-            .clickable(onClick = onClick),
         shape = shape,
+        onClick = onClick
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),

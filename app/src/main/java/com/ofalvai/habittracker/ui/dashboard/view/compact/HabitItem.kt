@@ -1,17 +1,20 @@
 package com.ofalvai.habittracker.ui.dashboard.view.compact
 
 import android.os.Vibrator
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -148,15 +151,14 @@ fun ActionSquare(
     val borderColor = if (toggled) activeColor.darken() else Color.Transparent
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
-    Surface(
-        shape = RectangleShape,
+    Box(
         modifier = Modifier
             .satisfyingToggleable(vibrator, Dp.Unspecified, true, toggled, onToggle, onSinglePress)
             .aspectRatio(1f)
             .padding(1.dp)
-            .border(1.dp, borderColor),
-        color = color,
-    ) { }
+            .border(1.dp, borderColor)
+            .background(color)
+    )
 }
 
 private fun Color.darken() = this.copy(
