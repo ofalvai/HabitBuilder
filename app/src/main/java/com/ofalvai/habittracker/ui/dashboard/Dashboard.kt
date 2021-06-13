@@ -1,6 +1,7 @@
 package com.ofalvai.habittracker.ui.dashboard
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -167,6 +169,13 @@ private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
         DashboardAppBar(config = DashboardConfig.FiveDay, onConfigChange = { })
 
         Spacer(Modifier.padding(top = 32.dp))
+
+        Image(painter = painterResource(R.drawable.illustration_empty_state), contentDescription = "")
+
+        Text(
+            text = stringResource(R.string.dashboard_empty_label),
+            style = MaterialTheme.typography.body1
+        )
 
         Button(
             modifier = Modifier.padding(16.dp),

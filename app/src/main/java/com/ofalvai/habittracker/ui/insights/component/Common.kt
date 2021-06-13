@@ -2,13 +2,14 @@ package com.ofalvai.habittracker.ui.insights.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -75,6 +76,22 @@ fun InsightHeader(
     }
 }
 
+@Composable
+fun EmptyView(label: String) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Icon(
+            modifier = Modifier.size(64.dp).align(Alignment.CenterHorizontally).alpha(0.5f),
+            painter = painterResource(R.drawable.ic_insights_placeholder),
+            contentDescription = stringResource(R.string.common_empty)
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.body2,
+        )
+    }
+}
+
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
 fun PreviewInsightCard() {
@@ -85,11 +102,7 @@ fun PreviewInsightCard() {
             title = "Test stats",
             description = "Heatmap shows you the number of habits done every day. Darker days mean more completed habits on a given day."
         ) {
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(color = Color.Red)
-            )
+            EmptyView(label = "Test label")
         }
     }
 }

@@ -8,6 +8,7 @@
     <string name="common_delete">Delete</string>
     <string name="common_more">More</string>
     <string name="common_error">Error</string>
+    <string name="common_empty">Empty</string>
 
     <string name="addhabit_appbar_title">Create new habit</string>
     <string name="addhabit_name_label">Habit name</string>
@@ -16,6 +17,7 @@
 
     <string name="dashboard_title">My habits</string>
     <string name="dashboard_change_layout">Change layout</string>
+    <string name="dashboard_empty_label">You don\'t have any habits yet.</string>
     <string name="dashboard_toggle_help">Long press to toggle</string>
     <string name="dashboard_create_habit">Create new habit</string>
     <string name="dashboard_create_habit_first">Create your first habit</string>

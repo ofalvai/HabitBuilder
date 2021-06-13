@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,7 +55,9 @@ fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
                         if (hasEnoughData(it.value)) {
                             TopHabitsTable(habits = it.value, onHabitClick = onHabitClick)
                         } else {
-                            EmptyView()
+                            EmptyView(
+                                label = stringResource(R.string.insights_tophabits_empty_label)
+                            )
                         }
                     }
                     Result.Loading -> Spacer(modifier = Modifier.height(45.dp))
@@ -169,16 +170,6 @@ private fun HabitBar(
             .background(MaterialTheme.colors.primary)
         )
     }
-}
-
-@Composable
-private fun EmptyView() {
-    // TODO: Illustration
-    Text(
-        text = stringResource(R.string.insights_tophabits_empty_label),
-        style = MaterialTheme.typography.caption.copy(fontStyle = FontStyle.Italic),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-    )
 }
 
 private fun hasEnoughData(habits: List<TopHabitItem>): Boolean {

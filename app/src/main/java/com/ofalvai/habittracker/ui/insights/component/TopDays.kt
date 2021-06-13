@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -54,7 +53,7 @@ fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
                     if (hasEnoughData(it.value)) {
                         TopDaysTable(items = it.value, onHabitClick = onHabitClick)
                     } else {
-                        EmptyView()
+                        EmptyView(label = stringResource(R.string.insights_topdays_empty_label))
                     }
                 }
                 Result.Loading -> Spacer(modifier = Modifier.height(45.dp))
@@ -125,16 +124,6 @@ private fun TopDaysRow(
             )
         }
     }
-}
-
-@Composable
-private fun EmptyView() {
-    // TODO: Illustration
-    Text(
-        text = stringResource(R.string.insights_topdays_empty_label),
-        style = MaterialTheme.typography.caption.copy(fontStyle = FontStyle.Italic),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-    )
 }
 
 private fun hasEnoughData(days: List<TopDayItem>): Boolean {
