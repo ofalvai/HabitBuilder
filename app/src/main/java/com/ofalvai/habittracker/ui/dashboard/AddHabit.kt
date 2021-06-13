@@ -1,5 +1,6 @@
 package com.ofalvai.habittracker.ui.dashboard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -43,12 +44,11 @@ fun AddHabitScreen(navController: NavController) {
     Column(Modifier.statusBarsPadding().verticalScroll(rememberScrollState())) {
         AddHabitAppBar(onBack = { navController.popBackStack() })
         AddHabitForm(onSave)
-        Suggestions(habits = Suggestions.habits, onSelect = onSave)
     }
 }
 
 @Composable
-fun AddHabitForm(
+private fun AddHabitForm(
     onSave: (Habit) -> Unit
 ) {
     var name by rememberSaveable { mutableStateOf("") }
@@ -76,7 +76,7 @@ fun AddHabitForm(
         OutlinedTextField(
             modifier = Modifier
                 .focusRequester(focusRequester)
-                .padding(horizontal = 32.dp)
+                .padding(horizontal = 32.dp, vertical = 16.dp)
                 .fillMaxWidth(),
             value = name,
             onValueChange = { name = it },
@@ -92,10 +92,12 @@ fun AddHabitForm(
             )
         }
 
+        Suggestions(habits = Suggestions.habits, onSelect = { name = it })
+
         HabitColorPicker(initialColor = color, onColorPick = { color = it })
 
         Button(
-            modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
+            modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp).fillMaxWidth(),
             onClick = onSaveClick
         ) {
             Text(stringResource(R.string.addhabit_save))
@@ -104,34 +106,20 @@ fun AddHabitForm(
 }
 
 @Composable
-fun Suggestions(habits: List<Habit>, onSelect: (Habit) -> Unit) {
-    Column(
-        Modifier
-            .padding(vertical = 32.dp)
-            .fillMaxWidth()
+private fun Suggestions(habits: List<String>, onSelect: (String) -> Unit) {
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(start = 32.dp, end = 32.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 32.dp),
-            text = stringResource(R.string.addhabit_suggestions_title),
-            style = MaterialTheme.typography.subtitle1
-        )
-
-        LazyRow(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            contentPadding = PaddingValues(start = 32.dp, end = 32.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(habits.size) { index ->
-                SuggestionChip(habit = habits[index], onClick = { onSelect(habits[index]) })
-            }
+        items(habits.size) { index ->
+            SuggestionChip(habit = habits[index], onClick = { onSelect(habits[index]) })
         }
     }
 }
 
 @Composable
-fun AddHabitAppBar(onBack: () -> Unit) {
+private fun AddHabitAppBar(onBack: () -> Unit) {
     TopAppBar(
         title = { Text(stringResource(R.string.addhabit_appbar_title)) },
         navigationIcon = {
@@ -146,15 +134,16 @@ fun AddHabitAppBar(onBack: () -> Unit) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SuggestionChip(habit: Habit, onClick: () -> Unit) {
+private fun SuggestionChip(habit: String, onClick: () -> Unit) {
     val shape = RoundedCornerShape(percent = 50)
     Surface(
         shape = shape,
-        onClick = onClick
+        onClick = onClick,
+        border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.15f))
     ) {
         Text(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-            text = habit.name,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+            text = habit,
             style = MaterialTheme.typography.body2
         )
     }
