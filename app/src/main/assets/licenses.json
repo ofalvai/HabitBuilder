@@ -725,18 +725,6 @@
     },
     {
         "groupId": "org.jetbrains.kotlin",
-        "artifactId": "kotlin-reflect",
-        "version": "1.4.31",
-        "spdxLicenses": [
-            {
-                "identifier": "Apache-2.0",
-                "name": "Apache License 2.0",
-                "url": "https://www.apache.org/licenses/LICENSE-2.0"
-            }
-        ]
-    },
-    {
-        "groupId": "org.jetbrains.kotlin",
         "artifactId": "kotlin-stdlib",
         "version": "1.5.10",
         "spdxLicenses": [

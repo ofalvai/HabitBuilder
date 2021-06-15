@@ -87,7 +87,6 @@ dependencies {
     coreLibraryDesugaring libs.android.tools.desugar
 
     implementation libs.androidx.core.ktx
-    implementation libs.androidx.activity.ktx
 
     implementation libs.bundles.compose
     implementation libs.androidx.navigation.compose
@@ -103,7 +102,6 @@ dependencies {
     implementation libs.accompanist.systemuicontroller
 
     // Required by layout inspector
-    implementation libs.compose.uitooling // TODO: kapt fails building release variant when this is `debugImplementation`
     debugImplementation libs.kotlin.reflect
 
     testImplementation libs.junit
