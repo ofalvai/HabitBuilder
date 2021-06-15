@@ -83,6 +83,13 @@ licensee {
     allowDependency("com.github.kizitonwose", "CalendarView", "1.0.4")
 }
 
+// https://www.zacsweers.dev/kapts-hidden-test-costs/
+tasks
+    .matching {
+        it.name.startsWith("kapt") && it.name.endsWith("TestKotlin")
+    }
+    .configureEach { it.enabled = false }
+
 dependencies {
     coreLibraryDesugaring libs.android.tools.desugar
 
