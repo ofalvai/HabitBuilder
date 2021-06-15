@@ -23,6 +23,9 @@ import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.ui.insights.InsightsScreen
+import com.ofalvai.habittracker.ui.settings.AboutScreen
+import com.ofalvai.habittracker.ui.settings.LicensesScreen
+import com.ofalvai.habittracker.ui.settings.SettingsScreen
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 
@@ -88,6 +91,9 @@ private fun Screens(navController: NavHostController,
                 navController = navController
             )
         }
+        composable(Screen.Settings.route) { SettingsScreen() }
+        composable(Screen.About.route) { AboutScreen(navController) }
+        composable(Screen.Licenses.route) { LicensesScreen(navController) }
     }
 }
 

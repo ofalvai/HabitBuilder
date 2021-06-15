@@ -82,6 +82,11 @@
     <string name="insights_topdays_description">Your most successful days. The list shows the day of week when each habit is performed most often and the number of completed habits on those days.</string>
     <string name="insights_topdays_error">Failed to load top days</string>
     <string name="insights_topdays_empty_label">A bit more data is needed to display your top days. Add more habits and perform them a few times.</string>
+
     <string name="menu_settings">Settings</string>
+
+    <string name="licenses_title">❤️ Open Source</string>
+    <string name="licenses_description">This app is built with the following open source projects:</string>
+    <string name="licenses_unknown_license">Unknown</string>
 
 </resources>

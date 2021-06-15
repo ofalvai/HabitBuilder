@@ -8,6 +8,7 @@ buildscript {
         classpath libs.android.tools.gradle
         classpath libs.kotlin.gradleplugin
         classpath libs.jacoco
+        classpath libs.licensee
     }
 }
 

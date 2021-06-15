@@ -45,5 +45,7 @@ turbine = "app.cash.turbine:turbine:0.5.2"
 
 jacoco = "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
 
+licensee = "app.cash.licensee:licensee-gradle-plugin:1.0.2"
+
 [bundles]
 compose = ["compose-ui", "compose-material", "compose-runtime-livedata", "compose-animation"]

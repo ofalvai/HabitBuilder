@@ -60,6 +60,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
         config = it
         viewModel.dashboardConfig = it
     }
+    val onSettingsClick = { navController.navigate(Screen.About.route) }
 
     when (habits) {
         is Result.Success -> {
@@ -69,7 +70,8 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
                 onAddHabitClick,
                 onConfigChange,
                 onActionToggle,
-                onHabitDetail
+                onHabitDetail,
+                onSettingsClick
             )
         }
         is Result.Failure -> ErrorView(label = stringResource(R.string.dashboard_error))
@@ -84,19 +86,17 @@ private fun LoadedDashboard(
     onAddHabitClick: () -> Unit,
     onConfigChange: (DashboardConfig) -> Unit,
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
-    onHabitDetail: (Habit) -> (Unit)
+    onHabitDetail: (Habit) -> (Unit),
+    onSettingsClick: () -> Unit
 ) {
     ContentWithPlaceholder(
         showPlaceholder = habits.isEmpty(),
-        placeholder = { DashboardPlaceholder(onAddHabitClick) }
+        placeholder = { DashboardPlaceholder(onAddHabitClick, onSettingsClick) }
     ) {
         Column(
             Modifier.fillMaxSize().statusBarsPadding()
         ) {
-            DashboardAppBar(
-                config = config,
-                onConfigChange = onConfigChange
-            )
+            DashboardAppBar(config, onConfigChange, onSettingsClick)
 
             Crossfade(targetState = config) {
                 when (it) {
@@ -115,7 +115,8 @@ private fun LoadedDashboard(
 @Composable
 private fun DashboardAppBar(
     config: DashboardConfig,
-    onConfigChange: (DashboardConfig) -> Unit
+    onConfigChange: (DashboardConfig) -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
     val onConfigChangeClick = {
@@ -149,8 +150,8 @@ private fun DashboardAppBar(
                 onDismissRequest = { menuExpanded = false },
                 offset = DpOffset(8.dp, 0.dp)
             ) {
-                DropdownMenuItem(onClick = { }) {
-                    Text("Settings")
+                DropdownMenuItem(onClick = onSettingsClick) {
+                    Text(stringResource(R.string.menu_settings))
                 }
             }
         }
@@ -158,7 +159,10 @@ private fun DashboardAppBar(
 }
 
 @Composable
-private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
+private fun DashboardPlaceholder(
+    onAddHabitClick: () -> Unit,
+    onSettingsClick: () -> Unit
+) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -166,7 +170,11 @@ private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
             .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DashboardAppBar(config = DashboardConfig.FiveDay, onConfigChange = { })
+        DashboardAppBar(
+            config = DashboardConfig.FiveDay,
+            onConfigChange = {},
+            onSettingsClick = onSettingsClick
+        )
 
         Spacer(Modifier.padding(top = 32.dp))
 
