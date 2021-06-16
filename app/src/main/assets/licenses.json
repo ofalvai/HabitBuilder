@@ -2,7 +2,7 @@
     {
         "groupId": "androidx.activity",
         "artifactId": "activity",
-        "version": "1.3.0-alpha08",
+        "version": "1.3.0-beta01",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -14,7 +14,7 @@
     {
         "groupId": "androidx.activity",
         "artifactId": "activity-compose",
-        "version": "1.3.0-alpha08",
+        "version": "1.3.0-beta01",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -26,7 +26,7 @@
     {
         "groupId": "androidx.activity",
         "artifactId": "activity-ktx",
-        "version": "1.3.0-alpha08",
+        "version": "1.3.0-beta01",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -338,7 +338,7 @@
     {
         "groupId": "androidx.core",
         "artifactId": "core",
-        "version": "1.5.0-rc02",
+        "version": "1.5.0",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -350,7 +350,7 @@
     {
         "groupId": "androidx.core",
         "artifactId": "core-ktx",
-        "version": "1.5.0-rc01",
+        "version": "1.5.0",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -470,7 +470,7 @@
     {
         "groupId": "androidx.lifecycle",
         "artifactId": "lifecycle-viewmodel-compose",
-        "version": "1.0.0-alpha05",
+        "version": "1.0.0-alpha06",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -506,7 +506,7 @@
     {
         "groupId": "androidx.navigation",
         "artifactId": "navigation-common",
-        "version": "2.4.0-alpha01",
+        "version": "2.4.0-alpha02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -518,7 +518,7 @@
     {
         "groupId": "androidx.navigation",
         "artifactId": "navigation-compose",
-        "version": "2.4.0-alpha01",
+        "version": "2.4.0-alpha02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -530,7 +530,7 @@
     {
         "groupId": "androidx.navigation",
         "artifactId": "navigation-runtime",
-        "version": "2.4.0-alpha01",
+        "version": "2.4.0-alpha02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -542,7 +542,7 @@
     {
         "groupId": "androidx.navigation",
         "artifactId": "navigation-runtime-ktx",
-        "version": "2.4.0-alpha01",
+        "version": "2.4.0-alpha02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -679,7 +679,7 @@
     {
         "groupId": "com.google.accompanist",
         "artifactId": "accompanist-insets",
-        "version": "0.10.0",
+        "version": "0.11.1",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -691,7 +691,7 @@
     {
         "groupId": "com.google.accompanist",
         "artifactId": "accompanist-systemuicontroller",
-        "version": "0.10.0",
+        "version": "0.11.1",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -750,7 +750,7 @@
     {
         "groupId": "org.jetbrains.kotlin",
         "artifactId": "kotlin-stdlib-jdk7",
-        "version": "1.4.32",
+        "version": "1.5.10",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -762,7 +762,7 @@
     {
         "groupId": "org.jetbrains.kotlin",
         "artifactId": "kotlin-stdlib-jdk8",
-        "version": "1.4.32",
+        "version": "1.5.10",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -786,7 +786,7 @@
     {
         "groupId": "org.jetbrains.kotlinx",
         "artifactId": "kotlinx-coroutines-core",
-        "version": "1.4.3",
+        "version": "1.5.0",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -798,7 +798,7 @@
     {
         "groupId": "org.jetbrains.kotlinx",
         "artifactId": "kotlinx-coroutines-core-jvm",
-        "version": "1.4.3",
+        "version": "1.5.0",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
