@@ -1,5 +1,5 @@
 [versions]
-compose = "1.0.0-beta08"
+compose = "1.0.0-beta09"
 room = "2.3.0"
 accompanist = "0.11.1"
 

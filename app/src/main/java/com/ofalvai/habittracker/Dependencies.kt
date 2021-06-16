@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.ofalvai.habittracker
 
 import android.content.Context
