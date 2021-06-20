@@ -16,6 +16,7 @@
 
 package com.ofalvai.habittracker.ui.common
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.R
@@ -41,16 +43,13 @@ import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 import java.util.*
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CalendarPager(
     yearMonth: YearMonth,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
-    val month = yearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
-    val year = yearMonth.year
-    val label = if (year == Year.now().value) month else "$month $year"
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -63,7 +62,20 @@ fun CalendarPager(
             )
         }
 
-        Text(text = label)
+        AnimatedContent(
+            targetState = yearMonth,
+            transitionSpec = pagerTransitionSpec,
+            modifier = Modifier.fillMaxWidth(0.8f)
+        ) { targetYearMonth ->
+            val month = targetYearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+            val year = targetYearMonth.year
+            val label = if (year == Year.now().value) month else "$month $year"
+            Text(
+                text = label,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         IconButton(onClick = onNextClick) {
             Icon(
@@ -71,6 +83,17 @@ fun CalendarPager(
                 contentDescription = stringResource(R.string.calendar_next_month)
             )
         }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private val pagerTransitionSpec: AnimatedContentScope<YearMonth>.() -> ContentTransform = {
+    if (targetState.isAfter(initialState)) {
+        // Slide in from right, slide out to left
+        slideInHorizontally({ it }) + fadeIn() with slideOutHorizontally({ -it }) + fadeOut()
+    } else {
+        // Slide in from left, slide out to right
+        slideInHorizontally({ -it }) + fadeIn() with slideOutHorizontally({ it }) + fadeOut()
     }
 }
 
