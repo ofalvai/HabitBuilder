@@ -16,6 +16,7 @@
 
 package com.ofalvai.habittracker.ui.habitdetail
 
+import android.os.Vibrator
 import androidx.annotation.FloatRange
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -33,16 +34,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.*
+import com.ofalvai.habittracker.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
+import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
 import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
@@ -58,6 +63,7 @@ import kotlin.math.roundToInt
 @Composable
 fun HabitDetailScreen(habitId: Int, navController: NavController) {
     val viewModel: HabitDetailViewModel = viewModel(factory = Dependencies.viewModelFactory)
+    val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
     val habitDetailState by viewModel.habitWithActions.collectAsState()
 
@@ -79,6 +85,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
     }
 
     val onDayToggle: (LocalDate, Action) -> Unit = { date, action ->
+        vibrator.vibrateCompat(VIBRATE_PATTERN_TOGGLE)
         viewModel.toggleActionFromDetail(habitId, action, date)
     }
 

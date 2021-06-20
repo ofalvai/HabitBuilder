@@ -78,7 +78,7 @@ fun DayLegend(
 }
 
 @Composable
-fun DayLabel(
+private fun DayLabel(
     day: LocalDate,
 ) {
     val modifier = Modifier
@@ -100,7 +100,7 @@ fun DayLabel(
 
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
-fun PreviewDayLabels() {
+private fun PreviewDayLabels() {
     HabitTrackerTheme {
         DayLegend(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -110,8 +110,8 @@ fun PreviewDayLabels() {
     }
 }
 
-// TODO: broken after beta-08 -> rewrite or wait for a fix
-// Most likely broken by https://android-review.googlesource.com/c/platform/frameworks/support/+/1714106
+val VIBRATE_PATTERN_TOGGLE = longArrayOf(0, 75, 50, 75)
+
 fun Modifier.satisfyingToggleable(
     vibrator: Vibrator,
     rippleRadius: Dp,
@@ -152,7 +152,7 @@ fun Modifier.satisfyingToggleable(
                     },
                     onLongPress = {
                         isSinglePress = false
-                        vibrator.vibrateCompat(longArrayOf(0, 75, 50, 75))
+                        vibrator.vibrateCompat(VIBRATE_PATTERN_TOGGLE)
                         onToggle(!toggled)
                     }
                 )
@@ -161,7 +161,7 @@ fun Modifier.satisfyingToggleable(
     }
 }
 
-private fun Vibrator.vibrateCompat(timings: LongArray, repeat: Int = -1) {
+fun Vibrator.vibrateCompat(timings: LongArray, repeat: Int = -1) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         vibrate(VibrationEffect.createWaveform(timings, repeat))
     } else {
