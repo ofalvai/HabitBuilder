@@ -1,9 +1,22 @@
+/*
+ * Copyright 2021 Olivér Falvai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.ofalvai.habittracker
 
 import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
-import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
-import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.ActionHistory
 import com.ofalvai.habittracker.ui.model.Habit
@@ -12,6 +25,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.Instant
 import java.time.temporal.ChronoUnit
+import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
+import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
+import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 
 class HabitMapperTest {
 
