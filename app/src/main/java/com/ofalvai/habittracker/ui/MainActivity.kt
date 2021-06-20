@@ -11,9 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
@@ -53,12 +58,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     Scaffold(
-                        bottomBar = {
-                            AppBottomNavigation(
-                                onDashboardSelected = { navController.navigate(Screen.Dashboard.route) },
-                                onInsightsSelected = { navController.navigate(Screen.Insights.route) }
-                            )
-                        },
+                        bottomBar = { AppBottomNavigation(navController) },
                         scaffoldState = scaffoldState
                     ) { innerPadding ->
                         Screens(navController, scaffoldState, innerPadding)
@@ -126,12 +126,7 @@ fun TextFieldError(
 }
 
 @Composable
-private fun AppBottomNavigation(
-    onDashboardSelected: () -> Unit,
-    onInsightsSelected: () -> Unit
-) {
-    var selectedIndex by remember { mutableStateOf(0) }
-
+private fun AppBottomNavigation(navController: NavController) {
     // Recreating the BottomNavigation() composable because window insets and elevation don't play
     // nice together. We need to apply a background (behind the navbar), padding, and elevation
     // in the correct order. Otherwise the elevation bottom shadow will be rendered on top of the
@@ -147,28 +142,49 @@ private fun AppBottomNavigation(
                 .height(56.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            BottomNavigationItem(
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+
+            AppBottomNavigationItem(
+                rootScreen = Screen.Dashboard,
                 icon = { Icon(AppIcons.Habits, stringResource(R.string.tab_dashboard)) },
-                selected = selectedIndex == 0,
-                onClick = {
-                    if (selectedIndex != 0) {
-                        selectedIndex = 0
-                        onDashboardSelected()
-                    }
-                },
-                label = { Text(stringResource(R.string.tab_dashboard)) }
+                label = stringResource(R.string.tab_dashboard),
+                currentDestination = currentDestination,
+                navController = navController
             )
-            BottomNavigationItem(
+            AppBottomNavigationItem(
+                rootScreen = Screen.Insights,
                 icon = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
-                selected = selectedIndex == 1,
-                onClick = {
-                    if (selectedIndex != 1) {
-                        selectedIndex = 1
-                        onInsightsSelected()
-                    }
-                },
-                label = { Text(stringResource(R.string.tab_insights)) }
+                label = stringResource(R.string.tab_insights),
+                currentDestination = currentDestination,
+                navController = navController
             )
         }
     }
+}
+
+@Composable
+private fun RowScope.AppBottomNavigationItem(
+    rootScreen: Screen,
+    icon: @Composable () -> Unit,
+    label: String,
+    currentDestination: NavDestination?,
+    navController: NavController
+) {
+    BottomNavigationItem(
+        icon = icon,
+        selected = currentDestination?.hierarchy?.any { it.route == rootScreen.route } == true,
+        onClick = {
+            navController.navigate(rootScreen.route) {
+                // Pop up to the start destination of the graph to
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id)
+                // Avoid multiple copies of the same destination when
+                // re-selecting the same item
+                launchSingleTop = true
+            }
+        },
+        label = { Text(label) }
+    )
 }
