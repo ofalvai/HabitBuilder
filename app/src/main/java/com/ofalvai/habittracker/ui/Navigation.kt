@@ -44,8 +44,6 @@ sealed class Screen(
         fun buildRoute(habitId: Int) = "habit_details/$habitId"
     }
 
-    object Settings : Screen("settings")
-
     object About : Screen("about")
 
     object Licenses : Screen("licenses")

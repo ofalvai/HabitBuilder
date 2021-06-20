@@ -21,7 +21,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -46,7 +48,6 @@ import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.ui.insights.InsightsScreen
 import com.ofalvai.habittracker.ui.settings.AboutScreen
 import com.ofalvai.habittracker.ui.settings.LicensesScreen
-import com.ofalvai.habittracker.ui.settings.SettingsScreen
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 
@@ -107,7 +108,6 @@ private fun Screens(navController: NavHostController,
                 navController = navController
             )
         }
-        composable(Screen.Settings.route) { SettingsScreen() }
         composable(Screen.About.route) { AboutScreen(navController) }
         composable(Screen.Licenses.route) { LicensesScreen(navController) }
     }
