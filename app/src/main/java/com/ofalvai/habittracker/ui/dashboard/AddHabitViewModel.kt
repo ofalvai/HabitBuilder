@@ -22,6 +22,7 @@ import com.ofalvai.habittracker.mapper.toEntityColor
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.Habit
+import kotlinx.coroutines.launch
 
 class AddHabitViewModel(
     private val dao: HabitDao,
