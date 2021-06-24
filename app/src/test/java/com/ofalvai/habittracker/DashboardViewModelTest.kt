@@ -16,13 +16,13 @@
 
 package com.ofalvai.habittracker
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
+import com.ofalvai.habittracker.ui.dashboard.DashboardEvent
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.ActionHistory
@@ -33,6 +33,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -53,9 +54,6 @@ class DashboardViewModelTest {
     private val appPreferences = mock<AppPreferences>()
 
     private lateinit var viewModel: DashboardViewModel
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
@@ -164,13 +162,18 @@ class DashboardViewModelTest {
         val exception = RuntimeException("Mocked error")
         given(dao.insertAction()).willThrow(exception)
         viewModel = DashboardViewModel(dao, appPreferences)
-        val action = Action(id = 0, toggled = true, timestamp = Instant.EPOCH)
 
         // When
-        viewModel.toggleActionFromDashboard(habitId = 0, action = action, date = LocalDate.of(2021, 6, 7))
+        launch { // https://github.com/cashapp/turbine/issues/33
+            viewModel.dashboardEvent.test {
+                val action = Action(id = 0, toggled = true, timestamp = Instant.EPOCH)
+                viewModel.toggleActionFromDashboard(habitId = 0, action = action, date = LocalDate.of(2021, 6, 7))
 
-        // Then
-        viewModel.toggleActionErrorEvent.value = exception
+                // Then
+                assertEquals(DashboardEvent.ToggleActionError, expectItem())
+                cancelAndConsumeRemainingEvents()
+            }
+        }
     }
 
     @Test

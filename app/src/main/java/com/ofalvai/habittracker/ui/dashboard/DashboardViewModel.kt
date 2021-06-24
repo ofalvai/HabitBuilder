@@ -22,13 +22,10 @@ import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
-import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.HabitWithActions
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
@@ -37,6 +34,10 @@ import java.time.LocalTime
 import java.time.OffsetDateTime
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
+
+enum class DashboardEvent {
+    ToggleActionError
+}
 
 class DashboardViewModel(
     private val dao: HabitDao,
@@ -56,7 +57,8 @@ class DashboardViewModel(
 
     var dashboardConfig by appPreferences::dashboardConfig
 
-    val toggleActionErrorEvent = SingleLiveEvent<Throwable>()
+    private val eventChannel = Channel<DashboardEvent>(Channel.BUFFERED)
+    val dashboardEvent = eventChannel.receiveAsFlow()
 
     fun toggleActionFromDashboard(habitId: Int, action: Action, date: LocalDate) {
         viewModelScope.launch {
@@ -64,7 +66,7 @@ class DashboardViewModel(
                 toggleAction(habitId, action, date)
             } catch (e: Throwable) {
                 Timber.e(e)
-                toggleActionErrorEvent.value = e
+                eventChannel.send(DashboardEvent.ToggleActionError)
             }
         }
     }

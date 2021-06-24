@@ -39,7 +39,7 @@ import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.Screen
 import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
-import com.ofalvai.habittracker.ui.common.observeAsEffect
+import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.Action
@@ -59,9 +59,13 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
 
     val snackbarCoroutineScope = rememberCoroutineScope()
     val errorMessage = stringResource(R.string.dashboard_error_toggle_action)
-    viewModel.toggleActionErrorEvent.observeAsEffect {
-        snackbarCoroutineScope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
+    viewModel.dashboardEvent.asEffect {
+        when (it) {
+            DashboardEvent.ToggleActionError -> {
+                snackbarCoroutineScope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
+                }
+            }
         }
     }
 
@@ -90,7 +94,10 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
                 onAboutClick
             )
         }
-        is Result.Failure -> ErrorView(label = stringResource(R.string.dashboard_error))
+        is Result.Failure -> ErrorView(
+            label = stringResource(R.string.dashboard_error),
+            modifier = Modifier.statusBarsPadding()
+        )
         Result.Loading -> { }
     }
 }

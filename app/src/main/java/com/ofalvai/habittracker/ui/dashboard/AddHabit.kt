@@ -43,7 +43,7 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.TextFieldError
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
-import com.ofalvai.habittracker.ui.common.observeAsEffect
+import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 
@@ -51,7 +51,7 @@ import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 fun AddHabitScreen(navController: NavController) {
     val viewModel: AddHabitViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
-    viewModel.backNavigationEvent.observeAsEffect { navController.popBackStack() }
+    viewModel.backNavigationEvent.asEffect { navController.popBackStack() }
 
     val onSave: (Habit) -> Unit = {
         viewModel.addHabit(it)

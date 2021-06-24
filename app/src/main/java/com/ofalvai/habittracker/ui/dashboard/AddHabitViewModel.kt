@@ -20,15 +20,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.toEntityColor
 import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.Habit
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AddHabitViewModel(
     private val dao: HabitDao,
 ) : ViewModel() {
 
-    val backNavigationEvent = SingleLiveEvent<Void>()
+    private val backNavigationEventChannel = Channel<Unit>(Channel.BUFFERED)
+    val backNavigationEvent: Flow<Unit> = backNavigationEventChannel.receiveAsFlow()
 
     fun addHabit(habit: Habit) {
         viewModelScope.launch {
@@ -37,7 +40,7 @@ class AddHabitViewModel(
                 color = habit.color.toEntityColor()
             )
             dao.insertHabit(habitEntity)
-            backNavigationEvent.call()
+            backNavigationEventChannel.send(Unit)
         }
     }
 }

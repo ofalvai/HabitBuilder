@@ -72,11 +72,12 @@ class OverallStatsTests {
     private lateinit var db: AppDatabase
     private val testCoroutineScope = TestCoroutineScope()
 
+    // https://github.com/Kotlin/kotlinx.coroutines/issues/1204
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @Before
-    fun before() = testCoroutineScope.runBlockingTest {
+    fun before() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         habitDao = db.habitDao()

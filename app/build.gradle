@@ -116,7 +116,8 @@ dependencies {
     implementation libs.bundles.compose
     implementation libs.androidx.navigation.compose
     implementation libs.androidx.activity.compose
-    implementation libs.androidx.lifecycle.viewmodel.compose
+
+    implementation libs.androidx.lifecycle.runtime
 
     implementation libs.androidx.room.ktx
     kapt libs.androidx.room.compiler
@@ -133,7 +134,6 @@ dependencies {
     testImplementation libs.kotlin.coroutines.test
     testImplementation libs.mockito.core
     testImplementation libs.mockito.kotlin
-    testImplementation libs.androidx.core.testing
     testImplementation libs.turbine
 
     androidTestImplementation libs.kotlin.coroutines.test

@@ -67,8 +67,10 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 
     val habitDetailState by viewModel.habitWithActions.collectAsState()
 
-    viewModel.backNavigationEvent.observeAsEffect {
-        navController.popBackStack()
+    viewModel.habitDetailEvent.asEffect {
+        when (it) {
+            HabitDetailEvent.BackNavigation -> navController.popBackStack()
+        }
     }
 
     val singleStats by viewModel.singleStats.collectAsState()

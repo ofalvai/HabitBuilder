@@ -2,7 +2,7 @@
     {
         "groupId": "androidx.activity",
         "artifactId": "activity",
-        "version": "1.3.0-beta01",
+        "version": "1.3.0-beta02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -14,7 +14,7 @@
     {
         "groupId": "androidx.activity",
         "artifactId": "activity-compose",
-        "version": "1.3.0-beta01",
+        "version": "1.3.0-beta02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -26,7 +26,7 @@
     {
         "groupId": "androidx.activity",
         "artifactId": "activity-ktx",
-        "version": "1.3.0-beta01",
+        "version": "1.3.0-beta02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -122,7 +122,7 @@
     {
         "groupId": "androidx.compose.animation",
         "artifactId": "animation",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -134,7 +134,7 @@
     {
         "groupId": "androidx.compose.animation",
         "artifactId": "animation-core",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -146,7 +146,7 @@
     {
         "groupId": "androidx.compose.foundation",
         "artifactId": "foundation",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -158,7 +158,7 @@
     {
         "groupId": "androidx.compose.foundation",
         "artifactId": "foundation-layout",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -170,7 +170,7 @@
     {
         "groupId": "androidx.compose.material",
         "artifactId": "material",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -182,7 +182,7 @@
     {
         "groupId": "androidx.compose.material",
         "artifactId": "material-icons-core",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -194,7 +194,7 @@
     {
         "groupId": "androidx.compose.material",
         "artifactId": "material-ripple",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -206,19 +206,7 @@
     {
         "groupId": "androidx.compose.runtime",
         "artifactId": "runtime",
-        "version": "1.0.0-beta08",
-        "spdxLicenses": [
-            {
-                "identifier": "Apache-2.0",
-                "name": "Apache License 2.0",
-                "url": "https://www.apache.org/licenses/LICENSE-2.0"
-            }
-        ]
-    },
-    {
-        "groupId": "androidx.compose.runtime",
-        "artifactId": "runtime-livedata",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -230,7 +218,7 @@
     {
         "groupId": "androidx.compose.runtime",
         "artifactId": "runtime-saveable",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -242,7 +230,7 @@
     {
         "groupId": "androidx.compose.ui",
         "artifactId": "ui",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -254,7 +242,7 @@
     {
         "groupId": "androidx.compose.ui",
         "artifactId": "ui-geometry",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -266,7 +254,7 @@
     {
         "groupId": "androidx.compose.ui",
         "artifactId": "ui-graphics",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -278,7 +266,7 @@
     {
         "groupId": "androidx.compose.ui",
         "artifactId": "ui-text",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -290,7 +278,7 @@
     {
         "groupId": "androidx.compose.ui",
         "artifactId": "ui-tooling",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -302,7 +290,7 @@
     {
         "groupId": "androidx.compose.ui",
         "artifactId": "ui-tooling-data",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -314,7 +302,7 @@
     {
         "groupId": "androidx.compose.ui",
         "artifactId": "ui-unit",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -326,7 +314,7 @@
     {
         "groupId": "androidx.compose.ui",
         "artifactId": "ui-util",
-        "version": "1.0.0-beta08",
+        "version": "1.0.0-beta09",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -398,7 +386,7 @@
     {
         "groupId": "androidx.lifecycle",
         "artifactId": "lifecycle-common",
-        "version": "2.3.1",
+        "version": "2.4.0-alpha02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -409,8 +397,8 @@
     },
     {
         "groupId": "androidx.lifecycle",
-        "artifactId": "lifecycle-livedata",
-        "version": "2.2.0",
+        "artifactId": "lifecycle-common-java8",
+        "version": "2.3.0",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -434,7 +422,7 @@
     {
         "groupId": "androidx.lifecycle",
         "artifactId": "lifecycle-runtime",
-        "version": "2.3.1",
+        "version": "2.4.0-alpha02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -446,7 +434,7 @@
     {
         "groupId": "androidx.lifecycle",
         "artifactId": "lifecycle-runtime-ktx",
-        "version": "2.3.1",
+        "version": "2.4.0-alpha02",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -552,6 +540,18 @@
         ]
     },
     {
+        "groupId": "androidx.profileinstaller",
+        "artifactId": "profileinstaller",
+        "version": "1.0.0-beta01",
+        "spdxLicenses": [
+            {
+                "identifier": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0"
+            }
+        ]
+    },
+    {
         "groupId": "androidx.recyclerview",
         "artifactId": "recyclerview",
         "version": "1.2.0",
@@ -639,6 +639,18 @@
         "groupId": "androidx.sqlite",
         "artifactId": "sqlite-framework",
         "version": "2.1.0",
+        "spdxLicenses": [
+            {
+                "identifier": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0"
+            }
+        ]
+    },
+    {
+        "groupId": "androidx.startup",
+        "artifactId": "startup-runtime",
+        "version": "1.0.0",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",
@@ -774,7 +786,7 @@
     {
         "groupId": "org.jetbrains.kotlinx",
         "artifactId": "kotlinx-coroutines-android",
-        "version": "1.4.3",
+        "version": "1.5.0",
         "spdxLicenses": [
             {
                 "identifier": "Apache-2.0",

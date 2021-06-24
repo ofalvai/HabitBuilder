@@ -62,6 +62,7 @@ class HabitStatsTest {
     private lateinit var db: AppDatabase
     private val testCoroutineScope = TestCoroutineScope()
 
+    // https://github.com/Kotlin/kotlinx.coroutines/issues/1204
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 

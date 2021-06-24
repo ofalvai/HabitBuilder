@@ -21,11 +21,12 @@ import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.*
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.common.Result
-import com.ofalvai.habittracker.ui.common.SingleLiveEvent
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
@@ -36,6 +37,10 @@ import java.util.*
 
 private val initialSingleStats = SingleStats(null, 0, 0, 0f)
 
+enum class HabitDetailEvent {
+    BackNavigation
+}
+
 class HabitDetailViewModel(
     private val dao: HabitDao
 ) : ViewModel() {
@@ -44,7 +49,9 @@ class HabitDetailViewModel(
     val singleStats = MutableStateFlow(initialSingleStats)
     val actionCountByWeek = MutableStateFlow<List<ActionCountByWeek>>(emptyList())
     val actionCountByMonth = MutableStateFlow<List<ActionCountByMonth>>(emptyList())
-    val backNavigationEvent = SingleLiveEvent<Void>()
+
+    private val eventChannel = Channel<HabitDetailEvent>(Channel.BUFFERED)
+    val habitDetailEvent = eventChannel.receiveAsFlow()
 
     fun fetchHabitDetails(habitId: Int): Job {
         return viewModelScope.launch {
@@ -108,7 +115,7 @@ class HabitDetailViewModel(
     fun deleteHabit(habit: Habit) {
         viewModelScope.launch {
             dao.deleteHabit(habit.toEntity())
-            backNavigationEvent.call()
+            eventChannel.send(HabitDetailEvent.BackNavigation)
         }
     }
 
