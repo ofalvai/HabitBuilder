@@ -1,10 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'jacoco'
 }
 
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.vanniktech.android.junit.jacoco'
 apply plugin: 'app.cash.licensee'
 
 android {
@@ -36,6 +36,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
+            testCoverageEnabled true
         }
 
         release {
@@ -68,11 +69,38 @@ android {
         exclude "META-INF/AL2.0"
         exclude "META-INF/LGPL2.1"
     }
+
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+        unitTests.returnDefaultValues = true
+    }
+
+    jacoco {
+        version = "0.8.7"
+    }
 }
 
-junitJacoco {
-    jacocoVersion = "0.8.7"
-    includeNoLocationClasses = true
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files([mainSrc]))
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(fileTree(dir: "$buildDir", includes: [
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/code-coverage/connected/*coverage.ec"
+    ]))
 }
 
 afterEvaluate {
@@ -86,22 +114,6 @@ licensee {
     allowUrl("http://www.apache.org/license/LICENSE-2.0.txt")
     allowDependency("com.github.kizitonwose", "CalendarView", "1.0.4")
 }
-
-/*
- * Copyright 2021 Olivér Falvai
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 // https://www.zacsweers.dev/kapts-hidden-test-costs/
 tasks

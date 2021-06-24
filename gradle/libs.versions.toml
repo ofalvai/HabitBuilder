@@ -39,7 +39,7 @@ mockito-core = "org.mockito:mockito-core:3.3.3"
 mockito-kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 turbine = "app.cash.turbine:turbine:0.5.2"
 
-jacoco = "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
+jacoco = "org.jacoco:org.jacoco.core:0.8.7
 
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.0.2"
 
