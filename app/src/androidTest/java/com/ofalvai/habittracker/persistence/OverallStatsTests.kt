@@ -378,17 +378,4 @@ class OverallStatsTests {
         // Then
         assertEquals(emptyList<HabitTopDay>(), topDayForHabits)
     }
-
-    @Test
-    fun testDayOfWeekConverter() {
-        val converter = EntityTypeConverters()
-
-        assertEquals(DayOfWeek.SUNDAY, converter.toDayOfWeek(0))
-        assertEquals(DayOfWeek.MONDAY, converter.toDayOfWeek(1))
-        assertEquals(DayOfWeek.TUESDAY, converter.toDayOfWeek(2))
-        assertEquals(DayOfWeek.WEDNESDAY, converter.toDayOfWeek(3))
-        assertEquals(DayOfWeek.THURSDAY, converter.toDayOfWeek(4))
-        assertEquals(DayOfWeek.FRIDAY, converter.toDayOfWeek(5))
-        assertEquals(DayOfWeek.SATURDAY, converter.toDayOfWeek(6))
-    }
 }
