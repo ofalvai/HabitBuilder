@@ -53,9 +53,7 @@ fun AddHabitScreen(navController: NavController) {
 
     viewModel.backNavigationEvent.asEffect { navController.popBackStack() }
 
-    val onSave: (Habit) -> Unit = {
-        viewModel.addHabit(it)
-    }
+    val onSave: (Habit) -> Unit = { viewModel.addHabit(it) }
 
     Column(Modifier.statusBarsPadding().verticalScroll(rememberScrollState())) {
         AddHabitAppBar(onBack = { navController.popBackStack() })
@@ -64,7 +62,7 @@ fun AddHabitScreen(navController: NavController) {
 }
 
 @Composable
-private fun AddHabitForm(
+fun AddHabitForm(
     onSave: (Habit) -> Unit
 ) {
     var name by rememberSaveable { mutableStateOf("") }

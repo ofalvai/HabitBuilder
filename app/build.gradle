@@ -68,6 +68,7 @@ android {
         exclude "META-INF/licenses/**"
         exclude "META-INF/AL2.0"
         exclude "META-INF/LGPL2.1"
+        exclude "**/attach_hotspot_windows.dll"
     }
 
     testOptions {
@@ -167,7 +168,6 @@ dependencies {
 
     testImplementation libs.junit
     testImplementation libs.kotlin.coroutines.test
-    testImplementation libs.mockito.core
     testImplementation libs.mockito.kotlin
     testImplementation libs.turbine
 
@@ -176,6 +176,8 @@ dependencies {
     androidTestImplementation libs.androidx.espresso
     androidTestImplementation libs.androidx.core.testing
     androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.mockito.kotlin
+    androidTestImplementation libs.mockito.android
     androidTestImplementation libs.turbine
     androidTestImplementation libs.compose.ui.test
 
