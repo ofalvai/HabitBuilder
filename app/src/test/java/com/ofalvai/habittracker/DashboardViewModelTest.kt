@@ -17,8 +17,6 @@
 package com.ofalvai.habittracker
 
 import app.cash.turbine.test
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
@@ -38,6 +36,8 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.given
+import org.mockito.kotlin.mock
 import java.time.Instant
 import java.time.LocalDate
 import kotlin.time.ExperimentalTime
