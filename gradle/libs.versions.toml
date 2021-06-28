@@ -20,13 +20,15 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha02"
 
 androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
+androidx-test-rules = "androidx.test:rules:1.3.0"
 androidx-junit-ext = "androidx.test.ext:junit:1.1.2"
 androidx-espresso = "androidx.test.espresso:espresso-core:3.3.0"
 
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
-compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose"}
 
 timber = "com.jakewharton.timber:timber:4.7.1"
 calendarview = "com.github.kizitonwose:CalendarView:1.0.4"
@@ -44,4 +46,4 @@ jacoco = "org.jacoco:org.jacoco.core:0.8.7
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.0.2"
 
 [bundles]
-compose = ["compose-ui", "compose-material", "compose-animation", "compose-uitooling"]
+compose = ["compose-ui-ui", "compose-material", "compose-animation", "compose-ui-tooling"]

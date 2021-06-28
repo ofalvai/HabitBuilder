@@ -77,10 +77,6 @@ android {
             }
         }
     }
-
-    jacoco {
-        version "0.8.7"
-    }
 }
 
 jacoco {
@@ -179,14 +175,9 @@ dependencies {
     androidTestImplementation libs.androidx.junit.ext
     androidTestImplementation libs.androidx.espresso
     androidTestImplementation libs.androidx.core.testing
+    androidTestImplementation libs.androidx.test.rules
     androidTestImplementation libs.turbine
-    // Test rules and transitive dependencies:
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.0-beta09")
-// Needed for createComposeRule, but not createAndroidComposeRule:
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.0.0-beta09")
-
-
-    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation libs.compose.ui.test
 
 
 }

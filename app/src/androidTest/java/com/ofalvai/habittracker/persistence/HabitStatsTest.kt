@@ -16,21 +16,18 @@
 
 package com.ofalvai.habittracker.persistence
 
-import android.Manifest
 import android.content.Context
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import com.ofalvai.habittracker.persistence.entity.*
+import com.ofalvai.habittracker.util.BaseInstrumentedTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
@@ -39,7 +36,7 @@ import java.time.LocalDate
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
-class HabitStatsTest {
+class HabitStatsTest : BaseInstrumentedTest() {
 
     private object TestData {
         val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green)
@@ -63,16 +60,6 @@ class HabitStatsTest {
     private lateinit var habitDao: HabitDao
     private lateinit var db: AppDatabase
     private val testCoroutineScope = TestCoroutineScope()
-
-    // https://github.com/Kotlin/kotlinx.coroutines/issues/1204
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val runtimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
 
     @Before
     fun before() = testCoroutineScope.runBlockingTest {
