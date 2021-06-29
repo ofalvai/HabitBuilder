@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.*
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
@@ -28,7 +29,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -42,7 +42,8 @@ enum class HabitDetailEvent {
 }
 
 class HabitDetailViewModel(
-    private val dao: HabitDao
+    private val dao: HabitDao,
+    private val telemetry: Telemetry
 ) : ViewModel() {
 
     val habitWithActions = MutableStateFlow<Result<HabitWithActions>>(Result.Loading)
@@ -69,7 +70,7 @@ class HabitDetailViewModel(
                 }
                 habitWithActions.value = Result.Success(habit)
             } catch (e: Throwable) {
-                Timber.e(e)
+                telemetry.logNonFatal(e)
                 habitWithActions.value = Result.Failure(e)
             }
         }
@@ -92,7 +93,7 @@ class HabitDetailViewModel(
                 actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity.await())
             } catch (e: Throwable) {
                 // Fail silently
-                Timber.e(e)
+                telemetry.logNonFatal(e)
             }
         }
     }

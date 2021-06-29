@@ -30,6 +30,8 @@ class HabitTrackerApplication : Application() {
 
         INSTANCE = this
 
+        Dependencies.telemetry.initialize()
+
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

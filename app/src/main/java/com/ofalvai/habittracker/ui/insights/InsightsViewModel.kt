@@ -22,6 +22,7 @@ import com.ofalvai.habittracker.mapper.mapHabitActionCount
 import com.ofalvai.habittracker.mapper.mapHabitTopDay
 import com.ofalvai.habittracker.mapper.mapSumActionCountByDay
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.TopDayItem
@@ -29,12 +30,12 @@ import com.ofalvai.habittracker.ui.model.TopHabitItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.YearMonth
 
 class InsightsViewModel(
-    private val habitDao: HabitDao
+    private val habitDao: HabitDao,
+    private val telemetry: Telemetry
 ): ViewModel() {
 
     val heatmapState = MutableStateFlow<Result<HeatmapMonth>>(Result.Loading)
@@ -87,7 +88,7 @@ class InsightsViewModel(
                 )
             )
         } catch (e: Throwable) {
-            Timber.e(e)
+            telemetry.logNonFatal(e)
             heatmapState.value = Result.Failure(e)
         }
     }
@@ -102,7 +103,7 @@ class InsightsViewModel(
                 .map { mapHabitActionCount(it, LocalDate.now()) }
                 .let { Result.Success(it) }
         } catch (e: Throwable) {
-            Timber.e(e)
+            telemetry.logNonFatal(e)
             topHabits.value = Result.Failure(e)
         }
     }
@@ -116,7 +117,7 @@ class InsightsViewModel(
                 .map { mapHabitTopDay(it) }
                 .let { Result.Success(it) }
         } catch (e: Throwable) {
-            Timber.e(e)
+            telemetry.logNonFatal(e)
             habitTopDays.value = Result.Failure(e)
         }
     }

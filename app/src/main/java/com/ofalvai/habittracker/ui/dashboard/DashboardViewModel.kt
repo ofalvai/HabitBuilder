@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.Action
@@ -27,7 +28,6 @@ import com.ofalvai.habittracker.ui.model.HabitWithActions
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -41,7 +41,8 @@ enum class DashboardEvent {
 
 class DashboardViewModel(
     private val dao: HabitDao,
-    appPreferences: AppPreferences
+    appPreferences: AppPreferences,
+    private val telemetry: Telemetry
 ) : ViewModel() {
 
     val habitsWithActions: Flow<Result<List<HabitWithActions>>> = dao
@@ -51,7 +52,7 @@ class DashboardViewModel(
             Result.Success(mapHabitEntityToModel(it))
         }
         .catch {
-            Timber.e(it)
+            telemetry.logNonFatal(it)
             emit(Result.Failure(it))
         }
 
@@ -65,7 +66,7 @@ class DashboardViewModel(
             try {
                 toggleAction(habitId, action, date)
             } catch (e: Throwable) {
-                Timber.e(e)
+                telemetry.logNonFatal(e)
                 eventChannel.send(DashboardEvent.ToggleActionError)
             }
         }

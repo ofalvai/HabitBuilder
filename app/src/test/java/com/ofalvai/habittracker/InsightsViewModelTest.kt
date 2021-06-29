@@ -19,6 +19,7 @@ package com.ofalvai.habittracker
 import app.cash.turbine.test
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
+import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
@@ -43,6 +44,7 @@ import kotlin.time.ExperimentalTime
 class InsightsViewModelTest {
 
     private val dao = mock<HabitDao>()
+    private val telemetry = mock<Telemetry>()
 
     private lateinit var viewModel: InsightsViewModel
 
@@ -61,7 +63,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
         // When
-        viewModel = InsightsViewModel(dao)
+        viewModel = InsightsViewModel(dao, telemetry)
 
         // Then
         viewModel.heatmapState.test {
@@ -83,7 +85,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
         // When
-        viewModel = InsightsViewModel(dao)
+        viewModel = InsightsViewModel(dao, telemetry)
 
         // Then
         viewModel.heatmapState.test {
@@ -110,7 +112,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
         // When
-        viewModel = InsightsViewModel(dao)
+        viewModel = InsightsViewModel(dao, telemetry)
 
         // Then
         viewModel.heatmapState.test {
@@ -136,7 +138,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
         // When
-        viewModel = InsightsViewModel(dao)
+        viewModel = InsightsViewModel(dao, telemetry)
 
         // Then
         viewModel.topHabits.test {
@@ -169,7 +171,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willThrow(exception)
 
         // When
-        viewModel = InsightsViewModel(dao)
+        viewModel = InsightsViewModel(dao, telemetry)
 
         // Then
         viewModel.habitTopDays.test {

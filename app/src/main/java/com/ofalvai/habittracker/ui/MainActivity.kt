@@ -22,6 +22,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -41,7 +42,9 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
@@ -72,6 +75,10 @@ class MainActivity : ComponentActivity() {
                             color = Color.Transparent,
                             darkIcons = useDarkIcons
                         )
+                    }
+
+                    LaunchedEffect(navController) {
+                        navController.addOnDestinationChangedListener(onDestinationChanged)
                     }
 
                     Scaffold(
@@ -202,5 +209,13 @@ private fun RowScope.AppBottomNavigationItem(
             }
         },
         label = { Text(label) }
+    )
+}
+
+private val onDestinationChanged: (NavController, NavDestination, Bundle?) -> Unit = { _, destination, arguments ->
+    Dependencies.telemetry.leaveBreadcrumb(
+        message = destination.route ?: "no-route",
+        metadata = arguments?.let { mapOf("arguments" to it.toString()) } ?: emptyMap(),
+        type = Telemetry.BreadcrumbType.Navigation
     )
 }

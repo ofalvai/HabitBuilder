@@ -6,16 +6,24 @@ plugins {
 apply plugin: 'kotlin-kapt'
 apply plugin: 'app.cash.licensee'
 apply plugin: 'jacoco'
+apply plugin: 'com.bugsnag.android.gradle'
+
+ext {
+    PACKAGE_NAME = "com.ofalvai.habittracker"
+    VERSION_CODE = 1
+    VERSION_NAME = "0.1.0"
+    API_KEY_BUGSNAG = "2e13a542ae3ed09ad42a5c82444925af"
+}
 
 android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.ofalvai.habittracker"
+        applicationId PACKAGE_NAME
         minSdkVersion 22 // Trace minSdk is 22
         targetSdkVersion 30
-        versionCode 1
-        versionName "0.1.0"
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -27,6 +35,8 @@ android {
                 ]
             }
         }
+
+        resValue("string", "api_key_bugsnag", "${API_KEY_BUGSNAG}")
     }
 
     lintOptions {
@@ -162,6 +172,8 @@ dependencies {
     implementation libs.calendarview
     implementation libs.accompanist.insets
     implementation libs.accompanist.systemuicontroller
+
+    implementation libs.bugsnag.runtime
 
     // Required by layout inspector
     debugImplementation libs.kotlin.reflect

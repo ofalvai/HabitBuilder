@@ -18,6 +18,7 @@ package com.ofalvai.habittracker
 
 import app.cash.turbine.test
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.dashboard.DashboardEvent
@@ -52,6 +53,7 @@ class DashboardViewModelTest {
 
     private val dao = mock<HabitDao>()
     private val appPreferences = mock<AppPreferences>()
+    private val telemetry = mock<Telemetry>()
 
     private lateinit var viewModel: DashboardViewModel
 
@@ -68,7 +70,7 @@ class DashboardViewModelTest {
         )))
 
         // When
-        viewModel = DashboardViewModel(dao, appPreferences)
+        viewModel = DashboardViewModel(dao, appPreferences, telemetry)
 
         // Then
         viewModel.habitsWithActions.test {
@@ -93,7 +95,7 @@ class DashboardViewModelTest {
         ))))
 
         // When
-        viewModel = DashboardViewModel(dao, appPreferences)
+        viewModel = DashboardViewModel(dao, appPreferences, telemetry)
 
         // Then
         viewModel.habitsWithActions.test {
@@ -130,7 +132,7 @@ class DashboardViewModelTest {
         }
 
         // When
-        viewModel = DashboardViewModel(dao, appPreferences)
+        viewModel = DashboardViewModel(dao, appPreferences, telemetry)
 
         // Then
         viewModel.habitsWithActions.test {
@@ -161,7 +163,7 @@ class DashboardViewModelTest {
         // Given
         val exception = RuntimeException("Mocked error")
         given(dao.insertAction()).willThrow(exception)
-        viewModel = DashboardViewModel(dao, appPreferences)
+        viewModel = DashboardViewModel(dao, appPreferences, telemetry)
 
         // When
         launch { // https://github.com/cashapp/turbine/issues/33
@@ -186,7 +188,7 @@ class DashboardViewModelTest {
         given(dao.getHabitsWithActions()).willReturn(habitFlow)
 
         // When
-        viewModel = DashboardViewModel(dao, appPreferences)
+        viewModel = DashboardViewModel(dao, appPreferences, telemetry)
 
         // Then
         viewModel.habitsWithActions.test {

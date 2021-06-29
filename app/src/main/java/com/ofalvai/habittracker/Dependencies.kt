@@ -26,6 +26,8 @@ import androidx.room.Room
 import com.ofalvai.habittracker.persistence.AppDatabase
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.persistence.MIGRATIONS
+import com.ofalvai.habittracker.telemetry.Telemetry
+import com.ofalvai.habittracker.telemetry.TelemetryImpl
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.dashboard.AddHabitViewModel
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
@@ -49,9 +51,12 @@ object Dependencies {
 
     private val sharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(HabitTrackerApplication.INSTANCE)
+
     private val appPreferences = AppPreferences(sharedPreferences)
 
-    val viewModelFactory = AppViewModelFactory(db.habitDao(), appPreferences, appContext)
+    val telemetry = TelemetryImpl(appContext)
+
+    val viewModelFactory = AppViewModelFactory(db.habitDao(), appPreferences, appContext, telemetry)
 }
 
 private fun roomQueryLogCallback(sqlQuery: String, bindArgs: List<Any>) {
@@ -67,20 +72,21 @@ private fun roomQueryLogCallback(sqlQuery: String, bindArgs: List<Any>) {
 class AppViewModelFactory(
     private val habitDao: HabitDao,
     private val appPreferences: AppPreferences,
-    private val appContext: Context
+    private val appContext: Context,
+    private val telemetry: Telemetry
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (AddHabitViewModel::class.java.isAssignableFrom(modelClass)) {
             return AddHabitViewModel(habitDao) as T
         }
         if (DashboardViewModel::class.java.isAssignableFrom(modelClass)) {
-            return DashboardViewModel(habitDao, appPreferences) as T
+            return DashboardViewModel(habitDao, appPreferences, telemetry) as T
         }
         if (HabitDetailViewModel::class.java.isAssignableFrom(modelClass)) {
-            return HabitDetailViewModel(habitDao) as T
+            return HabitDetailViewModel(habitDao, telemetry) as T
         }
         if (InsightsViewModel::class.java.isAssignableFrom(modelClass)) {
-            return InsightsViewModel(habitDao) as T
+            return InsightsViewModel(habitDao, telemetry) as T
         }
         if (LicensesViewModel::class.java.isAssignableFrom(modelClass)) {
             return LicensesViewModel(appContext) as T

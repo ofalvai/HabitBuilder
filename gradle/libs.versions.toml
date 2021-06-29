@@ -5,7 +5,7 @@ accompanist = "0.11.1"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-android-tools-gradle = "com.android.tools.build:gradle:7.1.0-alpha02"
+android-tools-gradle = "com.android.tools.build:gradle:7.0.0-beta04"
 
 kotlin-gradleplugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
 kotlin-reflect = "org.jetbrains.kotlin:kotlin-reflect:1.5.10"
@@ -36,12 +36,13 @@ calendarview = "com.github.kizitonwose:CalendarView:1.0.4"
 accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
+bugsnag-gradleplugin = "com.bugsnag:bugsnag-android-gradle-plugin:7.0.0-beta01"
+bugsnag-runtime = "com.bugsnag:bugsnag-android:5.9.5"
+
 junit = "junit:junit:4.13.1"
 mockito-android = "org.mockito:mockito-android:3.11.2"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
 turbine = "app.cash.turbine:turbine:0.5.2"
-
-jacoco = "org.jacoco:org.jacoco.core:0.8.7
 
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.0.2"
 
