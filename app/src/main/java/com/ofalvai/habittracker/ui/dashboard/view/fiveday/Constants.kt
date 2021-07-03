@@ -19,7 +19,8 @@ package com.ofalvai.habittracker.ui.dashboard.view.fiveday
 import androidx.compose.ui.unit.dp
 
 internal object Constants {
-    val SIZE_CIRCLE = 48.dp
-    val PADDING_CIRCLE = 4.dp
-    const val DAY_COUNT = 5
+    val CircleSize = 52.dp
+    val CirclePadding = 4.dp
+    const val DayCount = 5
+    const val ElevationMultiplier = 2.5f
 }

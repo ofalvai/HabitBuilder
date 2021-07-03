@@ -40,7 +40,7 @@ fun FiveDayHabitList(
     Column(
         horizontalAlignment = Alignment.End
     ) {
-        val width = Constants.SIZE_CIRCLE * 5 + Constants.PADDING_CIRCLE * 8
+        val width = Constants.CircleSize * 5 + Constants.CirclePadding * 8
         DayLegend(
             modifier = Modifier.wrapContentWidth(Alignment.End).width(width).padding(end = 32.dp),
             mostRecentDay = LocalDate.now(),

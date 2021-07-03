@@ -25,6 +25,7 @@
     <string name="common_more">More</string>
     <string name="common_error">Error</string>
     <string name="common_empty">Empty</string>
+    <string name="common_interpunct">%s · %s</string>
 
     <string name="addhabit_appbar_title">Create new habit</string>
     <string name="addhabit_name_label">Habit name</string>

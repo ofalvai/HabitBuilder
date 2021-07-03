@@ -31,11 +31,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.R
@@ -75,23 +77,15 @@ fun HabitCard(
                 style = AppTextStyle.habitSubtitle
             )
 
-            Text(
-                text = LocalContext.current.resources.getQuantityString(
-                    R.plurals.common_action_count_total,
-                    totalActionCount, totalActionCount
-                ),
-                style = MaterialTheme.typography.caption
-            )
-
-            ActionHistoryLabel(actionHistory)
+            ActionHistoryLabel(totalActionCount, actionHistory)
 
             ActionCircles(
-                modifier = Modifier.align(Alignment.End),
-                actions = actions.takeLast(Constants.DAY_COUNT),
+                modifier = Modifier.align(Alignment.End).padding(top = 8.dp),
+                actions = actions.takeLast(Constants.DayCount),
                 habitColor = habit.color,
                 onActionToggle = { action, dayIndex ->
                     val date = LocalDate.now()
-                        .minus((Constants.DAY_COUNT - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
+                        .minus((Constants.DayCount - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
                     onActionToggle(action, habit, date)
                 }
             )
@@ -122,6 +116,7 @@ fun ActionCircles(
                         )
                     },
                     isHighlighted = index == actions.size - 1,
+                    elevation = Dp(index * Constants.ElevationMultiplier),
                     onSinglePress = { singlePressCounter++ }
                 )
             }
@@ -135,7 +130,6 @@ fun ActionCircles(
             )
         }
     }
-
 }
 
 @Composable
@@ -144,22 +138,26 @@ fun ActionCircle(
     toggled: Boolean,
     onToggle: (Boolean) -> Unit,
     isHighlighted: Boolean,
+    elevation: Dp,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else Color.Transparent
-    val secondaryColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
+    val backgroundColor = if (toggled) activeColor else MaterialTheme.colors.surface
+    val borderColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
-    val rippleRadius = remember { Constants.SIZE_CIRCLE / 1.7f } // Make it a bit bigger than D / 2
+    val rippleRadius = remember { Constants.CircleSize / 1.7f } // Make it a bit bigger than D / 2
     val shape = CircleShape
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .satisfyingToggleable(vibrator, rippleRadius, false, toggled, onToggle, onSinglePress)
-            .size(Constants.SIZE_CIRCLE)
-            .padding(Constants.PADDING_CIRCLE)
-            .border(BorderStroke(2.dp, secondaryColor), shape)
-            .background(color, shape)
+            .size(Constants.CircleSize)
+            .padding(Constants.CirclePadding)
+            .then(if (elevation > 0.dp) Modifier.shadow(elevation, shape, false) else Modifier)
+            .satisfyingToggleable(
+                vibrator, rippleRadius, false, toggled, onToggle, onSinglePress
+            )
+            .border(BorderStroke(2.dp, borderColor), shape)
+            .background(backgroundColor, shape)
             .clip(shape)
     ) {
         if (isHighlighted) {
@@ -167,16 +165,20 @@ fun ActionCircle(
                 modifier = Modifier
                     .requiredSize(8.dp)
                     .clip(CircleShape)
-                    .background(color = secondaryColor, shape = CircleShape),
+                    .background(color = borderColor, shape = CircleShape),
             )
         }
     }
 }
 
 @Composable
-fun ActionHistoryLabel(actionHistory: ActionHistory) {
+fun ActionHistoryLabel(totalActionCount: Int, actionHistory: ActionHistory) {
     val resources = LocalContext.current.resources
-    val label = when (actionHistory) {
+    val totalLabel = resources.getQuantityString(
+        R.plurals.common_action_count_total,
+        totalActionCount, totalActionCount
+    )
+    val actionHistoryLabel = when (actionHistory) {
         ActionHistory.Clean -> stringResource(R.string.common_action_count_clean)
         is ActionHistory.MissedDays -> resources.getQuantityString(
             R.plurals.common_action_count_missed_days, actionHistory.days, actionHistory.days
@@ -185,9 +187,10 @@ fun ActionHistoryLabel(actionHistory: ActionHistory) {
             R.plurals.common_action_count_streak, actionHistory.days, actionHistory.days
         )
     }
+    val mergedLabel = stringResource(R.string.common_interpunct, totalLabel, actionHistoryLabel)
 
     Text(
-        text = label,
+        text = mergedLabel,
         style = MaterialTheme.typography.caption
     )
 }
