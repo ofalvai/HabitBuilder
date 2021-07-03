@@ -36,7 +36,7 @@ android {
             }
         }
 
-        resValue("string", "api_key_bugsnag", "${API_KEY_BUGSNAG}")
+        manifestPlaceholders = [api_key_bugsnag: "${API_KEY_BUGSNAG}"]
     }
 
     lintOptions {
