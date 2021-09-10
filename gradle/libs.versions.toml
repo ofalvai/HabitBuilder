@@ -5,7 +5,7 @@ accompanist = "0.14.0"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-android-tools-gradle = "com.android.tools.build:gradle:7.0.0-beta05"
+android-tools-gradle = "com.android.tools.build:gradle:7.0.1"
 
 kotlin-gradleplugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
 kotlin-reflect = "org.jetbrains.kotlin:kotlin-reflect:1.5.10"

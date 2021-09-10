@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id("com.spotify.ruler")
 }
 
 apply plugin: 'kotlin-kapt'
@@ -100,6 +101,13 @@ afterEvaluate {
     }
 }
 
+ruler {
+    abi.set("arm64-v8a")
+    locale.set("en")
+    screenDensity.set(480)
+    sdkVersion.set(27)
+}
+
 task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
     reports {
@@ -178,7 +186,10 @@ dependencies {
     implementation libs.accompanist.insets
     implementation libs.accompanist.systemuicontroller
 
-    implementation libs.bugsnag.runtime
+    implementation (libs.bugsnag.runtime) {
+        exclude group: "com.bugsnag", module: "bugsnag-plugin-android-anr"
+        exclude group: "com.bugsnag", module: "bugsnag-plugin-android-ndk"
+    }
 
     // Required by layout inspector
     debugImplementation libs.kotlin.reflect

@@ -9,6 +9,7 @@ buildscript {
         classpath libs.kotlin.gradleplugin
         classpath libs.licensee
         classpath libs.bugsnag.gradleplugin
+        classpath("com.spotify.ruler:ruler-gradle-plugin:0.2.0")
     }
 }
 
