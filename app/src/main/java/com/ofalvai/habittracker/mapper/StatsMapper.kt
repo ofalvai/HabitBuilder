@@ -81,7 +81,7 @@ fun mapSumActionCountByDay(
     val dayMap = mutableMapOf<LocalDate, HeatmapMonth.BucketInfo>()
 
     entityList.forEach {
-        if (it.date.yearMonth == yearMonth) {
+        if (it.date?.yearMonth == yearMonth) {
             dayMap[it.date] = actionCountToBucket(totalHabitCount, it.action_count)
         }
     }

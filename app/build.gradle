@@ -4,7 +4,7 @@ plugins {
     id("com.spotify.ruler")
 }
 
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'app.cash.licensee'
 apply plugin: 'jacoco'
 apply plugin: 'com.bugsnag.android.gradle'
@@ -17,23 +17,21 @@ ext {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdk 31
 
     defaultConfig {
         applicationId PACKAGE_NAME
-        minSdkVersion 22 // Trace minSdk is 22
-        targetSdkVersion 30
+        minSdk 21
+        targetSdk 30
         versionCode VERSION_CODE
         versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += [
-                        "room.incremental": "true",
-                        "room.schemaLocation": "$projectDir/schemas".toString()
-                ]
+            ksp {
+                arg("room.incremental", "true")
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
             }
         }
 
@@ -58,12 +56,8 @@ android {
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
-
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
         useIR = true
         freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
     }
@@ -165,9 +159,17 @@ licensee {
 // https://www.zacsweers.dev/kapts-hidden-test-costs/
 tasks
     .matching {
-        it.name.startsWith("kapt") && it.name.endsWith("TestKotlin")
+        it.name.startsWith("ksp") && it.name.endsWith("TestKotlin")
     }
     .configureEach { it.enabled = false }
+
+kotlin {
+    sourceSets.all {
+        languageSettings {
+            languageVersion = '1.6' // Exhaustive when statements
+        }
+    }
+}
 
 dependencies {
     coreLibraryDesugaring libs.android.tools.desugar
@@ -179,7 +181,7 @@ dependencies {
     implementation libs.androidx.lifecycle.runtime
 
     implementation libs.androidx.room.ktx
-    kapt libs.androidx.room.compiler
+    ksp libs.androidx.room.compiler
 
     implementation libs.timber
     implementation libs.calendarview
@@ -208,6 +210,4 @@ dependencies {
     androidTestImplementation libs.mockito.android
     androidTestImplementation libs.turbine
     androidTestImplementation libs.compose.ui.test
-
-
 }

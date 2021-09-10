@@ -6,16 +6,17 @@ buildscript {
     }
     dependencies {
         classpath libs.android.tools.gradle
-        classpath libs.kotlin.gradleplugin
+        classpath libs.kotlin.gradle
         classpath libs.licensee
-        classpath libs.bugsnag.gradleplugin
-        classpath("com.spotify.ruler:ruler-gradle-plugin:0.2.0")
+        classpath libs.bugsnag.gradle
+        classpath(libs.ruler)
     }
 }
 
 plugins {
     id "com.osacky.doctor" version "0.7.1"
     id "com.asarkar.gradle.build-time-tracker" version "3.0.1"
+    id "com.google.devtools.ksp" version "1.5.30-1.0.0"
 }
 
 doctor {

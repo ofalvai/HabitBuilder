@@ -48,7 +48,7 @@ data class ActionCompletionRate(
 }
 
 data class SumActionCountByDay(
-    val date: LocalDate,
+    val date: LocalDate?,
     val action_count: Int
 )
 
