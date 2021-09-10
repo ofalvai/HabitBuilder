@@ -44,7 +44,7 @@ mockito-android = "org.mockito:mockito-android:3.11.2"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
 turbine = "app.cash.turbine:turbine:0.5.2"
 
-licensee = "app.cash.licensee:licensee-gradle-plugin:1.0.2"
+licensee = "app.cash.licensee:licensee-gradle-plugin:1.2.0"
 
 [bundles]
 compose = ["compose-ui-ui", "compose-material", "compose-animation", "compose-ui-tooling"]

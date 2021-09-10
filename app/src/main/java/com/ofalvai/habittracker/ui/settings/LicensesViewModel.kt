@@ -27,7 +27,8 @@ private const val ASSET_PATH_LICENSES = "licenses.json"
 data class Dependency(
     val group: String,
     val artifact: String,
-    val license: License?
+    val license: License?,
+    val url: String?
 ) {
     data class License(val name: String)
 }
@@ -69,7 +70,18 @@ class LicensesViewModel(
                 null
             }
 
-            dependencies.add(Dependency(groupId, artifactId, license))
+            val url = if (dependencyObject.has("scm")) {
+                val scmObject = dependencyObject.getJSONObject("scm")
+                if (scmObject.has("url")) {
+                    scmObject.getString("url")
+                } else {
+                    null
+                }
+            } else {
+                null
+            }
+
+            dependencies.add(Dependency(groupId, artifactId, license, url))
         }
 
         return dependencies

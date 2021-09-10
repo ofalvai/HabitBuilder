@@ -145,8 +145,13 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
 licensee {
     allow("Apache-2.0")
-    allowUrl("http://www.apache.org/license/LICENSE-2.0.txt")
-    allowDependency("com.github.kizitonwose", "CalendarView", "1.0.4")
+    allow("MIT")
+    allowDependency('org.jetbrains', 'annotations', '16.0.1') {
+        because 'Apache-2.0, but typo in license URL fixed in newer versions'
+    }
+    allowDependency("com.github.kizitonwose", "CalendarView", "1.0.4") {
+        because "Artifact declares no licenses, but it's MIT according to GitHub"
+    }
 }
 
 // https://www.zacsweers.dev/kapts-hidden-test-costs/

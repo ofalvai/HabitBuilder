@@ -9,7 +9,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.activity",
@@ -21,7 +24,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.activity",
@@ -33,7 +39,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.annotation",
@@ -45,7 +54,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.annotation",
@@ -57,7 +69,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.arch.core",
@@ -69,7 +84,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.arch.core",
@@ -81,7 +99,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.autofill",
@@ -93,7 +114,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.collection",
@@ -105,7 +129,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.collection",
@@ -117,7 +144,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.compose.animation",
@@ -129,7 +159,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.animation",
@@ -141,7 +174,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.foundation",
@@ -153,7 +189,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.foundation",
@@ -165,7 +204,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.material",
@@ -177,7 +219,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.material",
@@ -189,7 +234,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.material",
@@ -201,7 +249,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.runtime",
@@ -213,7 +264,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.runtime",
@@ -225,7 +279,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.ui",
@@ -237,7 +294,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.ui",
@@ -249,7 +309,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.ui",
@@ -261,7 +324,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.ui",
@@ -273,7 +339,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.ui",
@@ -285,7 +354,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.ui",
@@ -297,7 +369,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.ui",
@@ -309,7 +384,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.compose.ui",
@@ -321,7 +399,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.core",
@@ -333,7 +414,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.core",
@@ -345,7 +429,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.customview",
@@ -357,7 +444,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.dynamicanimation",
@@ -369,7 +459,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.dynamicanimation",
@@ -381,7 +474,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -393,7 +489,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -405,7 +504,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -417,7 +519,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -429,7 +534,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -441,7 +549,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -453,7 +564,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -465,7 +579,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -477,7 +594,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.lifecycle",
@@ -489,7 +609,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.navigation",
@@ -501,7 +624,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.navigation",
@@ -513,7 +639,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.navigation",
@@ -525,7 +654,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.navigation",
@@ -537,7 +669,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.profileinstaller",
@@ -549,7 +684,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.recyclerview",
@@ -561,7 +699,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.room",
@@ -573,7 +714,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.room",
@@ -585,7 +729,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.room",
@@ -597,7 +744,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.savedstate",
@@ -609,7 +759,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.savedstate",
@@ -621,7 +774,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.sqlite",
@@ -633,7 +789,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.sqlite",
@@ -645,7 +804,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
     },
     {
         "groupId": "androidx.startup",
@@ -657,7 +819,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.tracing",
@@ -669,7 +834,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://cs.android.com/androidx/platform/frameworks/support"
+        }
     },
     {
         "groupId": "androidx.versionedparcelable",
@@ -681,7 +849,70 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "http://source.android.com"
+        }
+    },
+    {
+        "groupId": "com.bugsnag",
+        "artifactId": "bugsnag-android",
+        "version": "5.9.5",
+        "spdxLicenses": [
+            {
+                "identifier": "MIT",
+                "name": "MIT License",
+                "url": "https://opensource.org/licenses/MIT"
+            }
+        ],
+        "scm": {
+            "url": "https://github.com/bugsnag/bugsnag-android"
+        }
+    },
+    {
+        "groupId": "com.bugsnag",
+        "artifactId": "bugsnag-android-core",
+        "version": "5.9.5",
+        "spdxLicenses": [
+            {
+                "identifier": "MIT",
+                "name": "MIT License",
+                "url": "https://opensource.org/licenses/MIT"
+            }
+        ],
+        "scm": {
+            "url": "https://github.com/bugsnag/bugsnag-android"
+        }
+    },
+    {
+        "groupId": "com.bugsnag",
+        "artifactId": "bugsnag-plugin-android-anr",
+        "version": "5.9.5",
+        "spdxLicenses": [
+            {
+                "identifier": "MIT",
+                "name": "MIT License",
+                "url": "https://opensource.org/licenses/MIT"
+            }
+        ],
+        "scm": {
+            "url": "https://github.com/bugsnag/bugsnag-android"
+        }
+    },
+    {
+        "groupId": "com.bugsnag",
+        "artifactId": "bugsnag-plugin-android-ndk",
+        "version": "5.9.5",
+        "spdxLicenses": [
+            {
+                "identifier": "MIT",
+                "name": "MIT License",
+                "url": "https://opensource.org/licenses/MIT"
+            }
+        ],
+        "scm": {
+            "url": "https://github.com/bugsnag/bugsnag-android"
+        }
     },
     {
         "groupId": "com.github.kizitonwose",
@@ -698,7 +929,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/google/accompanist/"
+        }
     },
     {
         "groupId": "com.google.accompanist",
@@ -710,7 +944,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/google/accompanist/"
+        }
     },
     {
         "groupId": "com.jakewharton.timber",
@@ -722,7 +959,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/JakeWharton/timber"
+        }
     },
     {
         "groupId": "org.jetbrains",
@@ -733,7 +973,10 @@
                 "name": "The Apache Software License, Version 2.0",
                 "url": "http://www.apache.org/license/LICENSE-2.0.txt"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/JetBrains/java-annotations"
+        }
     },
     {
         "groupId": "org.jetbrains.kotlin",
@@ -745,7 +988,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/JetBrains/kotlin"
+        }
     },
     {
         "groupId": "org.jetbrains.kotlin",
@@ -757,7 +1003,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/JetBrains/kotlin"
+        }
     },
     {
         "groupId": "org.jetbrains.kotlin",
@@ -769,7 +1018,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/JetBrains/kotlin"
+        }
     },
     {
         "groupId": "org.jetbrains.kotlin",
@@ -781,7 +1033,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/JetBrains/kotlin"
+        }
     },
     {
         "groupId": "org.jetbrains.kotlinx",
@@ -793,7 +1048,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/Kotlin/kotlinx.coroutines"
+        }
     },
     {
         "groupId": "org.jetbrains.kotlinx",
@@ -805,7 +1063,10 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/Kotlin/kotlinx.coroutines"
+        }
     },
     {
         "groupId": "org.jetbrains.kotlinx",
@@ -817,6 +1078,9 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0"
             }
-        ]
+        ],
+        "scm": {
+            "url": "https://github.com/Kotlin/kotlinx.coroutines"
+        }
     }
 ]
