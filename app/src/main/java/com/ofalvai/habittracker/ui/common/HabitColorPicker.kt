@@ -16,7 +16,10 @@
 
 package com.ofalvai.habittracker.ui.common
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,7 +33,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +74,6 @@ fun HabitColorPicker(
 
             HabitColor(
                 color = it,
-                isSelected = isSelected,
                 transition = transition,
                 onClick = {
                     color = it
@@ -87,24 +88,23 @@ fun HabitColorPicker(
 @Composable
 fun HabitColor(
     color: Habit.Color,
-    isSelected: Boolean,
     transition: Transition<ColorPickerState>,
     onClick: () -> Unit
 ) {
-    val animationSpec = tween<Dp>(easing = LinearOutSlowInEasing, durationMillis = 250)
+    val animationSpec = tween<Dp>(durationMillis = 200)
     val size: Dp by transition.animateDp(
         transitionSpec = { animationSpec }, label = "ColorPickerSize"
     ) { state ->
         when (state) {
             ColorPickerState.Default -> 48.dp
-            ColorPickerState.Selected -> 56.dp
+            ColorPickerState.Selected -> 64.dp
         }
     }
     val horizontalPadding: Dp by transition.animateDp(
         transitionSpec = { animationSpec }, label = "ColorPickerHorizontalPadding"
     ) { state ->
         when (state) {
-            ColorPickerState.Default -> 4.dp
+            ColorPickerState.Default -> 8.dp
             ColorPickerState.Selected -> 0.dp
         }
     }
@@ -116,6 +116,14 @@ fun HabitColor(
             ColorPickerState.Selected -> 0.dp
         }
     }
+    val checkmarkSize: Dp by transition.animateDp(
+        transitionSpec = { animationSpec }, label = "ColorPickerCheckmarkSize"
+    ) { state ->
+        when (state) {
+            ColorPickerState.Default -> 0.dp
+            ColorPickerState.Selected -> 24.dp
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -124,21 +132,19 @@ fun HabitColor(
             .clickable(
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(radius = size / 2, bounded = false)
+                indication = null
             )
             .border(BorderStroke(1.dp, Color.Black.copy(alpha = 0.15f)), CircleShape)
             .background(color.composeColor, CircleShape)
             .clip(CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        if (isSelected) {
-            Icon(
-                imageVector = Icons.Rounded.Check,
-                tint = Color.Black.copy(alpha = 0.75f),
-                contentDescription = null,
-                modifier = Modifier.requiredSize(24.dp)
-            )
-        }
+        Icon(
+            imageVector = Icons.Rounded.Check,
+            tint = Color.Black.copy(alpha = 0.75f),
+            contentDescription = null,
+            modifier = Modifier.requiredSize(checkmarkSize)
+        )
     }
 }
 
