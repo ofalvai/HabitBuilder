@@ -32,4 +32,13 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
-val MIGRATIONS = arrayOf(MIGRATION_1_2)
+/**
+ * Adds index to foreign key column to avoid full table scan when the parent table changes
+ */
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("CREATE INDEX IF NOT EXISTS `index_Action_habit_id` ON `Action` (`habit_id`)")
+    }
+}
+
+val MIGRATIONS = arrayOf(MIGRATION_1_2, MIGRATION_2_3)

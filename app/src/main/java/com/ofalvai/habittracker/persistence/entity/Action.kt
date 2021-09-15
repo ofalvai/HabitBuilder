@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.persistence.entity
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.Instant
 
@@ -30,7 +31,8 @@ import java.time.Instant
             childColumns = ["habit_id"],
             onDelete = CASCADE
         )
-    ]
+    ],
+    indices = [Index("habit_id")]
 )
 data class Action(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
