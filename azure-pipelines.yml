@@ -13,8 +13,15 @@ steps:
 - task: Gradle@2
   inputs:
     gradleWrapperFile: 'gradlew'
-    tasks: 'assembleDebug'
+    tasks: testDebugUnitTest
     publishJUnitResults: true
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    gradleOptions: '-Xmx3072m'
+- task: Gradle@2
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    tasks: bundleRelease
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     gradleOptions: '-Xmx3072m'
