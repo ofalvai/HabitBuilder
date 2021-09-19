@@ -24,6 +24,7 @@ import com.ofalvai.habittracker.mapper.mapSumActionCountByDay
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
+import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.model.TopHabitItem
@@ -35,7 +36,8 @@ import java.time.YearMonth
 
 class InsightsViewModel(
     private val habitDao: HabitDao,
-    private val telemetry: Telemetry
+    private val telemetry: Telemetry,
+    onboardingManager: OnboardingManager
 ): ViewModel() {
 
     val heatmapState = MutableStateFlow<Result<HeatmapMonth>>(Result.Loading)
@@ -50,6 +52,7 @@ class InsightsViewModel(
 
     init {
         fetchStats()
+        onboardingManager.insightsOpened()
     }
 
     fun fetchHeatmap(yearMonth: YearMonth) {

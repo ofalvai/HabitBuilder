@@ -20,6 +20,10 @@ import android.content.SharedPreferences
 import com.ofalvai.habittracker.ui.model.DashboardConfig
 
 private const val KEY_DASHBOARD_CONFIG = "dashboard_config"
+private const val KEY_ONBOARDING_FIRST_HABIT_CREATED = "onboarding_first_habit_created"
+private const val KEY_ONBOARDING_FIRST_ACTION_COMPLETED = "onboarding_first_action_completed"
+private const val KEY_ONBOARDING_HABIT_DETAILS_OPENED = "onboarding_habit_details_opened"
+private const val KEY_ONBOARDING_INSIGHTS_OPENED = "onboarding_insights_opened"
 
 class AppPreferences(
     private val sharedPreferences: SharedPreferences
@@ -35,4 +39,20 @@ class AppPreferences(
         set(value) {
             sharedPreferences.edit().putString(KEY_DASHBOARD_CONFIG, value.toString()).apply()
         }
+
+    var onboardingFirstHabitCreated: Boolean
+        get() = sharedPreferences.getBoolean(KEY_ONBOARDING_FIRST_HABIT_CREATED, false)
+        set(value) = sharedPreferences.edit().putBoolean(KEY_ONBOARDING_FIRST_HABIT_CREATED, value).apply()
+
+    var onboardingFirstActionCompleted: Boolean
+        get() = sharedPreferences.getBoolean(KEY_ONBOARDING_FIRST_ACTION_COMPLETED, false)
+        set(value) = sharedPreferences.edit().putBoolean(KEY_ONBOARDING_FIRST_ACTION_COMPLETED, value).apply()
+
+    var onboardingHabitDetailsOpened: Boolean
+        get() = sharedPreferences.getBoolean(KEY_ONBOARDING_HABIT_DETAILS_OPENED, false)
+        set(value) = sharedPreferences.edit().putBoolean(KEY_ONBOARDING_HABIT_DETAILS_OPENED, value).apply()
+
+    var onboardingInsightsOpened: Boolean
+        get() = sharedPreferences.getBoolean(KEY_ONBOARDING_INSIGHTS_OPENED, false)
+        set(value) = sharedPreferences.edit().putBoolean(KEY_ONBOARDING_INSIGHTS_OPENED, value).apply()
 }

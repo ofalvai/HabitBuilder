@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 
 class AddHabitViewModel(
     private val dao: HabitDao,
+    private val onboardingManager: OnboardingManager
 ) : ViewModel() {
 
     private val backNavigationEventChannel = Channel<Unit>(Channel.BUFFERED)
@@ -40,6 +41,7 @@ class AddHabitViewModel(
                 color = habit.color.toEntityColor()
             )
             dao.insertHabit(habitEntity)
+            onboardingManager.firstHabitCreated()
             backNavigationEventChannel.send(Unit)
         }
     }

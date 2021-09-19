@@ -25,6 +25,7 @@ import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.model.OnboardingState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -42,7 +43,8 @@ enum class DashboardEvent {
 class DashboardViewModel(
     private val dao: HabitDao,
     appPreferences: AppPreferences,
-    private val telemetry: Telemetry
+    private val telemetry: Telemetry,
+    private val onboardingManager: OnboardingManager
 ) : ViewModel() {
 
     val habitsWithActions: Flow<Result<List<HabitWithActions>>> = dao
@@ -61,10 +63,13 @@ class DashboardViewModel(
     private val eventChannel = Channel<DashboardEvent>(Channel.BUFFERED)
     val dashboardEvent = eventChannel.receiveAsFlow()
 
+    val onboardingState: StateFlow<OnboardingState?> = onboardingManager.state
+
     fun toggleActionFromDashboard(habitId: Int, action: Action, date: LocalDate) {
         viewModelScope.launch {
             try {
                 toggleAction(habitId, action, date)
+                onboardingManager.firstActionCompleted()
             } catch (e: Throwable) {
                 telemetry.logNonFatal(e)
                 eventChannel.send(DashboardEvent.ToggleActionError)

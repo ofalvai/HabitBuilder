@@ -21,6 +21,7 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
+import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.util.MainCoroutineRule
@@ -45,6 +46,7 @@ class InsightsViewModelTest {
 
     private val dao = mock<HabitDao>()
     private val telemetry = mock<Telemetry>()
+    private val onboardingManager = mock<OnboardingManager>()
 
     private lateinit var viewModel: InsightsViewModel
 
@@ -63,7 +65,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
         // When
-        viewModel = InsightsViewModel(dao, telemetry)
+        viewModel = InsightsViewModel(dao, telemetry, onboardingManager)
 
         // Then
         viewModel.heatmapState.test {
@@ -85,7 +87,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
         // When
-        viewModel = InsightsViewModel(dao, telemetry)
+        viewModel = createViewModel()
 
         // Then
         viewModel.heatmapState.test {
@@ -98,7 +100,6 @@ class InsightsViewModelTest {
             assertEquals(Result.Loading, expectItem())
             val newLoadedState = expectItem() as Result.Success
             assertEquals(2, newLoadedState.value.totalHabitCount)
-
         }
     }
 
@@ -112,7 +113,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
         // When
-        viewModel = InsightsViewModel(dao, telemetry)
+        viewModel = createViewModel()
 
         // Then
         viewModel.heatmapState.test {
@@ -138,7 +139,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
         // When
-        viewModel = InsightsViewModel(dao, telemetry)
+        viewModel = createViewModel()
 
         // Then
         viewModel.topHabits.test {
@@ -171,7 +172,7 @@ class InsightsViewModelTest {
         given(dao.getTopDayForHabits()).willThrow(exception)
 
         // When
-        viewModel = InsightsViewModel(dao, telemetry)
+        viewModel = createViewModel()
 
         // Then
         viewModel.habitTopDays.test {
@@ -193,4 +194,6 @@ class InsightsViewModelTest {
             assertEquals(expected, expectItem())
         }
     }
+
+    private fun createViewModel() = InsightsViewModel(dao, telemetry, onboardingManager)
 }

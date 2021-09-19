@@ -22,6 +22,7 @@ import com.ofalvai.habittracker.mapper.*
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
+import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.model.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -43,7 +44,8 @@ enum class HabitDetailEvent {
 
 class HabitDetailViewModel(
     private val dao: HabitDao,
-    private val telemetry: Telemetry
+    private val telemetry: Telemetry,
+    onboardingManager: OnboardingManager
 ) : ViewModel() {
 
     val habitWithActions = MutableStateFlow<Result<HabitWithActions>>(Result.Loading)
@@ -53,6 +55,10 @@ class HabitDetailViewModel(
 
     private val eventChannel = Channel<HabitDetailEvent>(Channel.BUFFERED)
     val habitDetailEvent = eventChannel.receiveAsFlow()
+
+    init {
+        onboardingManager.habitDetailsOpened()
+    }
 
     fun fetchHabitDetails(habitId: Int): Job {
         return viewModelScope.launch {

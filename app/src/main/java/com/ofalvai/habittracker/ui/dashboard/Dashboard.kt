@@ -42,10 +42,7 @@ import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.DashboardConfig
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -56,6 +53,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
 
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
     val habits by viewModel.habitsWithActions.collectAsState(Result.Loading)
+    val onboardingState by viewModel.onboardingState.collectAsState()
 
     val snackbarCoroutineScope = rememberCoroutineScope()
     val errorMessage = stringResource(R.string.dashboard_error_toggle_action)
@@ -86,7 +84,8 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
         is Result.Success -> {
             LoadedDashboard(
                 habits = (habits as Result.Success<List<HabitWithActions>>).value,
-                config = config,
+                config,
+                onboardingState,
                 onAddHabitClick,
                 onConfigChange,
                 onActionToggle,
@@ -106,6 +105,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
 private fun LoadedDashboard(
     habits: List<HabitWithActions>,
     config: DashboardConfig,
+    onboardingState: OnboardingState?,
     onAddHabitClick: () -> Unit,
     onConfigChange: (DashboardConfig) -> Unit,
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
@@ -120,6 +120,10 @@ private fun LoadedDashboard(
             Modifier.fillMaxSize().statusBarsPadding()
         ) {
             DashboardAppBar(config, onConfigChange, onAboutClick)
+
+            if (onboardingState != null) {
+                Onboarding(onboardingState)
+            }
 
             Crossfade(targetState = config) {
                 when (it) {
@@ -201,7 +205,10 @@ private fun DashboardPlaceholder(
 
         Spacer(Modifier.padding(top = 32.dp))
 
-        Image(painter = painterResource(R.drawable.illustration_empty_state), contentDescription = "")
+        Image(
+            painter = painterResource(R.drawable.illustration_empty_state),
+            contentDescription = ""
+        )
 
         Text(
             text = stringResource(R.string.dashboard_empty_label),
