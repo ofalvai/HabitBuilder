@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    id "com.osacky.doctor" version "0.7.1"
+    id "com.osacky.doctor" version "0.7.3"
     id "com.asarkar.gradle.build-time-tracker" version "3.0.1"
     id "com.google.devtools.ksp" version "1.5.30-1.0.0"
 }
