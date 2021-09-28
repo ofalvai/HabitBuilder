@@ -43,20 +43,21 @@ import com.ofalvai.habittracker.ui.theme.AppTextStyle
 fun InsightsScreen(navController: NavController) {
     val viewModel: InsightsViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
-    Column(
-        modifier = Modifier
-            .statusBarsPadding()
-            .verticalScroll(rememberScrollState())
-            .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Column(Modifier.statusBarsPadding()) {
         InsightsAppBar(onAboutClick = { navController.navigate(Screen.About.route) })
 
-        Heatmap(viewModel)
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(start = 16.dp, end = 16.dp, bottom = 32.dp, top = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Heatmap(viewModel)
 
-        TopHabits(viewModel, navController)
+            TopHabits(viewModel, navController)
 
-        TopDays(viewModel, navController)
+            TopDays(viewModel, navController)
+        }
     }
 }
 
