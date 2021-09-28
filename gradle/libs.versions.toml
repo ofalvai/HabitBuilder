@@ -43,7 +43,7 @@ bugsnag-runtime = "com.bugsnag:bugsnag-android:5.9.5"
 junit = "junit:junit:4.13.1"
 mockito-android = "org.mockito:mockito-android:3.12.4"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
-turbine = "app.cash.turbine:turbine:0.5.2"
+turbine = "app.cash.turbine:turbine:0.6.1"
 
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.2.0"
 ruler = "com.spotify.ruler:ruler-gradle-plugin:0.2.0"
