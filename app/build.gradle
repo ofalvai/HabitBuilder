@@ -148,7 +148,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 licensee {
     allow("Apache-2.0")
     allow("MIT")
-    allowDependency('org.jetbrains', 'annotations', '16.0.1') {
+    allowDependency('org.jetbrains', 'annotations', '16.0.3') {
         because 'Apache-2.0, but typo in license URL fixed in newer versions'
     }
     allowDependency("com.github.kizitonwose", "CalendarView", "1.0.4") {
