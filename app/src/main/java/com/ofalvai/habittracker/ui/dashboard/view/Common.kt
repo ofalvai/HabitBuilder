@@ -52,7 +52,8 @@ fun CreateHabitButton(
     Box(Modifier.fillMaxWidth().wrapContentWidth()) {
         OutlinedButton(
             modifier = Modifier.padding(16.dp),
-            onClick = onClick
+            onClick = onClick,
+            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colors.background)
         ) {
             Icon(Icons.Rounded.Add, null, Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))

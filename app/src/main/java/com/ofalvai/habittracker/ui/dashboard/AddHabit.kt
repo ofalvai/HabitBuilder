@@ -81,7 +81,7 @@ fun AddHabitForm(
         }
     }
 
-    Column(Modifier.fillMaxWidth()) {
+    Column(Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
         val focusRequester = remember { FocusRequester() }
         SideEffect {
             focusRequester.requestFocus()
@@ -111,7 +111,7 @@ fun AddHabitForm(
         HabitColorPicker(initialColor = color, onColorPick = { color = it })
 
         Button(
-            modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp).fillMaxWidth(),
+            modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
             onClick = onSaveClick
         ) {
             Text(stringResource(R.string.addhabit_save))
