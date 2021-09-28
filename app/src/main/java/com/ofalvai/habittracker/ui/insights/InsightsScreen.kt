@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,6 +32,8 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.common.AppBar
 import com.ofalvai.habittracker.ui.insights.component.Heatmap
 import com.ofalvai.habittracker.ui.insights.component.TopDays
 import com.ofalvai.habittracker.ui.insights.component.TopHabits
@@ -44,13 +47,10 @@ fun InsightsScreen(navController: NavController) {
         modifier = Modifier
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 32.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = stringResource(R.string.insights_screen_title),
-            style = AppTextStyle.screenTitle
-        )
+        InsightsAppBar(onAboutClick = { navController.navigate(Screen.About.route) })
 
         Heatmap(viewModel)
 
@@ -58,4 +58,21 @@ fun InsightsScreen(navController: NavController) {
 
         TopDays(viewModel, navController)
     }
+}
+
+@Composable
+private fun InsightsAppBar(onAboutClick: () -> Unit) {
+    AppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.insights_screen_title),
+                style = AppTextStyle.screenTitle
+            )
+        },
+        dropdownMenuItems = {
+            DropdownMenuItem(onClick = onAboutClick) {
+                Text(stringResource(R.string.menu_about))
+            }
+        }
+    )
 }

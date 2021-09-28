@@ -22,13 +22,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -37,6 +35,7 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.common.AppBar
 import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.common.asEffect
@@ -146,7 +145,6 @@ private fun DashboardAppBar(
     onConfigChange: (DashboardConfig) -> Unit,
     onAboutClick: () -> Unit
 ) {
-    var menuExpanded by remember { mutableStateOf(false) }
     val onConfigChangeClick = {
         when (config) {
             DashboardConfig.FiveDay -> onConfigChange(DashboardConfig.Compact)
@@ -154,36 +152,24 @@ private fun DashboardAppBar(
         }
     }
 
-    Row(modifier = Modifier.height(48.dp)) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(start = 16.dp),
-            text = stringResource(R.string.dashboard_title),
-            style = AppTextStyle.screenTitleSmall
-        )
-
-        Spacer(Modifier.weight(1f))
-
-        IconButton(onClick = onConfigChangeClick) {
-            Icon(AppIcons.DashboardLayout, stringResource(R.string.dashboard_change_layout))
-        }
-
-        Box {
-            IconButton(onClick = { menuExpanded = true }) {
-                Icon(Icons.Rounded.MoreVert, stringResource(R.string.common_more))
+    AppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.dashboard_title),
+                style = AppTextStyle.screenTitle
+            )
+        },
+        iconActions = {
+            IconButton(onClick = onConfigChangeClick) {
+                Icon(AppIcons.DashboardLayout, stringResource(R.string.dashboard_change_layout))
             }
-            DropdownMenu(
-                expanded = menuExpanded,
-                onDismissRequest = { menuExpanded = false },
-                offset = DpOffset(8.dp, 0.dp)
-            ) {
-                DropdownMenuItem(onClick = onAboutClick) {
-                    Text(stringResource(R.string.menu_about))
-                }
+        },
+        dropdownMenuItems = {
+            DropdownMenuItem(onClick = onAboutClick) {
+                Text(stringResource(R.string.menu_about))
             }
         }
-    }
+    )
 }
 
 @Composable

@@ -44,10 +44,6 @@ object AppTextStyle {
 
     val screenTitle: TextStyle
         @Composable
-        get() = typography.h4.copy(fontFamily = patua)
-
-    val screenTitleSmall: TextStyle
-        @Composable
         get() = typography.h6.copy(fontFamily = patua)
 
     val habitTitle: TextStyle
