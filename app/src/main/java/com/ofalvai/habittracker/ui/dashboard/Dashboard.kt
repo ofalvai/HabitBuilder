@@ -44,6 +44,7 @@ import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppIcons
+import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -159,7 +160,7 @@ private fun DashboardAppBar(
                 .align(Alignment.CenterVertically)
                 .padding(start = 16.dp),
             text = stringResource(R.string.dashboard_title),
-            style = MaterialTheme.typography.h6
+            style = AppTextStyle.screenTitleSmall
         )
 
         Spacer(Modifier.weight(1f))

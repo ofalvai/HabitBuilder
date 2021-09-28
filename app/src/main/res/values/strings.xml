@@ -79,6 +79,7 @@
     <string name="habitdetails_error">Failed to load habit details</string>
     <string name="habitdetails_error_stats">Failed to load habit statistics</string>
 
+    <string name="insights_screen_title">Insights</string>
     <string name="insights_more_info">More information</string>
     <string name="insights_heatmap_title">Heatmap</string>
     <string name="insights_heatmap_description">Heatmap shows you the number of habits done each day. Darker days mean more completed habits on a given day. Tap on a day to see the actual number.</string>
