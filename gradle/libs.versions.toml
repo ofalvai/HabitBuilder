@@ -41,7 +41,7 @@ bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.1.0"
 bugsnag-runtime = "com.bugsnag:bugsnag-android:5.14.0"
 
 junit = "junit:junit:4.13.2"
-mockito-android = "org.mockito:mockito-android:3.12.4"
+mockito-android = "org.mockito:mockito-android:4.0.0"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
 turbine = "app.cash.turbine:turbine:0.6.1"
 
