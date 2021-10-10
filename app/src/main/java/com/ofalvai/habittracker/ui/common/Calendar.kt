@@ -90,10 +90,10 @@ fun CalendarPager(
 private val pagerTransitionSpec: AnimatedContentScope<YearMonth>.() -> ContentTransform = {
     if (targetState.isAfter(initialState)) {
         // Slide in from right, slide out to left
-        slideInHorizontally({ it }) + fadeIn() with slideOutHorizontally({ -it }) + fadeOut()
+        slideInHorizontally { it } + fadeIn() with slideOutHorizontally { -it } + fadeOut()
     } else {
         // Slide in from left, slide out to right
-        slideInHorizontally({ -it }) + fadeIn() with slideOutHorizontally({ it }) + fadeOut()
+        slideInHorizontally { -it } + fadeIn() with slideOutHorizontally { it } + fadeOut()
     }
 }
 
