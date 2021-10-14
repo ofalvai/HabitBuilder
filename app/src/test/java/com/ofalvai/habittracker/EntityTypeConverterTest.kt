@@ -17,7 +17,6 @@
 package com.ofalvai.habittracker
 
 import com.ofalvai.habittracker.persistence.EntityTypeConverters
-import com.ofalvai.habittracker.persistence.entity.Habit
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -45,24 +44,6 @@ class EntityTypeConverterTest {
 
         // Then
         assertEquals(1624563468000, result)
-    }
-
-    @Test
-    fun `Given color string When converted to Color Then enum is correct`() {
-        // When
-        val result = converter.toColor("Red")
-
-        // Then
-        assertEquals(Habit.Color.Red, result)
-    }
-
-    @Test
-    fun `Given Color enum When converted to string Then result is correct`() {
-        // When
-        val result = converter.fromColor(Habit.Color.Yellow)
-
-        // Then
-        assertEquals("Yellow", result)
     }
 
     @Test

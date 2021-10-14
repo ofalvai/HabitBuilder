@@ -21,7 +21,7 @@ import java.time.temporal.ChronoUnit
 
 data class ActionCountByMonth(
     val year: Int,
-    val month: Int,
+    val month: Month,
     val action_count: Int
 )
 

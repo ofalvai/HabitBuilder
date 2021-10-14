@@ -31,10 +31,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.util.*
+import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 
 private val initialSingleStats = SingleStats(null, 0, 0, 0f)
 
@@ -132,9 +131,9 @@ class HabitDetailViewModel(
         date: LocalDate,
     ) {
         if (updatedAction.toggled) {
-            val newAction = com.ofalvai.habittracker.persistence.entity.Action(
+            val newAction = ActionEntity(
                 habit_id = habitId,
-                timestamp = LocalDateTime.of(date, LocalTime.now())
+                timestamp = date.atStartOfDay()
                     .toInstant(OffsetDateTime.now().offset)
             )
             dao.insertAction(newAction)

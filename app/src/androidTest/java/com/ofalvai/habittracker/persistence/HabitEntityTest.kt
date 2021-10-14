@@ -137,7 +137,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
                 HabitWithActions(habit1, listOf(action1, action4)),
                 HabitWithActions(habit2, listOf(action2, action3))
             )
-            assertEquals(expectedHabitsWithActions, expectItem())
+            assertEquals(expectedHabitsWithActions, awaitItem())
         }
     }
 

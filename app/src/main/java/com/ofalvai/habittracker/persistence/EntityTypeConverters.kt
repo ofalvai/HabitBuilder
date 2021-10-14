@@ -17,10 +17,10 @@
 package com.ofalvai.habittracker.persistence
 
 import androidx.room.TypeConverter
-import com.ofalvai.habittracker.persistence.entity.Habit
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
+import java.time.Month
 
 class EntityTypeConverters {
 
@@ -29,12 +29,6 @@ class EntityTypeConverters {
 
     @TypeConverter
     fun fromInstant(instant: Instant): Long = instant.toEpochMilli()
-
-    @TypeConverter
-    fun toColor(colorString: String): Habit.Color = Habit.Color.valueOf(colorString)
-
-    @TypeConverter
-    fun fromColor(color: Habit.Color): String = color.toString()
 
     @TypeConverter
     fun toDate(dateString: String?): LocalDate? = if (dateString == null) null else LocalDate.parse(dateString)
@@ -46,5 +40,14 @@ class EntityTypeConverters {
     fun toDayOfWeek(dayIndex: Int): DayOfWeek {
         // SQLite day of week: 0-6 with Sunday == 0
         return DayOfWeek.of(if (dayIndex == 0) 7 else dayIndex)
+    }
+
+    @TypeConverter
+    fun toMonth(monthString: String): Month {
+        // SQLite's strftime('%m, ...) returns month numbers with a zero padding (eg. 01, 02, 03).
+        // We can't convert the returned value to Int directly because the leading zero makes
+        // Kotlin (Java) parse the digits as an octal value. It works for the first 7 months,
+        // then everything blows up in August...
+        return Month.of(monthString.toInt())
     }
 }

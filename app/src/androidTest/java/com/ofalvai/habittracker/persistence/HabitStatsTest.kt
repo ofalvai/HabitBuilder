@@ -33,6 +33,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 import java.time.Instant
 import java.time.LocalDate
+import java.time.Month
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -54,6 +55,7 @@ class HabitStatsTest : BaseInstrumentedTest() {
             Action(habit_id = habit1.id, timestamp = Instant.parse("2021-01-01T11:56:10Z")),
             Action(habit_id = habit1.id, timestamp = Instant.parse("2021-01-04T10:28:10Z")),
             Action(habit_id = habit1.id, timestamp = Instant.parse("2021-03-29T10:28:10Z")),
+            Action(habit_id = habit1.id, timestamp = Instant.parse("2021-08-29T10:28:10Z")),
         )
     }
 
@@ -86,7 +88,8 @@ class HabitStatsTest : BaseInstrumentedTest() {
             ActionCountByWeek(2020, 52, 2),
             ActionCountByWeek(2020, 53, 2), // W53: 2020-12-31, 2021-01-01
             ActionCountByWeek(2021, 1, 1), // W1: 2021-01-04
-            ActionCountByWeek(2021, 13, 1)
+            ActionCountByWeek(2021, 13, 1),
+            ActionCountByWeek(2021, 34, 1)
         )
         assertEquals(expected, actionCountsByWeek)
     }
@@ -103,10 +106,11 @@ class HabitStatsTest : BaseInstrumentedTest() {
         val actionCountByMonth = habitDao.getActionCountByMonth(TestData.habit1.id)
 
         val expected = listOf(
-            ActionCountByMonth(2019, 12, 1),
-            ActionCountByMonth(2020, 12, 3),
-            ActionCountByMonth(2021, 1, 2),
-            ActionCountByMonth(2021, 3, 1)
+            ActionCountByMonth(2019, Month.of(12), 1),
+            ActionCountByMonth(2020, Month.of(12), 3),
+            ActionCountByMonth(2021, Month.of(1), 2),
+            ActionCountByMonth(2021, Month.of(3), 1),
+            ActionCountByMonth(2021, Month.of(8), 1)
         )
         assertEquals(expected, actionCountByMonth)
     }
@@ -124,10 +128,10 @@ class HabitStatsTest : BaseInstrumentedTest() {
 
         val expectedCompletion = ActionCompletionRate(
             first_day = Instant.parse("2019-12-23T18:16:30Z"),
-            action_count = 7
+            action_count = 8
         )
         val today = LocalDate.of(2021, 3, 29)
-        val expectedRate = 0.015118791f
+        val expectedRate = 0.017278617f
         assertEquals(expectedCompletion, completionRate)
         assertEquals(expectedRate, expectedCompletion.rateAsOf(today))
     }
