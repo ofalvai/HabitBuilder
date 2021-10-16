@@ -28,12 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ofalvai.habittracker.mapper.mapActionCountByWeekListToItemList
-import com.ofalvai.habittracker.ui.model.ActionCountByWeek
 import com.ofalvai.habittracker.ui.model.ActionCountChart
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
-import java.time.LocalDate
-import java.time.Year
 import kotlin.math.max
 
 private const val MinBarHeight = 0.001f
@@ -93,20 +89,36 @@ fun ActionCountChart(
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 fun PreviewActionCountChart() {
     HabitTrackerTheme {
-        val actionCounts = listOf(
-            ActionCountByWeek(Year.of(2021), 1, 3),
-            ActionCountByWeek(Year.of(2021), 2, 4),
-            ActionCountByWeek(Year.of(2021), 3, 10),
-            ActionCountByWeek(Year.of(2021), 4, 0),
-            ActionCountByWeek(Year.of(2021), 5, 0),
-            ActionCountByWeek(Year.of(2021), 6, 2),
-            ActionCountByWeek(Year.of(2021), 7, 2),
-            ActionCountByWeek(Year.of(2021), 8, 5),
-            ActionCountByWeek(Year.of(2021), 9, 7),
-            ActionCountByWeek(Year.of(2021), 10, 8),
-            ActionCountByWeek(Year.of(2021), 11, 9),
-            ActionCountByWeek(Year.of(2021), 12, 7)
-        )
-        ActionCountChart(mapActionCountByWeekListToItemList(actionCounts, today = LocalDate.now()))
+        Column {
+            ActionCountChart(listOf(
+                ActionCountChart.ChartItem("6", 2021, 15),
+                ActionCountChart.ChartItem("7", 2021, 0),
+                ActionCountChart.ChartItem("8", 2021, 7),
+                ActionCountChart.ChartItem("9", 2021, 5),
+                ActionCountChart.ChartItem("10", 2021, 19)
+            ))
+            ActionCountChart(listOf(
+                ActionCountChart.ChartItem("2", 2021, 0),
+                ActionCountChart.ChartItem("3", 2021, 0),
+                ActionCountChart.ChartItem("4", 2021, 0),
+                ActionCountChart.ChartItem("5", 2021, 0),
+                ActionCountChart.ChartItem("6", 2021, 0),
+                ActionCountChart.ChartItem("7", 2021, 0),
+                ActionCountChart.ChartItem("8", 2021, 0),
+                ActionCountChart.ChartItem("9", 2021, 0),
+                ActionCountChart.ChartItem("10", 2021, 0)
+            ))
+            ActionCountChart(listOf(
+                ActionCountChart.ChartItem("22", 2021, 0),
+                ActionCountChart.ChartItem("33", 2021, 1),
+                ActionCountChart.ChartItem("44", 2021, 2),
+                ActionCountChart.ChartItem("55", 2021, 3),
+                ActionCountChart.ChartItem("66", 2021, 4),
+                ActionCountChart.ChartItem("77", 2021, 5),
+                ActionCountChart.ChartItem("88", 2021, 6),
+                ActionCountChart.ChartItem("99", 2021, 7),
+                ActionCountChart.ChartItem("10", 2021, 8)
+            ))
+        }
     }
 }
