@@ -23,6 +23,7 @@ import com.ofalvai.habittracker.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
 
@@ -36,9 +37,10 @@ class ChartsMapperTest {
             ActionCountByMonth(YearMonth.of(2021, 9), 6),
             ActionCountByMonth(YearMonth.of(2021, 10), 12)
         )
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByMonthListToItemList(list)
+        val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -53,9 +55,10 @@ class ChartsMapperTest {
     fun `Given empty month list When mapped Then result is empty too`() {
         // Given
         val list = emptyList<ActionCountByMonth>()
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByMonthListToItemList(list)
+        val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
         val expected = emptyList<ChartItem>()
@@ -68,9 +71,10 @@ class ChartsMapperTest {
         val list = listOf(
             ActionCountByMonth(YearMonth.of(2021, 10), 12)
         )
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByMonthListToItemList(list)
+        val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -80,21 +84,23 @@ class ChartsMapperTest {
     }
 
     @Test
-    fun `Given a single gap of 1 month When mapped Then a single item is added`() {
+    fun `Given a single gap of 1 month and empty current month When mapped Then two item is added`() {
         // Given
         val list = listOf(
             ActionCountByMonth(YearMonth.of(2021, 8), 1),
             ActionCountByMonth(YearMonth.of(2021, 10), 12)
         )
+        val today = LocalDate.of(2021, 11, 16)
 
         // When
-        val result = mapActionCountByMonthListToItemList(list)
+        val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
         val expected = listOf(
             ChartItem("8", 2021, 1),
             ChartItem("9", 2021, 0),
-            ChartItem("10", 2021, 12)
+            ChartItem("10", 2021, 12),
+            ChartItem("11", 2021, 0)
         )
         assertEquals(expected, result)
     }
@@ -106,9 +112,10 @@ class ChartsMapperTest {
             ActionCountByMonth(YearMonth.of(2021, 4), 1),
             ActionCountByMonth(YearMonth.of(2021, 10), 12)
         )
+        val today = LocalDate.of(2021, 11, 16)
 
         // When
-        val result = mapActionCountByMonthListToItemList(list)
+        val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -118,7 +125,8 @@ class ChartsMapperTest {
             ChartItem("7", 2021, 0),
             ChartItem("8", 2021, 0),
             ChartItem("9", 2021, 0),
-            ChartItem("10", 2021, 12)
+            ChartItem("10", 2021, 12),
+            ChartItem("11", 2021, 0)
         )
         assertEquals(expected, result)
     }
@@ -131,9 +139,10 @@ class ChartsMapperTest {
             ActionCountByMonth(YearMonth.of(2021, 10), 12),
             ActionCountByMonth(YearMonth.of(2021, 12), 24),
         )
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByMonthListToItemList(list)
+        val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -154,9 +163,10 @@ class ChartsMapperTest {
             ActionCountByMonth(YearMonth.of(2021, 9), 12),
             ActionCountByMonth(YearMonth.of(2021, 12), 24),
         )
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByMonthListToItemList(list)
+        val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -173,7 +183,7 @@ class ChartsMapperTest {
     }
 
     @Test
-    fun `Given multiple gaps spanning across years When mapped Then correct number of items are added`() {
+    fun `Given multiple gaps spanning across years and empty current month When mapped Then correct number of items are added`() {
         // Given
         val list = listOf(
             ActionCountByMonth(YearMonth.of(2020, 11), 11),
@@ -182,9 +192,10 @@ class ChartsMapperTest {
             ActionCountByMonth(YearMonth.of(2021, 12), 12),
             ActionCountByMonth(YearMonth.of(2022, 2), 2),
         )
+        val today = LocalDate.of(2022, 3, 16)
 
         // When
-        val result = mapActionCountByMonthListToItemList(list)
+        val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -204,6 +215,7 @@ class ChartsMapperTest {
             ChartItem("12", 2021, 12),
             ChartItem("1", 2022, 0),
             ChartItem("2", 2022, 2),
+            ChartItem("3", 2022, 0),
         )
         assertEquals(expected, result)
     }
@@ -216,9 +228,10 @@ class ChartsMapperTest {
             ActionCountByWeek(Year.of(2021), 9, 6),
             ActionCountByWeek(Year.of(2021), 10, 12)
         )
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list)
+        val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -233,9 +246,10 @@ class ChartsMapperTest {
     fun `Given empty week list When mapped Then result is empty too`() {
         // Given
         val list = emptyList<ActionCountByWeek>()
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list)
+        val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = emptyList<ChartItem>()
@@ -246,9 +260,10 @@ class ChartsMapperTest {
     fun `Given single week When mapped Then result is single item`() {
         // Given
         val list = listOf(ActionCountByWeek(Year.of(2021), 10, 16))
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list)
+        val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(ChartItem("10", 2021, 16))
@@ -256,21 +271,23 @@ class ChartsMapperTest {
     }
 
     @Test
-    fun `Given a single gap of 1 week When mapped Then a single item is added`() {
+    fun `Given a single gap of 1 week and empty current week When mapped Then 2 items are added`() {
         // Given
         val list = listOf(
             ActionCountByWeek(Year.of(2021), 8, 1),
             ActionCountByWeek(Year.of(2021), 10, 12)
         )
+        val today = LocalDate.of(2021, 3, 16)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list)
+        val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(
             ChartItem("8", 2021, 1),
             ChartItem("9", 2021, 0),
-            ChartItem("10", 2021, 12)
+            ChartItem("10", 2021, 12),
+            ChartItem("11", 2021, 0)
         )
         assertEquals(expected, result)
     }
@@ -282,9 +299,10 @@ class ChartsMapperTest {
             ActionCountByWeek(Year.of(2021), 5, 1),
             ActionCountByWeek(Year.of(2021), 10, 12)
         )
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list)
+        val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -306,9 +324,10 @@ class ChartsMapperTest {
             ActionCountByWeek(Year.of(2021), 8, 1),
             ActionCountByWeek(Year.of(2021), 10, 12)
         )
+        val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list)
+        val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -324,15 +343,16 @@ class ChartsMapperTest {
     }
 
     @Test
-    fun `Given multiple week gaps spanning across years When mapped Then correct number of items are added`() {
+    fun `Given multiple week gaps spanning across years and empty current week When mapped Then correct number of items are added`() {
         // Given
         val list = listOf(
             ActionCountByWeek(Year.of(2020), 50, 50),
             ActionCountByWeek(Year.of(2021), 3, 3),
         )
+        val today = LocalDate.of(2021, 1, 26)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list)
+        val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(
@@ -343,6 +363,7 @@ class ChartsMapperTest {
             ChartItem("1", 2021, 0),
             ChartItem("2", 2021, 0),
             ChartItem("3", 2021, 3),
+            ChartItem("4", 2021, 0),
         )
         assertEquals(expected, result)
     }

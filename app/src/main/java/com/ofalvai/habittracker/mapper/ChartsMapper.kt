@@ -16,31 +16,42 @@
 
 package com.ofalvai.habittracker.mapper
 
+import com.kizitonwose.calendarview.utils.yearMonth
 import com.ofalvai.habittracker.ui.habitdetail.ChartItem
 import com.ofalvai.habittracker.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
-import java.time.MonthDay
-import java.time.Period
-import java.time.Year
-import java.time.YearMonth
+import java.time.*
 import java.time.temporal.IsoFields
+import java.time.temporal.WeekFields
+import java.util.*
 
-
-fun mapActionCountByMonthListToItemList(list: List<ActionCountByMonth>): List<ChartItem> {
-    return fillActionCountByMonthListWithEmptyItems(list)
+fun mapActionCountByMonthListToItemList(
+    list: List<ActionCountByMonth>, today: LocalDate
+): List<ChartItem> {
+    return fillActionCountByMonthListWithEmptyItems(list, today)
         .map { it.toChartItem() }
 }
 
-fun mapActionCountByWeekListToItemList(list: List<ActionCountByWeek>): List<ChartItem> {
-    return fillActionCountByWeekListWithEmptyItems(list)
+fun mapActionCountByWeekListToItemList(
+    list: List<ActionCountByWeek>, today: LocalDate
+): List<ChartItem> {
+    return fillActionCountByWeekListWithEmptyItems(list, today)
         .map { it.toChartItem() }
 }
 
-fun fillActionCountByMonthListWithEmptyItems(list: List<ActionCountByMonth>): List<ActionCountByMonth> {
+fun fillActionCountByMonthListWithEmptyItems(
+    list: List<ActionCountByMonth>, today: LocalDate
+): List<ActionCountByMonth> {
+    // Add today's month to the end of list, even if it's missing
+    val listWithCurrentMonth = if (list.lastOrNull()?.yearMonth == today.yearMonth) {
+        list
+    } else {
+        list + listOf(ActionCountByMonth(today.yearMonth, 0))
+    }
+
     val filledList = mutableListOf<ActionCountByMonth>()
-
     var previousYearMonth: YearMonth? = null
-    for (item in list) {
+    for (item in listWithCurrentMonth) {
         if (previousYearMonth == null) {
             previousYearMonth = item.yearMonth
             filledList.add(item)
@@ -63,12 +74,26 @@ fun fillActionCountByMonthListWithEmptyItems(list: List<ActionCountByMonth>): Li
     return filledList
 }
 
-fun fillActionCountByWeekListWithEmptyItems(list: List<ActionCountByWeek>): List<ActionCountByWeek> {
+fun fillActionCountByWeekListWithEmptyItems(
+    list: List<ActionCountByWeek>, today: LocalDate
+): List<ActionCountByWeek> {
+    // Add today's week to the end of list, even if it's missing
+    val last = list.lastOrNull()
+    val todayWeekOfYear = today.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear())
+    val listWithCurrentWeek = if (
+        last?.year?.value == today.year && last.weekOfYear == todayWeekOfYear
+    ) {
+        list
+    } else {
+        list + listOf(ActionCountByWeek(Year.of(today.year), todayWeekOfYear, 0))
+    }
+
+
     val filledList = mutableListOf<ActionCountByWeek>()
 
     var previousYear: Year? = null
     var previousWeek: Int? = null
-    for (item in list) {
+    for (item in listWithCurrentWeek) {
         if (previousWeek == null && previousYear == null) {
             previousYear = item.year
             previousWeek = item.weekOfYear

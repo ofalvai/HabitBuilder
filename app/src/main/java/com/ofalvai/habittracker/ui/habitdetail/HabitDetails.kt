@@ -393,8 +393,9 @@ private fun HabitStats(
     var habitStatType by remember { mutableStateOf(HabitStatType.Weekly) }
     val chartItems by remember(habitStatType, actionCountByMonth, actionCountByWeek) {
         val chartItems: List<ChartItem> = when (habitStatType) {
-            HabitStatType.Weekly -> mapActionCountByWeekListToItemList(actionCountByWeek)
-            HabitStatType.Monthly -> mapActionCountByMonthListToItemList(actionCountByMonth)
+            // TODO: move to viewmodel
+            HabitStatType.Weekly -> mapActionCountByWeekListToItemList(actionCountByWeek, LocalDate.now())
+            HabitStatType.Monthly -> mapActionCountByMonthListToItemList(actionCountByMonth, LocalDate.now())
         }
         mutableStateOf(chartItems)
     }

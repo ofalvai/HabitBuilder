@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.mapper.mapActionCountByWeekListToItemList
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import java.time.LocalDate
 import java.time.Year
 import kotlin.math.max
 
@@ -43,13 +44,6 @@ data class ChartItem(
     val value: Int
 )
 
-
-
-/**
- * TODO:
- * - data validation
- * - X axis year indicator
- */
 @Composable
 fun ActionCountChart(
     values: List<ChartItem>,
@@ -76,7 +70,7 @@ fun ActionCountChart(
                     verticalArrangement = Arrangement.Bottom,
                     ) {
                     val value = chartItem.value
-                    val heightRatio = value / maxValue.toFloat()
+                    val heightRatio = if (maxValue > 0) value / maxValue.toFloat() else 0f
                     val isEven = index % 2 == 0
                     Text(
                         modifier = Modifier.width(BarWidth).padding(top = 8.dp),
@@ -118,6 +112,6 @@ fun PreviewActionCountChart() {
             ActionCountByWeek(Year.of(2021), 11, 9),
             ActionCountByWeek(Year.of(2021), 12, 7)
         )
-        ActionCountChart(mapActionCountByWeekListToItemList(actionCounts))
+        ActionCountChart(mapActionCountByWeekListToItemList(actionCounts, today = LocalDate.now()))
     }
 }
