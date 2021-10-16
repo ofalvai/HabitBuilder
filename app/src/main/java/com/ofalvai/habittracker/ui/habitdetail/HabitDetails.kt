@@ -45,6 +45,8 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.mapper.mapActionCountByMonthListToItemList
+import com.ofalvai.habittracker.mapper.mapActionCountByWeekListToItemList
 import com.ofalvai.habittracker.ui.common.*
 import com.ofalvai.habittracker.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
@@ -155,6 +157,7 @@ private fun HabitDetailScreen(
                 }
                 Result.Loading -> {
                     // No calendar and stats in loading state
+                    HabitStats(actionCountByWeek, actionCountByMonth)
                 }
                 is Result.Failure -> {
                     ErrorView(
@@ -380,23 +383,10 @@ private fun HabitStats(
     actionCountByWeek: List<ActionCountByWeek>,
     actionCountByMonth: List<ActionCountByMonth>
 ) {
-    Column(Modifier.padding(horizontal = 32.dp)) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("Actions by week:")
-        actionCountByWeek.forEach {
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                text = "${it.year} W${it.weekOfYear}: ${it.actionCount}"
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-        actionCountByMonth.forEach {
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                text = "${it.yearMonth}: ${it.actionCount}"
-            )
-        }
+    Column {
+        ActionCountChart(values = mapActionCountByWeekListToItemList(actionCountByWeek))
+        Spacer(modifier = Modifier.height(8.dp))
+        ActionCountChart(values = mapActionCountByMonthListToItemList(actionCountByMonth))
     }
 }
 
