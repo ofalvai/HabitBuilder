@@ -78,6 +78,8 @@
     <string name="habitdetails_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
     <string name="habitdetails_error">Failed to load habit details</string>
     <string name="habitdetails_error_stats">Failed to load habit statistics</string>
+    <string name="habitdetails_actioncount_selector_weekly">Weekly</string>
+    <string name="habitdetails_actioncount_selector_monthly">Monthly</string>
 
     <string name="insights_screen_title">Insights</string>
     <string name="insights_more_info">More information</string>

@@ -157,7 +157,6 @@ private fun HabitDetailScreen(
                 }
                 Result.Loading -> {
                     // No calendar and stats in loading state
-                    HabitStats(actionCountByWeek, actionCountByMonth)
                 }
                 is Result.Failure -> {
                     ErrorView(
@@ -255,9 +254,10 @@ private fun HabitHeaderEditingContent(
         }
     }
 
-    Column(modifier = Modifier
-        .padding(bottom = 32.dp)
-        .statusBarsPadding()
+    Column(
+        modifier = Modifier
+            .padding(bottom = 32.dp)
+            .statusBarsPadding()
     ) {
         HabitDetailEditingAppBar(
             onBack = onBack,
@@ -292,7 +292,8 @@ private fun HabitHeaderContent(
     Column(
         Modifier
             .padding(bottom = 32.dp)
-            .statusBarsPadding()) {
+            .statusBarsPadding()
+    ) {
         HabitDetailAppBar(
             onBack = onBack,
             onEdit = onEdit,
@@ -378,15 +379,60 @@ private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
     )
 }
 
+private enum class HabitStatType {
+    Weekly, Monthly;
+
+    fun invert() = if (this == Weekly) Monthly else Weekly
+}
+
 @Composable
 private fun HabitStats(
     actionCountByWeek: List<ActionCountByWeek>,
     actionCountByMonth: List<ActionCountByMonth>
 ) {
+    var habitStatType by remember { mutableStateOf(HabitStatType.Weekly) }
+    val chartItems by remember(habitStatType, actionCountByMonth, actionCountByWeek) {
+        val chartItems: List<ChartItem> = when (habitStatType) {
+            HabitStatType.Weekly -> mapActionCountByWeekListToItemList(actionCountByWeek)
+            HabitStatType.Monthly -> mapActionCountByMonthListToItemList(actionCountByMonth)
+        }
+        mutableStateOf(chartItems)
+    }
+
     Column {
-        ActionCountChart(values = mapActionCountByWeekListToItemList(actionCountByWeek))
-        Spacer(modifier = Modifier.height(8.dp))
-        ActionCountChart(values = mapActionCountByMonthListToItemList(actionCountByMonth))
+        Row(Modifier.align(Alignment.End)) {
+            ToggleButton(
+                checked = habitStatType == HabitStatType.Weekly,
+                onCheckedChange = { habitStatType = habitStatType.invert() }
+            ) {
+                Text(text = stringResource(R.string.habitdetails_actioncount_selector_weekly))
+            }
+            Spacer(Modifier.width(8.dp))
+            ToggleButton(
+                checked = habitStatType == HabitStatType.Monthly,
+                onCheckedChange = { habitStatType = habitStatType.invert() }
+            ) {
+                Text(text = stringResource(R.string.habitdetails_actioncount_selector_monthly))
+            }
+
+        }
+        ActionCountChart(
+            modifier = Modifier.fillMaxWidth(),
+            values = chartItems
+        )
+    }
+}
+
+@Composable
+private fun ToggleButton(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    content: @Composable () -> Unit
+) {
+    if (checked) {
+        Button(onClick = { onCheckedChange(!checked) }) { content() }
+    } else {
+        OutlinedButton(onClick = { onCheckedChange(!checked) }) { content() }
     }
 }
 
@@ -486,12 +532,14 @@ private fun DeleteConfirmationDialog(
 private fun PreviewHabitDetailScreen() {
     HabitTrackerTheme {
         HabitDetailScreen(
-            habitDetailState = Result.Success(HabitWithActions(
-                Habit(0, "Meditation", Habit.Color.Red),
-                listOf(Action(0, true, Instant.now())),
-                2,
-                ActionHistory.Clean
-            )),
+            habitDetailState = Result.Success(
+                HabitWithActions(
+                    Habit(0, "Meditation", Habit.Color.Red),
+                    listOf(Action(0, true, Instant.now())),
+                    2,
+                    ActionHistory.Clean
+                )
+            ),
             singleStats = SingleStats(LocalDate.now(), 2, 1, 0.15f),
             actionCountByWeek = emptyList(),
             actionCountByMonth = emptyList(),

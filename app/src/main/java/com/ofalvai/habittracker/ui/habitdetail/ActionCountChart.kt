@@ -51,7 +51,10 @@ data class ChartItem(
  * - X axis year indicator
  */
 @Composable
-fun ActionCountChart(values: List<ChartItem>) {
+fun ActionCountChart(
+    values: List<ChartItem>,
+    modifier: Modifier = Modifier
+) {
     if (values.isEmpty()) {
         return
     }
@@ -61,7 +64,7 @@ fun ActionCountChart(values: List<ChartItem>) {
 
 
     LazyRow(
-        modifier = Modifier.height(200.dp),
+        modifier = modifier.height(200.dp),
         reverseLayout = true
     ) {
         itemsIndexed(reversedItems) { index, chartItem ->
