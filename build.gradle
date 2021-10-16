@@ -1,3 +1,5 @@
+import com.android.build.gradle.api.AndroidBasePlugin
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
@@ -17,6 +19,7 @@ plugins {
     id "com.osacky.doctor" version "0.7.3"
     id "com.asarkar.gradle.build-time-tracker" version "3.0.1"
     id "com.google.devtools.ksp" version "1.5.31-1.0.0"
+    id "org.gradle.android.cache-fix" version "2.4.4" apply false
 }
 
 doctor {
@@ -36,4 +39,10 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+subprojects {
+    plugins.withType(AndroidBasePlugin) {
+        project.apply plugin: "org.gradle.android.cache-fix"
+    }
 }
