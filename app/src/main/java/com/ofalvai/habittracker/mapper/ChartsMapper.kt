@@ -17,9 +17,9 @@
 package com.ofalvai.habittracker.mapper
 
 import com.kizitonwose.calendarview.utils.yearMonth
-import com.ofalvai.habittracker.ui.habitdetail.ChartItem
 import com.ofalvai.habittracker.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
+import com.ofalvai.habittracker.ui.model.ActionCountChart
 import java.time.*
 import java.time.temporal.IsoFields
 import java.time.temporal.WeekFields
@@ -27,14 +27,14 @@ import java.util.*
 
 fun mapActionCountByMonthListToItemList(
     list: List<ActionCountByMonth>, today: LocalDate
-): List<ChartItem> {
+): List<ActionCountChart.ChartItem> {
     return fillActionCountByMonthListWithEmptyItems(list, today)
         .map { it.toChartItem() }
 }
 
 fun mapActionCountByWeekListToItemList(
     list: List<ActionCountByWeek>, today: LocalDate
-): List<ChartItem> {
+): List<ActionCountChart.ChartItem> {
     return fillActionCountByWeekListWithEmptyItems(list, today)
         .map { it.toChartItem() }
 }
@@ -138,13 +138,13 @@ fun fillActionCountByWeekListWithEmptyItems(
 }
 
 
-private fun ActionCountByWeek.toChartItem() = ChartItem(
+private fun ActionCountByWeek.toChartItem() = ActionCountChart.ChartItem(
     label = this.weekOfYear.toString(),
     year = this.year.value,
     value = this.actionCount
 )
 
-private fun ActionCountByMonth.toChartItem() = ChartItem(
+private fun ActionCountByMonth.toChartItem() = ActionCountChart.ChartItem(
     label = this.yearMonth.monthValue.toString(),
     year = this.yearMonth.year,
     value = this.actionCount,

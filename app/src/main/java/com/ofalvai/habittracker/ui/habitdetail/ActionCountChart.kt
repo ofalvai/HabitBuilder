@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.mapper.mapActionCountByWeekListToItemList
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
+import com.ofalvai.habittracker.ui.model.ActionCountChart
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import java.time.LocalDate
 import java.time.Year
@@ -38,15 +39,9 @@ import kotlin.math.max
 private const val MinBarHeight = 0.001f
 private val BarWidth = 32.dp
 
-data class ChartItem(
-    val label: String,
-    val year: Int,
-    val value: Int
-)
-
 @Composable
 fun ActionCountChart(
-    values: List<ChartItem>,
+    values: List<ActionCountChart.ChartItem>,
     modifier: Modifier = Modifier
 ) {
     if (values.isEmpty()) {

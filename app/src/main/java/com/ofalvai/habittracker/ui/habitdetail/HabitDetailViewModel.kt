@@ -36,6 +36,7 @@ import java.util.*
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 
 private val initialSingleStats = SingleStats(null, 0, 0, 0f)
+private val initialChartData = ActionCountChart(emptyList(), ActionCountChart.Type.Weekly)
 
 enum class HabitDetailEvent {
     BackNavigation
@@ -49,11 +50,13 @@ class HabitDetailViewModel(
 
     val habitWithActions = MutableStateFlow<Result<HabitWithActions>>(Result.Loading)
     val singleStats = MutableStateFlow(initialSingleStats)
-    val actionCountByWeek = MutableStateFlow<List<ActionCountByWeek>>(emptyList())
-    val actionCountByMonth = MutableStateFlow<List<ActionCountByMonth>>(emptyList())
+    val chartData = MutableStateFlow(initialChartData)
 
     private val eventChannel = Channel<HabitDetailEvent>(Channel.BUFFERED)
     val habitDetailEvent = eventChannel.receiveAsFlow()
+
+    private val actionCountByWeek = MutableStateFlow<List<ActionCountByWeek>>(emptyList())
+    private val actionCountByMonth = MutableStateFlow<List<ActionCountByMonth>>(emptyList())
 
     init {
         onboardingManager.habitDetailsOpened()
@@ -96,6 +99,7 @@ class HabitDetailViewModel(
                 )
                 actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity.await())
                 actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity.await())
+                switchChartType(chartData.value.type)
             } catch (e: Throwable) {
                 // Fail silently
                 telemetry.logNonFatal(e)
@@ -123,6 +127,14 @@ class HabitDetailViewModel(
             dao.deleteHabit(habit.toEntity())
             eventChannel.send(HabitDetailEvent.BackNavigation)
         }
+    }
+
+    fun switchChartType(newType: ActionCountChart.Type) {
+        val items = when (newType) {
+            ActionCountChart.Type.Weekly -> mapActionCountByWeekListToItemList(actionCountByWeek.value, LocalDate.now())
+            ActionCountChart.Type.Monthly -> mapActionCountByMonthListToItemList(actionCountByMonth.value, LocalDate.now())
+        }
+        chartData.value = ActionCountChart(items, newType)
     }
 
     private suspend fun toggleAction(

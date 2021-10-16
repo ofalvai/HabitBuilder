@@ -18,9 +18,9 @@ package com.ofalvai.habittracker
 
 import com.ofalvai.habittracker.mapper.mapActionCountByMonthListToItemList
 import com.ofalvai.habittracker.mapper.mapActionCountByWeekListToItemList
-import com.ofalvai.habittracker.ui.habitdetail.ChartItem
 import com.ofalvai.habittracker.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
+import com.ofalvai.habittracker.ui.model.ActionCountChart.ChartItem
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.LocalDate

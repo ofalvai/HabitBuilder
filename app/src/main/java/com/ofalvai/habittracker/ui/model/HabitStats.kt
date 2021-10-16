@@ -40,6 +40,23 @@ data class ActionCountByMonth(
     val actionCount: Int
 )
 
+data class ActionCountChart(
+    val items: List<ChartItem>,
+    val type: Type
+) {
+    data class ChartItem(
+        val label: String,
+        val year: Int,
+        val value: Int
+    )
+
+    enum class Type {
+        Weekly, Monthly;
+
+        fun invert() = if (this == Weekly) Monthly else Weekly
+    }
+}
+
 typealias BucketIndex = Int
 
 data class HeatmapMonth(

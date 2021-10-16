@@ -45,8 +45,6 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.mapper.mapActionCountByMonthListToItemList
-import com.ofalvai.habittracker.mapper.mapActionCountByWeekListToItemList
 import com.ofalvai.habittracker.ui.common.*
 import com.ofalvai.habittracker.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
@@ -76,8 +74,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
     }
 
     val singleStats by viewModel.singleStats.collectAsState()
-    val actionCountByWeek by viewModel.actionCountByWeek.collectAsState()
-    val actionCountByMonth by viewModel.actionCountByMonth.collectAsState()
+    val chartData by viewModel.chartData.collectAsState()
 
     DisposableEffect(habitId) {
         val job = viewModel.fetchHabitDetails(habitId)
@@ -112,8 +109,8 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
     HabitDetailScreen(
         habitDetailState = habitDetailState,
         singleStats = singleStats,
-        actionCountByWeek = actionCountByWeek,
-        actionCountByMonth = actionCountByMonth,
+        chartData = chartData,
+        onChartTypeChange = { viewModel.switchChartType(it) },
         onBack = { navController.popBackStack() },
         onEdit = { viewModel.updateHabit(it) },
         onDelete = onDelete,
@@ -125,8 +122,8 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 private fun HabitDetailScreen(
     habitDetailState: Result<HabitWithActions>,
     singleStats: SingleStats,
-    actionCountByWeek: List<ActionCountByWeek>,
-    actionCountByMonth: List<ActionCountByMonth>,
+    chartData: ActionCountChart,
+    onChartTypeChange: (ActionCountChart.Type) -> Unit,
     onBack: () -> Unit,
     onEdit: (Habit) -> Unit,
     onDelete: (Habit) -> Unit,
@@ -153,7 +150,7 @@ private fun HabitDetailScreen(
                         onDayToggle = onDayToggle
                     )
 
-                    HabitStats(actionCountByWeek, actionCountByMonth)
+                    HabitStats(chartData, onChartTypeChange)
                 }
                 Result.Loading -> {
                     // No calendar and stats in loading state
@@ -379,39 +376,23 @@ private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
     )
 }
 
-private enum class HabitStatType {
-    Weekly, Monthly;
-
-    fun invert() = if (this == Weekly) Monthly else Weekly
-}
-
 @Composable
 private fun HabitStats(
-    actionCountByWeek: List<ActionCountByWeek>,
-    actionCountByMonth: List<ActionCountByMonth>
+    chartData: ActionCountChart,
+    onStatTypeChange: (ActionCountChart.Type) -> Unit
 ) {
-    var habitStatType by remember { mutableStateOf(HabitStatType.Weekly) }
-    val chartItems by remember(habitStatType, actionCountByMonth, actionCountByWeek) {
-        val chartItems: List<ChartItem> = when (habitStatType) {
-            // TODO: move to viewmodel
-            HabitStatType.Weekly -> mapActionCountByWeekListToItemList(actionCountByWeek, LocalDate.now())
-            HabitStatType.Monthly -> mapActionCountByMonthListToItemList(actionCountByMonth, LocalDate.now())
-        }
-        mutableStateOf(chartItems)
-    }
-
     Column {
         Row(Modifier.align(Alignment.End)) {
             ToggleButton(
-                checked = habitStatType == HabitStatType.Weekly,
-                onCheckedChange = { habitStatType = habitStatType.invert() }
+                checked = chartData.type == ActionCountChart.Type.Weekly,
+                onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
             ) {
                 Text(text = stringResource(R.string.habitdetails_actioncount_selector_weekly))
             }
             Spacer(Modifier.width(8.dp))
             ToggleButton(
-                checked = habitStatType == HabitStatType.Monthly,
-                onCheckedChange = { habitStatType = habitStatType.invert() }
+                checked = chartData.type == ActionCountChart.Type.Monthly,
+                onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
             ) {
                 Text(text = stringResource(R.string.habitdetails_actioncount_selector_monthly))
             }
@@ -419,7 +400,7 @@ private fun HabitStats(
         }
         ActionCountChart(
             modifier = Modifier.fillMaxWidth(),
-            values = chartItems
+            values = chartData.items
         )
     }
 }
@@ -542,8 +523,8 @@ private fun PreviewHabitDetailScreen() {
                 )
             ),
             singleStats = SingleStats(LocalDate.now(), 2, 1, 0.15f),
-            actionCountByWeek = emptyList(),
-            actionCountByMonth = emptyList(),
+            chartData = ActionCountChart(emptyList(), ActionCountChart.Type.Weekly),
+            onChartTypeChange = {},
             onBack = { },
             onEdit = { },
             onDelete = { },
