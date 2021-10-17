@@ -20,6 +20,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +33,7 @@ import com.ofalvai.habittracker.ui.model.ActionCountChart
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import kotlin.math.max
 
-private const val MinBarHeight = 0.001f
+private const val MinBarHeight = 0.02f
 private val BarWidth = 32.dp
 
 @Composable
@@ -64,21 +65,24 @@ fun ActionCountChart(
                     val heightRatio = if (maxValue > 0) value / maxValue.toFloat() else 0f
                     val isEven = index % 2 == 0
                     Text(
-                        modifier = Modifier.width(BarWidth).padding(top = 8.dp),
+                        modifier = Modifier.width(BarWidth).padding(top = 8.dp, bottom = 4.dp),
                         text = value.toString(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.caption
                     )
+                    val background = if (isEven) MaterialTheme.colors.primary else MaterialTheme.colors.primary.copy(alpha = .8f) // TODO
                     Box(
                         modifier = Modifier
-                            .background(if (isEven) MaterialTheme.colors.primary else MaterialTheme.colors.primary.copy(alpha = .8f))
+                            .background(background, shape = RoundedCornerShape(4.dp))
                             .fillMaxHeight(fraction = max(MinBarHeight, heightRatio))
                             .width(BarWidth)
                     )
                 }
                 Text(
-                    modifier = Modifier.width(BarWidth),
+                    modifier = Modifier.width(BarWidth).padding(top = 4.dp),
                     text = chartItem.label,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.caption
                 )
             }
         }
@@ -109,15 +113,15 @@ fun PreviewActionCountChart() {
                 ActionCountChart.ChartItem("10", 2021, 0)
             ))
             ActionCountChart(listOf(
-                ActionCountChart.ChartItem("22", 2021, 0),
-                ActionCountChart.ChartItem("33", 2021, 1),
-                ActionCountChart.ChartItem("44", 2021, 2),
-                ActionCountChart.ChartItem("55", 2021, 3),
-                ActionCountChart.ChartItem("66", 2021, 4),
-                ActionCountChart.ChartItem("77", 2021, 5),
-                ActionCountChart.ChartItem("88", 2021, 6),
-                ActionCountChart.ChartItem("99", 2021, 7),
-                ActionCountChart.ChartItem("10", 2021, 8)
+                ActionCountChart.ChartItem("W22", 2021, 0),
+                ActionCountChart.ChartItem("W33", 2021, 1),
+                ActionCountChart.ChartItem("W44", 2021, 2),
+                ActionCountChart.ChartItem("W55", 2021, 3),
+                ActionCountChart.ChartItem("W66", 2021, 4),
+                ActionCountChart.ChartItem("W77", 2021, 5),
+                ActionCountChart.ChartItem("W88", 2021, 6),
+                ActionCountChart.ChartItem("W99", 2021, 7),
+                ActionCountChart.ChartItem("W10", 2021, 8)
             ))
         }
     }

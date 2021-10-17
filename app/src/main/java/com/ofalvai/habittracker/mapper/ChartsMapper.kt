@@ -139,7 +139,7 @@ fun fillActionCountByWeekListWithEmptyItems(
 
 
 private fun ActionCountByWeek.toChartItem() = ActionCountChart.ChartItem(
-    label = this.weekOfYear.toString(),
+    label = "W${this.weekOfYear}",
     year = this.year.value,
     value = this.actionCount
 )

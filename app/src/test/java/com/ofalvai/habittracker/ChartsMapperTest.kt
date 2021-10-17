@@ -52,7 +52,7 @@ class ChartsMapperTest {
     }
 
     @Test
-    fun `Given empty month list When mapped Then result is empty too`() {
+    fun `Given empty month list When mapped Then result is only the current month`() {
         // Given
         val list = emptyList<ActionCountByMonth>()
         val today = LocalDate.of(2021, 10, 16)
@@ -61,7 +61,7 @@ class ChartsMapperTest {
         val result = mapActionCountByMonthListToItemList(list, today)
 
         // Then
-        val expected = emptyList<ChartItem>()
+        val expected = listOf(ChartItem("10", 2021, 0))
         assertEquals(expected, result)
     }
 
@@ -139,7 +139,7 @@ class ChartsMapperTest {
             ActionCountByMonth(YearMonth.of(2021, 10), 12),
             ActionCountByMonth(YearMonth.of(2021, 12), 24),
         )
-        val today = LocalDate.of(2021, 10, 16)
+        val today = LocalDate.of(2021, 12, 16)
 
         // When
         val result = mapActionCountByMonthListToItemList(list, today)
@@ -163,7 +163,7 @@ class ChartsMapperTest {
             ActionCountByMonth(YearMonth.of(2021, 9), 12),
             ActionCountByMonth(YearMonth.of(2021, 12), 24),
         )
-        val today = LocalDate.of(2021, 10, 16)
+        val today = LocalDate.of(2021, 12, 16)
 
         // When
         val result = mapActionCountByMonthListToItemList(list, today)
@@ -228,22 +228,22 @@ class ChartsMapperTest {
             ActionCountByWeek(Year.of(2021), 9, 6),
             ActionCountByWeek(Year.of(2021), 10, 12)
         )
-        val today = LocalDate.of(2021, 10, 16)
+        val today = LocalDate.of(2021, 3, 10)
 
         // When
         val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(
-            ChartItem("8", 2021, 1),
-            ChartItem("9", 2021, 6),
-            ChartItem("10", 2021, 12)
+            ChartItem("W8", 2021, 1),
+            ChartItem("W9", 2021, 6),
+            ChartItem("W10", 2021, 12)
         )
         assertEquals(expected, result)
     }
 
     @Test
-    fun `Given empty week list When mapped Then result is empty too`() {
+    fun `Given empty week list When mapped Then result is the current week only`() {
         // Given
         val list = emptyList<ActionCountByWeek>()
         val today = LocalDate.of(2021, 10, 16)
@@ -252,7 +252,7 @@ class ChartsMapperTest {
         val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
-        val expected = emptyList<ChartItem>()
+        val expected = listOf(ChartItem("W41", 2021, 0))
         assertEquals(expected, result)
     }
 
@@ -260,13 +260,13 @@ class ChartsMapperTest {
     fun `Given single week When mapped Then result is single item`() {
         // Given
         val list = listOf(ActionCountByWeek(Year.of(2021), 10, 16))
-        val today = LocalDate.of(2021, 10, 16)
+        val today = LocalDate.of(2021, 3, 10)
 
         // When
         val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
-        val expected = listOf(ChartItem("10", 2021, 16))
+        val expected = listOf(ChartItem("W10", 2021, 16))
         assertEquals(expected, result)
     }
 
@@ -284,10 +284,10 @@ class ChartsMapperTest {
 
         // Then
         val expected = listOf(
-            ChartItem("8", 2021, 1),
-            ChartItem("9", 2021, 0),
-            ChartItem("10", 2021, 12),
-            ChartItem("11", 2021, 0)
+            ChartItem("W8", 2021, 1),
+            ChartItem("W9", 2021, 0),
+            ChartItem("W10", 2021, 12),
+            ChartItem("W11", 2021, 0)
         )
         assertEquals(expected, result)
     }
@@ -299,19 +299,19 @@ class ChartsMapperTest {
             ActionCountByWeek(Year.of(2021), 5, 1),
             ActionCountByWeek(Year.of(2021), 10, 12)
         )
-        val today = LocalDate.of(2021, 10, 16)
+        val today = LocalDate.of(2021, 3, 10)
 
         // When
         val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(
-            ChartItem("5", 2021, 1),
-            ChartItem("6", 2021, 0),
-            ChartItem("7", 2021, 0),
-            ChartItem("8", 2021, 0),
-            ChartItem("9", 2021, 0),
-            ChartItem("10", 2021, 12)
+            ChartItem("W5", 2021, 1),
+            ChartItem("W6", 2021, 0),
+            ChartItem("W7", 2021, 0),
+            ChartItem("W8", 2021, 0),
+            ChartItem("W9", 2021, 0),
+            ChartItem("W10", 2021, 12)
         )
         assertEquals(expected, result)
     }
@@ -324,20 +324,20 @@ class ChartsMapperTest {
             ActionCountByWeek(Year.of(2021), 8, 1),
             ActionCountByWeek(Year.of(2021), 10, 12)
         )
-        val today = LocalDate.of(2021, 10, 16)
+        val today = LocalDate.of(2021, 3, 10)
 
         // When
         val result = mapActionCountByWeekListToItemList(list, today)
 
         // Then
         val expected = listOf(
-            ChartItem("4", 2021, 4),
-            ChartItem("5", 2021, 0),
-            ChartItem("6", 2021, 0),
-            ChartItem("7", 2021, 0),
-            ChartItem("8", 2021, 1),
-            ChartItem("9", 2021, 0),
-            ChartItem("10", 2021, 12)
+            ChartItem("W4", 2021, 4),
+            ChartItem("W5", 2021, 0),
+            ChartItem("W6", 2021, 0),
+            ChartItem("W7", 2021, 0),
+            ChartItem("W8", 2021, 1),
+            ChartItem("W9", 2021, 0),
+            ChartItem("W10", 2021, 12)
         )
         assertEquals(expected, result)
     }
@@ -356,14 +356,14 @@ class ChartsMapperTest {
 
         // Then
         val expected = listOf(
-            ChartItem("50", 2020, 50),
-            ChartItem("51", 2020, 0),
-            ChartItem("52", 2020, 0),
-            ChartItem("53", 2020, 0),
-            ChartItem("1", 2021, 0),
-            ChartItem("2", 2021, 0),
-            ChartItem("3", 2021, 3),
-            ChartItem("4", 2021, 0),
+            ChartItem("W50", 2020, 50),
+            ChartItem("W51", 2020, 0),
+            ChartItem("W52", 2020, 0),
+            ChartItem("W53", 2020, 0),
+            ChartItem("W1", 2021, 0),
+            ChartItem("W2", 2021, 0),
+            ChartItem("W3", 2021, 3),
+            ChartItem("W4", 2021, 0),
         )
         assertEquals(expected, result)
     }
