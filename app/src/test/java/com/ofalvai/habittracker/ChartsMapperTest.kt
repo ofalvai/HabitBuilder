@@ -26,8 +26,11 @@ import org.junit.Test
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
+import java.util.*
 
 class ChartsMapperTest {
+
+    private val locale = Locale.forLanguageTag("hu-HU")
 
     @Test
     fun `Given consecutive months When mapped Then no filling item is added`() {
@@ -231,7 +234,7 @@ class ChartsMapperTest {
         val today = LocalDate.of(2021, 3, 10)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list, today)
+        val result = mapActionCountByWeekListToItemList(list, today, locale)
 
         // Then
         val expected = listOf(
@@ -249,7 +252,7 @@ class ChartsMapperTest {
         val today = LocalDate.of(2021, 10, 16)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list, today)
+        val result = mapActionCountByWeekListToItemList(list, today, locale)
 
         // Then
         val expected = listOf(ChartItem("W41", 2021, 0))
@@ -263,7 +266,7 @@ class ChartsMapperTest {
         val today = LocalDate.of(2021, 3, 10)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list, today)
+        val result = mapActionCountByWeekListToItemList(list, today, locale)
 
         // Then
         val expected = listOf(ChartItem("W10", 2021, 16))
@@ -280,7 +283,7 @@ class ChartsMapperTest {
         val today = LocalDate.of(2021, 3, 16)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list, today)
+        val result = mapActionCountByWeekListToItemList(list, today, locale)
 
         // Then
         val expected = listOf(
@@ -302,7 +305,7 @@ class ChartsMapperTest {
         val today = LocalDate.of(2021, 3, 10)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list, today)
+        val result = mapActionCountByWeekListToItemList(list, today, locale)
 
         // Then
         val expected = listOf(
@@ -327,7 +330,7 @@ class ChartsMapperTest {
         val today = LocalDate.of(2021, 3, 10)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list, today)
+        val result = mapActionCountByWeekListToItemList(list, today, locale)
 
         // Then
         val expected = listOf(
@@ -352,7 +355,7 @@ class ChartsMapperTest {
         val today = LocalDate.of(2021, 1, 26)
 
         // When
-        val result = mapActionCountByWeekListToItemList(list, today)
+        val result = mapActionCountByWeekListToItemList(list, today, locale)
 
         // Then
         val expected = listOf(

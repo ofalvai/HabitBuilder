@@ -33,9 +33,11 @@ fun mapActionCountByMonthListToItemList(
 }
 
 fun mapActionCountByWeekListToItemList(
-    list: List<ActionCountByWeek>, today: LocalDate
+    list: List<ActionCountByWeek>,
+    today: LocalDate,
+    locale: Locale
 ): List<ActionCountChart.ChartItem> {
-    return fillActionCountByWeekListWithEmptyItems(list, today)
+    return fillActionCountByWeekListWithEmptyItems(list, today, locale)
         .map { it.toChartItem() }
 }
 
@@ -75,11 +77,13 @@ fun fillActionCountByMonthListWithEmptyItems(
 }
 
 fun fillActionCountByWeekListWithEmptyItems(
-    list: List<ActionCountByWeek>, today: LocalDate
+    list: List<ActionCountByWeek>,
+    today: LocalDate,
+    locale: Locale
 ): List<ActionCountByWeek> {
     // Add today's week to the end of list, even if it's missing
     val last = list.lastOrNull()
-    val todayWeekOfYear = today.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear())
+    val todayWeekOfYear = today.get(WeekFields.of(locale).weekOfWeekBasedYear())
     val listWithCurrentWeek = if (
         last?.year?.value == today.year && last.weekOfYear == todayWeekOfYear
     ) {

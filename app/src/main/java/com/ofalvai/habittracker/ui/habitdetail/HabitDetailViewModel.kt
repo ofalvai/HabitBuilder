@@ -131,7 +131,9 @@ class HabitDetailViewModel(
 
     fun switchChartType(newType: ActionCountChart.Type) {
         val items = when (newType) {
-            ActionCountChart.Type.Weekly -> mapActionCountByWeekListToItemList(actionCountByWeek.value, LocalDate.now())
+            ActionCountChart.Type.Weekly -> {
+                mapActionCountByWeekListToItemList(actionCountByWeek.value, LocalDate.now(), Locale.getDefault())
+            }
             ActionCountChart.Type.Monthly -> mapActionCountByMonthListToItemList(actionCountByMonth.value, LocalDate.now())
         }
         chartData.value = ActionCountChart(items, newType)
