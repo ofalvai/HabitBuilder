@@ -18,7 +18,7 @@ androidx-activity-compose = "androidx.activity:activity-compose:1.3.1"
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
-androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-rc01"
+androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
 
 androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
 androidx-test-rules = "androidx.test:rules:1.4.0"
