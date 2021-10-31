@@ -185,6 +185,7 @@ dependencies {
 
     implementation libs.timber
     implementation libs.calendarview
+    implementation(libs.reorderable)
     implementation libs.accompanist.insets
     implementation libs.accompanist.systemuicontroller
 
