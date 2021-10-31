@@ -33,12 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
@@ -61,15 +63,17 @@ fun HabitCard(
     totalActionCount: Int,
     actionHistory: ActionHistory,
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
-    onDetailClick: (Habit) -> Unit
+    onDetailClick: (Habit) -> Unit,
+    dragOffset: Float?
 ) {
     Card(
         onClick = { onDetailClick(habit) },
-        elevation = 2.dp,
+        elevation = if (dragOffset == null) 2.dp else 8.dp,
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .draggableCard(dragOffset),
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
             Text(
@@ -195,6 +199,15 @@ fun ActionHistoryLabel(totalActionCount: Int, actionHistory: ActionHistory) {
     )
 }
 
+private fun Modifier.draggableCard(
+    offset: Float?
+): Modifier = this
+    .zIndex(offset?.let { 1f } ?: 0f)
+    .graphicsLayer {
+        translationY = offset ?: 0f
+        rotationZ = offset?.let { -3.0f } ?: 0f
+    }
+
 
 @Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
@@ -221,9 +234,9 @@ fun PreviewHabitCard() {
 
     HabitTrackerTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitCard(habit1, actions1, 14, ActionHistory.Clean, { _, _, _ -> }, {})
+            HabitCard(habit1, actions1, 14, ActionHistory.Clean, { _, _, _ -> }, {}, null)
             Spacer(modifier = Modifier.height(16.dp))
-            HabitCard(habit2, actions2, 3, ActionHistory.Streak(3), { _, _, _ -> }, {})
+            HabitCard(habit2, actions2, 3, ActionHistory.Streak(3), { _, _, _ -> }, {}, null)
         }
     }
 }

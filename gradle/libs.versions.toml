@@ -6,7 +6,7 @@ accompanist = "0.19.0"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-android-tools-gradle = "com.android.tools.build:gradle:7.1.0-beta01"
+android-tools-gradle = "com.android.tools.build:gradle:7.1.0-beta02"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -33,6 +33,7 @@ compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref =
 
 timber = "com.jakewharton.timber:timber:5.0.1"
 calendarview = "com.github.kizitonwose:CalendarView:1.0.4"
+reorderable = "org.burnoutcrew.composereorderable:reorderable:0.7.0"
 
 accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }

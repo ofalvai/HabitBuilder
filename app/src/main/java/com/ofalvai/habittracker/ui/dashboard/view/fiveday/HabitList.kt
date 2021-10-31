@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,8 @@ import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import org.burnoutcrew.reorderable.*
+import timber.log.Timber
 import java.time.LocalDate
 
 @Composable
@@ -47,18 +50,30 @@ fun FiveDayHabitList(
             pastDayCount = 4
         )
 
+        val mutableHabitList = habits.toMutableStateList()
+        val reorderState = rememberReorderState()
+        val onItemMove: (fromPos: ItemPosition, toPos: ItemPosition) -> (Unit) = { from, to ->
+            mutableHabitList.move(from.index, to.index)
+            Timber.d("Move: ${from.index} -> ${to.index}")
+        }
+
         LazyColumn(
+            state = reorderState.listState,
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(bottom = 48.dp)
+            contentPadding = PaddingValues(bottom = 48.dp),
+            modifier = Modifier
+                .reorderable(reorderState, onItemMove)
+                .detectReorderAfterLongPress(reorderState)
         ) {
-            items(habits) {
+            items(mutableHabitList, key = { it.habit.id }) { item ->
                 HabitCard(
-                    habit = it.habit,
-                    actions = it.actions,
-                    totalActionCount = it.totalActionCount,
-                    actionHistory = it.actionHistory,
+                    habit = item.habit,
+                    actions = item.actions,
+                    totalActionCount = item.totalActionCount,
+                    actionHistory = item.actionHistory,
                     onActionToggle = onActionToggle,
-                    onDetailClick = onHabitClick
+                    onDetailClick = onHabitClick,
+                    dragOffset = reorderState.offsetByKey(item.habit.id)
                 )
             }
             item {
