@@ -2,7 +2,7 @@
 kotlin = "1.5.31"
 compose = "1.1.0-alpha05"
 room = "2.4.0-beta01"
-accompanist = "0.19.0"
+accompanist = "0.20.2"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
