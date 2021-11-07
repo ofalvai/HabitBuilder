@@ -71,7 +71,7 @@ class InsightsViewModelTest {
         viewModel.heatmapState.test {
             // First item is Loading, but we only subscribe after the constructor has run
             // Which executes the fetching in a blocking way
-            assertEquals(1, (expectItem() as Result.Success).value.totalHabitCount)
+            assertEquals(1, (awaitItem() as Result.Success).value.totalHabitCount)
         }
     }
 
@@ -91,14 +91,14 @@ class InsightsViewModelTest {
 
         // Then
         viewModel.heatmapState.test {
-            val loadedState = expectItem() as Result.Success
+            val loadedState = awaitItem() as Result.Success
             assertEquals(1, loadedState.value.totalHabitCount)
 
             habitCountFlow.value = 2
             viewModel.fetchHeatmap(YearMonth.now().plusMonths(1))
 
-            assertEquals(Result.Loading, expectItem())
-            val newLoadedState = expectItem() as Result.Success
+            assertEquals(Result.Loading, awaitItem())
+            val newLoadedState = awaitItem() as Result.Success
             assertEquals(2, newLoadedState.value.totalHabitCount)
         }
     }
@@ -119,13 +119,13 @@ class InsightsViewModelTest {
         viewModel.heatmapState.test {
             // First item is Loading, but we only subscribe after the constructor has run
             // Which executes the fetching in a blocking way
-            assertEquals(Result.Failure(exception), expectItem())
+            assertEquals(Result.Failure(exception), awaitItem())
         }
         viewModel.topHabits.test {
-            assertEquals(Result.Success(emptyList<HeatmapMonth>()), expectItem())
+            assertEquals(Result.Success(emptyList<HeatmapMonth>()), awaitItem())
         }
         viewModel.habitTopDays.test {
-            assertEquals(Result.Success(emptyList<HeatmapMonth>()), expectItem())
+            assertEquals(Result.Success(emptyList<HeatmapMonth>()), awaitItem())
         }
     }
 
@@ -145,7 +145,7 @@ class InsightsViewModelTest {
         viewModel.topHabits.test {
             // First item is Loading, but we only subscribe after the constructor has run
             // Which executes the fetching in a blocking way
-            assertEquals(Result.Failure(exception), expectItem())
+            assertEquals(Result.Failure(exception), awaitItem())
         }
         viewModel.heatmapState.test {
             val expected = Result.Success(HeatmapMonth(
@@ -155,10 +155,10 @@ class InsightsViewModelTest {
                 bucketCount = 2,
                 bucketMaxValues = listOf(0 to 0, 1 to 1)
             ))
-            assertEquals(expected, expectItem())
+            assertEquals(expected, awaitItem())
         }
         viewModel.habitTopDays.test {
-            assertEquals(Result.Success(emptyList<HeatmapMonth>()), expectItem())
+            assertEquals(Result.Success(emptyList<HeatmapMonth>()), awaitItem())
         }
     }
 
@@ -178,10 +178,10 @@ class InsightsViewModelTest {
         viewModel.habitTopDays.test {
             // First item is Loading, but we only subscribe after the constructor has run
             // Which executes the fetching in a blocking way
-            assertEquals(Result.Failure(exception), expectItem())
+            assertEquals(Result.Failure(exception), awaitItem())
         }
         viewModel.topHabits.test {
-            assertEquals(Result.Success(emptyList<HeatmapMonth>()), expectItem())
+            assertEquals(Result.Success(emptyList<HeatmapMonth>()), awaitItem())
         }
         viewModel.heatmapState.test {
             val expected = Result.Success(HeatmapMonth(
@@ -191,7 +191,7 @@ class InsightsViewModelTest {
                 bucketCount = 2,
                 bucketMaxValues = listOf(0 to 0, 1 to 1)
             ))
-            assertEquals(expected, expectItem())
+            assertEquals(expected, awaitItem())
         }
     }
 
