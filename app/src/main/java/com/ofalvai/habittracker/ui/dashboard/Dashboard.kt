@@ -56,14 +56,15 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
     val onboardingState by viewModel.onboardingState.collectAsState()
 
     val snackbarCoroutineScope = rememberCoroutineScope()
-    val errorMessage = stringResource(R.string.dashboard_error_toggle_action)
+    val errorToggleAction = stringResource(R.string.dashboard_error_toggle_action)
+    val errorItemMove = stringResource(R.string.dashboard_error_item_move)
     viewModel.dashboardEvent.asEffect {
-        when (it) {
-            DashboardEvent.ToggleActionError -> {
-                snackbarCoroutineScope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
-                }
-            }
+        val errorMessage = when (it) {
+            DashboardEvent.ToggleActionError -> errorToggleAction
+            DashboardEvent.MoveHabitError -> errorItemMove
+        }
+        snackbarCoroutineScope.launch {
+            scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
         }
     }
 
@@ -79,6 +80,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
         viewModel.dashboardConfig = it
     }
     val onAboutClick = { navController.navigate(Screen.About.route) }
+    val onMove: (ItemMoveEvent) -> Unit = { viewModel.persistItemMove(it) }
 
     when (habits) {
         is Result.Success -> {
@@ -90,7 +92,8 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
                 onConfigChange,
                 onActionToggle,
                 onHabitDetail,
-                onAboutClick
+                onAboutClick,
+                onMove
             )
         }
         is Result.Failure -> ErrorView(
@@ -110,7 +113,8 @@ private fun LoadedDashboard(
     onConfigChange: (DashboardConfig) -> Unit,
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
     onHabitDetail: (Habit) -> (Unit),
-    onAboutClick: () -> Unit
+    onAboutClick: () -> Unit,
+    onMove: (ItemMoveEvent) -> Unit
 ) {
     ContentWithPlaceholder(
         showPlaceholder = habits.isEmpty(),
@@ -128,7 +132,7 @@ private fun LoadedDashboard(
             Crossfade(targetState = config) {
                 when (it) {
                     DashboardConfig.FiveDay -> {
-                        FiveDayHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
+                        FiveDayHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick, onMove)
                     }
                     DashboardConfig.Compact -> {
                         CompactHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)

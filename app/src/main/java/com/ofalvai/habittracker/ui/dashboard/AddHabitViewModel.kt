@@ -23,8 +23,11 @@ import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.ui.model.Habit
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
 class AddHabitViewModel(
     private val dao: HabitDao,
@@ -36,13 +39,21 @@ class AddHabitViewModel(
 
     fun addHabit(habit: Habit) {
         viewModelScope.launch {
-            val habitEntity = com.ofalvai.habittracker.persistence.entity.Habit(
-                name = habit.name,
-                color = habit.color.toEntityColor()
-            )
-            dao.insertHabit(habitEntity)
-            onboardingManager.firstHabitCreated()
-            backNavigationEventChannel.send(Unit)
+            try {
+                val habitCount = dao.getHabitCount().first()
+
+                val habitEntity = HabitEntity(
+                    name = habit.name,
+                    color = habit.color.toEntityColor(),
+                    order = habitCount
+                )
+                dao.insertHabit(habitEntity)
+                onboardingManager.firstHabitCreated()
+                backNavigationEventChannel.send(Unit)
+            } catch (e: Throwable) {
+                // TODO: error handling on UI
+                Timber.e(e)
+            }
         }
     }
 }

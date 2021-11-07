@@ -60,8 +60,8 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
     @Test
     fun insertAndReadHabits() = testCoroutineScope.runBlockingTest {
-        val newHabit1 = Habit(name = "New habit", color = Habit.Color.Green)
-        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.Green)
+        val newHabit1 = Habit(name = "New habit", color = Habit.Color.Green, order = 0)
+        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.Green, order = 1)
 
         habitDao.insertHabit(newHabit1, newHabit2)
 
@@ -73,7 +73,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
     @Test
     fun insertAndReadActions() = testCoroutineScope.runBlockingTest {
         val habitId = 51
-        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green)
+        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0)
         val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T10:15:30Z"))
         val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T10:16:30Z"))
 
@@ -88,9 +88,9 @@ class HabitEntityTest : BaseInstrumentedTest() {
     @Test
     fun readActionsByHabit() = testCoroutineScope.runBlockingTest {
         val habitId = 875
-        val habit1 = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green)
-        val habit2 = Habit(name = "Drinking enough water", color = Habit.Color.Green)
-        val habit3 = Habit(name = "Workout", color = Habit.Color.Green)
+        val habit1 = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0)
+        val habit2 = Habit(name = "Drinking enough water", color = Habit.Color.Green, order = 1)
+        val habit3 = Habit(name = "Workout", color = Habit.Color.Green, order = 2)
         val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T18:16:40Z"))
         val action3 = Action(habit_id = 876, timestamp = Instant.parse("2020-12-23T10:18:42Z"))
@@ -106,7 +106,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
     @Test
     fun readActionsAfterTime() = testCoroutineScope.runBlockingTest {
-        val habit = Habit(id = 1, name = "New habit", color = Habit.Color.Green)
+        val habit = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 0)
         val action1 = Action(id = 1, habit_id = 1, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(id = 2, habit_id = 1, timestamp = Instant.parse("2020-12-24T18:16:40Z"))
         val action3 = Action(id = 3, habit_id = 1, timestamp = Instant.parse("2020-12-25T10:18:42Z"))
@@ -122,8 +122,8 @@ class HabitEntityTest : BaseInstrumentedTest() {
     @ExperimentalTime
     @Test
     fun readAllHabitsWithActions() = testCoroutineScope.runBlockingTest {
-        val habit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green)
-        val habit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.Green)
+        val habit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 0)
+        val habit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.Green, order = 1)
         val action1 = Action(id = 1, habit_id = habit1.id, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(id = 2, habit_id = habit2.id, timestamp = Instant.parse("2020-12-24T18:16:40Z"))
         val action3 = Action(id = 3, habit_id = habit2.id, timestamp = Instant.parse("2020-12-25T10:18:42Z"))
@@ -144,7 +144,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
     @Test
     fun deleteHabitWithActions() = testCoroutineScope.runBlockingTest {
         val habitId = 51
-        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green)
+        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0)
         val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2021-05-31T10:15:30Z"))
         val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2021-05-31T10:16:30Z"))
 
@@ -159,6 +159,52 @@ class HabitEntityTest : BaseInstrumentedTest() {
         val habits = habitDao.getHabits()
         val expectedHabits = emptyList<Habit>()
         assertEquals(expectedHabits, habits)
+    }
+
+    @Test
+    fun readHabitsWithModifiedOrders() = testCoroutineScope.runBlockingTest {
+        val newHabit1 = Habit(name = "New habit", color = Habit.Color.Green, order = 5)
+        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.Green, order = 1)
+        val newHabit3 = Habit(name = "Meditation", color = Habit.Color.Green, order = 2)
+        val newHabit4 = Habit(name = "The first one", color = Habit.Color.Yellow, order = 0)
+
+        habitDao.insertHabit(newHabit1, newHabit2, newHabit3, newHabit4)
+
+        val habits = habitDao.getHabits()
+        val expected = listOf(
+            newHabit4.copy(id = 4),
+            newHabit2.copy(id = 2),
+            newHabit3.copy(id = 3),
+            newHabit1.copy(id = 1)
+        )
+        assertEquals(expected, habits)
+    }
+
+    @Test
+    fun swapHabitOrders() = testCoroutineScope.runBlockingTest {
+        val newHabit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 5)
+        val newHabit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.Green, order = 1)
+        val newHabit3 = Habit(id = 3, name = "Meditation", color = Habit.Color.Green, order = 2)
+        val newHabit4 = Habit(id = 4, name = "The first one", color = Habit.Color.Yellow, order = 0)
+
+        habitDao.insertHabit(newHabit1, newHabit2, newHabit3, newHabit4)
+
+        val habitPair = habitDao.getHabitPair(newHabit3.id, newHabit4.id)
+        habitDao.updateHabitOrders(
+            id1 = newHabit3.id,
+            order1 = habitPair[1].order,
+            id2 = newHabit4.id,
+            order2 = habitPair[0].order
+        )
+
+        val habits = habitDao.getHabits()
+        val expected = listOf(
+            newHabit3.copy(order = 0),
+            newHabit2,
+            newHabit4.copy(order = 2),
+            newHabit1,
+        )
+        assertEquals(expected, habits)
     }
 
 }

@@ -58,6 +58,9 @@ class HabitDetailViewModel(
     private val actionCountByWeek = MutableStateFlow<List<ActionCountByWeek>>(emptyList())
     private val actionCountByMonth = MutableStateFlow<List<ActionCountByMonth>>(emptyList())
 
+    // Store loaded habit's order to convert the model back to entity later
+    private var habitOrder: Int? = null
+
     init {
         onboardingManager.habitDetailsOpened()
     }
@@ -66,6 +69,8 @@ class HabitDetailViewModel(
         return viewModelScope.launch {
             try {
                 val habit = dao.getHabitWithActions(habitId).let {
+                    habitOrder = it.habit.order
+
                     // TODO: unify this with the regular mapping (where empty day action are filled)
                     HabitWithActions(
                         Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
@@ -117,14 +122,14 @@ class HabitDetailViewModel(
 
     fun updateHabit(habit: Habit) {
         viewModelScope.launch {
-            dao.updateHabit(habit.toEntity())
+            dao.updateHabit(habit.toEntity(habitOrder ?: 0))
             fetchHabitDetails(habit.id)
         }
     }
 
     fun deleteHabit(habit: Habit) {
         viewModelScope.launch {
-            dao.deleteHabit(habit.toEntity())
+            dao.deleteHabit(habit.toEntity(habitOrder ?: 0))
             eventChannel.send(HabitDetailEvent.BackNavigation)
         }
     }
