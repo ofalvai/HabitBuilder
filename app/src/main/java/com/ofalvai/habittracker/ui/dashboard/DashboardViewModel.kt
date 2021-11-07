@@ -24,9 +24,11 @@ import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.Action
+import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.ui.model.OnboardingState
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -37,8 +39,19 @@ import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 
 enum class DashboardEvent {
-    ToggleActionError
+    ToggleActionError,
+    MoveHabitError
 }
+
+/**
+ * Information about moving up/down an item in the habit list.
+ * When a single item move has a distance of more than 1, the view should post one event for each
+ * step.
+ */
+data class ItemMoveEvent(
+    val firstHabitId: HabitId,
+    val secondHabitId: HabitId
+)
 
 class DashboardViewModel(
     private val dao: HabitDao,
@@ -65,6 +78,16 @@ class DashboardViewModel(
 
     val onboardingState: StateFlow<OnboardingState?> = onboardingManager.state
 
+    /**
+     * Queue of item move events that should be persisted to the DB. The view posts events into
+     * the channel and the ViewModel consumes each event to maintain consistency.
+     */
+    private val itemMoveChannel = Channel<ItemMoveEvent>(Channel.UNLIMITED)
+
+    init {
+        consumeReorderEvents()
+    }
+
     fun toggleActionFromDashboard(habitId: Int, action: Action, date: LocalDate) {
         viewModelScope.launch {
             try {
@@ -73,6 +96,33 @@ class DashboardViewModel(
             } catch (e: Throwable) {
                 telemetry.logNonFatal(e)
                 eventChannel.send(DashboardEvent.ToggleActionError)
+            }
+        }
+    }
+
+    fun persistItemMove(event: ItemMoveEvent) {
+        viewModelScope.launch {
+            itemMoveChannel.send(event)
+        }
+    }
+
+    private fun consumeReorderEvents() {
+        viewModelScope.launch {
+            itemMoveChannel.consumeEach {
+                try {
+                    val habits = dao.getHabitPair(it.firstHabitId, it.secondHabitId)
+                    val firstHabitOrder = habits.first { h -> h.id == it.firstHabitId }.order
+                    val secondHabitOrder = habits.first { h -> h.id == it.secondHabitId }.order
+                    dao.updateHabitOrders(
+                        id1 = it.firstHabitId,
+                        order1 = secondHabitOrder,
+                        id2 = it.secondHabitId,
+                        order2 = firstHabitOrder
+                    )
+                } catch (e: Throwable) {
+                    telemetry.logNonFatal(e)
+                    eventChannel.send(DashboardEvent.MoveHabitError)
+                }
             }
         }
     }

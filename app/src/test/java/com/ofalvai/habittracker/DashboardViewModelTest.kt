@@ -23,6 +23,7 @@ import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.dashboard.DashboardEvent
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
+import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.ActionHistory
@@ -30,6 +31,7 @@ import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.util.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -38,8 +40,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.given
-import org.mockito.kotlin.mock
+import org.mockito.kotlin.*
 import java.time.Instant
 import java.time.LocalDate
 import kotlin.time.ExperimentalTime
@@ -66,9 +67,9 @@ class DashboardViewModelTest {
     fun `Given habits without actions When VM loaded Then list contains habits with empty history`() = runBlockingTest {
         // Given
         given(dao.getHabitsWithActions()).willReturn(flowOf(listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), emptyList()),
-            HabitWithActionsEntity(HabitEntity(1, "Running", ColorEntity.Green), emptyList()),
-            HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.Green), emptyList())
+            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green, 0), emptyList()),
+            HabitWithActionsEntity(HabitEntity(1, "Running", ColorEntity.Green, 1), emptyList()),
+            HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.Green, 2), emptyList())
         )))
 
         // When
@@ -82,8 +83,8 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
-            assertEquals(Result.Success(expectedHabits), expectItem())
-            expectComplete()
+            assertEquals(Result.Success(expectedHabits), awaitItem())
+            awaitComplete()
         }
     }
 
@@ -91,9 +92,9 @@ class DashboardViewModelTest {
     fun `Given habits and actions in DB When Flow is observed Then collector is notified once`() = runBlockingTest {
         // Given
         given(dao.getHabitsWithActions()).willReturn(flowOf((listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), emptyList()),
-            HabitWithActionsEntity(HabitEntity(1, "Running", ColorEntity.Green), emptyList()),
-            HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.Green), emptyList())
+            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green, 0), emptyList()),
+            HabitWithActionsEntity(HabitEntity(1, "Running", ColorEntity.Green, 1), emptyList()),
+            HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.Green, 2), emptyList())
         ))))
 
         // When
@@ -107,8 +108,8 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
-            assertEquals(Result.Success(expectedHabits), expectItem())
-            expectComplete()
+            assertEquals(Result.Success(expectedHabits), awaitItem())
+            awaitComplete()
         }
     }
 
@@ -121,9 +122,9 @@ class DashboardViewModelTest {
         given(dao.getHabitsWithActions()).willReturn(mockFlow)
 
         val initialHabitWithActions = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green), emptyList()),
-            HabitWithActionsEntity(HabitEntity(1, "Running", ColorEntity.Green), emptyList()),
-            HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.Green), emptyList())
+            HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green, 0), emptyList()),
+            HabitWithActionsEntity(HabitEntity(1, "Running", ColorEntity.Green, 1), emptyList()),
+            HabitWithActionsEntity(HabitEntity(2, "Workout", ColorEntity.Green, 2), emptyList())
         )
         val modifiedHabitWithActions = initialHabitWithActions.mapIndexed { index, habit ->
             if (index == 0) {
@@ -146,7 +147,7 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
-            assertEquals(Result.Success(expectedHabits1), expectItem())
+            assertEquals(Result.Success(expectedHabits1), awaitItem())
 
             viewModel.toggleActionFromDashboard(0, Action(0, true, instantNow), dateNow)
             mockFlow.emit(modifiedHabitWithActions)
@@ -156,7 +157,7 @@ class DashboardViewModelTest {
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(2, "Workout", Habit.Color.Green), expectedActionHistory, 0, ActionHistory.Clean)
             )
-            assertEquals(Result.Success(expectedHabits2), expectItem())
+            assertEquals(Result.Success(expectedHabits2), awaitItem())
         }
     }
 
@@ -174,7 +175,7 @@ class DashboardViewModelTest {
                 viewModel.toggleActionFromDashboard(habitId = 0, action = action, date = LocalDate.of(2021, 6, 7))
 
                 // Then
-                assertEquals(DashboardEvent.ToggleActionError, expectItem())
+                assertEquals(DashboardEvent.ToggleActionError, awaitItem())
                 cancelAndConsumeRemainingEvents()
             }
         }
@@ -195,8 +196,137 @@ class DashboardViewModelTest {
         // Then
         viewModel.habitsWithActions.test {
             val expected = Result.Failure(exception)
-            assertEquals(expected, expectItem())
-            expectComplete()
+            assertEquals(expected, awaitItem())
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `Given non-continuous item ordersWhen moving an item Then it is persisted in the DB`() = runBlockingTest {
+        // Given
+        val habit1 = HabitEntity(id = 1, name = "First habit", color = ColorEntity.Yellow, order = 0)
+        val habit2 = HabitEntity(id = 2, name = "Second habit", color = ColorEntity.Red, order = 9)
+        given(dao.getHabitPair(1, 2)).willReturn(listOf(habit1, habit2))
+
+        val updateNotificationFlow = MutableSharedFlow<Unit>(
+            replay = 0,
+            extraBufferCapacity = 10,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST // Allow tryEmit() to succeed
+        )
+        given(dao.updateHabitOrders(any(), any(), any(), any())).will {
+            updateNotificationFlow.tryEmit(Unit)
+        }
+
+        viewModel = createViewModel()
+
+        updateNotificationFlow.test {
+            // When
+            val event = ItemMoveEvent(firstHabitId = 1, secondHabitId = 2)
+            viewModel.persistItemMove(event)
+
+            // Then
+            awaitItem()
+            verifyNoInteractions(telemetry) // No exceptions
+            verify(dao).updateHabitOrders(
+                id1 = 1,
+                order1 = 9,
+                id2 = 2,
+                order2 = 0
+            )
+        }
+    }
+
+    @Test
+    fun `When moving multiple items Then they are persisted in consistent order to the DB`() = runBlockingTest {
+        // Given
+        val habit1 = HabitEntity(id = 1, name = "First habit", color = ColorEntity.Yellow, order = 0)
+        val habit2 = HabitEntity(id = 2, name = "Second habit", color = ColorEntity.Red, order = 1)
+        val habit3 = HabitEntity(id = 3, name = "Third habit", color = ColorEntity.Red, order = 2)
+        given(dao.getHabitPair(1, 2)).willReturn(listOf(habit1, habit2))
+        given(dao.getHabitPair(1, 3)).willReturn(listOf(habit1.copy(order = 1), habit3))
+
+        val updateNotificationFlow = MutableSharedFlow<Unit>(
+            replay = 0,
+            extraBufferCapacity = 10,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST // Allow tryEmit() to succeed
+        )
+        given(dao.updateHabitOrders(any(), any(), any(), any())).will {
+            updateNotificationFlow.tryEmit(Unit)
+        }
+
+        viewModel = createViewModel()
+
+        updateNotificationFlow.test {
+            // When
+            val event1 = ItemMoveEvent(firstHabitId = 1, secondHabitId = 2)
+            viewModel.persistItemMove(event1)
+            val event2 = ItemMoveEvent(firstHabitId = 1, secondHabitId = 3)
+            viewModel.persistItemMove(event2)
+
+            // Then
+            awaitItem()
+            verify(dao).updateHabitOrders(
+                id1 = 1,
+                order1 = 1,
+                id2 = 2,
+                order2 = 0
+            )
+
+            awaitItem()
+            verify(dao).updateHabitOrders(
+                id1 = 1,
+                order1 = 2,
+                id2 = 3,
+                order2 = 1
+            )
+
+            verifyNoInteractions(telemetry) // No exceptions
+        }
+    }
+
+    @Test
+    fun `Given error in handling the event When moving an item Then error is handled and processing continues`() = runBlockingTest {
+        // Given
+        val habit1 = HabitEntity(id = 5, name = "First habit", color = ColorEntity.Yellow, order = 0)
+        val habit2 = HabitEntity(id = 6, name = "Second habit", color = ColorEntity.Red, order = 1)
+        given(dao.getHabitPair(5, 6)).willReturn(listOf(habit1, habit2))
+
+        val updateNotificationFlow = MutableSharedFlow<Unit>(
+            replay = 0,
+            extraBufferCapacity = 10,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST // Allow tryEmit() to succeed
+        )
+        var invocations = 0
+        given(dao.updateHabitOrders(any(), any(), any(), any())).will {
+            updateNotificationFlow.tryEmit(Unit)
+            invocations++
+            if (invocations == 1) {
+                throw RuntimeException("Mocked error")
+            }
+        }
+
+        viewModel = createViewModel()
+
+        updateNotificationFlow.test {
+            // When
+            val event = ItemMoveEvent(firstHabitId = 5, secondHabitId = 6)
+            viewModel.persistItemMove(event)
+
+            // Then
+            awaitItem()
+            verify(telemetry).logNonFatal(any())
+
+            // Try another, non-throwing operation
+            viewModel.persistItemMove(ItemMoveEvent(firstHabitId = 5, secondHabitId = 6))
+
+            awaitItem()
+            verifyNoMoreInteractions(telemetry)
+            verify(dao, times(2)).updateHabitOrders(
+                id1 = 5,
+                order1 = 1,
+                id2 = 6,
+                order2 = 0
+            )
         }
     }
 

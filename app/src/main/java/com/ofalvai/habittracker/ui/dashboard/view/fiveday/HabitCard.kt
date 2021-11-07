@@ -64,13 +64,14 @@ fun HabitCard(
     actionHistory: ActionHistory,
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
     onDetailClick: (Habit) -> Unit,
-    dragOffset: Float?
+    dragOffset: Float,
+    modifier: Modifier = Modifier
 ) {
     Card(
         onClick = { onDetailClick(habit) },
-        elevation = if (dragOffset == null) 2.dp else 8.dp,
+        elevation = if (dragOffset == 0f) 2.dp else 8.dp,
         shape = RoundedCornerShape(16.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .draggableCard(dragOffset),
@@ -200,12 +201,12 @@ fun ActionHistoryLabel(totalActionCount: Int, actionHistory: ActionHistory) {
 }
 
 private fun Modifier.draggableCard(
-    offset: Float?
+    offset: Float
 ): Modifier = this
-    .zIndex(offset?.let { 1f } ?: 0f)
+    .zIndex(if (offset == 0f) 0f else 1f)
     .graphicsLayer {
-        translationY = offset ?: 0f
-        rotationZ = offset?.let { -3.0f } ?: 0f
+        translationY = if (offset == 0f) 0f else offset
+        rotationZ = if (offset == 0f) 0f else -2f
     }
 
 
@@ -234,9 +235,9 @@ fun PreviewHabitCard() {
 
     HabitTrackerTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitCard(habit1, actions1, 14, ActionHistory.Clean, { _, _, _ -> }, {}, null)
+            HabitCard(habit1, actions1, 14, ActionHistory.Clean, { _, _, _ -> }, {}, 0f)
             Spacer(modifier = Modifier.height(16.dp))
-            HabitCard(habit2, actions2, 3, ActionHistory.Streak(3), { _, _, _ -> }, {}, null)
+            HabitCard(habit2, actions2, 3, ActionHistory.Streak(3), { _, _, _ -> }, {}, 0f)
         }
     }
 }

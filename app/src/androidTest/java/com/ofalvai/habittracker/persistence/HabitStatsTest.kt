@@ -40,10 +40,10 @@ import java.time.Month
 class HabitStatsTest : BaseInstrumentedTest() {
 
     private object TestData {
-        val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green)
-        val habit2 = Habit(id = 876, name = "Drinking enough water", color = Habit.Color.Green)
-        val habit3 = Habit(id = 877, name = "Workout", color = Habit.Color.Green)
-        val habit4 = Habit(id = 878, name = "Habit I never do", color = Habit.Color.Yellow)
+        val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green, order = 0)
+        val habit2 = Habit(id = 876, name = "Drinking enough water", color = Habit.Color.Green, order = 1)
+        val habit3 = Habit(id = 877, name = "Workout", color = Habit.Color.Green, order = 2)
+        val habit4 = Habit(id = 878, name = "Habit I never do", color = Habit.Color.Yellow, order = 3)
 
         val actions = arrayOf(
             Action(habit_id = habit1.id, timestamp = Instant.parse("2019-12-23T18:16:30Z")),

@@ -18,6 +18,7 @@ package com.ofalvai.habittracker.persistence
 
 import androidx.room.*
 import com.ofalvai.habittracker.persistence.entity.*
+import com.ofalvai.habittracker.ui.model.HabitId
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.LocalDate
@@ -25,7 +26,7 @@ import java.time.LocalDate
 @Dao
 interface HabitDao {
 
-    @Query("SELECT * FROM habit")
+    @Query("SELECT * FROM habit ORDER BY `order` ASC")
     suspend fun getHabits(): List<Habit>
 
     @Insert
@@ -42,8 +43,19 @@ interface HabitDao {
 
     // TODO: limit by timestamp
     @Transaction
-    @Query("SELECT * FROM habit")
+    @Query("SELECT * FROM habit ORDER BY `order` ASC")
     fun getHabitsWithActions(): Flow<List<HabitWithActions>>
+
+    @Query("SELECT * FROM habit WHERE id IN (:id1, :id2)")
+    suspend fun getHabitPair(id1: HabitId, id2: HabitId): List<Habit>
+
+    @Query(
+        """UPDATE habit
+            SET `order` = CASE id WHEN :id1 THEN :order1 WHEN :id2 THEN :order2 END
+            WHERE id IN (:id1, :id2)
+        """
+    )
+    suspend fun updateHabitOrders(id1: HabitId, order1: Int, id2: HabitId, order2: Int)
 
     @Transaction
     @Query("SELECT * FROM habit WHERE id = :habitId")
@@ -107,7 +119,7 @@ interface HabitDao {
             GROUP BY date
         """
     )
-    suspend fun getSumActionCountByDay(from: LocalDate, to:LocalDate): List<SumActionCountByDay>
+    suspend fun getSumActionCountByDay(from: LocalDate, to: LocalDate): List<SumActionCountByDay>
 
     @Query(
         """SELECT
