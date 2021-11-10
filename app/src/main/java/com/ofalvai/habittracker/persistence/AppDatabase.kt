@@ -26,7 +26,7 @@ import com.ofalvai.habittracker.persistence.entity.Habit
     entities = [
         Habit::class, Action::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 @TypeConverters(EntityTypeConverters::class)

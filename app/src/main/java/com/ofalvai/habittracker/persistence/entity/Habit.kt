@@ -24,7 +24,8 @@ data class Habit(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val color: Color,
-    val order: Int
+    val order: Int,
+    val archived: Boolean
 ) {
 
     enum class Color {

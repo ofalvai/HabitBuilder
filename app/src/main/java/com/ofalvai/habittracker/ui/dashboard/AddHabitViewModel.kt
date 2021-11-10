@@ -40,12 +40,13 @@ class AddHabitViewModel(
     fun addHabit(habit: Habit) {
         viewModelScope.launch {
             try {
-                val habitCount = dao.getHabitCount().first()
+                val habitCount = dao.getTotalHabitCount().first()
 
                 val habitEntity = HabitEntity(
                     name = habit.name,
                     color = habit.color.toEntityColor(),
-                    order = habitCount
+                    order = habitCount,
+                    archived = false
                 )
                 dao.insertHabit(habitEntity)
                 onboardingManager.firstHabitCreated()

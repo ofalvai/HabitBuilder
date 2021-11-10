@@ -61,7 +61,7 @@ class DashboardViewModel(
 ) : ViewModel() {
 
     val habitsWithActions: Flow<Result<List<HabitWithActions>>> = dao
-        .getHabitsWithActions()
+        .getActiveHabitsWithActions()
         .distinctUntilChanged()
         .map<List<HabitWithActionsEntity>, Result<List<HabitWithActions>>> {
             Result.Success(mapHabitEntityToModel(it))
