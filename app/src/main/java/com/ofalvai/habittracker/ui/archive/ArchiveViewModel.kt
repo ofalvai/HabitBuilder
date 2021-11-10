@@ -17,14 +17,34 @@
 package com.ofalvai.habittracker.ui.archive
 
 import androidx.lifecycle.ViewModel
+import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.telemetry.Telemetry
+import com.ofalvai.habittracker.ui.common.Result
+import com.ofalvai.habittracker.ui.model.Habit
+import com.ofalvai.habittracker.ui.model.HabitWithActions
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 
 class ArchiveViewModel(
     private val dao: HabitDao,
     private val telemetry: Telemetry
 ): ViewModel() {
 
+    val archivedHabitList: Flow<Result<List<HabitWithActions>>> = dao
+        .getArchivedHabitsWithActions()
+        .map<List<HabitWithActionsEntity>, Result<List<HabitWithActions>>> {
+            Result.Success(mapHabitEntityToModel(it))
+        }
+        .catch {
+            telemetry.logNonFatal(it)
+            emit(Result.Failure(it))
+        }
 
+    fun unarchiveHabit(habit: Habit) {
+
+    }
 
 }
