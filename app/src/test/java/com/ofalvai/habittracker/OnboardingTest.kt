@@ -30,9 +30,8 @@ import org.junit.Test
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class OnboardingTest {
 
     private val appPreferences = mock<AppPreferences>()

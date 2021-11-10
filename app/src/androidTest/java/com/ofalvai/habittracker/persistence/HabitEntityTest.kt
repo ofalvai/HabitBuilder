@@ -35,7 +35,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 import java.time.Instant
-import kotlin.time.ExperimentalTime
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -119,7 +118,6 @@ class HabitEntityTest : BaseInstrumentedTest() {
         assertEquals(listOf(action3, action4), actions)
     }
 
-    @ExperimentalTime
     @Test
     fun readAllHabitsWithActions() = testCoroutineScope.runBlockingTest {
         val habit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 0)

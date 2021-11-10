@@ -38,9 +38,7 @@ import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 @ExperimentalCoroutinesApi
 class InsightsViewModelTest {
 
