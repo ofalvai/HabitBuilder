@@ -29,6 +29,7 @@ import com.ofalvai.habittracker.persistence.MIGRATIONS
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.telemetry.TelemetryImpl
 import com.ofalvai.habittracker.ui.AppPreferences
+import com.ofalvai.habittracker.ui.archive.ArchiveViewModel
 import com.ofalvai.habittracker.ui.dashboard.AddHabitViewModel
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
@@ -94,6 +95,9 @@ class AppViewModelFactory(
         }
         if (LicensesViewModel::class.java.isAssignableFrom(modelClass)) {
             return LicensesViewModel(appContext) as T
+        }
+        if (ArchiveViewModel::class.java.isAssignableFrom(modelClass)) {
+            return ArchiveViewModel(habitDao, telemetry) as T
         }
         throw IllegalArgumentException("No matching ViewModel for ${modelClass.canonicalName}")
     }

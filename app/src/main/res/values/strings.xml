@@ -105,6 +105,7 @@
     <string name="insights_topdays_empty_label">A bit more data is needed to display your top days. Add more habits and perform them a few times.</string>
 
     <string name="menu_about">About</string>
+    <string name="menu_archive">Archived habits</string>
 
     <string name="licenses_title">❤️ Open Source</string>
     <string name="licenses_description">This app is built with the following open source projects:</string>
@@ -114,5 +115,7 @@
     <string name="about_button_rate">Rate app</string>
     <string name="about_button_source">View source on GitHub</string>
     <string name="about_button_licenses">Open-source libraries</string>
+
+    <string name="archive_title">Archived habits</string>
 
 </resources>
