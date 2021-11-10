@@ -43,13 +43,11 @@ import org.junit.Test
 import org.mockito.kotlin.*
 import java.time.Instant
 import java.time.LocalDate
-import kotlin.time.ExperimentalTime
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 import com.ofalvai.habittracker.persistence.entity.Habit.Color as ColorEntity
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 
-@ExperimentalTime
 @ExperimentalCoroutinesApi
 class DashboardViewModelTest {
 
