@@ -118,7 +118,7 @@ private fun Screens(navController: NavHostController,
         }
         composable(Screen.About.route) { AboutScreen(navController) }
         composable(Screen.Licenses.route) { LicensesScreen(navController) }
-        composable(Screen.Archive.route) { ArchiveScreen(navController) }
+        composable(Screen.Archive.route) { ArchiveScreen(navController, scaffoldState) }
     }
 }
 

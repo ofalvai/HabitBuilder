@@ -19,15 +19,13 @@ package com.ofalvai.habittracker.ui.archive
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -39,16 +37,29 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
+import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import kotlinx.coroutines.launch
 
 @Composable
-fun ArchiveScreen(navController: NavController) {
+fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
     val viewModel = viewModel<ArchiveViewModel>(factory = Dependencies.viewModelFactory)
 
     val habits by viewModel.archivedHabitList.collectAsState(initial = Result.Loading)
     val onHabitUnarchive: (Habit) -> Unit = {
         viewModel.unarchiveHabit(it)
+    }
+
+    val snackbarCoroutineScope = rememberCoroutineScope()
+    val errorUnarchive = stringResource(R.string.archive_error_unarchive)
+    viewModel.archiveEvent.asEffect {
+        val message = when (it) {
+            ArchiveEvent.UnarchiveError -> errorUnarchive
+        }
+        snackbarCoroutineScope.launch {
+            scaffoldState.snackbarHostState.showSnackbar(message)
+        }
     }
 
     Column {
@@ -76,7 +87,6 @@ fun ArchiveScreen(navController: NavController) {
                 modifier = Modifier.statusBarsPadding()
             )
         }
-
     }
 }
 
@@ -88,6 +98,9 @@ fun ArchivedHabitList(
     LazyColumn {
         items(habits) {
             Text(text = it.habit.name)
+            Button(onClick = { onHabitUnarchive(it.habit) }) {
+                Text("Unarchive")
+            }
         }
     }
 }

@@ -61,6 +61,9 @@ interface HabitDao {
     )
     suspend fun updateHabitOrders(id1: HabitId, order1: Int, id2: HabitId, order2: Int)
 
+    @Query("UPDATE habit SET archived = 0 WHERE id == :id")
+    suspend fun unarchiveHabit(id: HabitId)
+
     @Transaction
     @Query("SELECT * FROM habit WHERE id = :habitId")
     suspend fun getHabitWithActions(habitId: Int): HabitWithActions

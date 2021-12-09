@@ -97,7 +97,7 @@
     <string name="insights_tophabits_description">Your most often performed habits. Shows the number of times you completed your habits. The strength bar shows the ratio of completed and missed days since the first day (the bar is full if you have a perfect streak without a missed day).</string>
     <string name="insights_tophabits_navigate">Navigate to %s</string>
     <string name="insights_tophabits_see_all">See all</string>
-    <string name="insights_tophabits_error">Failed to top habits</string>
+    <string name="insights_tophabits_error">Failed to load top habits</string>
     <string name="insights_tophabits_empty_label">Add more habits and complete them at least once to see their success rate here.</string>
     <string name="insights_topdays_title">Top days</string>
     <string name="insights_topdays_description">Your most successful days. The list shows the day of week when each habit is performed most often and the number of completed habits on those days.</string>
@@ -117,5 +117,7 @@
     <string name="about_button_licenses">Open-source libraries</string>
 
     <string name="archive_title">Archived habits</string>
+    <string name="archive_error_unarchive">Failed to unarchive habit</string>
+    <string name="archive_error_delete">Failed to delete habit</string>
 
 </resources>
