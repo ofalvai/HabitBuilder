@@ -50,5 +50,9 @@ object AppIcons {
     val Error: Painter
         @Composable
         get() = painterResource(R.drawable.ic_error)
+
+    val Archive: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_archive)
 }
 

@@ -21,7 +21,7 @@
     <string name="common_back">Back</string>
     <string name="common_edit">Edit</string>
     <string name="common_save">Save</string>
-    <string name="common_delete">Delete</string>
+    <string name="common_archive">Archive</string>
     <string name="common_more">More</string>
     <string name="common_error">Error</string>
     <string name="common_empty">Empty</string>
@@ -73,10 +73,10 @@
     <string name="habitdetails_singlestat_total">Total times done</string>
     <string name="habitdetails_singlestat_weekly">Done this week</string>
     <string name="habitdetails_singlestat_completionrate">Completion rate</string>
-    <string name="habitdetails_delete_confirm">Delete</string>
-    <string name="habitdetails_confirm_cancel">Cancel</string>
-    <string name="habitdetails_confirm_title">Delete habit?</string>
-    <string name="habitdetails_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
+    <string name="habitdetails_archive_confirm">Archive</string>
+    <string name="habitdetails_archive_cancel">Cancel</string>
+    <string name="habitdetails_archive_title">Archive habit?</string>
+    <string name="habitdetails_archive_description">This habit will be moved to the archive. If you change your mind, you can unarchive the habit without data loss, or delete forever.</string>
     <string name="habitdetails_error">Failed to load habit details</string>
     <string name="habitdetails_error_stats">Failed to load habit statistics</string>
     <string name="habitdetails_actioncount_selector_weekly">Weekly</string>
@@ -119,5 +119,7 @@
     <string name="archive_title">Archived habits</string>
     <string name="archive_error_unarchive">Failed to unarchive habit</string>
     <string name="archive_error_delete">Failed to delete habit</string>
+    <string name="archive_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
+
 
 </resources>

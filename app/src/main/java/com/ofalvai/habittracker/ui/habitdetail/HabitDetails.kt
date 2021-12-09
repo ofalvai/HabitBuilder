@@ -28,7 +28,6 @@ import androidx.compose.material.ButtonDefaults.textButtonColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -49,6 +48,7 @@ import com.ofalvai.habittracker.ui.common.*
 import com.ofalvai.habittracker.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
 import com.ofalvai.habittracker.ui.model.*
+import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
@@ -90,19 +90,19 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
         viewModel.toggleActionFromDetail(habitId, action, date)
     }
 
-    var showDeleteDialog by remember { mutableStateOf(false) }
-    var pendingHabitToDelete by remember { mutableStateOf<Habit?>(null) }
-    val onDelete: (Habit) -> Unit = {
-        showDeleteDialog = true
-        pendingHabitToDelete = it
+    var showArchiveDialog by remember { mutableStateOf(false) }
+    var pendingHabitToArchive by remember { mutableStateOf<Habit?>(null) }
+    val onArchive: (Habit) -> Unit = {
+        showArchiveDialog = true
+        pendingHabitToArchive = it
     }
 
-    DeleteConfirmationDialog(
-        showDialog = showDeleteDialog,
-        onDismiss = { showDeleteDialog = false },
+    ArchiveConfirmationDialog(
+        showDialog = showArchiveDialog,
+        onDismiss = { showArchiveDialog = false },
         onConfirm = {
-            pendingHabitToDelete?.let { viewModel.deleteHabit(it) }
-            pendingHabitToDelete = null
+            pendingHabitToArchive?.let { viewModel.archiveHabit(it) }
+            pendingHabitToArchive = null
         }
     )
 
@@ -113,7 +113,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
         onChartTypeChange = { viewModel.switchChartType(it) },
         onBack = { navController.popBackStack() },
         onEdit = { viewModel.updateHabit(it) },
-        onDelete = onDelete,
+        onArchive = onArchive,
         onDayToggle = onDayToggle
     )
 }
@@ -126,13 +126,13 @@ private fun HabitDetailScreen(
     onChartTypeChange: (ActionCountChart.Type) -> Unit,
     onBack: () -> Unit,
     onEdit: (Habit) -> Unit,
-    onDelete: (Habit) -> Unit,
+    onArchive: (Habit) -> Unit,
     onDayToggle: (LocalDate, Action) -> Unit,
 ) {
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
 
     Column {
-        HabitDetailHeader(habitDetailState, singleStats, onBack, onEdit, onDelete)
+        HabitDetailHeader(habitDetailState, singleStats, onBack, onEdit, onArchive)
 
         Column(Modifier.verticalScroll(rememberScrollState()).padding(32.dp)) {
             when (habitDetailState) {
@@ -173,7 +173,7 @@ private fun HabitDetailHeader(
     singleStats: SingleStats,
     onBack: () -> Unit,
     onSave: (Habit) -> Unit,
-    onDelete: (Habit) -> Unit
+    onArchive: (Habit) -> Unit
 ) {
     var isEditing by remember { mutableStateOf(false) }
 
@@ -212,7 +212,7 @@ private fun HabitDetailHeader(
                             isEditing = false
                             onSave(it)
                         },
-                        onDelete = onDelete
+                        onArchive = onArchive
                     )
                 }
 
@@ -235,7 +235,7 @@ private fun HabitHeaderEditingContent(
     habitDetails: HabitWithActions,
     onBack: () -> Unit,
     onSave: (Habit) -> Unit,
-    onDelete: (Habit) -> Unit
+    onArchive: (Habit) -> Unit
 ) {
     var editingName by remember(habitName) {
         mutableStateOf(habitName)
@@ -259,7 +259,7 @@ private fun HabitHeaderEditingContent(
         HabitDetailEditingAppBar(
             onBack = onBack,
             onSave = onSaveClick,
-            onDelete = { onDelete(habitDetails.habit) }
+            onArchive = { onArchive(habitDetails.habit) }
         )
         OutlinedTextField(
             value = editingName,
@@ -337,7 +337,7 @@ private fun HabitDetailAppBar(
 private fun HabitDetailEditingAppBar(
     onBack: () -> Unit,
     onSave: () -> Unit,
-    onDelete: () -> Unit
+    onArchive: () -> Unit
 ) {
     TopAppBar(
         title = { },
@@ -351,8 +351,8 @@ private fun HabitDetailEditingAppBar(
                 IconButton(onClick = onSave) {
                     Icon(Icons.Rounded.Check, stringResource(R.string.common_save))
                 }
-                IconButton(onClick = onDelete) {
-                    Icon(Icons.Rounded.Delete, stringResource(R.string.common_delete))
+                IconButton(onClick = onArchive) {
+                    Icon(AppIcons.Archive, stringResource(R.string.common_archive))
                 }
             }
         },
@@ -472,7 +472,7 @@ private fun SingleStat(
 }
 
 @Composable
-private fun DeleteConfirmationDialog(
+private fun ArchiveConfirmationDialog(
     showDialog: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
@@ -485,23 +485,23 @@ private fun DeleteConfirmationDialog(
                     onClick = onConfirm,
                     colors = textButtonColors(contentColor = MaterialTheme.colors.error)
                 ) {
-                    Text(text = stringResource(R.string.habitdetails_delete_confirm))
+                    Text(text = stringResource(R.string.habitdetails_archive_confirm))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { onDismiss() }) {
-                    Text(text = stringResource(R.string.habitdetails_confirm_cancel))
+                    Text(text = stringResource(R.string.habitdetails_archive_cancel))
                 }
             },
             title = {
                 Text(
-                    text = stringResource(R.string.habitdetails_confirm_title),
+                    text = stringResource(R.string.habitdetails_archive_title),
                     style = MaterialTheme.typography.h6
                 )
             },
             text = {
                 Text(
-                    text = stringResource(R.string.habitdetails_delete_description),
+                    text = stringResource(R.string.habitdetails_archive_description),
                     style = MaterialTheme.typography.body1
                 )
             }
@@ -527,7 +527,7 @@ private fun PreviewHabitDetailScreen() {
             onChartTypeChange = {},
             onBack = { },
             onEdit = { },
-            onDelete = { },
+            onArchive = { },
             onDayToggle = { _, _ -> }
         )
     }
