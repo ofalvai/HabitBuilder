@@ -25,6 +25,7 @@
     <string name="common_more">More</string>
     <string name="common_error">Error</string>
     <string name="common_empty">Empty</string>
+    <string name="common_cancel">Cancel</string>
     <string name="common_interpunct">%s · %s</string>
 
     <string name="addhabit_appbar_title">Create new habit</string>
@@ -119,7 +120,9 @@
     <string name="archive_title">Archived habits</string>
     <string name="archive_error_unarchive">Failed to unarchive habit</string>
     <string name="archive_error_delete">Failed to delete habit</string>
+    <string name="archive_delete_title">Delete habit?</string>
     <string name="archive_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
+    <string name="archive_delete_confirm">Delete forever</string>
 
 
 </resources>

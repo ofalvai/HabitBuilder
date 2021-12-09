@@ -22,10 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -35,6 +32,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.ui.common.ConfirmationDialog
 import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.common.asEffect
@@ -47,20 +45,42 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
     val viewModel = viewModel<ArchiveViewModel>(factory = Dependencies.viewModelFactory)
 
     val habits by viewModel.archivedHabitList.collectAsState(initial = Result.Loading)
-    val onHabitUnarchive: (Habit) -> Unit = {
-        viewModel.unarchiveHabit(it)
-    }
 
     val snackbarCoroutineScope = rememberCoroutineScope()
     val errorUnarchive = stringResource(R.string.archive_error_unarchive)
+    val errorDelete = stringResource(R.string.archive_error_delete)
     viewModel.archiveEvent.asEffect {
         val message = when (it) {
             ArchiveEvent.UnarchiveError -> errorUnarchive
+            ArchiveEvent.DeleteError -> errorDelete
         }
         snackbarCoroutineScope.launch {
             scaffoldState.snackbarHostState.showSnackbar(message)
         }
     }
+
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var pendingHabitToDelete by remember { mutableStateOf<Habit?>(null) }
+    val onDelete: (Habit) -> Unit = {
+        showDeleteDialog = true
+        pendingHabitToDelete = it
+    }
+
+    val onUnarchive: (Habit) -> Unit = { viewModel.unarchiveHabit(it) }
+
+    ConfirmationDialog(
+        showDialog = showDeleteDialog,
+        title = stringResource(R.string.archive_delete_title),
+        description = stringResource(R.string.archive_delete_description),
+        confirmText = stringResource(R.string.archive_delete_confirm),
+        onDismiss = { showDeleteDialog = false },
+        onConfirm = {
+            pendingHabitToDelete?.let { viewModel.deleteHabit(it) }
+            pendingHabitToDelete = null
+            showDeleteDialog = false
+        }
+    )
+
 
     Column {
         TopAppBar(
@@ -78,7 +98,9 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
         when (habits) {
             is Result.Success -> {
                 ArchivedHabitList(
-                    (habits as Result.Success<List<HabitWithActions>>).value, onHabitUnarchive
+                    (habits as Result.Success<List<HabitWithActions>>).value,
+                    onUnarchive,
+                    onDelete
                 )
             }
             Result.Loading -> {}
@@ -93,13 +115,17 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
 @Composable
 fun ArchivedHabitList(
     habits: List<HabitWithActions>,
-    onHabitUnarchive: (Habit) -> Unit
+    onUnarchive: (Habit) -> Unit,
+    onDelete: (Habit) -> Unit
 ) {
     LazyColumn {
         items(habits) {
             Text(text = it.habit.name)
-            Button(onClick = { onHabitUnarchive(it.habit) }) {
+            Button(onClick = { onUnarchive(it.habit) }) {
                 Text("Unarchive")
+            }
+            Button(onClick = { onDelete(it.habit) }) {
+                Text("Delete")
             }
         }
     }

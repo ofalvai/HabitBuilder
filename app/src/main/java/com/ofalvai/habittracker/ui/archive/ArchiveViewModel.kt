@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.ui.archive
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
+import com.ofalvai.habittracker.mapper.toEntity
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
@@ -33,7 +34,8 @@ import kotlinx.coroutines.launch
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 
 enum class ArchiveEvent {
-    UnarchiveError
+    UnarchiveError,
+    DeleteError
 }
 
 class ArchiveViewModel(
@@ -61,6 +63,17 @@ class ArchiveViewModel(
             } catch (e: Throwable) {
                 telemetry.logNonFatal(e)
                 eventChannel.send(ArchiveEvent.UnarchiveError)
+            }
+        }
+    }
+
+    fun deleteHabit(habit: Habit) {
+        viewModelScope.launch {
+            try {
+                dao.deleteHabit(habit.toEntity(0, true))
+            } catch (e: Throwable) {
+                telemetry.logNonFatal(e)
+                eventChannel.send(ArchiveEvent.DeleteError)
             }
         }
     }

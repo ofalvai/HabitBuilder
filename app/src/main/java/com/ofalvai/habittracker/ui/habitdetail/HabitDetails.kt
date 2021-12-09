@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.ButtonDefaults.textButtonColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
@@ -97,12 +96,16 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
         pendingHabitToArchive = it
     }
 
-    ArchiveConfirmationDialog(
+    ConfirmationDialog(
         showDialog = showArchiveDialog,
+        title = stringResource(R.string.habitdetails_archive_title),
+        description = stringResource(R.string.habitdetails_archive_description),
+        confirmText = stringResource(R.string.habitdetails_archive_confirm),
         onDismiss = { showArchiveDialog = false },
         onConfirm = {
             pendingHabitToArchive?.let { viewModel.archiveHabit(it) }
             pendingHabitToArchive = null
+            showArchiveDialog = false
         }
     )
 
@@ -467,44 +470,6 @@ private fun SingleStat(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.caption,
             textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-private fun ArchiveConfirmationDialog(
-    showDialog: Boolean,
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit
-) {
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { onDismiss() },
-            confirmButton = {
-                TextButton(
-                    onClick = onConfirm,
-                    colors = textButtonColors(contentColor = MaterialTheme.colors.error)
-                ) {
-                    Text(text = stringResource(R.string.habitdetails_archive_confirm))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { onDismiss() }) {
-                    Text(text = stringResource(R.string.habitdetails_archive_cancel))
-                }
-            },
-            title = {
-                Text(
-                    text = stringResource(R.string.habitdetails_archive_title),
-                    style = MaterialTheme.typography.h6
-                )
-            },
-            text = {
-                Text(
-                    text = stringResource(R.string.habitdetails_archive_description),
-                    style = MaterialTheme.typography.body1
-                )
-            }
         )
     }
 }
