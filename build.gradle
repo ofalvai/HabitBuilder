@@ -18,8 +18,8 @@ buildscript {
 plugins {
     id "com.osacky.doctor" version "0.7.3"
     id "com.asarkar.gradle.build-time-tracker" version "3.0.1"
-    id "com.google.devtools.ksp" version "1.5.31-1.0.0"
-    id "org.gradle.android.cache-fix" version "2.4.4" apply false
+    id "com.google.devtools.ksp" version "1.5.31-1.0.1"
+    id "org.gradle.android.cache-fix" version "2.4.5" apply false
 }
 
 doctor {
@@ -32,7 +32,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://kotlin.bintray.com/kotlinx" } // kotlinx artifacts required by Compose Runtime
         maven { url "https://jitpack.io" }
     }
 }
