@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.5.31"
 compose = "1.1.0-beta03"
-room = "2.4.0-beta01"
+room = "2.4.0"
 accompanist = "0.20.2"
 
 [libraries]
