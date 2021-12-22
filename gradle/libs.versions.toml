@@ -39,7 +39,7 @@ accompanist-insets = { module = "com.google.accompanist:accompanist-insets", ver
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.1.0"
-bugsnag-runtime = "com.bugsnag:bugsnag-android:5.16.0"
+bugsnag-runtime = "com.bugsnag:bugsnag-android:5.17.0"
 
 junit = "junit:junit:4.13.2"
 mockito-android = "org.mockito:mockito-android:4.2.0"
