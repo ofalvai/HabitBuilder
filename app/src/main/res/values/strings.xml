@@ -77,7 +77,7 @@
     <string name="habitdetails_archive_confirm">Archive</string>
     <string name="habitdetails_archive_cancel">Cancel</string>
     <string name="habitdetails_archive_title">Archive habit?</string>
-    <string name="habitdetails_archive_description">This habit will be moved to the archive. If you change your mind, you can unarchive the habit without data loss, or delete forever.</string>
+    <string name="habitdetails_archive_description">This habit will be moved to the archive. If you change your mind, you can unarchive the habit without data loss, or delete it forever.</string>
     <string name="habitdetails_error">Failed to load habit details</string>
     <string name="habitdetails_error_stats">Failed to load habit statistics</string>
     <string name="habitdetails_actioncount_selector_weekly">Weekly</string>
@@ -123,6 +123,9 @@
     <string name="archive_delete_title">Delete habit?</string>
     <string name="archive_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
     <string name="archive_delete_confirm">Delete forever</string>
-
+    <string name="archive_habit_summary">Last performed: %1$s  · %2$d total</string>
+    <string name="archive_habit_last_action_never">never</string>
+    <string name="archive_action_unarchive">Unarchive</string>
+    <string name="archive_action_delete">Delete</string>
 
 </resources>
