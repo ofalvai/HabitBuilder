@@ -16,9 +16,11 @@
 
 package com.ofalvai.habittracker.ui.archive
 
-import androidx.compose.foundation.layout.Column
+import android.text.format.DateUtils
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -38,7 +40,9 @@ import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import kotlinx.coroutines.launch
+import java.time.Instant
 
 @Composable
 fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
@@ -113,20 +117,73 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
 }
 
 @Composable
-fun ArchivedHabitList(
+private fun ArchivedHabitList(
     habits: List<HabitWithActions>,
     onUnarchive: (Habit) -> Unit,
     onDelete: (Habit) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(bottom = 48.dp),
+    ) {
         items(habits) {
-            Text(text = it.habit.name)
-            Button(onClick = { onUnarchive(it.habit) }) {
-                Text("Unarchive")
-            }
-            Button(onClick = { onDelete(it.habit) }) {
-                Text("Delete")
+            ArchivedHabitItem(it, onUnarchive, onDelete)
+        }
+    }
+}
+
+@Composable
+private fun ArchivedHabitItem(
+    habitWithActions: HabitWithActions,
+    onUnarchive: (Habit) -> Unit,
+    onDelete: (Habit) -> Unit
+) {
+    Card(
+        elevation = 2.dp,
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+            Text(
+                text = habitWithActions.habit.name,
+                style = AppTextStyle.habitSubtitle
+            )
+            HabitSummary(habitWithActions)
+            Row(Modifier.padding(top = 16.dp)) {
+                OutlinedButton(onClick = { onUnarchive(habitWithActions.habit) }) {
+                    Text(stringResource(R.string.archive_action_unarchive))
+                }
+                Spacer(Modifier.width(16.dp))
+                OutlinedButton(onClick = { onDelete(habitWithActions.habit) }) {
+                    Text(stringResource(R.string.archive_action_delete))
+                }
             }
         }
     }
+}
+
+@Composable
+private fun HabitSummary(habitWithActions: HabitWithActions) {
+    val lastActionInstant: Instant? = habitWithActions.actions.lastOrNull { it.toggled }?.timestamp
+    val lastActionLabel = if (lastActionInstant != null) {
+        DateUtils.getRelativeTimeSpanString(
+            lastActionInstant.toEpochMilli(),
+            System.currentTimeMillis(),
+            0
+        )
+    } else {
+        stringResource(R.string.archive_habit_last_action_never)
+    }
+    val mergedLabel = stringResource(
+        R.string.archive_habit_summary,
+        lastActionLabel,
+        habitWithActions.totalActionCount
+    )
+
+    Text(
+        text = mergedLabel,
+        style = MaterialTheme.typography.subtitle2
+    )
 }
