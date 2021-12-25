@@ -39,12 +39,16 @@ interface HabitDao {
     suspend fun updateHabit(habit: Habit)
 
     @Query("SELECT count(*) FROM habit")
-    fun getHabitCount(): Flow<Int>
+    fun getTotalHabitCount(): Flow<Int>
 
     // TODO: limit by timestamp
     @Transaction
-    @Query("SELECT * FROM habit ORDER BY `order` ASC")
-    fun getHabitsWithActions(): Flow<List<HabitWithActions>>
+    @Query("SELECT * FROM habit WHERE archived == 0 ORDER BY `order` ASC")
+    fun getActiveHabitsWithActions(): Flow<List<HabitWithActions>>
+
+    @Transaction
+    @Query("SELECT * FROM habit WHERE archived == 1 ORDER BY `id` ASC")
+    fun getArchivedHabitsWithActions(): Flow<List<HabitWithActions>>
 
     @Query("SELECT * FROM habit WHERE id IN (:id1, :id2)")
     suspend fun getHabitPair(id1: HabitId, id2: HabitId): List<Habit>
@@ -56,6 +60,9 @@ interface HabitDao {
         """
     )
     suspend fun updateHabitOrders(id1: HabitId, order1: Int, id2: HabitId, order2: Int)
+
+    @Query("UPDATE habit SET archived = 0 WHERE id == :id")
+    suspend fun unarchiveHabit(id: HabitId)
 
     @Transaction
     @Query("SELECT * FROM habit WHERE id = :habitId")

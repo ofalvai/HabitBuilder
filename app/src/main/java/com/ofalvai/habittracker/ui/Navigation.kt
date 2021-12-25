@@ -47,4 +47,6 @@ sealed class Screen(
     object About : Screen("about")
 
     object Licenses : Screen("licenses")
+
+    object Archive : Screen("archive")
 }

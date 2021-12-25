@@ -21,10 +21,11 @@
     <string name="common_back">Back</string>
     <string name="common_edit">Edit</string>
     <string name="common_save">Save</string>
-    <string name="common_delete">Delete</string>
+    <string name="common_archive">Archive</string>
     <string name="common_more">More</string>
     <string name="common_error">Error</string>
     <string name="common_empty">Empty</string>
+    <string name="common_cancel">Cancel</string>
     <string name="common_interpunct">%s · %s</string>
 
     <string name="addhabit_appbar_title">Create new habit</string>
@@ -73,10 +74,10 @@
     <string name="habitdetails_singlestat_total">Total times done</string>
     <string name="habitdetails_singlestat_weekly">Done this week</string>
     <string name="habitdetails_singlestat_completionrate">Completion rate</string>
-    <string name="habitdetails_delete_confirm">Delete</string>
-    <string name="habitdetails_confirm_cancel">Cancel</string>
-    <string name="habitdetails_confirm_title">Delete habit?</string>
-    <string name="habitdetails_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
+    <string name="habitdetails_archive_confirm">Archive</string>
+    <string name="habitdetails_archive_cancel">Cancel</string>
+    <string name="habitdetails_archive_title">Archive habit?</string>
+    <string name="habitdetails_archive_description">This habit will be moved to the archive. If you change your mind, you can unarchive the habit without data loss, or delete it forever.</string>
     <string name="habitdetails_error">Failed to load habit details</string>
     <string name="habitdetails_error_stats">Failed to load habit statistics</string>
     <string name="habitdetails_actioncount_selector_weekly">Weekly</string>
@@ -97,7 +98,7 @@
     <string name="insights_tophabits_description">Your most often performed habits. Shows the number of times you completed your habits. The strength bar shows the ratio of completed and missed days since the first day (the bar is full if you have a perfect streak without a missed day).</string>
     <string name="insights_tophabits_navigate">Navigate to %s</string>
     <string name="insights_tophabits_see_all">See all</string>
-    <string name="insights_tophabits_error">Failed to top habits</string>
+    <string name="insights_tophabits_error">Failed to load top habits</string>
     <string name="insights_tophabits_empty_label">Add more habits and complete them at least once to see their success rate here.</string>
     <string name="insights_topdays_title">Top days</string>
     <string name="insights_topdays_description">Your most successful days. The list shows the day of week when each habit is performed most often and the number of completed habits on those days.</string>
@@ -105,6 +106,7 @@
     <string name="insights_topdays_empty_label">A bit more data is needed to display your top days. Add more habits and perform them a few times.</string>
 
     <string name="menu_about">About</string>
+    <string name="menu_archive">Archived habits</string>
 
     <string name="licenses_title">❤️ Open Source</string>
     <string name="licenses_description">This app is built with the following open source projects:</string>
@@ -115,4 +117,15 @@
     <string name="about_button_source">View source on GitHub</string>
     <string name="about_button_licenses">Open-source libraries</string>
 
+    <string name="archive_title">Archived habits</string>
+    <string name="archive_error_unarchive">Failed to unarchive habit</string>
+    <string name="archive_error_delete">Failed to delete habit</string>
+    <string name="archive_delete_title">Delete habit?</string>
+    <string name="archive_delete_description">Habit history and other details will be lost. This cannot be undone.</string>
+    <string name="archive_delete_confirm">Delete forever</string>
+    <string name="archive_habit_summary">Last performed: %1$s  · %2$d total</string>
+    <string name="archive_habit_last_action_never">never</string>
+    <string name="archive_action_unarchive">Unarchive</string>
+    <string name="archive_action_delete">Delete</string>
+    <string name="archive_empty">You can archive habits that are on pause or no longer relevant. Navigate to the habit edit screen, then tap Archive.\n\nArchived habits can be later unarchived or deleted permanently.</string>
 </resources>

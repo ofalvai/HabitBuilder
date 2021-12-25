@@ -32,11 +32,12 @@ fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): List
     }
 }
 
-fun Habit.toEntity(order: Int) = HabitEntity(
+fun Habit.toEntity(order: Int, archived: Boolean) = HabitEntity(
     id = this.id,
     name = this.name,
     color = this.color.toEntityColor(),
-    order = order
+    order = order,
+    archived = archived
 )
 
 fun HabitEntity.Color.toUIColor(): Habit.Color = when (this) {

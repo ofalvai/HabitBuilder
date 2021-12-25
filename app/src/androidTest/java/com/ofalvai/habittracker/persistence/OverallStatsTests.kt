@@ -40,11 +40,11 @@ import java.time.LocalDate
 class OverallStatsTests : BaseInstrumentedTest() {
 
     private object TestData {
-        val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green, order = 0)
-        val habit2 = Habit(id = 876, name = "Drinking enough water", color = Habit.Color.Green, order = 1)
-        val habit3 = Habit(id = 877, name = "Workout", color = Habit.Color.Green, order = 2)
-        val habit4 = Habit(id = 878, name = "Habit I never do", color = Habit.Color.Yellow, order = 3)
-        val habit5 = Habit(id = 879, name = "Habit I do mostly on Friday", color = Habit.Color.Blue, order = 4)
+        val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false)
+        val habit2 = Habit(id = 876, name = "Drinking enough water", color = Habit.Color.Green, order = 1, archived = false)
+        val habit3 = Habit(id = 877, name = "Workout", color = Habit.Color.Green, order = 2, archived = false)
+        val habit4 = Habit(id = 878, name = "Habit I never do", color = Habit.Color.Yellow, order = 3, archived = false)
+        val habit5 = Habit(id = 879, name = "Habit I do mostly on Friday", color = Habit.Color.Blue, order = 4, archived = false)
         val habits = arrayOf(habit1, habit2, habit3, habit4, habit5)
 
         val actions = arrayOf(

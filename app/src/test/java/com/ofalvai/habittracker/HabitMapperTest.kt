@@ -40,9 +40,7 @@ class HabitMapperTest {
             ActionEntity(id = 2, habit_id = 0, timestamp = now.minus(1, ChronoUnit.DAYS)),
             ActionEntity(id = 3, habit_id = 0, timestamp = now.minus(3, ChronoUnit.DAYS))
         )
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Green, 0), actions),
-        )
+        val habits = listOf(givenHabitWithActions(actions))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -62,7 +60,7 @@ class HabitMapperTest {
                 Habit(
                     0,
                     "Meditation",
-                    Habit.Color.Green
+                    Habit.Color.Red
                 ),
                 expectedActionHistory,
                 3,
@@ -79,9 +77,7 @@ class HabitMapperTest {
             ActionEntity(id = 1, habit_id = 0, timestamp = Instant.now().minus(10, ChronoUnit.DAYS)),
             ActionEntity(id = 2, habit_id = 0, timestamp = Instant.now().minus(19, ChronoUnit.DAYS))
         )
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Yellow, 0), actions)
-        )
+        val habits = listOf(givenHabitWithActions(actions))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -89,7 +85,7 @@ class HabitMapperTest {
         // Then
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Yellow),
+            Habit(0, "Meditation", Habit.Color.Red),
             expectedActionHistory,
             2,
             ActionHistory.MissedDays(10)
@@ -109,9 +105,7 @@ class HabitMapperTest {
             ActionEntity(id = 5, habit_id = 0, timestamp = now.minus(19, ChronoUnit.DAYS)),
             ActionEntity(id = 6, habit_id = 0, timestamp = now.minus(30, ChronoUnit.DAYS))
         )
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0), actions),
-        )
+        val habits = listOf(givenHabitWithActions(actions))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -145,9 +139,7 @@ class HabitMapperTest {
             ActionEntity(id = 3, habit_id = 0, timestamp = now.minus(2, ChronoUnit.DAYS)),
             ActionEntity(id = 4, habit_id = 0, timestamp = now.minus(3, ChronoUnit.DAYS)),
         )
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0), actions),
-        )
+        val habits = listOf(givenHabitWithActions(actions))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -174,9 +166,7 @@ class HabitMapperTest {
     @Test
     fun `Given habit with no actions When mapped to model Then action history is clean`() {
         // Given
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0), emptyList()),
-        )
+        val habits = listOf(givenHabitWithActions(emptyList()))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -199,9 +189,7 @@ class HabitMapperTest {
         val actions = listOf(
             ActionEntity(id = 1, habit_id = 0, timestamp = now.minus(3, ChronoUnit.DAYS)),
         )
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0), actions),
-        )
+        val habits = listOf(givenHabitWithActions(actions))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -232,9 +220,7 @@ class HabitMapperTest {
         val actions = listOf(
             ActionEntity(id = 1, habit_id = 0, timestamp = now),
         )
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0), actions),
-        )
+        val habits = listOf(givenHabitWithActions(actions))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -265,9 +251,7 @@ class HabitMapperTest {
         val actions = listOf(
             ActionEntity(id = 1, habit_id = 0, timestamp = now.minus(1, ChronoUnit.DAYS)),
         )
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0), actions),
-        )
+        val habits = listOf(givenHabitWithActions(actions))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -298,9 +282,7 @@ class HabitMapperTest {
         val actions = listOf(
             ActionEntity(id = 1, habit_id = 0, timestamp = now.plus(1, ChronoUnit.DAYS)),
         )
-        val habits = listOf(
-            HabitWithActionsEntity(HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0), actions),
-        )
+        val habits = listOf(givenHabitWithActions(actions))
 
         // When
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
@@ -315,5 +297,12 @@ class HabitMapperTest {
         ))
         assertEquals(expectedHabits, mappedHabitsWithActions)
     }
+
+    private fun givenHabitEntity() = HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0, false)
+
+    private fun givenHabitWithActions(actions: List<ActionEntity>) = HabitWithActionsEntity(
+        habit = givenHabitEntity(),
+        actions = actions
+    )
 
 }

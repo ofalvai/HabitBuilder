@@ -122,14 +122,14 @@ class HabitDetailViewModel(
 
     fun updateHabit(habit: Habit) {
         viewModelScope.launch {
-            dao.updateHabit(habit.toEntity(habitOrder ?: 0))
+            dao.updateHabit(habit.toEntity(order = habitOrder ?: 0, archived = false))
             fetchHabitDetails(habit.id)
         }
     }
 
-    fun deleteHabit(habit: Habit) {
+    fun archiveHabit(habit: Habit) {
         viewModelScope.launch {
-            dao.deleteHabit(habit.toEntity(habitOrder ?: 0))
+            dao.updateHabit(habit.toEntity(order = habitOrder ?: 0, archived = true))
             eventChannel.send(HabitDetailEvent.BackNavigation)
         }
     }

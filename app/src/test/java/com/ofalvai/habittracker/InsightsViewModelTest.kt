@@ -55,7 +55,7 @@ class InsightsViewModelTest {
     fun `Given habit and actions When ViewModel loads Then habit count and heatmap data are combined into ViewModel state once`() = runBlocking {
         // Given
         val habitCountFlow = MutableStateFlow(1)
-        given(dao.getHabitCount()).willReturn(habitCountFlow)
+        given(dao.getTotalHabitCount()).willReturn(habitCountFlow)
         given(dao.getSumActionCountByDay(any(), any())).willReturn(listOf(
             SumActionCountByDay(date = LocalDate.now(), action_count = 1)
         ))
@@ -77,7 +77,7 @@ class InsightsViewModelTest {
     fun `Given loaded ViewModel When habit count changes and heatmap reloaded Then ViewModel state is updated once with new habit count`() = runBlocking {
         // Given
         val habitCountFlow = MutableStateFlow(1)
-        given(dao.getHabitCount()).willReturn(habitCountFlow)
+        given(dao.getTotalHabitCount()).willReturn(habitCountFlow)
         given(dao.getSumActionCountByDay(any(), any())).willReturn(listOf(
             SumActionCountByDay(date = LocalDate.now(), action_count = 1)
         ))
@@ -106,7 +106,7 @@ class InsightsViewModelTest {
         // Given
         val exception = RuntimeException("Mocked exception")
         given(dao.getSumActionCountByDay(any(), any())).willThrow(exception)
-        given(dao.getHabitCount()).willReturn(flowOf(1))
+        given(dao.getTotalHabitCount()).willReturn(flowOf(1))
         given(dao.getMostSuccessfulHabits(any())).willReturn(emptyList())
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
@@ -132,7 +132,7 @@ class InsightsViewModelTest {
         // Given
         val exception = RuntimeException("Mocked exception")
         given(dao.getSumActionCountByDay(any(), any())).willReturn(emptyList())
-        given(dao.getHabitCount()).willReturn(flowOf(1))
+        given(dao.getTotalHabitCount()).willReturn(flowOf(1))
         given(dao.getMostSuccessfulHabits(any())).willThrow(exception)
         given(dao.getTopDayForHabits()).willReturn(emptyList())
 
@@ -165,7 +165,7 @@ class InsightsViewModelTest {
         // Given
         val exception = RuntimeException("Mocked exception")
         given(dao.getSumActionCountByDay(any(), any())).willReturn(emptyList())
-        given(dao.getHabitCount()).willReturn(flowOf(1))
+        given(dao.getTotalHabitCount()).willReturn(flowOf(1))
         given(dao.getMostSuccessfulHabits(any())).willReturn(emptyList())
         given(dao.getTopDayForHabits()).willThrow(exception)
 

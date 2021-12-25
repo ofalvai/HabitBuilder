@@ -80,6 +80,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
         viewModel.dashboardConfig = it
     }
     val onAboutClick = { navController.navigate(Screen.About.route) }
+    val onArchiveClick = { navController.navigate(Screen.Archive.route) }
     val onMove: (ItemMoveEvent) -> Unit = { viewModel.persistItemMove(it) }
 
     when (habits) {
@@ -93,6 +94,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
                 onActionToggle,
                 onHabitDetail,
                 onAboutClick,
+                onArchiveClick,
                 onMove
             )
         }
@@ -114,16 +116,17 @@ private fun LoadedDashboard(
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
     onHabitDetail: (Habit) -> (Unit),
     onAboutClick: () -> Unit,
+    onArchiveClick: () -> Unit,
     onMove: (ItemMoveEvent) -> Unit
 ) {
     ContentWithPlaceholder(
         showPlaceholder = habits.isEmpty(),
-        placeholder = { DashboardPlaceholder(onAddHabitClick, onAboutClick) }
+        placeholder = { DashboardPlaceholder(onAddHabitClick, onAboutClick, onArchiveClick) }
     ) {
         Column(
             Modifier.fillMaxSize().statusBarsPadding()
         ) {
-            DashboardAppBar(config, onConfigChange, onAboutClick)
+            DashboardAppBar(config, onConfigChange, onAboutClick, onArchiveClick)
 
             if (onboardingState != null) {
                 Onboarding(onboardingState)
@@ -147,7 +150,8 @@ private fun LoadedDashboard(
 private fun DashboardAppBar(
     config: DashboardConfig,
     onConfigChange: (DashboardConfig) -> Unit,
-    onAboutClick: () -> Unit
+    onAboutClick: () -> Unit,
+    onArchiveClick: () -> Unit
 ) {
     val onConfigChangeClick = {
         when (config) {
@@ -169,6 +173,9 @@ private fun DashboardAppBar(
             }
         },
         dropdownMenuItems = {
+            DropdownMenuItem(onClick = onArchiveClick) {
+                Text(stringResource(R.string.menu_archive))
+            }
             DropdownMenuItem(onClick = onAboutClick) {
                 Text(stringResource(R.string.menu_about))
             }
@@ -179,7 +186,8 @@ private fun DashboardAppBar(
 @Composable
 private fun DashboardPlaceholder(
     onAddHabitClick: () -> Unit,
-    onAboutClick: () -> Unit
+    onAboutClick: () -> Unit,
+    onArchiveClick: () -> Unit
 ) {
     Column(
         Modifier
@@ -191,7 +199,8 @@ private fun DashboardPlaceholder(
         DashboardAppBar(
             config = DashboardConfig.FiveDay,
             onConfigChange = {},
-            onAboutClick = onAboutClick
+            onAboutClick = onAboutClick,
+            onArchiveClick = onArchiveClick
         )
 
         Spacer(Modifier.padding(top = 32.dp))

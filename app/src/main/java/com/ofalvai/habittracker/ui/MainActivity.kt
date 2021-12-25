@@ -45,6 +45,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.telemetry.Telemetry
+import com.ofalvai.habittracker.ui.archive.ArchiveScreen
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.Dashboard
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
@@ -117,6 +118,7 @@ private fun Screens(navController: NavHostController,
         }
         composable(Screen.About.route) { AboutScreen(navController) }
         composable(Screen.Licenses.route) { LicensesScreen(navController) }
+        composable(Screen.Archive.route) { ArchiveScreen(navController, scaffoldState) }
     }
 }
 

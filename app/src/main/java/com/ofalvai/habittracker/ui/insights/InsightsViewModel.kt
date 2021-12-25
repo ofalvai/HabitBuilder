@@ -44,7 +44,7 @@ class InsightsViewModel(
     val topHabits = MutableStateFlow<Result<List<TopHabitItem>>>(Result.Success(emptyList()))
     val habitTopDays = MutableStateFlow<Result<List<TopDayItem>>>(Result.Success(emptyList()))
 
-    private val habitCount: SharedFlow<Int> = habitDao.getHabitCount().shareIn(
+    private val habitCount: SharedFlow<Int> = habitDao.getTotalHabitCount().shareIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         replay = 1
