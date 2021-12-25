@@ -25,21 +25,26 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.common.ConfirmationDialog
 import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -122,12 +127,17 @@ private fun ArchivedHabitList(
     onUnarchive: (Habit) -> Unit,
     onDelete: (Habit) -> Unit
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(bottom = 48.dp),
+    ContentWithPlaceholder(
+        showPlaceholder = habits.isEmpty(),
+        placeholder = { EmptyView() }
     ) {
-        items(habits) {
-            ArchivedHabitItem(it, onUnarchive, onDelete)
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(bottom = 48.dp),
+        ) {
+            items(habits) {
+                ArchivedHabitItem(it, onUnarchive, onDelete)
+            }
         }
     }
 }
@@ -186,4 +196,22 @@ private fun HabitSummary(habitWithActions: HabitWithActions) {
         text = mergedLabel,
         style = MaterialTheme.typography.subtitle2
     )
+}
+
+@Composable
+private fun EmptyView() {
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 32.dp)) {
+        Icon(
+            modifier = Modifier.size(64.dp).align(Alignment.CenterHorizontally).alpha(0.5f),
+            painter = AppIcons.Archive,
+            contentDescription = stringResource(R.string.common_archive)
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            modifier = Modifier.fillMaxWidth().padding(32.dp),
+            text = stringResource(R.string.archive_empty),
+            style = MaterialTheme.typography.body1,
+            textAlign = TextAlign.Center
+        )
+    }
 }

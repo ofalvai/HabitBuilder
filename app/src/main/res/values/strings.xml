@@ -127,5 +127,5 @@
     <string name="archive_habit_last_action_never">never</string>
     <string name="archive_action_unarchive">Unarchive</string>
     <string name="archive_action_delete">Delete</string>
-
+    <string name="archive_empty">You can archive habits that are on pause or no longer relevant. Navigate to the habit edit screen, then tap Archive.\n\nArchived habits can be later unarchived or deleted permanently.</string>
 </resources>
