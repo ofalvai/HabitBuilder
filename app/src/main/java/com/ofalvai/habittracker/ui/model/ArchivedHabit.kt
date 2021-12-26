@@ -14,32 +14,13 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.persistence.entity
+package com.ofalvai.habittracker.ui.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import java.time.Instant
 
-@Entity
-data class Habit(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+data class ArchivedHabit(
+    val id: HabitId,
     val name: String,
-    val color: Color,
-    val order: Int,
-    val archived: Boolean
-) {
-
-    enum class Color {
-        Red,
-        Green,
-        Blue,
-        Yellow
-    }
-
-}
-
-/**
- * Partial Habit class to allow deleting by ID only
- */
-data class HabitById(
-    val id: Int
+    val totalActionCount: Int,
+    val lastAction: Instant?
 )

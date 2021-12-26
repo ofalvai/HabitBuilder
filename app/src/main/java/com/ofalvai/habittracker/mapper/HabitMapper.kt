@@ -16,6 +16,7 @@
 
 package com.ofalvai.habittracker.mapper
 
+import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
@@ -28,6 +29,17 @@ fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): List
             actions = actionsToRecentDays(it.actions),
             totalActionCount = it.actions.size,
             actionHistory = actionsToHistory(it.actions)
+        )
+    }
+}
+
+fun mapHabitEntityToArchivedModel(habitsWithActions: List<HabitWithActionsEntity>): List<ArchivedHabit> {
+    return habitsWithActions.map {
+        ArchivedHabit(
+            id = it.habit.id,
+            name = it.habit.name,
+            totalActionCount = it.actions.size,
+            lastAction = it.actions.lastOrNull()?.timestamp
         )
     }
 }

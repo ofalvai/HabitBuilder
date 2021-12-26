@@ -18,13 +18,12 @@ package com.ofalvai.habittracker.ui.archive
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
-import com.ofalvai.habittracker.mapper.toEntity
+import com.ofalvai.habittracker.mapper.mapHabitEntityToArchivedModel
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.persistence.entity.HabitById
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -46,17 +45,17 @@ class ArchiveViewModel(
     private val eventChannel = Channel<ArchiveEvent>(Channel.BUFFERED)
     val archiveEvent = eventChannel.receiveAsFlow()
 
-    val archivedHabitList: Flow<Result<List<HabitWithActions>>> = dao
+    val archivedHabitList: Flow<Result<List<ArchivedHabit>>> = dao
         .getArchivedHabitsWithActions()
-        .map<List<HabitWithActionsEntity>, Result<List<HabitWithActions>>> {
-            Result.Success(mapHabitEntityToModel(it))
+        .map<List<HabitWithActionsEntity>, Result<List<ArchivedHabit>>> {
+            Result.Success(mapHabitEntityToArchivedModel(it))
         }
         .catch {
             telemetry.logNonFatal(it)
             emit(Result.Failure(it))
         }
 
-    fun unarchiveHabit(habit: Habit) {
+    fun unarchiveHabit(habit: ArchivedHabit) {
         viewModelScope.launch {
             try {
                 dao.unarchiveHabit(habit.id)
@@ -67,15 +66,14 @@ class ArchiveViewModel(
         }
     }
 
-    fun deleteHabit(habit: Habit) {
+    fun deleteHabit(habit: ArchivedHabit) {
         viewModelScope.launch {
             try {
-                dao.deleteHabit(habit.toEntity(0, true))
+                dao.deleteHabit(HabitById(habit.id))
             } catch (e: Throwable) {
                 telemetry.logNonFatal(e)
                 eventChannel.send(ArchiveEvent.DeleteError)
             }
         }
     }
-
 }

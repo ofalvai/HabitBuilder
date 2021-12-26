@@ -23,6 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.ofalvai.habittracker.persistence.entity.Action
 import com.ofalvai.habittracker.persistence.entity.Habit
+import com.ofalvai.habittracker.persistence.entity.HabitById
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions
 import com.ofalvai.habittracker.util.BaseInstrumentedTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -149,7 +150,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
         habitDao.insertHabit(habit)
         habitDao.insertAction(action1, action2)
-        habitDao.deleteHabit(habit)
+        habitDao.deleteHabit(HabitById(habit.id))
 
         val actions = habitDao.getActionsForHabit(habitId)
         val expectedActions = emptyList<Action>()

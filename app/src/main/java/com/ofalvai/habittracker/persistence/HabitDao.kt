@@ -32,8 +32,8 @@ interface HabitDao {
     @Insert
     suspend fun insertHabit(vararg habit: Habit)
 
-    @Delete
-    suspend fun deleteHabit(habit: Habit)
+    @Delete(entity = Habit::class)
+    suspend fun deleteHabit(habitById: HabitById)
 
     @Update
     suspend fun updateHabit(habit: Habit)

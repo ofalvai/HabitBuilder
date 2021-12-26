@@ -42,12 +42,10 @@ import com.ofalvai.habittracker.ui.common.ConfirmationDialog
 import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.common.asEffect
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import kotlinx.coroutines.launch
-import java.time.Instant
 
 @Composable
 fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
@@ -69,13 +67,13 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
     }
 
     var showDeleteDialog by remember { mutableStateOf(false) }
-    var pendingHabitToDelete by remember { mutableStateOf<Habit?>(null) }
-    val onDelete: (Habit) -> Unit = {
+    var pendingHabitToDelete by remember { mutableStateOf<ArchivedHabit?>(null) }
+    val onDelete: (ArchivedHabit) -> Unit = {
         showDeleteDialog = true
         pendingHabitToDelete = it
     }
 
-    val onUnarchive: (Habit) -> Unit = { viewModel.unarchiveHabit(it) }
+    val onUnarchive: (ArchivedHabit) -> Unit = { viewModel.unarchiveHabit(it) }
 
     ConfirmationDialog(
         showDialog = showDeleteDialog,
@@ -107,7 +105,7 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
         when (habits) {
             is Result.Success -> {
                 ArchivedHabitList(
-                    (habits as Result.Success<List<HabitWithActions>>).value,
+                    (habits as Result.Success<List<ArchivedHabit>>).value,
                     onUnarchive,
                     onDelete
                 )
@@ -123,9 +121,9 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
 
 @Composable
 private fun ArchivedHabitList(
-    habits: List<HabitWithActions>,
-    onUnarchive: (Habit) -> Unit,
-    onDelete: (Habit) -> Unit
+    habits: List<ArchivedHabit>,
+    onUnarchive: (ArchivedHabit) -> Unit,
+    onDelete: (ArchivedHabit) -> Unit
 ) {
     ContentWithPlaceholder(
         showPlaceholder = habits.isEmpty(),
@@ -144,9 +142,9 @@ private fun ArchivedHabitList(
 
 @Composable
 private fun ArchivedHabitItem(
-    habitWithActions: HabitWithActions,
-    onUnarchive: (Habit) -> Unit,
-    onDelete: (Habit) -> Unit
+    habit: ArchivedHabit,
+    onUnarchive: (ArchivedHabit) -> Unit,
+    onDelete: (ArchivedHabit) -> Unit
 ) {
     Card(
         elevation = 2.dp,
@@ -157,16 +155,16 @@ private fun ArchivedHabitItem(
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
             Text(
-                text = habitWithActions.habit.name,
+                text = habit.name,
                 style = AppTextStyle.habitSubtitle
             )
-            HabitSummary(habitWithActions)
+            HabitSummary(habit)
             Row(Modifier.padding(top = 16.dp)) {
-                OutlinedButton(onClick = { onUnarchive(habitWithActions.habit) }) {
+                OutlinedButton(onClick = { onUnarchive(habit) }) {
                     Text(stringResource(R.string.archive_action_unarchive))
                 }
                 Spacer(Modifier.width(16.dp))
-                OutlinedButton(onClick = { onDelete(habitWithActions.habit) }) {
+                OutlinedButton(onClick = { onDelete(habit) }) {
                     Text(stringResource(R.string.archive_action_delete))
                 }
             }
@@ -175,11 +173,10 @@ private fun ArchivedHabitItem(
 }
 
 @Composable
-private fun HabitSummary(habitWithActions: HabitWithActions) {
-    val lastActionInstant: Instant? = habitWithActions.actions.lastOrNull { it.toggled }?.timestamp
-    val lastActionLabel = if (lastActionInstant != null) {
+private fun HabitSummary(habit: ArchivedHabit) {
+    val lastActionLabel = if (habit.lastAction != null) {
         DateUtils.getRelativeTimeSpanString(
-            lastActionInstant.toEpochMilli(),
+            habit.lastAction.toEpochMilli(),
             System.currentTimeMillis(),
             0
         )
@@ -189,7 +186,7 @@ private fun HabitSummary(habitWithActions: HabitWithActions) {
     val mergedLabel = stringResource(
         R.string.archive_habit_summary,
         lastActionLabel,
-        habitWithActions.totalActionCount
+        habit.totalActionCount
     )
 
     Text(
