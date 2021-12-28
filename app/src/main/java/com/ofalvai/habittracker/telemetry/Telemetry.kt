@@ -19,7 +19,8 @@ package com.ofalvai.habittracker.telemetry
 import android.content.Context
 import com.bugsnag.android.BreadcrumbType
 import com.bugsnag.android.Bugsnag
-import timber.log.Timber
+import logcat.asLog
+import logcat.logcat
 
 interface Telemetry {
 
@@ -44,7 +45,7 @@ class TelemetryImpl(private val appContext: Context) : Telemetry {
     }
 
     override fun logNonFatal(e: Throwable) {
-        Timber.e(e)
+        logcat { e.asLog() }
         Bugsnag.notify(e)
     }
 

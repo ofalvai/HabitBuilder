@@ -183,7 +183,7 @@ dependencies {
     implementation libs.androidx.room.ktx
     ksp libs.androidx.room.compiler
 
-    implementation libs.timber
+    implementation libs.logcat
     implementation libs.calendarview
     implementation(libs.reorderable)
     implementation libs.accompanist.insets

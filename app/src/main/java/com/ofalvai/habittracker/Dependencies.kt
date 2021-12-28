@@ -36,7 +36,7 @@ import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.settings.LicensesViewModel
-import timber.log.Timber
+import logcat.logcat
 
 object Dependencies {
 
@@ -64,11 +64,9 @@ object Dependencies {
 }
 
 private fun roomQueryLogCallback(sqlQuery: String, bindArgs: List<Any>) {
-    Timber.tag("RoomQueryLog")
-    Timber.d("Query: %s", sqlQuery)
+    logcat("RoomQueryLog") { "Query: $sqlQuery" }
     if (bindArgs.isNotEmpty()) {
-        Timber.tag("RoomQueryLog")
-        Timber.d("Args: %s", bindArgs.toString())
+        logcat("RoomQueryLog") { "Args: $bindArgs" }
     }
 }
 
@@ -82,7 +80,7 @@ class AppViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (AddHabitViewModel::class.java.isAssignableFrom(modelClass)) {
-            return AddHabitViewModel(habitDao, onboardingManager) as T
+            return AddHabitViewModel(habitDao, onboardingManager, telemetry) as T
         }
         if (DashboardViewModel::class.java.isAssignableFrom(modelClass)) {
             return DashboardViewModel(habitDao, appPreferences, telemetry, onboardingManager) as T

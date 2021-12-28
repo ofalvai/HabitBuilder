@@ -20,18 +20,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.toEntityColor
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.model.Habit
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
 class AddHabitViewModel(
     private val dao: HabitDao,
-    private val onboardingManager: OnboardingManager
+    private val onboardingManager: OnboardingManager,
+    private val telemetry: Telemetry
 ) : ViewModel() {
 
     private val backNavigationEventChannel = Channel<Unit>(Channel.BUFFERED)
@@ -53,7 +54,7 @@ class AddHabitViewModel(
                 backNavigationEventChannel.send(Unit)
             } catch (e: Throwable) {
                 // TODO: error handling on UI
-                Timber.e(e)
+                telemetry.logNonFatal(e)
             }
         }
     }
