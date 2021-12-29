@@ -66,7 +66,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.get()
+        // kotlinCompilerExtensionVersion libs.versions.compose.get()
+        kotlinCompilerExtensionVersion = "1.2.0-SNAPSHOT" // TODO: temporary workaround for a Kotlin 1.6.10 compatible Compose compiler
     }
 
     packagingOptions {
@@ -87,6 +88,16 @@ android {
 
 jacoco {
     toolVersion = "0.8.7"
+}
+
+configurations.all{
+    resolutionStrategy {
+        eachDependency { details ->
+            if ('org.jacoco' == details.requested.group) {
+                details.useVersion "0.8.7"
+            }
+        }
+    }
 }
 
 afterEvaluate {
@@ -148,9 +159,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 licensee {
     allow("Apache-2.0")
     allow("MIT")
-    allowDependency('org.jetbrains', 'annotations', '16.0.3') {
-        because 'Apache-2.0, but typo in license URL fixed in newer versions'
-    }
+    ignoreDependencies("org.jacoco")
     allowDependency("com.github.kizitonwose", "CalendarView", "1.0.4") {
         because "Artifact declares no licenses, but it's MIT according to GitHub"
     }
@@ -162,14 +171,6 @@ tasks
         it.name.startsWith("ksp") && it.name.endsWith("TestKotlin")
     }
     .configureEach { it.enabled = false }
-
-kotlin {
-    sourceSets.all {
-        languageSettings {
-            languageVersion = '1.6' // Exhaustive when statements
-        }
-    }
-}
 
 dependencies {
     coreLibraryDesugaring libs.android.tools.desugar
