@@ -16,6 +16,8 @@
 
 package com.ofalvai.habittracker.ui.habitdetail
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -25,6 +27,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +39,7 @@ import kotlin.math.max
 private const val MinBarHeight = 0.02f
 private val BarWidth = 32.dp
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ActionCountChart(
     values: List<ActionCountChart.ChartItem>,
@@ -44,46 +48,51 @@ fun ActionCountChart(
     if (values.isEmpty()) {
         return
     }
-    val maxValue = values.maxByOrNull { it.value }!!.value
     // Reverse items and use reverseLayout = true to initially scroll to end
     val reversedItems = remember(values) { values.reversed() }
 
-
-    LazyRow(
-        modifier = modifier.height(200.dp),
-        reverseLayout = true
-    ) {
-        itemsIndexed(reversedItems) { index, chartItem ->
-            Column(
-                modifier = Modifier.padding(horizontal = 4.dp).fillMaxHeight()
-            ) {
+    AnimatedContent(
+        targetState = reversedItems,
+        transitionSpec = { fadeIn(animationSpec = tween(300, delayMillis = 150)) with fadeOut() },
+        contentAlignment = Alignment.BottomCenter
+    ) { items ->
+        val maxValue = items.maxByOrNull { it.value }!!.value
+        LazyRow(
+            modifier = modifier.height(200.dp),
+            reverseLayout = true
+        ) {
+            itemsIndexed(items) { index, chartItem ->
                 Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.Bottom,
-                    ) {
-                    val value = chartItem.value
-                    val heightRatio = if (maxValue > 0) value / maxValue.toFloat() else 0f
-                    val isEven = index % 2 == 0
+                    modifier = Modifier.padding(horizontal = 4.dp).fillMaxHeight()
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.Bottom,
+                        ) {
+                        val value = chartItem.value
+                        val heightRatio = if (maxValue > 0) value / maxValue.toFloat() else 0f
+                        val isEven = index % 2 == 0
+                        Text(
+                            modifier = Modifier.width(BarWidth).padding(top = 8.dp, bottom = 4.dp),
+                            text = value.toString(),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.caption
+                        )
+                        val background = if (isEven) MaterialTheme.colors.primary else MaterialTheme.colors.primary.copy(alpha = .8f) // TODO
+                        Box(
+                            modifier = Modifier
+                                .background(background, shape = RoundedCornerShape(4.dp))
+                                .fillMaxHeight(fraction = max(MinBarHeight, heightRatio))
+                                .width(BarWidth)
+                        )
+                    }
                     Text(
-                        modifier = Modifier.width(BarWidth).padding(top = 8.dp, bottom = 4.dp),
-                        text = value.toString(),
+                        modifier = Modifier.width(BarWidth).padding(top = 4.dp),
+                        text = chartItem.label,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.caption
                     )
-                    val background = if (isEven) MaterialTheme.colors.primary else MaterialTheme.colors.primary.copy(alpha = .8f) // TODO
-                    Box(
-                        modifier = Modifier
-                            .background(background, shape = RoundedCornerShape(4.dp))
-                            .fillMaxHeight(fraction = max(MinBarHeight, heightRatio))
-                            .width(BarWidth)
-                    )
                 }
-                Text(
-                    modifier = Modifier.width(BarWidth).padding(top = 4.dp),
-                    text = chartItem.label,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.caption
-                )
             }
         }
     }

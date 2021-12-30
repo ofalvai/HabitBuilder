@@ -50,7 +50,7 @@ class HabitDetailViewModel(
 
     val habitWithActions = MutableStateFlow<Result<HabitWithActions>>(Result.Loading)
     val singleStats = MutableStateFlow(initialSingleStats)
-    val chartData = MutableStateFlow(initialChartData)
+    val chartData = MutableStateFlow<Result<ActionCountChart>>(Result.Success(initialChartData))
 
     private val eventChannel = Channel<HabitDetailEvent>(Channel.BUFFERED)
     val habitDetailEvent = eventChannel.receiveAsFlow()
@@ -104,7 +104,9 @@ class HabitDetailViewModel(
                 )
                 actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity.await())
                 actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity.await())
-                switchChartType(chartData.value.type)
+                if (chartData.value is Result.Success) {
+                    switchChartType((chartData.value as Result.Success<ActionCountChart>).value.type)
+                }
             } catch (e: Throwable) {
                 // Fail silently
                 telemetry.logNonFatal(e)
@@ -135,13 +137,23 @@ class HabitDetailViewModel(
     }
 
     fun switchChartType(newType: ActionCountChart.Type) {
-        val items = when (newType) {
-            ActionCountChart.Type.Weekly -> {
-                mapActionCountByWeekListToItemList(actionCountByWeek.value, LocalDate.now(), Locale.getDefault())
+        try {
+            val items = when (newType) {
+                ActionCountChart.Type.Weekly -> mapActionCountByWeekListToItemList(
+                    actionCountByWeek.value,
+                    LocalDate.now(),
+                    Locale.getDefault()
+                )
+                ActionCountChart.Type.Monthly -> mapActionCountByMonthListToItemList(
+                    actionCountByMonth.value,
+                    LocalDate.now()
+                )
             }
-            ActionCountChart.Type.Monthly -> mapActionCountByMonthListToItemList(actionCountByMonth.value, LocalDate.now())
+            chartData.value = Result.Success(ActionCountChart(items, newType))
+        } catch (e: Throwable) {
+            chartData.value = Result.Failure(e)
+            telemetry.logNonFatal(e)
         }
-        chartData.value = ActionCountChart(items, newType)
     }
 
     private suspend fun toggleAction(

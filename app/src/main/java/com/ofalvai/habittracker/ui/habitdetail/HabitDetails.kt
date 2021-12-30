@@ -30,6 +30,7 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -125,7 +126,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 private fun HabitDetailScreen(
     habitDetailState: Result<HabitWithActions>,
     singleStats: SingleStats,
-    chartData: ActionCountChart,
+    chartData: Result<ActionCountChart>,
     onChartTypeChange: (ActionCountChart.Type) -> Unit,
     onBack: () -> Unit,
     onEdit: (Habit) -> Unit,
@@ -152,8 +153,6 @@ private fun HabitDetailScreen(
                         actions = habitDetailState.value.actions,
                         onDayToggle = onDayToggle
                     )
-
-                    HabitStats(chartData, onChartTypeChange)
                 }
                 Result.Loading -> {
                     // No calendar and stats in loading state
@@ -163,6 +162,17 @@ private fun HabitDetailScreen(
                         label = stringResource(R.string.habitdetails_error_stats),
                         modifier = Modifier.padding(top = 64.dp)
                     )
+                }
+            }
+
+            when (chartData) {
+                is Result.Success -> HabitStats(chartData.value, onChartTypeChange)
+                is Result.Failure -> ErrorView(
+                    label = stringResource(R.string.habitdetails_error_stats),
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+                Result.Loading -> {
+                    // No chart in loading state
                 }
             }
         }
@@ -384,27 +394,35 @@ private fun HabitStats(
     chartData: ActionCountChart,
     onStatTypeChange: (ActionCountChart.Type) -> Unit
 ) {
-    Column {
-        Row(Modifier.align(Alignment.End)) {
-            ToggleButton(
-                checked = chartData.type == ActionCountChart.Type.Weekly,
-                onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
-            ) {
-                Text(text = stringResource(R.string.habitdetails_actioncount_selector_weekly))
-            }
-            Spacer(Modifier.width(8.dp))
-            ToggleButton(
-                checked = chartData.type == ActionCountChart.Type.Monthly,
-                onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
-            ) {
-                Text(text = stringResource(R.string.habitdetails_actioncount_selector_monthly))
-            }
+    Card(Modifier.padding(top = 16.dp)) {
+        Column {
+            Row(Modifier.align(Alignment.End).padding(top = 8.dp, end = 16.dp)) {
+                Text(
+                    modifier = Modifier.align(CenterVertically),
+                    text = stringResource(R.string.habitdetails_actioncount_selector_label),
+                    style = MaterialTheme.typography.body2
+                )
+                Spacer(Modifier.width(8.dp))
+                ToggleButton(
+                    checked = chartData.type == ActionCountChart.Type.Weekly,
+                    onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
+                ) {
+                    Text(text = stringResource(R.string.habitdetails_actioncount_selector_weekly))
+                }
+                Spacer(Modifier.width(8.dp))
+                ToggleButton(
+                    checked = chartData.type == ActionCountChart.Type.Monthly,
+                    onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
+                ) {
+                    Text(text = stringResource(R.string.habitdetails_actioncount_selector_monthly))
+                }
 
+            }
+            ActionCountChart(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                values = chartData.items
+            )
         }
-        ActionCountChart(
-            modifier = Modifier.fillMaxWidth(),
-            values = chartData.items
-        )
     }
 }
 
@@ -488,7 +506,7 @@ private fun PreviewHabitDetailScreen() {
                 )
             ),
             singleStats = SingleStats(LocalDate.now(), 2, 1, 0.15f),
-            chartData = ActionCountChart(emptyList(), ActionCountChart.Type.Weekly),
+            chartData = Result.Success(ActionCountChart(emptyList(), ActionCountChart.Type.Weekly)),
             onChartTypeChange = {},
             onBack = { },
             onEdit = { },
