@@ -31,15 +31,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.ui.common.HorizontalGrid
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
@@ -129,29 +128,6 @@ fun ActionSquares(
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Center
             )
-        }
-    }
-}
-
-@Composable
-fun HorizontalGrid(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    Layout(content, modifier) { measurables, constraints ->
-        val itemConstraints = Constraints.fixedWidth(constraints.maxWidth / measurables.size)
-        val placeables = measurables.map {
-            it.measure(itemConstraints)
-        }
-
-        val height = placeables.maxOf { it.height }
-        layout(constraints.maxWidth, height) {
-            var xOffset = 0
-
-            placeables.forEach {
-                it.placeRelative(x = xOffset, y = 0)
-                xOffset += it.width
-            }
         }
     }
 }

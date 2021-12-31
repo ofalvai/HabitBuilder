@@ -52,6 +52,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
     val viewModel: DashboardViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
+    var configDialogOpen by remember { mutableStateOf(false) }
     val habits by viewModel.habitsWithActions.collectAsState(Result.Loading)
     val onboardingState by viewModel.onboardingState.collectAsState()
 
@@ -75,6 +76,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
         navController.navigate(Screen.HabitDetails.buildRoute(it.id))
     }
     val onAddHabitClick = { navController.navigate(Screen.AddHabit.route) }
+    val onConfigClick: () -> Unit = { configDialogOpen = true }
     val onConfigChange: (DashboardConfig) -> Unit = {
         config = it
         viewModel.dashboardConfig = it
@@ -83,6 +85,13 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
     val onArchiveClick = { navController.navigate(Screen.Archive.route) }
     val onMove: (ItemMoveEvent) -> Unit = { viewModel.persistItemMove(it) }
 
+    DashboardConfigDialog(
+        isVisible = configDialogOpen,
+        config = config,
+        onConfigSelected = onConfigChange,
+        onDismissed = { configDialogOpen = false }
+    )
+
     when (habits) {
         is Result.Success -> {
             LoadedDashboard(
@@ -90,7 +99,7 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
                 config,
                 onboardingState,
                 onAddHabitClick,
-                onConfigChange,
+                onConfigClick,
                 onActionToggle,
                 onHabitDetail,
                 onAboutClick,
@@ -112,7 +121,7 @@ private fun LoadedDashboard(
     config: DashboardConfig,
     onboardingState: OnboardingState?,
     onAddHabitClick: () -> Unit,
-    onConfigChange: (DashboardConfig) -> Unit,
+    onConfigClick: () -> Unit,
     onActionToggle: (Action, Habit, LocalDate) -> Unit,
     onHabitDetail: (Habit) -> (Unit),
     onAboutClick: () -> Unit,
@@ -121,12 +130,12 @@ private fun LoadedDashboard(
 ) {
     ContentWithPlaceholder(
         showPlaceholder = habits.isEmpty(),
-        placeholder = { DashboardPlaceholder(onAddHabitClick, onAboutClick, onArchiveClick) }
+        placeholder = { DashboardPlaceholder(onAddHabitClick, onAboutClick, onArchiveClick, onConfigClick) }
     ) {
         Column(
             Modifier.fillMaxSize().statusBarsPadding()
         ) {
-            DashboardAppBar(config, onConfigChange, onAboutClick, onArchiveClick)
+            DashboardAppBar(onConfigClick, onAboutClick, onArchiveClick)
 
             if (onboardingState != null) {
                 Onboarding(onboardingState)
@@ -148,18 +157,10 @@ private fun LoadedDashboard(
 
 @Composable
 private fun DashboardAppBar(
-    config: DashboardConfig,
-    onConfigChange: (DashboardConfig) -> Unit,
+    onConfigClick: () -> Unit,
     onAboutClick: () -> Unit,
     onArchiveClick: () -> Unit
 ) {
-    val onConfigChangeClick = {
-        when (config) {
-            DashboardConfig.FiveDay -> onConfigChange(DashboardConfig.Compact)
-            DashboardConfig.Compact -> onConfigChange(DashboardConfig.FiveDay)
-        }
-    }
-
     AppBar(
         title = {
             Text(
@@ -168,7 +169,7 @@ private fun DashboardAppBar(
             )
         },
         iconActions = {
-            IconButton(onClick = onConfigChangeClick) {
+            IconButton(onClick = onConfigClick) {
                 Icon(AppIcons.DashboardLayout, stringResource(R.string.dashboard_change_layout))
             }
         },
@@ -187,7 +188,8 @@ private fun DashboardAppBar(
 private fun DashboardPlaceholder(
     onAddHabitClick: () -> Unit,
     onAboutClick: () -> Unit,
-    onArchiveClick: () -> Unit
+    onArchiveClick: () -> Unit,
+    onConfigClick: () -> Unit,
 ) {
     Column(
         Modifier
@@ -196,12 +198,7 @@ private fun DashboardPlaceholder(
             .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DashboardAppBar(
-            config = DashboardConfig.FiveDay,
-            onConfigChange = {},
-            onAboutClick = onAboutClick,
-            onArchiveClick = onArchiveClick
-        )
+        DashboardAppBar(onConfigClick, onAboutClick, onArchiveClick)
 
         Spacer(Modifier.padding(top = 32.dp))
 
