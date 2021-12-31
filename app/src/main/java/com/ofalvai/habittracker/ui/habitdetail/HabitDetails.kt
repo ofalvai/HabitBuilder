@@ -20,6 +20,7 @@ import android.os.Vibrator
 import androidx.annotation.FloatRange
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -32,6 +33,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -138,21 +140,25 @@ private fun HabitDetailScreen(
     Column {
         HabitDetailHeader(habitDetailState, singleStats, onBack, onEdit, onArchive)
 
-        Column(Modifier.verticalScroll(rememberScrollState()).padding(32.dp)) {
+        Column(Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
             when (habitDetailState) {
                 is Result.Success -> {
-                    CalendarPager(
-                        yearMonth = yearMonth,
-                        onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
-                        onNextClick = { yearMonth = yearMonth.plusMonths(1) }
-                    )
-                    CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
-                    HabitCalendar(
-                        yearMonth = yearMonth,
-                        habitColor = habitDetailState.value.habit.color.composeColor,
-                        actions = habitDetailState.value.actions,
-                        onDayToggle = onDayToggle
-                    )
+                    Column(
+                        Modifier.cardBackground().padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
+                    ) {
+                        CalendarPager(
+                            yearMonth = yearMonth,
+                            onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
+                            onNextClick = { yearMonth = yearMonth.plusMonths(1) }
+                        )
+                        CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
+                        HabitCalendar(
+                            yearMonth = yearMonth,
+                            habitColor = habitDetailState.value.habit.color.composeColor,
+                            actions = habitDetailState.value.actions,
+                            onDayToggle = onDayToggle
+                        )
+                    }
                 }
                 Result.Loading -> {
                     // No calendar and stats in loading state
@@ -394,35 +400,33 @@ private fun HabitStats(
     chartData: ActionCountChart,
     onStatTypeChange: (ActionCountChart.Type) -> Unit
 ) {
-    Card(Modifier.padding(top = 16.dp)) {
-        Column {
-            Row(Modifier.align(Alignment.End).padding(top = 8.dp, end = 16.dp)) {
-                Text(
-                    modifier = Modifier.align(CenterVertically),
-                    text = stringResource(R.string.habitdetails_actioncount_selector_label),
-                    style = MaterialTheme.typography.body2
-                )
-                Spacer(Modifier.width(8.dp))
-                ToggleButton(
-                    checked = chartData.type == ActionCountChart.Type.Weekly,
-                    onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
-                ) {
-                    Text(text = stringResource(R.string.habitdetails_actioncount_selector_weekly))
-                }
-                Spacer(Modifier.width(8.dp))
-                ToggleButton(
-                    checked = chartData.type == ActionCountChart.Type.Monthly,
-                    onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
-                ) {
-                    Text(text = stringResource(R.string.habitdetails_actioncount_selector_monthly))
-                }
-
-            }
-            ActionCountChart(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-                values = chartData.items
+    Column(Modifier.padding(top = 16.dp).cardBackground()) {
+        Row(Modifier.align(Alignment.End).padding(top = 8.dp, end = 16.dp)) {
+            Text(
+                modifier = Modifier.align(CenterVertically),
+                text = stringResource(R.string.habitdetails_actioncount_selector_label),
+                style = MaterialTheme.typography.body2
             )
+            Spacer(Modifier.width(8.dp))
+            ToggleButton(
+                checked = chartData.type == ActionCountChart.Type.Weekly,
+                onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
+            ) {
+                Text(text = stringResource(R.string.habitdetails_actioncount_selector_weekly))
+            }
+            Spacer(Modifier.width(8.dp))
+            ToggleButton(
+                checked = chartData.type == ActionCountChart.Type.Monthly,
+                onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
+            ) {
+                Text(text = stringResource(R.string.habitdetails_actioncount_selector_monthly))
+            }
+
         }
+        ActionCountChart(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            values = chartData.items
+        )
     }
 }
 
@@ -490,6 +494,10 @@ private fun SingleStat(
             textAlign = TextAlign.Center
         )
     }
+}
+
+private fun Modifier.cardBackground() = composed {
+    this.background(Color.White.copy(alpha = 0.5f), shape = MaterialTheme.shapes.medium)
 }
 
 @Preview(showBackground = true, widthDp = 400)
