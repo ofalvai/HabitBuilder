@@ -17,8 +17,13 @@
 package com.ofalvai.habittracker.telemetry
 
 import android.content.Context
+import android.os.Build
+import android.os.StrictMode
 import com.bugsnag.android.BreadcrumbType
 import com.bugsnag.android.Bugsnag
+import com.bugsnag.android.BugsnagThreadViolationListener
+import com.bugsnag.android.BugsnagVmViolationListener
+import com.ofalvai.habittracker.BuildConfig
 import logcat.asLog
 import logcat.logcat
 
@@ -42,6 +47,7 @@ class TelemetryImpl(private val appContext: Context) : Telemetry {
 
     override fun initialize() {
         Bugsnag.start(appContext)
+        initStrictModeListener()
     }
 
     override fun logNonFatal(e: Throwable) {
@@ -60,6 +66,34 @@ class TelemetryImpl(private val appContext: Context) : Telemetry {
             Telemetry.BreadcrumbType.UserAction -> BreadcrumbType.USER
         }
         Bugsnag.leaveBreadcrumb(message, metadata, bugsnagType)
+    }
+
+    private fun initStrictModeListener() {
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val executor = appContext.mainExecutor
+
+            // setup StrictMode policy for thread violations
+            val threadListener = BugsnagThreadViolationListener()
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .permitDiskReads()
+                    .permitDiskWrites()
+                    .penaltyListener(executor, threadListener)
+                    .penaltyLog()
+                    .build()
+            )
+
+            // setup StrictMode policy for VM violations
+            val vmListener = BugsnagVmViolationListener()
+            StrictMode.setVmPolicy(
+                StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyListener(executor, vmListener)
+                    .penaltyLog()
+                    .build()
+            )
+        }
     }
 
 }
