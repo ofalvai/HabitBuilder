@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,8 @@
 
 package com.ofalvai.habittracker.composable
 
-import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ofalvai.habittracker.ui.MainActivity
 import com.ofalvai.habittracker.ui.dashboard.AddHabitForm
@@ -54,7 +51,7 @@ class AddHabitTest : BaseInstrumentedTest() {
             }
         }
 
-        composeRule.onNodeWithText("Habit name").assertIsFocused()
+        composeRule.onNodeWithText("Name your habit").assertIsFocused()
     }
 
     @Test
@@ -69,18 +66,20 @@ class AddHabitTest : BaseInstrumentedTest() {
 
         composeRule.apply {
             onNodeWithText("Create habit").performClick()
-            onNodeWithText("Habit name").assertIsFocused()
+            onNodeWithText("Name your habit").assertIsFocused()
             onNodeWithText("Enter a name for new habit").assertExists("TextField error message not found")
         }
     }
 
     @Test
-    fun givenName_WhenCreateClicked_ThenSaveAndNavigate() {
+    fun givenNameAndNotes_WhenCreateClicked_ThenSaveAndNavigate() {
         val expectedHabitName = "Test habit name"
+        val expectedNotes = "Test habit notes\nSecond line"
         var onSaveCalled = false
         val onSave: (Habit) -> Unit = {
             onSaveCalled = true
             assertEquals(expectedHabitName, it.name)
+            assertEquals(expectedNotes, it.notes)
         }
 
         composeRule.setContent {
@@ -90,7 +89,9 @@ class AddHabitTest : BaseInstrumentedTest() {
         }
 
         composeRule.apply {
-            onNodeWithText("Habit name").performTextInput(expectedHabitName)
+            onNodeWithText("Name your habit").performTextInput(expectedHabitName)
+            onNodeWithText("Name your habit").performImeAction()
+            onNodeWithText("Notes").assertIsFocused().performTextInput(expectedNotes)
             onNodeWithText("Create habit").performClick()
             assertTrue(onSaveCalled)
         }

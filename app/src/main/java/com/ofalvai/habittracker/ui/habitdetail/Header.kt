@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import androidx.annotation.FloatRange
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -30,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -85,7 +88,6 @@ internal fun HabitDetailHeader(
                     exit = shrinkVertically() + fadeOut()
                 ) {
                     HabitHeaderEditingContent(
-                        habitName = habitDetailState.value.habit.name,
                         habitDetails = habitDetailState.value,
                         onBack = onBack,
                         onSave = {
@@ -111,14 +113,16 @@ internal fun HabitDetailHeader(
 
 @Composable
 private fun HabitHeaderEditingContent(
-    habitName: String,
     habitDetails: HabitWithActions,
     onBack: () -> Unit,
     onSave: (Habit) -> Unit,
     onArchive: (Habit) -> Unit
 ) {
-    var editingName by remember(habitName) {
-        mutableStateOf(habitName)
+    var editingName by remember(habitDetails.habit.name) {
+        mutableStateOf(habitDetails.habit.name)
+    }
+    var editingNotes by remember(habitDetails.habit.notes) {
+        mutableStateOf(habitDetails.habit.notes)
     }
     var editingColor by remember(habitDetails.habit.color) {
         mutableStateOf(habitDetails.habit.color)
@@ -126,7 +130,9 @@ private fun HabitHeaderEditingContent(
     var isNameValid by remember { mutableStateOf(true) }
     val onSaveClick = {
         if (isNameValid) {
-            val newValue = habitDetails.habit.copy(name = editingName, color = editingColor)
+            val newValue = habitDetails.habit.copy(
+                name = editingName, color = editingColor, notes = editingNotes
+            )
             onSave(newValue)
         }
     }
@@ -147,10 +153,22 @@ private fun HabitHeaderEditingContent(
                 editingName = it
                 isNameValid = it.isNotBlank()
             },
-            modifier = Modifier
-                .padding(horizontal = 32.dp)
-                .fillMaxWidth(),
-            isError = !isNameValid
+            label = { Text(stringResource(R.string.habitdetails_edit_name_label)) },
+            modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
+            isError = !isNameValid,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Next
+            )
+        )
+        OutlinedTextField(
+            value = editingNotes,
+            onValueChange = { editingNotes = it },
+            label = { Text(stringResource(R.string.habitdetails_edit_notes_label)) },
+            modifier = Modifier.padding(start = 32.dp, end = 32.dp, top = 16.dp).fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.None
+            )
         )
         HabitColorPicker(
             initialColor = habitDetails.habit.color,
@@ -181,6 +199,14 @@ private fun HabitHeaderContent(
             style = AppTextStyle.habitTitle,
             textAlign = TextAlign.Center
         )
+        if (habitDetails.habit.notes.isNotBlank()) {
+            Text(
+                text = habitDetails.habit.notes,
+                modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
+                style = MaterialTheme.typography.body2,
+                textAlign = TextAlign.Center
+            )
+        }
         SingleStatRow(
             totalCount = singleStats.actionCount,
             weeklyCount = singleStats.weeklyActionCount,

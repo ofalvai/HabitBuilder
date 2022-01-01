@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.ofalvai.habittracker.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ofalvai.habittracker.mapper.toEntityColor
+import com.ofalvai.habittracker.mapper.toEntity
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.model.Habit
@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 
 class AddHabitViewModel(
     private val dao: HabitDao,
@@ -42,13 +41,7 @@ class AddHabitViewModel(
         viewModelScope.launch {
             try {
                 val habitCount = dao.getTotalHabitCount().first()
-
-                val habitEntity = HabitEntity(
-                    name = habit.name,
-                    color = habit.color.toEntityColor(),
-                    order = habitCount,
-                    archived = false
-                )
+                val habitEntity = habit.toEntity(order = habitCount, archived = false)
                 dao.insertHabit(habitEntity)
                 onboardingManager.firstHabitCreated()
                 backNavigationEventChannel.send(Unit)

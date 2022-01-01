@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,10 +40,10 @@ import java.time.Month
 class HabitStatsTest : BaseInstrumentedTest() {
 
     private object TestData {
-        val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false)
-        val habit2 = Habit(id = 876, name = "Drinking enough water", color = Habit.Color.Green, order = 1, archived = false)
-        val habit3 = Habit(id = 877, name = "Workout", color = Habit.Color.Green, order = 2, archived = false)
-        val habit4 = Habit(id = 878, name = "Habit I never do", color = Habit.Color.Yellow, order = 3, archived = false)
+        val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false, notes = "")
+        val habit2 = Habit(id = 876, name = "Drinking enough water", color = Habit.Color.Green, order = 1, archived = false, notes = "")
+        val habit3 = Habit(id = 877, name = "Workout", color = Habit.Color.Green, order = 2, archived = false, notes = "")
+        val habit4 = Habit(id = 878, name = "Habit I never do", color = Habit.Color.Yellow, order = 3, archived = false, notes = "")
 
         val actions = arrayOf(
             Action(habit_id = habit1.id, timestamp = Instant.parse("2019-12-23T18:16:30Z")),

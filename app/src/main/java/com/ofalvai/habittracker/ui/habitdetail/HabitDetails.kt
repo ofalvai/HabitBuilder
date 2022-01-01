@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -241,7 +241,7 @@ private fun PreviewHabitDetailScreen() {
         HabitDetailScreen(
             habitDetailState = Result.Success(
                 HabitWithActions(
-                    Habit(0, "Meditation", Habit.Color.Red),
+                    Habit(0, "Meditation", Habit.Color.Red, ""),
                     listOf(Action(0, true, Instant.now())),
                     2,
                     ActionHistory.Clean

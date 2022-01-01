@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2021 Olivér Falvai
+  ~ Copyright 2022 Olivér Falvai
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -29,8 +29,10 @@
     <string name="common_interpunct">%1$s · %2$s</string>
 
     <string name="addhabit_appbar_title">Create new habit</string>
-    <string name="addhabit_name_label">Habit name</string>
+    <string name="addhabit_name_label">Name your habit</string>
     <string name="addhabit_name_error">Enter a name for new habit</string>
+    <string name="addhabit_notes_label">Notes</string>
+    <string name="addhabit_notes_description">Recording the exact time and location of the new habit increases the odds of sticking to it. Avoid vague habits like \"Exercise more\".</string>
     <string name="addhabit_save">Create habit</string>
 
     <string name="dashboard_title">My habits</string>
@@ -44,12 +46,15 @@
     <string name="dashboard_error_toggle_action">Failed to save action</string>
     <string name="dashboard_error_item_move">Failed to move habit, try again</string>
 
-    <string name="habit_suggestion_meditation">Meditation</string>
-    <string name="habit_suggestion_workout">Workout</string>
-    <string name="habit_suggestion_reading">Reading</string>
+    <string name="habit_suggestion_meditation">Meditate</string>
+    <string name="habit_suggestion_workout">Exercise for 10 min</string>
+    <string name="habit_suggestion_reading">Read for 20 min</string>
     <string name="habit_suggestion_walk">Go for a walk</string>
-    <string name="habit_suggestion_diy">Do something DIY</string>
-    <string name="habit_suggestion_morning_exercise">Morning exercise</string>
+    <string name="habit_suggestion_plan_my_day">Plan my day</string>
+    <string name="habit_suggestion_stretch">Stretch after wakeup</string>
+    <string name="habit_suggestion_go_to_bed">Go to bed early</string>
+    <string name="habit_suggestion_journal">Write in my journal</string>
+    <string name="habit_suggestion_spend_time">Spend time with…</string>
 
     <string name="tab_dashboard">Habits</string>
     <string name="tab_insights">Insights</string>
@@ -78,6 +83,8 @@
     <string name="habitdetails_archive_cancel">Cancel</string>
     <string name="habitdetails_archive_title">Archive habit?</string>
     <string name="habitdetails_archive_description">This habit will be moved to the archive. If you change your mind, you can unarchive the habit without data loss, or delete it forever.</string>
+    <string name="habitdetails_edit_name_label">Name</string>
+    <string name="habitdetails_edit_notes_label">Notes</string>
     <string name="habitdetails_error">Failed to load habit details</string>
     <string name="habitdetails_error_stats">Failed to load habit statistics</string>
     <string name="habitdetails_actioncount_selector_label">Times a</string>
