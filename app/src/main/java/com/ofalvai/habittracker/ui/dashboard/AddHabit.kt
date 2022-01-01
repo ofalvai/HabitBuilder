@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,8 @@ fun AddHabitForm(
         } else {
             val habit = Habit(
                 name = name,
-                color = color
+                color = color,
+                notes = "" // TODO
             )
             onSave(habit)
         }
@@ -168,8 +169,6 @@ private fun SuggestionChip(habit: String, onClick: () -> Unit) {
 fun PreviewAddHabit() {
     HabitTrackerTheme {
         Column {
-            Suggestions(habits = Suggestions.habits, onSelect = { })
-
             AddHabitForm(onSave = { })
         }
     }

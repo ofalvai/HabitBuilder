@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,8 +60,8 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
     @Test
     fun insertAndReadHabits() = testCoroutineScope.runBlockingTest {
-        val newHabit1 = Habit(name = "New habit", color = Habit.Color.Green, order = 0, archived = false)
-        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.Green, order = 1, archived = false)
+        val newHabit1 = Habit(name = "New habit", color = Habit.Color.Green, order = 0, archived = false, notes = "Habit notes")
+        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.Green, order = 1, archived = false, notes = "")
 
         habitDao.insertHabit(newHabit1, newHabit2)
 
@@ -73,7 +73,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
     @Test
     fun insertAndReadActions() = testCoroutineScope.runBlockingTest {
         val habitId = 51
-        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false)
+        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false, "")
         val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T10:15:30Z"))
         val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T10:16:30Z"))
 
@@ -88,9 +88,9 @@ class HabitEntityTest : BaseInstrumentedTest() {
     @Test
     fun readActionsByHabit() = testCoroutineScope.runBlockingTest {
         val habitId = 875
-        val habit1 = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false)
-        val habit2 = Habit(name = "Drinking enough water", color = Habit.Color.Green, order = 1, archived = false)
-        val habit3 = Habit(name = "Workout", color = Habit.Color.Green, order = 2, archived = false)
+        val habit1 = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false, notes = "")
+        val habit2 = Habit(name = "Drinking enough water", color = Habit.Color.Green, order = 1, archived = false, notes = "")
+        val habit3 = Habit(name = "Workout", color = Habit.Color.Green, order = 2, archived = false, notes = "")
         val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2020-12-23T18:16:40Z"))
         val action3 = Action(habit_id = 876, timestamp = Instant.parse("2020-12-23T10:18:42Z"))
@@ -106,7 +106,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
     @Test
     fun readActionsAfterTime() = testCoroutineScope.runBlockingTest {
-        val habit = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 0, archived = false)
+        val habit = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 0, archived = false, notes = "")
         val action1 = Action(id = 1, habit_id = 1, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(id = 2, habit_id = 1, timestamp = Instant.parse("2020-12-24T18:16:40Z"))
         val action3 = Action(id = 3, habit_id = 1, timestamp = Instant.parse("2020-12-25T10:18:42Z"))
@@ -121,9 +121,9 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
     @Test
     fun readAllHabitsWithActions() = testCoroutineScope.runBlockingTest {
-        val habit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 0, archived = false)
-        val habit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.Green, order = 1, archived = false)
-        val habit3 = Habit(id = 3, name = "Archived habit", color = Habit.Color.Yellow, order = 2, archived = true)
+        val habit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 0, archived = false, notes = "")
+        val habit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.Green, order = 1, archived = false, notes = "")
+        val habit3 = Habit(id = 3, name = "Archived habit", color = Habit.Color.Yellow, order = 2, archived = true, notes = "")
         val action1 = Action(id = 1, habit_id = habit1.id, timestamp = Instant.parse("2020-12-23T18:16:30Z"))
         val action2 = Action(id = 2, habit_id = habit2.id, timestamp = Instant.parse("2020-12-24T18:16:40Z"))
         val action3 = Action(id = 3, habit_id = habit2.id, timestamp = Instant.parse("2020-12-25T10:18:42Z"))
@@ -144,7 +144,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
     @Test
     fun deleteHabitWithActions() = testCoroutineScope.runBlockingTest {
         val habitId = 51
-        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false)
+        val habit = Habit(id = habitId, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false, notes = "")
         val action1 = Action(habit_id = habitId, timestamp = Instant.parse("2021-05-31T10:15:30Z"))
         val action2 = Action(habit_id = habitId, timestamp = Instant.parse("2021-05-31T10:16:30Z"))
 
@@ -163,10 +163,10 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
     @Test
     fun readHabitsWithModifiedOrders() = testCoroutineScope.runBlockingTest {
-        val newHabit1 = Habit(name = "New habit", color = Habit.Color.Green, order = 5, archived = false)
-        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.Green, order = 1, archived = false)
-        val newHabit3 = Habit(name = "Meditation", color = Habit.Color.Green, order = 2, archived = false)
-        val newHabit4 = Habit(name = "The first one", color = Habit.Color.Yellow, order = 0, archived = false)
+        val newHabit1 = Habit(name = "New habit", color = Habit.Color.Green, order = 5, archived = false, notes = "")
+        val newHabit2 = Habit(name = "Other new habit", color = Habit.Color.Green, order = 1, archived = false, notes = "")
+        val newHabit3 = Habit(name = "Meditation", color = Habit.Color.Green, order = 2, archived = false, notes = "")
+        val newHabit4 = Habit(name = "The first one", color = Habit.Color.Yellow, order = 0, archived = false, notes = "")
 
         habitDao.insertHabit(newHabit1, newHabit2, newHabit3, newHabit4)
 
@@ -182,10 +182,10 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
     @Test
     fun swapHabitOrders() = testCoroutineScope.runBlockingTest {
-        val newHabit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 5, archived = false)
-        val newHabit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.Green, order = 1, archived = false)
-        val newHabit3 = Habit(id = 3, name = "Meditation", color = Habit.Color.Green, order = 2, archived = false)
-        val newHabit4 = Habit(id = 4, name = "The first one", color = Habit.Color.Yellow, order = 0, archived = false)
+        val newHabit1 = Habit(id = 1, name = "New habit", color = Habit.Color.Green, order = 5, archived = false, notes = "")
+        val newHabit2 = Habit(id = 2, name = "Other new habit", color = Habit.Color.Green, order = 1, archived = false, notes = "")
+        val newHabit3 = Habit(id = 3, name = "Meditation", color = Habit.Color.Green, order = 2, archived = false, notes = "")
+        val newHabit4 = Habit(id = 4, name = "The first one", color = Habit.Color.Yellow, order = 0, archived = false, notes = "")
 
         habitDao.insertHabit(newHabit1, newHabit2, newHabit3, newHabit4)
 

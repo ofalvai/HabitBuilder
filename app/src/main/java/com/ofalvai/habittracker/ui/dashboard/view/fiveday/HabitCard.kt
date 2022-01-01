@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -216,12 +216,14 @@ fun PreviewHabitCard() {
     val habit1 = Habit(
         id = 1,
         name = "Meditation",
-        color = Habit.Color.Yellow
+        color = Habit.Color.Yellow,
+        notes = ""
     )
     val habit2 = Habit(
         id = 2,
         name = "Workout",
-        color = Habit.Color.Green
+        color = Habit.Color.Green,
+        notes = ""
     )
 
     val actions1 = (1..5).map {

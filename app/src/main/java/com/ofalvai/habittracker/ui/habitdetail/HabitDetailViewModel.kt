@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ class HabitDetailViewModel(
 
                     // TODO: unify this with the regular mapping (where empty day action are filled)
                     HabitWithActions(
-                        Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
+                        Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor(), it.habit.notes),
                         it.actions.map { action ->
                             Action(action.id, toggled = true, timestamp = action.timestamp)
                         },

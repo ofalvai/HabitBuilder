@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import com.ofalvai.habittracker.persistence.entity.Habit
     entities = [
         Habit::class, Action::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
 )
 @TypeConverters(EntityTypeConverters::class)

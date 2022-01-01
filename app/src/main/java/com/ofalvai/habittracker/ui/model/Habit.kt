@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,8 @@ typealias HabitId = Int
 data class Habit(
     val id: HabitId = 0,
     val name: String,
-    val color: Color
+    val color: Color,
+    val notes: String
 ) {
 
     companion object {
