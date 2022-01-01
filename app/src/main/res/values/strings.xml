@@ -29,8 +29,10 @@
     <string name="common_interpunct">%1$s · %2$s</string>
 
     <string name="addhabit_appbar_title">Create new habit</string>
-    <string name="addhabit_name_label">Habit name</string>
+    <string name="addhabit_name_label">Name your habit</string>
     <string name="addhabit_name_error">Enter a name for new habit</string>
+    <string name="addhabit_notes_label">Notes</string>
+    <string name="addhabit_notes_description">Recording the exact time and location of the new habit increases the odds of sticking to it. Avoid vague habits like \"Exercise more\".</string>
     <string name="addhabit_save">Create habit</string>
 
     <string name="dashboard_title">My habits</string>
