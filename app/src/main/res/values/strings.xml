@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2021 Olivér Falvai
+  ~ Copyright 2022 Olivér Falvai
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -44,12 +44,15 @@
     <string name="dashboard_error_toggle_action">Failed to save action</string>
     <string name="dashboard_error_item_move">Failed to move habit, try again</string>
 
-    <string name="habit_suggestion_meditation">Meditation</string>
-    <string name="habit_suggestion_workout">Workout</string>
-    <string name="habit_suggestion_reading">Reading</string>
+    <string name="habit_suggestion_meditation">Meditate</string>
+    <string name="habit_suggestion_workout">Exercise for 10 min</string>
+    <string name="habit_suggestion_reading">Read for 20 min</string>
     <string name="habit_suggestion_walk">Go for a walk</string>
-    <string name="habit_suggestion_diy">Do something DIY</string>
-    <string name="habit_suggestion_morning_exercise">Morning exercise</string>
+    <string name="habit_suggestion_plan_my_day">Plan my day</string>
+    <string name="habit_suggestion_stretch">Stretch after wakeup</string>
+    <string name="habit_suggestion_go_to_bed">Go to bed early</string>
+    <string name="habit_suggestion_journal">Write in my journal</string>
+    <string name="habit_suggestion_spend_time">Spend time with…</string>
 
     <string name="tab_dashboard">Habits</string>
     <string name="tab_insights">Insights</string>
