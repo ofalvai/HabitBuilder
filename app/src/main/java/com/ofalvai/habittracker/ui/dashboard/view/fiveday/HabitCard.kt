@@ -31,14 +31,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.content.getSystemService
@@ -122,7 +120,6 @@ fun ActionCircles(
                         )
                     },
                     isHighlighted = index == actions.size - 1,
-                    elevation = Dp(index * Constants.ElevationMultiplier),
                     onSinglePress = { singlePressCounter++ }
                 )
             }
@@ -144,7 +141,6 @@ fun ActionCircle(
     toggled: Boolean,
     onToggle: (Boolean) -> Unit,
     isHighlighted: Boolean,
-    elevation: Dp,
     onSinglePress: () -> Unit
 ) {
     val backgroundColor = if (toggled) activeColor else MaterialTheme.colors.surface
@@ -158,7 +154,6 @@ fun ActionCircle(
         modifier = Modifier
             .size(Constants.CircleSize)
             .padding(Constants.CirclePadding)
-            .then(if (elevation > 0.dp) Modifier.shadow(elevation, shape, false) else Modifier)
             .satisfyingToggleable(
                 vibrator, rippleRadius, false, toggled, onToggle, onSinglePress
             )
