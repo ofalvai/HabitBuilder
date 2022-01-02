@@ -44,10 +44,7 @@ import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.ui.model.SingleStats
-import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
-import com.ofalvai.habittracker.ui.theme.composeColor
+import com.ofalvai.habittracker.ui.theme.*
 import kotlin.math.roundToInt
 
 @Composable
@@ -65,8 +62,8 @@ internal fun HabitDetailHeader(
             is Result.Success -> {
                 if (isEditing) MaterialTheme.colors.surface else {
                     if (MaterialTheme.colors.isLight) {
-                        habitDetailState.value.habit.color.composeColor.copy(alpha = 0.5f)
-                    } else MaterialTheme.colors.surface
+                        habitDetailState.value.habit.color.composeColor.copy(alpha = 0.4f)
+                    } else MaterialTheme.colors.surfaceVariant
                 }
             }
             else -> MaterialTheme.colors.background

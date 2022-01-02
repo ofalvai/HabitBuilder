@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
@@ -51,6 +52,8 @@ fun HabitCalendar(
     onDayToggle: (LocalDate, Action) -> Unit
 ) {
     val context = LocalContext.current
+    val textColor = MaterialTheme.colors.onSurface
+    val textColorActive = MaterialTheme.colors.surface
 
     val view = remember {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
@@ -58,7 +61,7 @@ fun HabitCalendar(
             orientation = LinearLayout.HORIZONTAL
             scrollMode = ScrollMode.PAGED
             dayViewResource = R.layout.item_calendar_day
-            dayBinder = HabitDayBinder(habitColor, onDayToggle)
+            dayBinder = HabitDayBinder(habitColor, textColor, textColorActive, onDayToggle)
             itemAnimator = DefaultItemAnimator().apply {
                 // Avoid flashes on recomposition
                 supportsChangeAnimations = false
@@ -80,6 +83,8 @@ fun HabitCalendar(
 
 private class HabitDayBinder(
     var habitColor: Color,
+    private val textColor: Color,
+    private val textColorActive: Color,
     private val onDayToggle: (LocalDate, Action) -> Unit
 ) : DayBinder<DayViewContainer> {
 
@@ -94,7 +99,7 @@ private class HabitDayBinder(
                 .toLocalDate()
             dateOfAction == day.date
         } ?: Action(0, false, null)
-        container.bind(day, habitColor, actionOnDay)
+        container.bind(day, habitColor, actionOnDay, textColor, textColorActive)
     }
 }
 
@@ -117,7 +122,13 @@ private class DayViewContainer(
         }
     }
 
-    fun bind(day: CalendarDay, habitColor: Color, action: Action) {
+    fun bind(
+        day: CalendarDay,
+        habitColor: Color,
+        action: Action,
+        textColor: Color,
+        textColorActive: Color
+    ) {
         this.day = day
         this.action = action
 
@@ -131,6 +142,9 @@ private class DayViewContainer(
 
         textView.setBackgroundColor(
             if (action.toggled) habitColor.toColorInt() else backgroundColor
+        )
+        textView.setTextColor(
+            (if (action.toggled) textColorActive else textColor).toColorInt()
         )
 
         textView.alpha = if (day.date.isAfter(today)) 0.5f else 1f

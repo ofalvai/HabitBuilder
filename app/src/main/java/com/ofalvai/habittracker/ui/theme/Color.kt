@@ -24,36 +24,49 @@ import com.ofalvai.habittracker.ui.model.Habit
 
 object AppColor {
 
-    val primary = Color(0xFF2B3940)
-    val primaryVariant = Color(0xFFFFF5E5)
-    val secondary = Color.Cyan // TODO
-
     object Light {
-        val background = Color(0xFFFFF1DD)
-        val surface = Color.White
-        val onSurface = Color(0xFF262626)
-        val onBackground = Color(0xFF262626)
+        val primary = Color(0xFF7B5800)
+        val primaryVariant = Color(0xFF6C5C3F)
+        val secondary = Color(0xFF4B6545)
+        val background = Color(0xFFFFF5E5)
+        val surface = Color(0xFFFFFBF8)
+        val surfaceVariant = Color(0xFFEEE1CF)
 
-        val surfaceVariant = Color(0xFFFFF8ED)
+        val onPrimary = Color.White
+        val onSecondary = Color.White
+        val onSurface = Color(0xFF1E1B16)
+        val onBackground = Color(0xFF1E1B16)
+
         val gray1 = Color.Black.copy(alpha = 0.1f)
         val gray2 = Color.Black.copy(alpha = 0.25f)
 
-        val habitRed = Color(0xFFE08F8F)
-        val habitGreen = Color(0xFFAEC2B8)
-        val habitBlue = Color(0xFF9EB2D1)
-        val habitYellow = Color(0xFFFFCC79)
+        val habitRed = Color(0xFF9C4043)
+        val habitGreen = Color(0xFF008768)
+        val habitBlue = Color(0xFF1E5FA6)
+        val habitYellow = Color(0xFF7D5800)
         val habitPink = Color(0xFFE08FB8)
     }
 
     object Dark {
-        val surfaceVariant = Color(0xFF232323)
+        val primary = Color(0xFFF5BE48)
+        val primaryVariant = Color(0xFF412D00)
+        val secondary = Color(0xFF4B6545)
+        val background = Color(0xFF1E1B16)
+        val surface = Color(0xFF1E1B16)
+
+        val onPrimary = Color(0xFF412D00)
+        val onSecondary = Color(0xFF1F361B)
+        val onBackground = Color(0xFFE9E1D8)
+        val onSurface = Color(0xFFE9E1D8)
+        val surfaceVariant = Color(0xFF4E4639)
+
         val gray1 = Color.White.copy(alpha = 0.1f)
         val gray2 = Color.White.copy(alpha = 0.25f)
 
-        val habitRed = Color(0xFFE08F8F)
-        val habitGreen = Color(0xFFAEC2B8)
-        val habitBlue = Color(0xFF9EB2D1)
-        val habitYellow = Color(0xFFFFCC79)
+        val habitRed = Color(0xFFFFB3B2)
+        val habitGreen = Color(0xFF63DBB6)
+        val habitBlue = Color(0xFFA4C8FF)
+        val habitYellow = Color(0xFFF7BD48)
         val habitPink = Color(0xFFE08FB8)
     }
 }

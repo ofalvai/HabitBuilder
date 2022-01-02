@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ fun ActionCountChart(
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.caption
                         )
-                        val background = if (isEven) MaterialTheme.colors.primary else MaterialTheme.colors.primary.copy(alpha = .8f) // TODO
+                        val background = if (isEven) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant
                         Box(
                             modifier = Modifier
                                 .background(background, shape = RoundedCornerShape(4.dp))

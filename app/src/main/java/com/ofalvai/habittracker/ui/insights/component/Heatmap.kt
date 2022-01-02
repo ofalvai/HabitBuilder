@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -56,6 +57,7 @@ import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.theme.AppIcons
+import com.ofalvai.habittracker.ui.theme.gray2
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -142,13 +144,14 @@ private fun HeatmapCalendar(
     }
 
     val context = LocalContext.current
+    val primaryColor = MaterialTheme.colors.primary
     val view = remember {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         CalendarView(context).apply {
             orientation = LinearLayout.HORIZONTAL
             scrollMode = ScrollMode.PAGED
             dayViewResource = R.layout.item_calendar_day_heatmap
-            dayBinder = HeatmapDayBinder(heatmapData, onDayClick)
+            dayBinder = HeatmapDayBinder(heatmapData, onDayClick, primaryColor)
             setup(startMonth = yearMonth, endMonth = yearMonth, firstDayOfWeek)
         }
     }
@@ -203,12 +206,14 @@ private fun HeatmapLegend(
         )
 
         Row(
-            Modifier.border(1.dp, MaterialTheme.colors.onSurface).alignByBaseline()
+            Modifier.border(1.dp, MaterialTheme.colors.gray2).alignByBaseline()
         ) {
             heatmapData.bucketMaxValues.forEach {
                 val bucketIndex = it.first
                 val maxValue = it.second
-                val backgroundColor = bucketIndexToColor(bucketIndex, heatmapData.bucketCount)
+                val backgroundColor = MaterialTheme.colors.primary.adjustToBucketIndex(
+                    bucketIndex, heatmapData.bucketCount
+                )
                 Box(
                     Modifier.background(backgroundColor).size(24.dp)
                 ) {
@@ -240,13 +245,14 @@ private fun hasEnoughData(heatmapData: HeatmapMonth): Boolean {
 
 private class HeatmapDayBinder(
     var heatmapData: HeatmapMonth,
-    private val onDayClick: (HeatmapMonth.BucketInfo) -> Unit
+    private val onDayClick: (HeatmapMonth.BucketInfo) -> Unit,
+    private val primaryColor: Color
 ) : DayBinder<DayViewContainer> {
     override fun create(view: View) = DayViewContainer(view, onDayClick)
 
     override fun bind(container: DayViewContainer, day: CalendarDay) {
         val dayData = heatmapData.dayMap[day.date] ?: HeatmapMonth.BucketInfo(0, 0)
-        container.bind(day, dayData, heatmapData.bucketCount)
+        container.bind(day, dayData, heatmapData.bucketCount, primaryColor)
     }
 }
 
@@ -266,12 +272,17 @@ private class DayViewContainer(
         }
     }
 
-    fun bind(day: CalendarDay, bucketInfo: HeatmapMonth.BucketInfo, bucketCount: Int) {
+    fun bind(
+        day: CalendarDay,
+        bucketInfo: HeatmapMonth.BucketInfo,
+        bucketCount: Int,
+        primaryColor: Color
+    ) {
         this.day = day
         this.bucketInfo = bucketInfo
 
         val today = LocalDate.now()
-        val color = bucketIndexToColor(bucketInfo.bucketIndex, bucketCount)
+        val color = primaryColor.adjustToBucketIndex(bucketInfo.bucketIndex, bucketCount)
         textView.setBackgroundColor(color.toColorInt())
 
         textView.visibility = if (day.owner == DayOwner.THIS_MONTH) {
@@ -303,7 +314,8 @@ private fun Color.toColorInt(): Int {
     return (value shr 32).toInt()
 }
 
-private fun bucketIndexToColor(index: Int, bucketCount: Int): Color {
+@ColorInt
+private fun Color.adjustToBucketIndex(index: Int, bucketCount: Int): Color {
     if (index > 0 && index >= bucketCount) {
         throw IllegalArgumentException("Bucket index ($index) outside of bucket range (count=$bucketCount)")
     }
@@ -311,8 +323,6 @@ private fun bucketIndexToColor(index: Int, bucketCount: Int): Color {
     return if (bucketCount == 0) {
         return Color.Transparent
     } else {
-        Color.Gray.copy(
-            alpha = index / bucketCount.toFloat()
-        )
+        this.copy(alpha = index / bucketCount.toFloat())
     }
 }
