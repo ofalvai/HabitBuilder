@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,5 +22,4 @@ internal object Constants {
     val CircleSize = 52.dp
     val CirclePadding = 4.dp
     const val DayCount = 5
-    const val ElevationMultiplier = 2.5f
 }
