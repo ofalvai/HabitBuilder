@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWith
 fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): List<HabitWithActions> {
     return habitsWithActions.map {
         HabitWithActions(
-            habit = Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor()),
+            habit = Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor(), it.habit.notes),
             actions = actionsToRecentDays(it.actions),
             totalActionCount = it.actions.size,
             actionHistory = actionsToHistory(it.actions)
@@ -49,7 +49,8 @@ fun Habit.toEntity(order: Int, archived: Boolean) = HabitEntity(
     name = this.name,
     color = this.color.toEntityColor(),
     order = order,
-    archived = archived
+    archived = archived,
+    notes = this.notes
 )
 
 fun HabitEntity.Color.toUIColor(): Habit.Color = when (this) {

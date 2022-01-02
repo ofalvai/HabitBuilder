@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.composeColor
-import com.ofalvai.habittracker.ui.theme.habitInactive
+import com.ofalvai.habittracker.ui.theme.gray1
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -139,7 +139,7 @@ fun ActionSquare(
     onToggle: (Boolean) -> Unit,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else MaterialTheme.colors.habitInactive
+    val color = if (toggled) activeColor else MaterialTheme.colors.gray1
     val borderColor = if (toggled) activeColor.darken() else Color.Transparent
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 

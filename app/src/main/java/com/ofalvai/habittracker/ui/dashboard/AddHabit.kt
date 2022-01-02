@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.surfaceVariant
 
 @Composable
 fun AddHabitScreen(navController: NavController) {
@@ -66,6 +68,7 @@ fun AddHabitForm(
     onSave: (Habit) -> Unit
 ) {
     var name by rememberSaveable { mutableStateOf("") }
+    var notes by rememberSaveable { mutableStateOf("") }
     var color by rememberSaveable { mutableStateOf(Habit.DEFAULT_COLOR) }
     var isNameValid by remember { mutableStateOf(true) }
 
@@ -73,30 +76,33 @@ fun AddHabitForm(
         if (name.isEmpty()) {
             isNameValid = false
         } else {
-            val habit = Habit(
-                name = name,
-                color = color
-            )
+            val habit = Habit(0, name, color, notes)
             onSave(habit)
         }
     }
 
     Column(Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
-        val focusRequester = remember { FocusRequester() }
-        SideEffect {
-            focusRequester.requestFocus()
+        val nameFocusRequester = remember { FocusRequester() }
+        DisposableEffect(Unit) {
+            // Using a DisposableEffect with Unit as key to only run the effect once, not in every
+            // recomposition
+            nameFocusRequester.requestFocus()
+            onDispose {  }
         }
 
         OutlinedTextField(
             modifier = Modifier
-                .focusRequester(focusRequester)
+                .focusRequester(nameFocusRequester)
                 .padding(horizontal = 32.dp, vertical = 16.dp)
                 .fillMaxWidth(),
             value = name,
             onValueChange = { name = it },
             label = { Text(stringResource(R.string.addhabit_name_label)) },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = ImeAction.Next
+            )
         )
 
         if (!isNameValid) {
@@ -106,7 +112,27 @@ fun AddHabitForm(
             )
         }
 
-        Suggestions(habits = Suggestions.habits, onSelect = { name = it })
+        Suggestions(habits = Suggestions.habits, onSelect = {
+            name = it
+            nameFocusRequester.requestFocus()
+        })
+
+        OutlinedTextField(
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(),
+            value = notes,
+            onValueChange = { notes = it },
+            label = { Text(stringResource(R.string.addhabit_notes_label)) },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = ImeAction.None
+            ),
+        )
+
+        Text(
+            modifier = Modifier.padding(horizontal = 32.dp),
+            text = stringResource(R.string.addhabit_notes_description),
+            style = MaterialTheme.typography.caption
+        )
 
         HabitColorPicker(initialColor = color, onColorPick = { color = it })
 
@@ -153,10 +179,15 @@ private fun SuggestionChip(habit: String, onClick: () -> Unit) {
     Surface(
         shape = shape,
         onClick = onClick,
-        border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.15f))
+        border = BorderStroke(
+            1.dp,
+            // Match the OutlinedTextField border color1
+            MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+        ),
+        color = MaterialTheme.colors.surfaceVariant
     ) {
         Text(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             text = habit,
             style = MaterialTheme.typography.body2
         )
@@ -168,8 +199,6 @@ private fun SuggestionChip(habit: String, onClick: () -> Unit) {
 fun PreviewAddHabit() {
     HabitTrackerTheme {
         Column {
-            Suggestions(habits = Suggestions.habits, onSelect = { })
-
             AddHabitForm(onSave = { })
         }
     }

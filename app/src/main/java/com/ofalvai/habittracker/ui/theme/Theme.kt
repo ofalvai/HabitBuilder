@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,26 +25,37 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 
-private val DarkColorPalette = darkColors(
-    primary = AppColor.primary,
-    primaryVariant = AppColor.primaryVariant,
-    secondary = AppColor.secondary,
-)
-
 private val LightColorPalette = lightColors(
-    primary = AppColor.primary,
-    primaryVariant = AppColor.primaryVariant,
-    secondary = AppColor.secondary,
+    primary = AppColor.Light.primary,
+    primaryVariant = AppColor.Light.primaryVariant,
+    secondary = AppColor.Light.secondary,
 
     background = AppColor.Light.background,
     surface = AppColor.Light.surface,
+
+    onPrimary = AppColor.Light.onPrimary,
+    onSecondary = AppColor.Light.onSecondary,
     onSurface = AppColor.Light.onSurface,
     onBackground = AppColor.Light.onBackground
 )
 
+private val DarkColorPalette = darkColors(
+    primary = AppColor.Dark.primary,
+    primaryVariant = AppColor.Dark.primaryVariant,
+    secondary = AppColor.Dark.secondary,
+
+    background = AppColor.Dark.background,
+    surface = AppColor.Dark.surface,
+
+    onPrimary = AppColor.Dark.onPrimary,
+    onSecondary = AppColor.Dark.onSecondary,
+    onSurface = AppColor.Dark.onSurface,
+    onBackground = AppColor.Dark.onBackground
+)
+
 val shapes = Shapes(
-    small = RoundedCornerShape(4.dp),
-    medium = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(8.dp),
     large = RoundedCornerShape(0.dp)
 )
 

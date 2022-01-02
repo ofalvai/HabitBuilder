@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ fun InsightCard(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    Card(modifier = modifier) {
+    Card(modifier = modifier, elevation = 2.dp) {
         Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
             InsightHeader(iconPainter, title, description)
 

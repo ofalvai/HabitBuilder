@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,8 @@ data class Habit(
     val name: String,
     val color: Color,
     val order: Int,
-    val archived: Boolean
+    val archived: Boolean,
+    val notes: String
 ) {
 
     enum class Color {

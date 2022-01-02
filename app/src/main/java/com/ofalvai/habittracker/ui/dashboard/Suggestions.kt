@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,14 @@ object Suggestions {
 
     val habits: List<String>
         @Composable get() = listOf(
-            stringResource(R.string.habit_suggestion_meditation),
-            stringResource(R.string.habit_suggestion_workout),
             stringResource(R.string.habit_suggestion_reading),
+            stringResource(R.string.habit_suggestion_workout),
+            stringResource(R.string.habit_suggestion_meditation),
             stringResource(R.string.habit_suggestion_walk),
-            stringResource(R.string.habit_suggestion_diy),
-            stringResource(R.string.habit_suggestion_morning_exercise)
+            stringResource(R.string.habit_suggestion_plan_my_day),
+            stringResource(R.string.habit_suggestion_stretch),
+            stringResource(R.string.habit_suggestion_go_to_bed),
+            stringResource(R.string.habit_suggestion_journal),
+            stringResource(R.string.habit_suggestion_spend_time),
         )
 }

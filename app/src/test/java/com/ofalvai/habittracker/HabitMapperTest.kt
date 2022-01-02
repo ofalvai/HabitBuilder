@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,8 @@ class HabitMapperTest {
                 Habit(
                     0,
                     "Meditation",
-                    Habit.Color.Red
+                    Habit.Color.Red,
+                    "Doing right after waking up in the living room"
                 ),
                 expectedActionHistory,
                 3,
@@ -85,7 +86,7 @@ class HabitMapperTest {
         // Then
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Red),
+            Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory,
             2,
             ActionHistory.MissedDays(10)
@@ -121,7 +122,7 @@ class HabitMapperTest {
             Action(1, true, now)
         )
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Red),
+            Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory,
             6,
             ActionHistory.Streak(2)
@@ -155,7 +156,7 @@ class HabitMapperTest {
             Action(1, true, now)
         )
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Red),
+            Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory,
             4,
             ActionHistory.Streak(4)
@@ -174,7 +175,7 @@ class HabitMapperTest {
         // Then
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Red),
+            Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory,
             0,
             ActionHistory.Clean
@@ -205,7 +206,7 @@ class HabitMapperTest {
             Action(0, false, null)
         )
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Red),
+            Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory,
             1,
             ActionHistory.MissedDays(3)
@@ -236,7 +237,7 @@ class HabitMapperTest {
             Action(1, true, now)
         )
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Red),
+            Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory,
             1,
             ActionHistory.Streak(1)
@@ -267,7 +268,7 @@ class HabitMapperTest {
             Action(0, false, null)
         )
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Red),
+            Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory,
             1,
             ActionHistory.MissedDays(1)
@@ -290,7 +291,7 @@ class HabitMapperTest {
         // Then
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
-            Habit(0, "Meditation", Habit.Color.Red),
+            Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory,
             1,
             ActionHistory.Clean
@@ -298,7 +299,7 @@ class HabitMapperTest {
         assertEquals(expectedHabits, mappedHabitsWithActions)
     }
 
-    private fun givenHabitEntity() = HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0, false)
+    private fun givenHabitEntity() = HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0, false, "Doing right after waking up in the living room")
 
     private fun givenHabitWithActions(actions: List<ActionEntity>) = HabitWithActionsEntity(
         habit = givenHabitEntity(),

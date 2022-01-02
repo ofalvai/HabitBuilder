@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.content.getSystemService
@@ -50,6 +48,7 @@ import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
+import com.ofalvai.habittracker.ui.theme.gray2
 import java.time.Instant
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -121,7 +120,6 @@ fun ActionCircles(
                         )
                     },
                     isHighlighted = index == actions.size - 1,
-                    elevation = Dp(index * Constants.ElevationMultiplier),
                     onSinglePress = { singlePressCounter++ }
                 )
             }
@@ -143,11 +141,10 @@ fun ActionCircle(
     toggled: Boolean,
     onToggle: (Boolean) -> Unit,
     isHighlighted: Boolean,
-    elevation: Dp,
     onSinglePress: () -> Unit
 ) {
     val backgroundColor = if (toggled) activeColor else MaterialTheme.colors.surface
-    val borderColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
+    val borderColor = if (toggled) MaterialTheme.colors.gray2 else activeColor
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
     val rippleRadius = remember { Constants.CircleSize / 1.7f } // Make it a bit bigger than D / 2
     val shape = CircleShape
@@ -157,7 +154,6 @@ fun ActionCircle(
         modifier = Modifier
             .size(Constants.CircleSize)
             .padding(Constants.CirclePadding)
-            .then(if (elevation > 0.dp) Modifier.shadow(elevation, shape, false) else Modifier)
             .satisfyingToggleable(
                 vibrator, rippleRadius, false, toggled, onToggle, onSinglePress
             )
@@ -216,12 +212,14 @@ fun PreviewHabitCard() {
     val habit1 = Habit(
         id = 1,
         name = "Meditation",
-        color = Habit.Color.Yellow
+        color = Habit.Color.Yellow,
+        notes = ""
     )
     val habit2 = Habit(
         id = 2,
         name = "Workout",
-        color = Habit.Color.Green
+        color = Habit.Color.Green,
+        notes = ""
     )
 
     val actions1 = (1..5).map {

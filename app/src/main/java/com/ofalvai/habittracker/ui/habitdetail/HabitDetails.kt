@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +45,7 @@ import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
 import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
+import com.ofalvai.habittracker.ui.theme.surfaceVariant
 import kotlinx.coroutines.cancel
 import java.time.Instant
 import java.time.LocalDate
@@ -164,7 +164,7 @@ private fun Calendar(
 ) {
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
     Column(
-        Modifier.cardBackground().padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
+        Modifier.surfaceBackground().padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
     ) {
         CalendarPager(
             yearMonth = yearMonth,
@@ -186,7 +186,7 @@ private fun HabitStats(
     chartData: ActionCountChart,
     onStatTypeChange: (ActionCountChart.Type) -> Unit
 ) {
-    Column(Modifier.padding(top = 16.dp).cardBackground()) {
+    Column(Modifier.padding(top = 16.dp).surfaceBackground()) {
         Row(Modifier.align(Alignment.End).padding(top = 8.dp, end = 16.dp)) {
             Text(
                 modifier = Modifier.align(CenterVertically),
@@ -230,18 +230,18 @@ private fun ToggleButton(
     }
 }
 
-private fun Modifier.cardBackground() = composed {
-    this.background(Color.White.copy(alpha = 0.5f), shape = MaterialTheme.shapes.medium)
+private fun Modifier.surfaceBackground() = composed {
+    this.background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
 }
 
-@Preview(showBackground = true, widthDp = 400)
+@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 @Composable
 private fun PreviewHabitDetailScreen() {
     HabitTrackerTheme {
         HabitDetailScreen(
             habitDetailState = Result.Success(
                 HabitWithActions(
-                    Habit(0, "Meditation", Habit.Color.Red),
+                    Habit(0, "Meditation", Habit.Color.Red, ""),
                     listOf(Action(0, true, Instant.now())),
                     2,
                     ActionHistory.Clean
