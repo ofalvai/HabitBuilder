@@ -45,7 +45,7 @@
     <string name="dashboard_error">Failed to load habit list</string>
     <string name="dashboard_error_toggle_action">Failed to save action</string>
     <string name="dashboard_error_item_move">Failed to move habit, try again</string>
-    <string name="dashboard_config_dialog_title">Layout</string>
+    <string name="dashboard_config_dialog_title">Choose layout</string>
     <string name="dashboard_config_dialog_fiveday">Five day</string>
     <string name="dashboard_config_dialog_compact">Compact</string>
 

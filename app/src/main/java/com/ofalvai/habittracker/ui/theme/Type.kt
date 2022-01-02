@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import com.ofalvai.habittracker.R
 
 private val lato = FontFamily(
     Font(R.font.lato_regular),
+    Font(R.font.lato_bold, weight = FontWeight.Medium),
     Font(R.font.lato_bold, weight = FontWeight.Bold)
 )
 
@@ -38,6 +39,11 @@ val typography: Typography
     @Composable
     get() = Typography(
         defaultFontFamily = lato,
+        button = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            letterSpacing = 0.25.sp
+        )
     )
 
 object AppTextStyle {

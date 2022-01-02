@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +37,7 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.HorizontalGrid
 import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
-import com.ofalvai.habittracker.ui.theme.habitInactive
+import com.ofalvai.habittracker.ui.theme.gray2
 
 
 @Composable
@@ -53,7 +53,7 @@ fun DashboardConfigDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colors.surface)
+                    .background(MaterialTheme.colors.background)
             ) {
                 DialogContent(config, onConfigSelected, onDismissed)
             }
@@ -85,7 +85,7 @@ private fun DialogContent(
             Column {
                 Text(
                     text = stringResource(R.string.dashboard_config_dialog_fiveday),
-                    style = MaterialTheme.typography.body1,
+                    style = MaterialTheme.typography.subtitle2,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Spacer(Modifier.height(8.dp))
@@ -103,14 +103,14 @@ private fun DialogContent(
             Column {
                 Text(
                     text = stringResource(R.string.dashboard_config_dialog_compact),
-                    style = MaterialTheme.typography.body1,
+                    style = MaterialTheme.typography.subtitle2,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Spacer(Modifier.height(8.dp))
                 CompactOutline()
             }
         }
-        OutlinedButton(
+        Button(
             onClick = onDismissed,
             modifier = Modifier.align(Alignment.End).padding(top = 16.dp)
         ) {
@@ -130,8 +130,8 @@ private fun ConfigOption(
         .clip(MaterialTheme.shapes.medium)
         .then(
             if (isSelected) Modifier.border(
-                width = 1.dp,
-                color = Color.DarkGray,
+                width = 2.dp,
+                color = MaterialTheme.colors.primary,
                 shape = MaterialTheme.shapes.medium
             ) else Modifier
         )
@@ -149,7 +149,7 @@ private fun FiveDayOutline() {
             .border(
                 width = 1.dp,
                 shape = MaterialTheme.shapes.medium,
-                color = MaterialTheme.colors.habitInactive
+                color = MaterialTheme.colors.gray2
             )
             .padding(12.dp)
     ) {
@@ -176,7 +176,7 @@ private fun FiveDayOutlineCircle(toggled: Boolean) {
             .then(
                 if (toggled) Modifier.placeholderBackground() else Modifier.border(
                     1.dp,
-                    Color.DarkGray,
+                    MaterialTheme.colors.gray2,
                     CircleShape
                 )
             )
@@ -202,9 +202,9 @@ private fun CompactOutline() {
     }
 }
 
-private fun Modifier.placeholderBackground() = this.then(
-    this.background(Color.DarkGray)
-)
+private fun Modifier.placeholderBackground() = this.composed {
+    this.background(MaterialTheme.colors.gray2)
+}
 
 @Composable
 private fun CompactOutlineBox(toggled: Boolean) {
@@ -213,10 +213,10 @@ private fun CompactOutlineBox(toggled: Boolean) {
             .aspectRatio(1f)
             .then(
                 if (toggled) Modifier.placeholderBackground() else Modifier.background(
-                    MaterialTheme.colors.habitInactive
+                    MaterialTheme.colors.gray2
                 )
             )
-            .border(1.dp, MaterialTheme.colors.surface)
+            .border(1.dp, MaterialTheme.colors.background)
     )
 }
 
