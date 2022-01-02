@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,24 +34,45 @@ object AppColor {
         val onSurface = Color(0xFF262626)
         val onBackground = Color(0xFF262626)
 
+        val surfaceVariant = Color(0xFFFFF8ED)
+        val gray1 = Color.Black.copy(alpha = 0.1f)
+        val gray2 = Color.Black.copy(alpha = 0.25f)
+
         val habitRed = Color(0xFFE08F8F)
         val habitGreen = Color(0xFFAEC2B8)
         val habitBlue = Color(0xFF9EB2D1)
         val habitYellow = Color(0xFFFFCC79)
         val habitPink = Color(0xFFE08FB8)
-        val habitInactive = Color.Black.copy(alpha = 0.05f)
     }
 
     object Dark {
-        // TODO: check colors on dark background
+        val surfaceVariant = Color(0xFF232323)
+        val gray1 = Color.White.copy(alpha = 0.1f)
+        val gray2 = Color.White.copy(alpha = 0.25f)
+
         val habitRed = Color(0xFFE08F8F)
         val habitGreen = Color(0xFFAEC2B8)
         val habitBlue = Color(0xFF9EB2D1)
         val habitYellow = Color(0xFFFFCC79)
         val habitPink = Color(0xFFE08FB8)
-        val habitInactive = Color.White.copy(alpha = 0.05f)
     }
 }
+
+/**
+ * Background for surfaces that need to distinct from the background, but don't use elevation.
+ * It's a single color in both light and dark mode (higher elevation won't make it lighter)
+ */
+val Colors.surfaceVariant: Color
+    @Composable
+    get() = if (isLight) AppColor.Light.surfaceVariant else AppColor.Dark.surfaceVariant
+
+val Colors.gray1: Color
+    @Composable
+    get() = if (isLight) AppColor.Light.gray1 else AppColor.Dark.gray1
+
+val Colors.gray2: Color
+    @Composable
+    get() = if (isLight) AppColor.Light.gray2 else AppColor.Dark.gray2
 
 val Colors.habitRed: Color
     @Composable
@@ -69,9 +90,6 @@ val Colors.habitYellow: Color
     @Composable
     get() = if (isLight) AppColor.Light.habitYellow else AppColor.Dark.habitYellow
 
-val Colors.habitInactive: Color
-    @Composable
-    get() = if (isLight) AppColor.Light.habitInactive else AppColor.Dark.habitInactive
 
 val Habit.Color.composeColor: Color
     @Composable

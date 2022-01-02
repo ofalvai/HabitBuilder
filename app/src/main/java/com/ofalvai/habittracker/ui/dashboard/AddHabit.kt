@@ -47,6 +47,7 @@ import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.surfaceVariant
 
 @Composable
 fun AddHabitScreen(navController: NavController) {
@@ -178,10 +179,15 @@ private fun SuggestionChip(habit: String, onClick: () -> Unit) {
     Surface(
         shape = shape,
         onClick = onClick,
-        border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.15f))
+        border = BorderStroke(
+            1.dp,
+            // Match the OutlinedTextField border color1
+            MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+        ),
+        color = MaterialTheme.colors.surfaceVariant
     ) {
         Text(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             text = habit,
             style = MaterialTheme.typography.body2
         )

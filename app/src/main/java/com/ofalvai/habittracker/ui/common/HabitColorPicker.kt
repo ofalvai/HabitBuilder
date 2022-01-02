@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.*
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
+import com.ofalvai.habittracker.ui.theme.gray2
 
 enum class ColorPickerState { Default, Selected }
 
@@ -134,7 +136,7 @@ fun HabitColor(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             )
-            .border(BorderStroke(1.dp, Color.Black.copy(alpha = 0.15f)), CircleShape)
+            .border(BorderStroke(1.dp, MaterialTheme.colors.gray2), CircleShape)
             .background(color.composeColor, CircleShape)
             .clip(CircleShape),
         contentAlignment = Alignment.Center

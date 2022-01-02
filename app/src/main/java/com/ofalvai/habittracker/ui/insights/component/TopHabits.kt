@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.TopHabitItem
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
-import com.ofalvai.habittracker.ui.theme.habitInactive
+import com.ofalvai.habittracker.ui.theme.gray1
 
 @Composable
 fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
@@ -177,7 +177,7 @@ private fun HabitBar(
             .clip(shape)
             .fillMaxWidth()
             .height(height)
-            .background(MaterialTheme.colors.habitInactive)
+            .background(MaterialTheme.colors.gray1)
     ) {
         Box(modifier = Modifier
             .clip(shape)

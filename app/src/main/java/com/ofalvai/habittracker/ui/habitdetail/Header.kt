@@ -64,7 +64,9 @@ internal fun HabitDetailHeader(
         targetValue = when (habitDetailState) {
             is Result.Success -> {
                 if (isEditing) MaterialTheme.colors.surface else {
-                    habitDetailState.value.habit.color.composeColor.copy(alpha = 0.5f)
+                    if (MaterialTheme.colors.isLight) {
+                        habitDetailState.value.habit.color.composeColor.copy(alpha = 0.5f)
+                    } else MaterialTheme.colors.surface
                 }
             }
             else -> MaterialTheme.colors.background

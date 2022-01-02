@@ -50,6 +50,7 @@ import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
+import com.ofalvai.habittracker.ui.theme.gray2
 import java.time.Instant
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -147,7 +148,7 @@ fun ActionCircle(
     onSinglePress: () -> Unit
 ) {
     val backgroundColor = if (toggled) activeColor else MaterialTheme.colors.surface
-    val borderColor = if (toggled) Color.Black.copy(alpha = 0.25f) else activeColor
+    val borderColor = if (toggled) MaterialTheme.colors.gray2 else activeColor
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
     val rippleRadius = remember { Constants.CircleSize / 1.7f } // Make it a bit bigger than D / 2
     val shape = CircleShape
