@@ -244,6 +244,7 @@ private fun SingleStatRow(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun SingleStat(
     value: String,
@@ -253,11 +254,26 @@ private fun SingleStat(
     Column(
         modifier.padding(horizontal = 4.dp)
     ) {
-        Text(
-            text = value,
+        AnimatedContent(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = AppTextStyle.singleStatValue
-        )
+            targetState = value,
+            transitionSpec = {
+                if (targetState > initialState) {
+                    slideInVertically { height -> height } + fadeIn() with slideOutVertically { height -> -height } + fadeOut()
+                } else {
+                    slideInVertically { height -> -height } + fadeIn() with slideOutVertically { height -> height } + fadeOut()
+                }.using(
+                    // Disable clipping since the faded slide-in/out should be displayed
+                    // out of bounds.
+                    SizeTransform(clip = false)
+                )
+            }
+        ) { targetValue ->
+            Text(
+                text = targetValue,
+                style = AppTextStyle.singleStatValue
+            )
+        }
         Text(
             text = label,
             modifier = Modifier.align(Alignment.CenterHorizontally),
