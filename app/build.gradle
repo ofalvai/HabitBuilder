@@ -189,6 +189,7 @@ dependencies {
     implementation(libs.reorderable)
     implementation libs.accompanist.insets
     implementation libs.accompanist.systemuicontroller
+    implementation libs.accompanist.navigation
 
     implementation (libs.bugsnag.runtime) {
         exclude group: "com.bugsnag", module: "bugsnag-plugin-android-anr"

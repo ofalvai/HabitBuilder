@@ -13,29 +13,107 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalAnimationApi::class)
 
 package com.ofalvai.habittracker.ui
 
 import android.os.Bundle
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.compose.animation.*
+import androidx.compose.runtime.Composable
+import androidx.navigation.*
+import com.google.accompanist.navigation.animation.composable
+import com.ofalvai.habittracker.ui.theme.AppTransition
 
-sealed class Screen(
+sealed class Screen constructor(
     val route: String,
-    val arguments: List<NamedNavArgument> = emptyList()
+    val arguments: List<NamedNavArgument> = emptyList(),
+    val enterTransition: AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition = { AppTransition.defaultEnter },
+    val exitTransition: AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition = { AppTransition.defaultExit },
+    val popEnterTransition: AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition = enterTransition,
+    val popExitTransition: AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition = exitTransition
+)
+
+fun NavGraphBuilder.appDestination(
+    screen: Screen,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
-    object Dashboard : Screen("dashboard")
+    composable(
+        route = screen.route,
+        arguments = screen.arguments,
+        enterTransition = screen.enterTransition,
+        exitTransition = screen.exitTransition,
+        popEnterTransition = screen.popEnterTransition,
+        popExitTransition = screen.popExitTransition,
+        content = content
+    )
+}
 
-    object Insights : Screen("insights")
+object Destination {
+    object Dashboard : Screen(
+        route = "dashboard",
+        enterTransition = {
+            when (initialState.destination.route) {
+                Insights.route -> AppTransition.fadeThroughEnter
+                About.route, Archive.route, AddHabit.route, HabitDetails.route -> AppTransition.sharedZAxisEnterBackward
+                else -> AppTransition.defaultEnter
+            }
+        },
+        exitTransition = {
+            when (targetState.destination.route) {
+                Insights.route -> AppTransition.fadeThroughExit
+                About.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisExitForward
+                else -> AppTransition.defaultExit
+            }
+        }
+    )
 
-    object AddHabit : Screen("add_habit")
+    object Insights : Screen(
+        route = "insights",
+        enterTransition = {
+            when (initialState.destination.route) {
+                Dashboard.route -> AppTransition.fadeThroughEnter
+                About.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisEnterBackward
+                else -> AppTransition.defaultEnter
+            }
+        },
+        exitTransition = {
+            when (targetState.destination.route) {
+                Dashboard.route -> AppTransition.fadeThroughExit
+                About.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisExitForward
+                else -> AppTransition.defaultExit
+            }
+        }
+    )
+
+    object AddHabit : Screen(
+        route = "add_habit",
+        enterTransition = { AppTransition.sharedZAxisEnterForward },
+        exitTransition = { AppTransition.sharedZAxisExitBackward }
+    )
+
+    object About : Screen(
+        route = "about",
+        enterTransition = {
+            when (initialState.destination.route) {
+                Dashboard.route, Insights.route -> AppTransition.sharedZAxisEnterForward
+                else -> AppTransition.defaultEnter
+            }
+        },
+        exitTransition = {
+            when (targetState.destination.route) {
+                Dashboard.route, Insights.route -> AppTransition.sharedZAxisExitBackward
+                else -> AppTransition.defaultExit
+            }
+        }
+    )
 
     object HabitDetails : Screen(
         route = "habit_details/{id}",
         arguments = listOf(navArgument("id") {
             type = NavType.IntType
-        })
+        }),
+        enterTransition = { AppTransition.sharedZAxisEnterForward },
+        exitTransition = { AppTransition.sharedZAxisExitBackward }
     ) {
         fun idFrom(arguments: Bundle?): Int {
             return arguments?.getInt("id")!!
@@ -44,9 +122,13 @@ sealed class Screen(
         fun buildRoute(habitId: Int) = "habit_details/$habitId"
     }
 
-    object About : Screen("about")
+    object Licenses : Screen(
+        route = "licenses"
+    )
 
-    object Licenses : Screen("licenses")
-
-    object Archive : Screen("archive")
+    object Archive : Screen(
+        route = "archive",
+        enterTransition = { AppTransition.sharedZAxisEnterForward },
+        exitTransition = { AppTransition.sharedZAxisExitBackward }
+    )
 }

@@ -68,7 +68,7 @@ internal fun HabitDetailHeader(
             }
             else -> MaterialTheme.colors.background
         },
-        animationSpec = tween(durationMillis = 900)
+        animationSpec = tween(durationMillis = 900, delayMillis = 150)
     )
 
     Surface(color = backgroundColor) {

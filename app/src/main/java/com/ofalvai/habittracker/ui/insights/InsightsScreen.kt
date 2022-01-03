@@ -32,7 +32,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.common.AppBar
 import com.ofalvai.habittracker.ui.insights.component.Heatmap
 import com.ofalvai.habittracker.ui.insights.component.TopDays
@@ -44,7 +44,7 @@ fun InsightsScreen(navController: NavController) {
     val viewModel: InsightsViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     Column(Modifier.statusBarsPadding()) {
-        InsightsAppBar(onAboutClick = { navController.navigate(Screen.About.route) })
+        InsightsAppBar(onAboutClick = { navController.navigate(Destination.About.route) })
 
         Column(
             modifier = Modifier

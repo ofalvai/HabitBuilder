@@ -34,7 +34,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
-import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.common.AppBar
 import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
-fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
+fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) {
     val viewModel: DashboardViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
@@ -73,16 +73,16 @@ fun Dashboard(navController: NavController, scaffoldState: ScaffoldState) {
         viewModel.toggleActionFromDashboard(habit.id, action, date)
     }
     val onHabitDetail: (Habit) -> (Unit) = {
-        navController.navigate(Screen.HabitDetails.buildRoute(it.id))
+        navController.navigate(Destination.HabitDetails.buildRoute(it.id))
     }
-    val onAddHabitClick = { navController.navigate(Screen.AddHabit.route) }
+    val onAddHabitClick = { navController.navigate(Destination.AddHabit.route) }
     val onConfigClick: () -> Unit = { configDialogOpen = true }
     val onConfigChange: (DashboardConfig) -> Unit = {
         config = it
         viewModel.dashboardConfig = it
     }
-    val onAboutClick = { navController.navigate(Screen.About.route) }
-    val onArchiveClick = { navController.navigate(Screen.Archive.route) }
+    val onAboutClick = { navController.navigate(Destination.About.route) }
+    val onArchiveClick = { navController.navigate(Destination.Archive.route) }
     val onMove: (ItemMoveEvent) -> Unit = { viewModel.persistItemMove(it) }
 
     DashboardConfigDialog(

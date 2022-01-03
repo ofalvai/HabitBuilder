@@ -17,6 +17,7 @@
 package com.ofalvai.habittracker.ui.archive
 
 import android.text.format.DateUtils
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -89,7 +90,7 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
     )
 
 
-    Column {
+    Column(Modifier.background(MaterialTheme.colors.background)) {
         TopAppBar(
             modifier = Modifier.statusBarsPadding(),
             title = { Text(stringResource(R.string.archive_title)) },

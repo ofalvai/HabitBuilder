@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.common.ErrorView
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
@@ -55,7 +55,7 @@ fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
     val topHabits by viewModel.topHabits.collectAsState()
 
     val onHabitClick: (HabitId) -> Unit = {
-        val route = Screen.HabitDetails.buildRoute(habitId = it)
+        val route = Destination.HabitDetails.buildRoute(habitId = it)
         navController.navigate(route)
     }
 
