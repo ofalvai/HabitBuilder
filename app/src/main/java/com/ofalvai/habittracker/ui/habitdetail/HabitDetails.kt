@@ -126,7 +126,7 @@ private fun HabitDetailScreen(
     onArchive: (Habit) -> Unit,
     onDayToggle: (LocalDate, Action) -> Unit,
 ) {
-    Column {
+    Column(Modifier.background(MaterialTheme.colors.background).fillMaxSize()) {
         HabitDetailHeader(habitDetailState, singleStats, onBack, onEdit, onArchive)
 
         Column(Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {

@@ -17,6 +17,7 @@
 package com.ofalvai.habittracker.ui.settings
 
 import android.content.Intent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -35,7 +36,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.BuildConfig
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.Screen
+import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 
 private const val SOURCE_URL = "https://github.com/ofalvai/HabitTracker"
@@ -57,7 +58,7 @@ fun AboutScreen(navController: NavController) {
             val intent = Intent(Intent.ACTION_VIEW).apply { data = uri }
             context.startActivity(intent)
         },
-        onOpenSourceClick = { navController.navigate(Screen.Licenses.route) }
+        onOpenSourceClick = { navController.navigate(Destination.Licenses.route) }
     )
 }
 
@@ -71,10 +72,11 @@ private fun AboutScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
+            .background(MaterialTheme.colors.background)
             .padding(32.dp)
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
-            .fillMaxWidth()
+            .fillMaxSize()
     ) {
         Text(
             text = stringResource(R.string.app_name),

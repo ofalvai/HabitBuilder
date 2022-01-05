@@ -43,6 +43,7 @@ reorderable = "org.burnoutcrew.composereorderable:reorderable:0.7.4"
 
 accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist"}
 
 bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.1.0"
 bugsnag-runtime = "com.bugsnag:bugsnag-android:5.17.0"

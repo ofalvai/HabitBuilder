@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -35,19 +36,18 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.archive.ArchiveScreen
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
-import com.ofalvai.habittracker.ui.dashboard.Dashboard
+import com.ofalvai.habittracker.ui.dashboard.DashboardScreen
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.ui.insights.InsightsScreen
 import com.ofalvai.habittracker.ui.settings.AboutScreen
@@ -57,6 +57,7 @@ import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 
 class MainActivity : ComponentActivity() {
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,7 +67,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             HabitTrackerTheme {
                 ProvideWindowInsets {
-                    val navController = rememberNavController()
+                    val navController = rememberAnimatedNavController()
                     val systemUiController = rememberSystemUiController()
                     val useDarkIcons = MaterialTheme.colors.isLight
                     val scaffoldState = rememberScaffoldState()
@@ -84,7 +85,8 @@ class MainActivity : ComponentActivity() {
 
                     Scaffold(
                         bottomBar = { AppBottomNavigation(navController) },
-                        scaffoldState = scaffoldState
+                        scaffoldState = scaffoldState,
+                        modifier = Modifier.fillMaxSize()
                     ) { innerPadding ->
                         Screens(navController, scaffoldState, innerPadding)
                     }
@@ -94,31 +96,29 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun Screens(navController: NavHostController,
                     scaffoldState: ScaffoldState,
                     padding: PaddingValues
 ) {
-    NavHost(
+    AnimatedNavHost(
         navController,
-        startDestination = Screen.Dashboard.route,
-        modifier = Modifier.padding(padding)
+        startDestination = Destination.Dashboard.route,
+        modifier = Modifier.padding(padding).fillMaxSize()
     ) {
-        composable(Screen.Dashboard.route) { Dashboard(navController, scaffoldState) }
-        composable(Screen.Insights.route) { InsightsScreen(navController) }
-        composable(Screen.AddHabit.route) { AddHabitScreen(navController) }
-        composable(
-            Screen.HabitDetails.route,
-            arguments = Screen.HabitDetails.arguments
-        ) { backStackEntry ->
+        appDestination(Destination.Dashboard) { DashboardScreen(navController, scaffoldState) }
+        appDestination(Destination.Insights) { InsightsScreen(navController) }
+        appDestination(Destination.AddHabit) { AddHabitScreen(navController) }
+        appDestination(Destination.HabitDetails) { backStackEntry ->
             HabitDetailScreen(
-                habitId = Screen.HabitDetails.idFrom(backStackEntry.arguments),
+                habitId = Destination.HabitDetails.idFrom(backStackEntry.arguments),
                 navController = navController
             )
         }
-        composable(Screen.About.route) { AboutScreen(navController) }
-        composable(Screen.Licenses.route) { LicensesScreen(navController) }
-        composable(Screen.Archive.route) { ArchiveScreen(navController, scaffoldState) }
+        appDestination(Destination.About) { AboutScreen(navController) }
+        appDestination(Destination.Licenses) { LicensesScreen(navController) }
+        appDestination(Destination.Archive) { ArchiveScreen(navController, scaffoldState) }
     }
 }
 
@@ -171,14 +171,14 @@ private fun AppBottomNavigation(navController: NavController) {
             val currentDestination = navBackStackEntry?.destination
 
             AppBottomNavigationItem(
-                rootScreen = Screen.Dashboard,
+                rootScreen = Destination.Dashboard,
                 icon = { Icon(AppIcons.Habits, stringResource(R.string.tab_dashboard)) },
                 label = stringResource(R.string.tab_dashboard),
                 currentDestination = currentDestination,
                 navController = navController
             )
             AppBottomNavigationItem(
-                rootScreen = Screen.Insights,
+                rootScreen = Destination.Insights,
                 icon = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
                 label = stringResource(R.string.tab_insights),
                 currentDestination = currentDestination,
