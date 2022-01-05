@@ -63,9 +63,6 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 
-
-private val loadingMonthData = HeatmapMonth(YearMonth.now(), emptyMap(), 0, 0, emptyList())
-
 @Composable
 fun Heatmap(viewModel: InsightsViewModel) {
 
@@ -86,13 +83,14 @@ fun Heatmap(viewModel: InsightsViewModel) {
         title = stringResource(R.string.insights_heatmap_title),
         description = stringResource(R.string.insights_heatmap_description),
     ) {
-        // TODO: too many recompositions
         Column {
             CalendarPager(
                 yearMonth = yearMonth,
                 onPreviousClick = onPreviousMonth,
                 onNextClick = onNextMonth
             )
+
+            CalendarDayLegend()
 
             when (heatmapState) {
                 is Result.Success -> {
@@ -102,9 +100,6 @@ fun Heatmap(viewModel: InsightsViewModel) {
                     if (!enoughData) {
                         EmptyView()
                     }
-
-                    CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
-
                     HeatmapCalendar(yearMonth, heatmapData)
 
                     if (enoughData) {
@@ -115,9 +110,10 @@ fun Heatmap(viewModel: InsightsViewModel) {
                     }
                 }
                 Result.Loading -> {
-                    CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
-
-                    HeatmapCalendar(yearMonth = yearMonth, heatmapData = loadingMonthData)
+                    // Avoid emitting another HeatmapCalendar() here because it an expensive
+                    // composable (wraps an AndroidView which contains a RecyclerView)
+                    // Yes, the layout will jump when transitioning from Loading -> Success,
+                    // but it's still better than janky animations
                 }
                 is Result.Failure -> {
                     ErrorView(label = stringResource(R.string.insights_heatmap_error))
@@ -157,9 +153,13 @@ private fun HeatmapCalendar(
     }
 
     AndroidView({ view }) { calendarView ->
-        (calendarView.dayBinder as HeatmapDayBinder).heatmapData = heatmapData
-        calendarView.updateMonthRange(startMonth = yearMonth, endMonth = yearMonth)
-        calendarView.notifyCalendarChanged()
+        val binder = calendarView.dayBinder as HeatmapDayBinder
+        // This recomposition happens quite often, but we should only reload when relevant data changes
+        if (heatmapData != binder.heatmapData) {
+            binder.heatmapData = heatmapData
+            calendarView.updateMonthRange(startMonth = yearMonth, endMonth = yearMonth)
+            calendarView.notifyMonthChanged(yearMonth)
+        }
     }
 }
 

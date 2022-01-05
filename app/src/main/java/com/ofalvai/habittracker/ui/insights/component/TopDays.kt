@@ -16,7 +16,6 @@
 
 package com.ofalvai.habittracker.ui.insights.component
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -63,19 +62,18 @@ fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
         title = stringResource(R.string.insights_topdays_title),
         description = stringResource(R.string.insights_topdays_description),
     ) {
-        Crossfade(targetState = topDays) {
-            when (it) {
-                is Result.Success -> {
-                    if (hasEnoughData(it.value)) {
-                        TopDaysTable(items = it.value, onHabitClick = onHabitClick)
-                    } else {
-                        EmptyView(label = stringResource(R.string.insights_topdays_empty_label))
-                    }
+        when (topDays) {
+            is Result.Success -> {
+                val successTopDays = topDays as Result.Success
+                if (hasEnoughData(successTopDays.value)) {
+                    TopDaysTable(items = successTopDays.value, onHabitClick = onHabitClick)
+                } else {
+                    EmptyView(label = stringResource(R.string.insights_topdays_empty_label))
                 }
-                Result.Loading -> Spacer(modifier = Modifier.height(45.dp))
-                is Result.Failure -> {
-                    ErrorView(label = stringResource(R.string.insights_topdays_error))
-                }
+            }
+            Result.Loading -> Spacer(modifier = Modifier.height(45.dp))
+            is Result.Failure -> {
+                ErrorView(label = stringResource(R.string.insights_topdays_error))
             }
         }
     }

@@ -17,7 +17,6 @@
 package com.ofalvai.habittracker.ui.insights.component
 
 import androidx.annotation.FloatRange
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -65,7 +64,7 @@ fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
         description = stringResource(R.string.insights_tophabits_description)
     ) {
         Column {
-            Crossfade(targetState = topHabits) {
+            topHabits.let {
                 when (it) {
                     is Result.Success -> {
                         if (hasEnoughData(it.value)) {

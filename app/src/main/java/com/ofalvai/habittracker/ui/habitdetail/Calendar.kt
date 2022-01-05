@@ -61,7 +61,7 @@ fun HabitCalendar(
             orientation = LinearLayout.HORIZONTAL
             scrollMode = ScrollMode.PAGED
             dayViewResource = R.layout.item_calendar_day
-            dayBinder = HabitDayBinder(habitColor, textColor, textColorActive, onDayToggle)
+            dayBinder = HabitDayBinder(habitColor, yearMonth, textColor, textColorActive, onDayToggle)
             itemAnimator = DefaultItemAnimator().apply {
                 // Avoid flashes on recomposition
                 supportsChangeAnimations = false
@@ -71,29 +71,32 @@ fun HabitCalendar(
     }
 
     AndroidView({ view }) { calendarView ->
-        (calendarView.dayBinder as HabitDayBinder).also {
-            it.habitColor = habitColor
-            it.currentMonthActions = actions
+        val binder = calendarView.dayBinder as HabitDayBinder
+        // This recomposition happens quite often, but we should only reload if relevant data changed
+        if (actions != binder.actions || habitColor != binder.habitColor || yearMonth != binder.yearMonth) {
+            binder.habitColor = habitColor
+            binder.actions = actions
+            binder.yearMonth = yearMonth
+            calendarView.updateMonthRange(startMonth = yearMonth, endMonth = yearMonth)
+            calendarView.notifyMonthChanged(yearMonth)
         }
-
-        calendarView.updateMonthRange(startMonth = yearMonth, endMonth = yearMonth)
-        calendarView.notifyCalendarChanged()
     }
 }
 
 private class HabitDayBinder(
     var habitColor: Color,
+    var yearMonth: YearMonth,
     private val textColor: Color,
     private val textColorActive: Color,
     private val onDayToggle: (LocalDate, Action) -> Unit
 ) : DayBinder<DayViewContainer> {
 
-    var currentMonthActions: List<Action> = emptyList()
+    var actions: List<Action> = emptyList()
 
     override fun create(view: View) = DayViewContainer(view, onDayToggle)
 
     override fun bind(container: DayViewContainer, day: CalendarDay) {
-        val actionOnDay = currentMonthActions.find {
+        val actionOnDay = actions.find {
             val dateOfAction = LocalDateTime
                 .ofInstant(it.timestamp, ZoneId.systemDefault())
                 .toLocalDate()

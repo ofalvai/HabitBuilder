@@ -98,8 +98,9 @@ private val pagerTransitionSpec: AnimatedContentScope<YearMonth>.() -> ContentTr
 }
 
 @Composable
-fun CalendarDayLegend(weekFields: WeekFields) {
+fun CalendarDayLegend() {
     // TODO: use a Grid-like layout for perfect alignment
+    val weekFields = WeekFields.of(Locale.getDefault())
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -132,6 +133,6 @@ private fun PreviewCalendarPager() {
 @Composable
 private fun PreviewCalendarDayLegend() {
     HabitTrackerTheme {
-        CalendarDayLegend(WeekFields.ISO)
+        CalendarDayLegend()
     }
 }

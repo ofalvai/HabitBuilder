@@ -41,8 +41,8 @@ class InsightsViewModel(
 ): ViewModel() {
 
     val heatmapState = MutableStateFlow<Result<HeatmapMonth>>(Result.Loading)
-    val topHabits = MutableStateFlow<Result<List<TopHabitItem>>>(Result.Success(emptyList()))
-    val habitTopDays = MutableStateFlow<Result<List<TopDayItem>>>(Result.Success(emptyList()))
+    val topHabits = MutableStateFlow<Result<List<TopHabitItem>>>(Result.Loading)
+    val habitTopDays = MutableStateFlow<Result<List<TopDayItem>>>(Result.Loading)
 
     private val habitCount: SharedFlow<Int> = habitDao.getTotalHabitCount().shareIn(
         scope = viewModelScope,
@@ -75,8 +75,6 @@ class InsightsViewModel(
     }
 
     private suspend fun reloadHeatmap(yearMonth: YearMonth) {
-        heatmapState.value = Result.Loading
-
         try {
             val startDate = yearMonth.atDay(1)
             val endDate = yearMonth.atEndOfMonth()
@@ -97,8 +95,6 @@ class InsightsViewModel(
     }
 
     private suspend fun reloadTopHabits() {
-        topHabits.value = Result.Loading
-
         try {
             topHabits.value = habitDao
                 .getMostSuccessfulHabits(100) // TODO: smaller number when "See all" screen is done
@@ -112,8 +108,6 @@ class InsightsViewModel(
     }
 
     private suspend fun reloadHabitTopDays() {
-        habitTopDays.value = Result.Loading
-
         try {
             habitTopDays.value = habitDao
                 .getTopDayForHabits()

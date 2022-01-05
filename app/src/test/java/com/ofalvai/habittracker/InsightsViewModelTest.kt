@@ -95,7 +95,6 @@ class InsightsViewModelTest {
             habitCountFlow.value = 2
             viewModel.fetchHeatmap(YearMonth.now().plusMonths(1))
 
-            assertEquals(Result.Loading, awaitItem())
             val newLoadedState = awaitItem() as Result.Success
             assertEquals(2, newLoadedState.value.totalHabitCount)
         }

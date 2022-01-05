@@ -50,8 +50,6 @@ import kotlinx.coroutines.cancel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.temporal.WeekFields
-import java.util.*
 
 @Composable
 fun HabitDetailScreen(habitId: Int, navController: NavController) {
@@ -171,7 +169,7 @@ private fun Calendar(
             onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
             onNextClick = { yearMonth = yearMonth.plusMonths(1) }
         )
-        CalendarDayLegend(weekFields = WeekFields.of(Locale.getDefault()))
+        CalendarDayLegend()
         HabitCalendar(
             yearMonth = yearMonth,
             habitColor = habitDetailState.value.habit.color.composeColor,
