@@ -17,6 +17,9 @@
 package com.ofalvai.habittracker.ui.dashboard.view.fiveday
 
 import android.os.Vibrator
+import androidx.compose.animation.*
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -135,6 +138,7 @@ fun ActionCircles(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ActionCircle(
     activeColor: Color,
@@ -143,31 +147,41 @@ fun ActionCircle(
     isHighlighted: Boolean,
     onSinglePress: () -> Unit
 ) {
-    val backgroundColor = if (toggled) activeColor else MaterialTheme.colors.surface
-    val borderColor = if (toggled) MaterialTheme.colors.gray2 else activeColor
-    val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
-    val rippleRadius = remember { Constants.CircleSize / 1.7f } // Make it a bit bigger than D / 2
-    val shape = CircleShape
-
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .size(Constants.CircleSize)
-            .padding(Constants.CirclePadding)
-            .satisfyingToggleable(
-                vibrator, rippleRadius, false, toggled, onToggle, onSinglePress
-            )
-            .border(BorderStroke(2.dp, borderColor), shape)
-            .background(backgroundColor, shape)
-            .clip(shape)
-    ) {
-        if (isHighlighted) {
-            Box(
-                modifier = Modifier
-                    .requiredSize(8.dp)
-                    .clip(CircleShape)
-                    .background(color = borderColor, shape = CircleShape),
-            )
+    AnimatedContent(
+        targetState = toggled,
+        transitionSpec = {
+            (scaleIn(
+                animationSpec = tween(250, delayMillis = 250, easing = CubicBezierEasing(0.46f, 1.83f, 0.64f, 1f))
+            ) with scaleOut(
+                animationSpec = tween(250)
+            )).using(SizeTransform(clip = false ))
+        }
+    ) { targetToggled ->
+        val backgroundColor = if (targetToggled) activeColor else MaterialTheme.colors.surface
+        val borderColor = if (targetToggled) MaterialTheme.colors.gray2 else activeColor
+        val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
+        val rippleRadius = remember { Constants.CircleSize / 1.7f } // Make it a bit bigger than D / 2
+        val shape = CircleShape
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(Constants.CircleSize)
+                .padding(Constants.CirclePadding)
+                .satisfyingToggleable(
+                    vibrator, rippleRadius, false, targetToggled, onToggle, onSinglePress
+                )
+                .border(BorderStroke(2.dp, borderColor), shape)
+                .background(backgroundColor, shape)
+                .clip(shape)
+        ) {
+            if (isHighlighted) {
+                Box(
+                    modifier = Modifier
+                        .requiredSize(8.dp)
+                        .clip(CircleShape)
+                        .background(color = borderColor, shape = CircleShape),
+                )
+            }
         }
     }
 }
