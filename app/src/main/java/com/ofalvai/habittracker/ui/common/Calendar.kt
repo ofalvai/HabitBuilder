@@ -99,19 +99,15 @@ private val pagerTransitionSpec: AnimatedContentScope<YearMonth>.() -> ContentTr
 
 @Composable
 fun CalendarDayLegend() {
-    // TODO: use a Grid-like layout for perfect alignment
     val weekFields = WeekFields.of(Locale.getDefault())
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    HorizontalGrid(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
         (0..6).map {
             val day = weekFields.firstDayOfWeek.plus(it.toLong())
             val label = day.getDisplayName(TextStyle.SHORT, Locale.getDefault())
             Text(
                 text = label,
-                style = MaterialTheme.typography.caption
+                style = MaterialTheme.typography.caption,
+                textAlign = TextAlign.Center
             )
         }
     }
