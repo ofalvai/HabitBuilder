@@ -44,9 +44,6 @@ import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
-import java.time.DayOfWeek
-import java.time.format.TextStyle
-import java.util.*
 
 @Composable
 fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
@@ -111,7 +108,7 @@ private fun TopDaysRow(
         )
 
         Text(
-            text = item.day.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+            text = item.dayLabel,
             modifier = Modifier.weight(0.30f),
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
@@ -152,31 +149,31 @@ private fun PreviewTopDaysTable() {
             habitId = 1,
             name = "Short name",
             count = 1567,
-            day = DayOfWeek.MONDAY
+            dayLabel = "Monday"
         ),
         TopDayItem(
             habitId = 1,
             name = "Name",
             count = 153,
-            day = DayOfWeek.THURSDAY
+            dayLabel = "Thursday"
         ),
         TopDayItem(
             habitId = 1,
             name = "Loooong name lorem ipsum dolor sit amet",
             count = 10,
-            day = DayOfWeek.SUNDAY
+            dayLabel = "Sunday"
         ),
         TopDayItem(
             habitId = 1,
             name = "Meditation",
             count = 9,
-            day = DayOfWeek.WEDNESDAY
+            dayLabel = "Wednesday"
         ),
         TopDayItem(
             habitId = 1,
             name = "Workout",
             count = 3,
-            day = DayOfWeek.SATURDAY
+            dayLabel = "Saturday"
         )
     )
 

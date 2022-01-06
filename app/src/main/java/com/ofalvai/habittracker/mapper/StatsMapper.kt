@@ -23,6 +23,7 @@ import com.ofalvai.habittracker.persistence.entity.HabitTopDay
 import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
 import com.ofalvai.habittracker.ui.model.*
 import java.time.*
+import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 import java.util.*
@@ -109,11 +110,13 @@ fun mapHabitActionCount(entity: HabitActionCount, now: LocalDate): TopHabitItem 
     )
 }
 
-fun mapHabitTopDay(entity: HabitTopDay): TopDayItem {
+fun mapHabitTopDay(entity: HabitTopDay, locale: Locale): TopDayItem {
     return TopDayItem(
         habitId = entity.habit_id,
         name = entity.name,
-        day = entity.top_day_of_week,
+        dayLabel = if (entity.action_count_on_day == 0) "–" else {
+            entity.top_day_of_week.getDisplayName(TextStyle.FULL, locale)
+        },
         count = entity.action_count_on_day
     )
 }

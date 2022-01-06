@@ -110,7 +110,7 @@
     <string name="insights_tophabits_navigate">Navigate to %s</string>
     <string name="insights_tophabits_see_all">See all</string>
     <string name="insights_tophabits_error">Failed to load top habits</string>
-    <string name="insights_tophabits_empty_label">Add more habits and complete them at least once to see their success rate here.</string>
+    <string name="insights_tophabits_empty_label">Create more habits and complete them at least once to see your success rate here.</string>
     <string name="insights_topdays_title">Top days</string>
     <string name="insights_topdays_description">Your most successful days. The list shows the day of week when each habit is performed most often and the number of completed habits on those days.</string>
     <string name="insights_topdays_error">Failed to load top days</string>

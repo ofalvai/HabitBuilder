@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
+import java.util.*
 
 class InsightsViewModel(
     private val habitDao: HabitDao,
@@ -111,7 +112,7 @@ class InsightsViewModel(
         try {
             habitTopDays.value = habitDao
                 .getTopDayForHabits()
-                .map { mapHabitTopDay(it) }
+                .map { mapHabitTopDay(it, Locale.getDefault()) }
                 .let { Result.Success(it) }
         } catch (e: Throwable) {
             telemetry.logNonFatal(e)

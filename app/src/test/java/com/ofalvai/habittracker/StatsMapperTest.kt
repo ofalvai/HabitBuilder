@@ -18,13 +18,12 @@ package com.ofalvai.habittracker
 
 import com.ofalvai.habittracker.mapper.mapHabitActionCount
 import com.ofalvai.habittracker.mapper.mapHabitSingleStats
+import com.ofalvai.habittracker.mapper.mapHabitTopDay
 import com.ofalvai.habittracker.mapper.mapSumActionCountByDay
-import com.ofalvai.habittracker.persistence.entity.ActionCompletionRate
-import com.ofalvai.habittracker.persistence.entity.ActionCountByWeek
-import com.ofalvai.habittracker.persistence.entity.HabitActionCount
-import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
+import com.ofalvai.habittracker.persistence.entity.*
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.SingleStats
+import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.model.TopHabitItem
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -531,5 +530,55 @@ class StatsMapperTest {
             completionRate = 0.5714285714f
         )
         assertEquals(expected, singleStats)
+    }
+
+    @Test
+    fun `Given habit top days and locale When mapped Then weekday representation is correct`() {
+        // Given
+        val locale = Locale.US
+        val topDays = listOf(
+            HabitTopDay(0, "Sunday habit", DayOfWeek.SUNDAY, 2),
+            HabitTopDay(0, "Monday habit", DayOfWeek.MONDAY, 13),
+            HabitTopDay(0, "Tuesday habit", DayOfWeek.TUESDAY, 3),
+            HabitTopDay(0, "Wednesday habit", DayOfWeek.WEDNESDAY, 234),
+            HabitTopDay(0, "Thursday habit", DayOfWeek.THURSDAY, 2),
+            HabitTopDay(0, "Friday habit", DayOfWeek.FRIDAY, 6),
+            HabitTopDay(0, "Saturday habit", DayOfWeek.SATURDAY, 1),
+            HabitTopDay(0, "Empty habit", DayOfWeek.SUNDAY, 0),
+        )
+
+        // When + then
+        assertEquals(
+            TopDayItem(0, "Sunday habit", "Sunday", 2),
+            mapHabitTopDay(topDays[0], locale)
+        )
+        assertEquals(
+            TopDayItem(0, "Monday habit", "Monday", 13),
+            mapHabitTopDay(topDays[1], locale)
+        )
+        assertEquals(
+            TopDayItem(0, "Tuesday habit", "Tuesday", 3),
+            mapHabitTopDay(topDays[2], locale)
+        )
+        assertEquals(
+            TopDayItem(0, "Wednesday habit", "Wednesday", 234),
+            mapHabitTopDay(topDays[3], locale)
+        )
+        assertEquals(
+            TopDayItem(0, "Thursday habit", "Thursday", 2),
+            mapHabitTopDay(topDays[4], locale)
+        )
+        assertEquals(
+            TopDayItem(0, "Friday habit", "Friday", 6),
+            mapHabitTopDay(topDays[5], locale)
+        )
+        assertEquals(
+            TopDayItem(0, "Saturday habit", "Saturday", 1),
+            mapHabitTopDay(topDays[6], locale)
+        )
+        assertEquals(
+            TopDayItem(0, "Empty habit", "–", 0),
+            mapHabitTopDay(topDays[7], locale)
+        )
     }
 }

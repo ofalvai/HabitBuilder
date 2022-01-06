@@ -17,7 +17,6 @@
 package com.ofalvai.habittracker.ui.model
 
 import androidx.annotation.FloatRange
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
@@ -82,6 +81,6 @@ data class TopHabitItem(
 data class TopDayItem(
     val habitId: HabitId,
     val name: String,
-    val day: DayOfWeek,
+    val dayLabel: String,
     val count: Int
 )
