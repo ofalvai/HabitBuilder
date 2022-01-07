@@ -102,7 +102,7 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
             label = stringResource(R.string.dashboard_error),
             modifier = Modifier.statusBarsPadding()
         )
-        Result.Loading -> { }
+        Result.Loading -> {}
     }
 }
 
@@ -140,23 +140,23 @@ private fun LoadedDashboard(
     onArchiveClick: () -> Unit,
     onMove: (ItemMoveEvent) -> Unit
 ) {
-    ContentWithPlaceholder(
-        showPlaceholder = habits.isEmpty(),
-        placeholder = { DashboardPlaceholder(onAddHabitClick, onAboutClick, onArchiveClick, onConfigClick) }
-    ) {
-        Column(
-            Modifier.fillMaxSize().statusBarsPadding()
+    Column(Modifier.fillMaxSize().statusBarsPadding()) {
+        DashboardAppBar(onConfigClick, onAboutClick, onArchiveClick)
+
+        if (onboardingState != null) {
+            Onboarding(onboardingState)
+        }
+
+        ContentWithPlaceholder(
+            showPlaceholder = habits.isEmpty(),
+            placeholder = { DashboardPlaceholder(onAddHabitClick) }
         ) {
-            DashboardAppBar(onConfigClick, onAboutClick, onArchiveClick)
-
-            if (onboardingState != null) {
-                Onboarding(onboardingState)
-            }
-
             Crossfade(targetState = config) {
                 when (it) {
                     DashboardConfig.FiveDay -> {
-                        FiveDayHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick, onMove)
+                        FiveDayHabitList(
+                            habits, onActionToggle, onHabitDetail, onAddHabitClick, onMove
+                        )
                     }
                     DashboardConfig.Compact -> {
                         CompactHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
@@ -197,12 +197,7 @@ private fun DashboardAppBar(
 }
 
 @Composable
-private fun DashboardPlaceholder(
-    onAddHabitClick: () -> Unit,
-    onAboutClick: () -> Unit,
-    onArchiveClick: () -> Unit,
-    onConfigClick: () -> Unit,
-) {
+private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -210,8 +205,6 @@ private fun DashboardPlaceholder(
             .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DashboardAppBar(onConfigClick, onAboutClick, onArchiveClick)
-
         Spacer(Modifier.padding(top = 32.dp))
 
         Image(

@@ -140,4 +140,13 @@
     <string name="archive_action_unarchive">Unarchive</string>
     <string name="archive_action_delete">Delete</string>
     <string name="archive_empty">You can archive habits that are on pause or no longer relevant. Navigate to the habit edit screen, then tap Archive.\n\nArchived habits can be later unarchived or deleted permanently.</string>
+
+    <string name="onboarding_step_create_title">Your first habit</string>
+    <string name="onboarding_step_create_subtitle">Your habits will be listed here. Now, create your first habit.</string>
+    <string name="onboarding_step_logpress_title">Long press today\'s circle</string>
+    <string name="onboarding_step_logpress_subtitle">Mark the habit as completed for today. You will see a nice streak of progress after a few days.</string>
+    <string name="onboarding_step_details_title">Habit details</string>
+    <string name="onboarding_step_details_subtitle">Tap on a habit to see more details.</string>
+    <string name="onboarding_step_insights_title">Tap Insights on the bottom</string>
+    <string name="onboarding_step_insights_subtitle">See your progress once you create more habits and practice them every day. Use the charts and statistics to analyze your progress.</string>
 </resources>

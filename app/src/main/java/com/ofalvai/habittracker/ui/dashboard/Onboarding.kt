@@ -16,17 +16,69 @@
 
 package com.ofalvai.habittracker.ui.dashboard
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProgressIndicatorDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.ofalvai.habittracker.ui.model.OnboardingState
+import com.ofalvai.habittracker.ui.theme.surfaceVariant
+import kotlin.math.roundToInt
 
 @Composable
 fun Onboarding(state: OnboardingState) {
-    Column {
-        Text(text = state.totalSteps.toString())
-        Text(text = state.step.index.toString())
-        Text(text = state.step.title)
-        Text(text = state.step.subtitle)
+    Box(
+        modifier = Modifier
+            .animateContentSize(animationSpec = tween(500))
+            .padding(16.dp)
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
+            .padding(16.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            val progress = state.step.index / state.totalSteps.toFloat()
+            val animatedProgress by animateFloatAsState(
+                targetValue = progress,
+                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+            )
+            Box(Modifier.size(48.dp)) {
+                CircularProgressIndicator(
+                    progress = 1f,
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.surface
+                )
+                CircularProgressIndicator(
+                    progress = animatedProgress,
+                    modifier = Modifier.fillMaxSize()
+                )
+                Text(
+                    text = "${(progress * 100).roundToInt()}%",
+                    modifier = Modifier.align(Alignment.Center),
+                    style = MaterialTheme.typography.caption
+                )
+            }
+
+            Column(Modifier.padding(start = 24.dp)) {
+                Text(
+                    text = stringResource(state.step.title),
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = stringResource(state.step.subtitle),
+                    style = MaterialTheme.typography.body2
+                )
+            }
+        }
     }
 }

@@ -16,10 +16,37 @@
 
 package com.ofalvai.habittracker.ui.dashboard
 
+import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.model.OnboardingState
-import com.ofalvai.habittracker.ui.model.OnboardingSteps
+import com.ofalvai.habittracker.ui.model.Step
 import kotlinx.coroutines.flow.MutableStateFlow
+
+object OnboardingData {
+    val steps = listOf(
+            Step(
+                index = 0,
+                title = R.string.onboarding_step_create_title,
+                subtitle = R.string.onboarding_step_create_subtitle
+            ),
+            Step(
+                index = 1,
+                title = R.string.onboarding_step_logpress_title,
+                subtitle = R.string.onboarding_step_logpress_subtitle
+            ),
+            Step(
+                index = 2,
+                title = R.string.onboarding_step_details_title,
+                subtitle = R.string.onboarding_step_details_subtitle
+            ),
+            Step(
+                index = 3,
+                title = R.string.onboarding_step_insights_title,
+                subtitle = R.string.onboarding_step_insights_subtitle
+            )
+        )
+    val totalSteps = steps.size
+}
 
 class OnboardingManager(
     private val appPreferences: AppPreferences
@@ -64,13 +91,13 @@ class OnboardingManager(
 
     private fun currentState(): OnboardingState? {
         return if (!firstHabitCreated) {
-            OnboardingState(step = OnboardingSteps[0], totalSteps = OnboardingSteps.size)
+            OnboardingState(step = OnboardingData.steps[0], totalSteps = OnboardingData.totalSteps)
         } else if (!firstActionCompleted) {
-            OnboardingState(step = OnboardingSteps[1], totalSteps = OnboardingSteps.size)
+            OnboardingState(step = OnboardingData.steps[1], totalSteps = OnboardingData.totalSteps)
         } else if (!habitDetailsOpened) {
-            OnboardingState(step = OnboardingSteps[2], totalSteps = OnboardingSteps.size)
+            OnboardingState(step = OnboardingData.steps[2], totalSteps = OnboardingData.totalSteps)
         } else if (!insightsOpened) {
-            OnboardingState(step = OnboardingSteps[3], totalSteps = OnboardingSteps.size)
+            OnboardingState(step = OnboardingData.steps[3], totalSteps = OnboardingData.totalSteps)
         } else {
             null
         }

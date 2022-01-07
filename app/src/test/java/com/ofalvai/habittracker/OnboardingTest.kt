@@ -18,9 +18,9 @@ package com.ofalvai.habittracker
 
 import app.cash.turbine.test
 import com.ofalvai.habittracker.ui.AppPreferences
+import com.ofalvai.habittracker.ui.dashboard.OnboardingData
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.model.OnboardingState
-import com.ofalvai.habittracker.ui.model.OnboardingSteps
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
@@ -47,7 +47,7 @@ class OnboardingTest {
 
         // Then
         onboardingManager.state.test {
-            val expected = OnboardingState(step = OnboardingSteps[0], totalSteps = OnboardingSteps.size)
+            val expected = OnboardingState(step = OnboardingData.steps[0], totalSteps = OnboardingData.totalSteps)
             assertEquals(expected, awaitItem())
             expectNoEvents()
         }
@@ -81,21 +81,21 @@ class OnboardingTest {
         // Then
         launch { // https://github.com/cashapp/turbine/issues/33
             onboardingManager.state.test {
-                val expected1 = OnboardingState(step = OnboardingSteps[0], totalSteps = OnboardingSteps.size)
+                val expected1 = OnboardingState(step = OnboardingData.steps[0], totalSteps = OnboardingData.totalSteps)
                 assertEquals(expected1, awaitItem())
 
                 onboardingManager.firstHabitCreated()
-                val expected2 = expected1.copy(step = OnboardingSteps[1])
+                val expected2 = expected1.copy(step = OnboardingData.steps[1])
                 assertEquals(expected2, awaitItem())
                 verify(appPreferences).onboardingFirstHabitCreated = true
 
                 onboardingManager.firstActionCompleted()
-                val expected3 = expected1.copy(step = OnboardingSteps[2])
+                val expected3 = expected1.copy(step = OnboardingData.steps[2])
                 assertEquals(expected3, awaitItem())
                 verify(appPreferences).onboardingFirstActionCompleted = true
 
                 onboardingManager.habitDetailsOpened()
-                val expected4 = expected1.copy(step = OnboardingSteps[3])
+                val expected4 = expected1.copy(step = OnboardingData.steps[3])
                 assertEquals(expected4, awaitItem())
                 verify(appPreferences).onboardingHabitDetailsOpened = true
 
@@ -119,7 +119,7 @@ class OnboardingTest {
 
         // Then
         onboardingManager.state.test {
-            val expected = OnboardingState(step = OnboardingSteps[1], totalSteps = OnboardingSteps.size)
+            val expected = OnboardingState(step = OnboardingData.steps[1], totalSteps = OnboardingData.totalSteps)
             assertEquals(expected, awaitItem())
             expectNoEvents()
         }
@@ -136,7 +136,7 @@ class OnboardingTest {
 
         // Then
         onboardingManager.state.test {
-            val expected = OnboardingState(step = OnboardingSteps[1], totalSteps = OnboardingSteps.size)
+            val expected = OnboardingState(step = OnboardingData.steps[1], totalSteps = OnboardingData.totalSteps)
             assertEquals(expected, awaitItem())
             expectNoEvents()
         }
@@ -154,23 +154,23 @@ class OnboardingTest {
         // Then
         launch { // https://github.com/cashapp/turbine/issues/33
             onboardingManager.state.test {
-                val expected1 = OnboardingState(step = OnboardingSteps[0], totalSteps = OnboardingSteps.size)
+                val expected1 = OnboardingState(step = OnboardingData.steps[0], totalSteps = OnboardingData.totalSteps)
                 assertEquals(expected1, awaitItem())
 
                 onboardingManager.firstHabitCreated()
-                val expected2 = expected1.copy(step = OnboardingSteps[1])
+                val expected2 = expected1.copy(step = OnboardingData.steps[1])
                 assertEquals(expected2, awaitItem())
                 verify(appPreferences).onboardingFirstHabitCreated = true
 
                 // Habit detail is opened before action completion
                 onboardingManager.habitDetailsOpened()
-                val expected3 = expected1.copy(step = OnboardingSteps[1])
+                val expected3 = expected1.copy(step = OnboardingData.steps[1])
                 assertEquals(expected3, awaitItem())
                 verify(appPreferences).onboardingHabitDetailsOpened = true
 
                 // Completing action, skipping the complete action step in onboarding
                 onboardingManager.firstActionCompleted()
-                val expected4 = expected1.copy(step = OnboardingSteps[3])
+                val expected4 = expected1.copy(step = OnboardingData.steps[3])
                 assertEquals(expected4, awaitItem())
                 verify(appPreferences).onboardingFirstActionCompleted = true
 
@@ -191,16 +191,16 @@ class OnboardingTest {
         // Then
         launch { // https://github.com/cashapp/turbine/issues/33
             onboardingManager.state.test {
-                val expected = OnboardingState(step = OnboardingSteps[1], totalSteps = OnboardingSteps.size)
+                val expected = OnboardingState(step = OnboardingData.steps[1], totalSteps = OnboardingData.totalSteps)
                 assertEquals(expected, awaitItem())
 
                 // Insights opened before action completion
                 onboardingManager.insightsOpened()
-                assertEquals(expected.copy(step = OnboardingSteps[1]), awaitItem())
+                assertEquals(expected.copy(step = OnboardingData.steps[1]), awaitItem())
                 verify(appPreferences).onboardingInsightsOpened = true
 
                 onboardingManager.firstActionCompleted()
-                assertEquals(expected.copy(step = OnboardingSteps[2]), awaitItem())
+                assertEquals(expected.copy(step = OnboardingData.steps[2]), awaitItem())
                 verify(appPreferences).onboardingFirstActionCompleted = true
 
                 // Opening habit details, next state is null because Insights is already visited

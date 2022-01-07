@@ -16,36 +16,15 @@
 
 package com.ofalvai.habittracker.ui.model
 
+typealias StringRes = Int
+
 data class Step(
     val index: Int,
-    val title: String,
-    val subtitle: String
+    val title: StringRes,
+    val subtitle: StringRes
 )
 
 data class OnboardingState(
     val step: Step,
     val totalSteps: Int
-)
-
-val OnboardingSteps = listOf(
-    Step(
-        index = 0,
-        title = "Create your first habit",
-        subtitle = ""
-    ),
-    Step(
-        index = 1,
-        title = "Long press a circle to complete",
-        subtitle = ""
-    ),
-    Step(
-        index = 2,
-        title = "Open a habit for more details",
-        subtitle = ""
-    ),
-    Step(
-        index = 3,
-        title = "Check out the insights",
-        subtitle = ""
-    )
 )
