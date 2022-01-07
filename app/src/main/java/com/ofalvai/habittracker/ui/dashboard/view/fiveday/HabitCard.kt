@@ -67,13 +67,21 @@ fun HabitCard(
     dragOffset: Float,
     modifier: Modifier = Modifier
 ) {
+    val isDragging = dragOffset != 0f
+    val backgroundColor = if (isDragging) {
+        MaterialTheme.colors.surface
+    } else {
+        habit.color.composeColor.copy(alpha = 0.1f)
+    }
     Card(
         onClick = { onDetailClick(habit) },
-        elevation = if (dragOffset == 0f) 2.dp else 8.dp,
+        elevation = 0.dp,
         shape = RoundedCornerShape(16.dp),
+        backgroundColor = backgroundColor,
+        border = if (isDragging) BorderStroke(1.dp, habit.color.composeColor) else null,
         modifier = modifier
-            .fillMaxWidth()
             .padding(horizontal = 16.dp)
+            .fillMaxWidth()
             .draggableCard(dragOffset),
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
