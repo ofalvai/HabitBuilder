@@ -159,7 +159,9 @@ private fun LoadedDashboard(
                         )
                     }
                     DashboardConfig.Compact -> {
-                        CompactHabitList(habits, onActionToggle, onHabitDetail, onAddHabitClick)
+                        CompactHabitList(
+                            habits, onActionToggle, onHabitDetail, onAddHabitClick, onMove
+                        )
                     }
                 }
             }

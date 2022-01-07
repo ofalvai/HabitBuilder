@@ -16,18 +16,18 @@
 
 package com.ofalvai.habittracker.ui.dashboard.view.compact
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ofalvai.habittracker.ui.dashboard.view.CreateHabitButton
+import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
 import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
+import com.ofalvai.habittracker.ui.dashboard.view.ReorderableHabitList
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.model.HabitWithActions
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import java.time.LocalDate
 
 @Composable
@@ -35,7 +35,8 @@ fun CompactHabitList(
     habits: List<HabitWithActions>,
     onActionToggle: (Action, Habit, Int) -> Unit,
     onHabitClick: (Habit) -> Unit,
-    onAddHabitClick: () -> Unit
+    onAddHabitClick: () -> Unit,
+    onMove: (ItemMoveEvent) -> Unit,
 ) {
     Column {
         DayLegend(
@@ -44,20 +45,19 @@ fun CompactHabitList(
             pastDayCount = Constants.DAY_COUNT - 1
         )
 
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = 48.dp)
-        ) {
-            items(habits.size) { index ->
-                HabitItem(
-                    habit = habits[index].habit,
-                    actions = habits[index].actions.takeLast(Constants.DAY_COUNT),
-                    onActionToggle = onActionToggle,
-                    onDetailClick = onHabitClick
-                )
-            }
-            item {
-                CreateHabitButton(onClick = onAddHabitClick)
-            }
+        ReorderableHabitList(
+            habits, Arrangement.Top, onMove, onAddHabitClick
+        ) { item, reorderState ->
+            HabitItem(
+                habit = item.habit,
+                actions = item.actions.takeLast(Constants.DAY_COUNT),
+                onActionToggle = onActionToggle,
+                onDetailClick = onHabitClick,
+                // Null and 0 drag offset is intentionally treated as the same because dragging
+                // is using the same gesture detection as the long-press Action toggle modifier
+                dragOffset = reorderState.offsetByKey(item.habit.id) ?: 0f,
+                modifier = Modifier.detectReorderAfterLongPress(reorderState)
+            )
         }
     }
 }

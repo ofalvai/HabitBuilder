@@ -31,11 +31,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.HorizontalGrid
@@ -51,12 +53,15 @@ fun HabitItem(
     habit: Habit,
     actions: List<Action>,
     onActionToggle: (Action, Habit, Int) -> Unit,
-    onDetailClick: (Habit) -> Unit
+    onDetailClick: (Habit) -> Unit,
+    dragOffset: Float,
+    modifier: Modifier = Modifier
 ) {
-
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
+            .draggableCard(dragOffset)
+            .background(MaterialTheme.colors.background)
             .clickable(onClick = { onDetailClick(habit) })
             .padding(top = 4.dp)
     ) {
@@ -156,3 +161,11 @@ private fun Color.darken() = this.copy(
     green = this.green * 0.85f,
     blue = this.blue * 0.85f
 )
+
+private fun Modifier.draggableCard(
+    offset: Float
+): Modifier = this
+    .zIndex(if (offset == 0f) 0f else 1f)
+    .graphicsLayer {
+        translationY = if (offset == 0f) 0f else offset
+    }
