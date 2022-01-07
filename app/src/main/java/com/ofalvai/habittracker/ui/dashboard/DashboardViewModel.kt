@@ -37,7 +37,8 @@ import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWith
 
 enum class DashboardEvent {
     ToggleActionError,
-    MoveHabitError
+    MoveHabitError,
+    ActionPerformed
 }
 
 /**
@@ -89,6 +90,10 @@ class DashboardViewModel(
     fun toggleAction(habitId: Int, action: Action, daysInPast: Int) {
         viewModelScope.launch {
             try {
+                if (action.toggled) {
+                    eventChannel.send(DashboardEvent.ActionPerformed)
+                }
+
                 val date = LocalDate.now().minusDays(daysInPast.toLong())
                 actionRepository.toggleAction(habitId, action, date)
                 onboardingManager.firstActionCompleted()

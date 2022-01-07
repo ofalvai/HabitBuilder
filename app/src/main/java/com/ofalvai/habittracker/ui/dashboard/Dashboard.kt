@@ -44,6 +44,8 @@ import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,17 +58,7 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
     val onboardingState by viewModel.onboardingState.collectAsState()
 
     val snackbarCoroutineScope = rememberCoroutineScope()
-    val errorToggleAction = stringResource(R.string.dashboard_error_toggle_action)
-    val errorItemMove = stringResource(R.string.dashboard_error_item_move)
-    viewModel.dashboardEvent.asEffect {
-        val errorMessage = when (it) {
-            DashboardEvent.ToggleActionError -> errorToggleAction
-            DashboardEvent.MoveHabitError -> errorItemMove
-        }
-        snackbarCoroutineScope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
-        }
-    }
+    DisplaySnackbarEvents(viewModel.dashboardEvent, snackbarCoroutineScope, scaffoldState)
 
     val onActionToggle: (Action, Habit, Int) -> Unit = { action, habit, daysInPast ->
         viewModel.toggleAction(habit.id, action, daysInPast)
@@ -111,6 +103,27 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
             modifier = Modifier.statusBarsPadding()
         )
         Result.Loading -> { }
+    }
+}
+
+@Composable
+private fun DisplaySnackbarEvents(
+    dashboardEvent: Flow<DashboardEvent>,
+    snackbarCoroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState
+) {
+    val errorToggleAction = stringResource(R.string.dashboard_error_toggle_action)
+    val errorItemMove = stringResource(R.string.dashboard_error_item_move)
+    val eventAction = stringResource(R.string.dashboard_event_action_performed)
+    dashboardEvent.asEffect {
+        val errorMessage = when (it) {
+            DashboardEvent.ToggleActionError -> errorToggleAction
+            DashboardEvent.MoveHabitError -> errorItemMove
+            DashboardEvent.ActionPerformed -> eventAction
+        }
+        snackbarCoroutineScope.launch {
+            scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
+        }
     }
 }
 
