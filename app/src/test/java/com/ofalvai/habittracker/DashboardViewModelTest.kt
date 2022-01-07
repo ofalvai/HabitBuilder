@@ -173,6 +173,7 @@ class DashboardViewModelTest {
                 viewModel.toggleAction(habitId = 0, action = action, daysInPast = 2)
 
                 // Then
+                assertEquals(DashboardEvent.ActionPerformed, awaitItem())
                 assertEquals(DashboardEvent.ToggleActionError, awaitItem())
                 cancelAndConsumeRemainingEvents()
             }
