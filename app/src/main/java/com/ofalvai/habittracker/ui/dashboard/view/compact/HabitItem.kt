@@ -45,14 +45,12 @@ import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.theme.composeColor
 import com.ofalvai.habittracker.ui.theme.gray1
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 @Composable
 fun HabitItem(
     habit: Habit,
     actions: List<Action>,
-    onActionToggle: (Action, Habit, LocalDate) -> Unit,
+    onActionToggle: (Action, Habit, Int) -> Unit,
     onDetailClick: (Habit) -> Unit
 ) {
 
@@ -88,8 +86,8 @@ fun HabitItem(
             actions = actions,
             habitColor = habit.color,
             onActionToggle = { action, dayIndex ->
-                val date = LocalDate.now().minus((6 - dayIndex).toLong(), ChronoUnit.DAYS) // TODO
-                onActionToggle(action, habit, date)
+                val daysInPast = (Constants.DAY_COUNT - 1 - dayIndex)
+                onActionToggle(action, habit, daysInPast)
             })
     }
 }

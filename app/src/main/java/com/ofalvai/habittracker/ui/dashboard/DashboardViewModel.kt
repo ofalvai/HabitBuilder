@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.repo.ActionRepository
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
@@ -32,10 +33,6 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.OffsetDateTime
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
 
 enum class DashboardEvent {
@@ -55,6 +52,7 @@ data class ItemMoveEvent(
 
 class DashboardViewModel(
     private val dao: HabitDao,
+    private val actionRepository: ActionRepository,
     appPreferences: AppPreferences,
     private val telemetry: Telemetry,
     private val onboardingManager: OnboardingManager
@@ -88,10 +86,11 @@ class DashboardViewModel(
         consumeReorderEvents()
     }
 
-    fun toggleActionFromDashboard(habitId: Int, action: Action, date: LocalDate) {
+    fun toggleAction(habitId: Int, action: Action, daysInPast: Int) {
         viewModelScope.launch {
             try {
-                toggleAction(habitId, action, date)
+                val date = LocalDate.now().minusDays(daysInPast.toLong())
+                actionRepository.toggleAction(habitId, action, date)
                 onboardingManager.firstActionCompleted()
             } catch (e: Throwable) {
                 telemetry.logNonFatal(e)
@@ -126,23 +125,4 @@ class DashboardViewModel(
             }
         }
     }
-
-    // TODO: duplicated across Dashboard + HabitDetails
-    private suspend fun toggleAction(
-        habitId: Int,
-        updatedAction: Action,
-        date: LocalDate,
-    ) {
-        if (updatedAction.toggled) {
-            val newAction = ActionEntity(
-                habit_id = habitId,
-                timestamp = LocalDateTime.of(date, LocalTime.now())
-                    .toInstant(OffsetDateTime.now().offset)
-            )
-            dao.insertAction(newAction)
-        } else {
-            dao.deleteAction(updatedAction.id)
-        }
-    }
-
 }

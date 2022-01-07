@@ -42,7 +42,7 @@ import java.time.LocalDate
 @Composable
 fun FiveDayHabitList(
     habits: List<HabitWithActions>,
-    onActionToggle: (Action, Habit, LocalDate) -> Unit,
+    onActionToggle: (Action, Habit, Int) -> Unit,
     onHabitClick: (Habit) -> Unit,
     onAddHabitClick: () -> Unit,
     onMove: (ItemMoveEvent) -> Unit

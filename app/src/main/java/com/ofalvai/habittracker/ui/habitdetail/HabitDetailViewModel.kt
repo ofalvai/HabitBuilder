@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.mapper.*
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.repo.ActionRepository
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
@@ -31,9 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.OffsetDateTime
 import java.util.*
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 
 private val initialSingleStats = SingleStats(null, 0, 0, 0f)
 private val initialChartData = ActionCountChart(emptyList(), ActionCountChart.Type.Weekly)
@@ -44,6 +43,7 @@ enum class HabitDetailEvent {
 
 class HabitDetailViewModel(
     private val dao: HabitDao,
+    private val actionRepository: ActionRepository,
     private val telemetry: Telemetry,
     onboardingManager: OnboardingManager
 ) : ViewModel() {
@@ -114,9 +114,9 @@ class HabitDetailViewModel(
         }
     }
 
-    fun toggleActionFromDetail(habitId: Int, action: Action, date: LocalDate) {
+    fun toggleAction(habitId: Int, action: Action, date: LocalDate) {
         viewModelScope.launch {
-            toggleAction(habitId, action, date)
+            actionRepository.toggleAction(habitId, action, date)
             fetchHabitDetails(habitId)
             fetchHabitStats(habitId)
         }
@@ -155,22 +155,4 @@ class HabitDetailViewModel(
             telemetry.logNonFatal(e)
         }
     }
-
-    private suspend fun toggleAction(
-        habitId: Int,
-        updatedAction: Action,
-        date: LocalDate,
-    ) {
-        if (updatedAction.toggled) {
-            val newAction = ActionEntity(
-                habit_id = habitId,
-                timestamp = date.atStartOfDay()
-                    .toInstant(OffsetDateTime.now().offset)
-            )
-            dao.insertAction(newAction)
-        } else {
-            dao.deleteAction(updatedAction.id)
-        }
-    }
-
 }

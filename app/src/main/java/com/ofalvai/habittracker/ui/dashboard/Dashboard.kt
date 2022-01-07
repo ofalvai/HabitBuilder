@@ -45,7 +45,6 @@ import com.ofalvai.habittracker.ui.model.*
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 @Composable
 fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) {
@@ -69,8 +68,8 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
         }
     }
 
-    val onActionToggle: (Action, Habit, LocalDate) -> Unit = { action, habit, date ->
-        viewModel.toggleActionFromDashboard(habit.id, action, date)
+    val onActionToggle: (Action, Habit, Int) -> Unit = { action, habit, daysInPast ->
+        viewModel.toggleAction(habit.id, action, daysInPast)
     }
     val onHabitDetail: (Habit) -> (Unit) = {
         navController.navigate(Destination.HabitDetails.buildRoute(it.id))
@@ -122,7 +121,7 @@ private fun LoadedDashboard(
     onboardingState: OnboardingState?,
     onAddHabitClick: () -> Unit,
     onConfigClick: () -> Unit,
-    onActionToggle: (Action, Habit, LocalDate) -> Unit,
+    onActionToggle: (Action, Habit, Int) -> Unit,
     onHabitDetail: (Habit) -> (Unit),
     onAboutClick: () -> Unit,
     onArchiveClick: () -> Unit,

@@ -33,7 +33,7 @@ import java.time.LocalDate
 @Composable
 fun CompactHabitList(
     habits: List<HabitWithActions>,
-    onActionToggle: (Action, Habit, LocalDate) -> Unit,
+    onActionToggle: (Action, Habit, Int) -> Unit,
     onHabitClick: (Habit) -> Unit,
     onAddHabitClick: () -> Unit
 ) {
@@ -41,7 +41,7 @@ fun CompactHabitList(
         DayLegend(
             modifier = Modifier.fillMaxWidth(),
             mostRecentDay = LocalDate.now(),
-            pastDayCount = 6
+            pastDayCount = Constants.DAY_COUNT - 1
         )
 
         LazyColumn(

@@ -78,7 +78,7 @@ fun HabitDetailScreen(habitId: Int, navController: NavController) {
 
     val onDayToggle: (LocalDate, Action) -> Unit = { date, action ->
         vibrator.vibrateCompat(VIBRATE_PATTERN_TOGGLE)
-        viewModel.toggleActionFromDetail(habitId, action, date)
+        viewModel.toggleAction(habitId, action, date)
     }
 
     var showArchiveDialog by remember { mutableStateOf(false) }

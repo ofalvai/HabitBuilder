@@ -53,8 +53,6 @@ import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
 import com.ofalvai.habittracker.ui.theme.gray2
 import java.time.Instant
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import kotlin.random.Random
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -64,7 +62,7 @@ fun HabitCard(
     actions: List<Action>,
     totalActionCount: Int,
     actionHistory: ActionHistory,
-    onActionToggle: (Action, Habit, LocalDate) -> Unit,
+    onActionToggle: (Action, Habit, Int) -> Unit,
     onDetailClick: (Habit) -> Unit,
     dragOffset: Float,
     modifier: Modifier = Modifier
@@ -91,9 +89,8 @@ fun HabitCard(
                 actions = actions.takeLast(Constants.DayCount),
                 habitColor = habit.color,
                 onActionToggle = { action, dayIndex ->
-                    val date = LocalDate.now()
-                        .minus((Constants.DayCount - 1 - dayIndex).toLong(), ChronoUnit.DAYS)
-                    onActionToggle(action, habit, date)
+                    val daysInPast = Constants.DayCount - 1 - dayIndex
+                    onActionToggle(action, habit, daysInPast)
                 }
             )
         }

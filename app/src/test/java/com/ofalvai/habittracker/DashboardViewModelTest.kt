@@ -18,6 +18,7 @@ package com.ofalvai.habittracker
 
 import app.cash.turbine.test
 import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.repo.ActionRepository
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.common.Result
@@ -42,7 +43,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.*
 import java.time.Instant
-import java.time.LocalDate
 import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
 import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
 import com.ofalvai.habittracker.persistence.entity.Habit.Color as ColorEntity
@@ -52,6 +52,7 @@ import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWith
 class DashboardViewModelTest {
 
     private val dao = mock<HabitDao>()
+    private val repo = mock<ActionRepository>()
     private val appPreferences = mock<AppPreferences>()
     private val telemetry = mock<Telemetry>()
     private val onboardingManager = mock<OnboardingManager>()
@@ -114,7 +115,6 @@ class DashboardViewModelTest {
     @Test
     fun `Given observed habit list When a habit is updated Then collector is notified`() = runBlockingTest {
         // Given
-        val dateNow = LocalDate.now()
         val instantNow = Instant.now()
         val mockFlow = MutableSharedFlow<List<HabitWithActionsEntity>>(replay = 0)
         given(dao.getActiveHabitsWithActions()).willReturn(mockFlow)
@@ -147,7 +147,7 @@ class DashboardViewModelTest {
             )
             assertEquals(Result.Success(expectedHabits1), awaitItem())
 
-            viewModel.toggleActionFromDashboard(0, Action(0, true, instantNow), dateNow)
+            viewModel.toggleAction(0, Action(0, true, instantNow), 0)
             mockFlow.emit(modifiedHabitWithActions)
 
             val expectedHabits2 = listOf(
@@ -170,7 +170,7 @@ class DashboardViewModelTest {
         launch { // https://github.com/cashapp/turbine/issues/33
             viewModel.dashboardEvent.test {
                 val action = Action(id = 0, toggled = true, timestamp = Instant.EPOCH)
-                viewModel.toggleActionFromDashboard(habitId = 0, action = action, date = LocalDate.of(2021, 6, 7))
+                viewModel.toggleAction(habitId = 0, action = action, daysInPast = 2)
 
                 // Then
                 assertEquals(DashboardEvent.ToggleActionError, awaitItem())
@@ -328,5 +328,5 @@ class DashboardViewModelTest {
         }
     }
 
-    private fun createViewModel() = DashboardViewModel(dao, appPreferences, telemetry, onboardingManager)
+    private fun createViewModel() = DashboardViewModel(dao, repo, appPreferences, telemetry, onboardingManager)
 }
