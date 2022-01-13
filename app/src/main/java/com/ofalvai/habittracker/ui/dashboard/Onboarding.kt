@@ -30,8 +30,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.ui.model.OnboardingState
+import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.surfaceVariant
 import kotlin.math.roundToInt
 
@@ -80,5 +83,31 @@ fun Onboarding(state: OnboardingState) {
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Dashboard item", group = "Onboarding", styleName = "Initial")
+@Composable
+fun PreviewOnboardingStep1() {
+    HabitTrackerTheme {
+        val state = OnboardingState(
+            step = OnboardingData.steps[0],
+            totalSteps = OnboardingData.totalSteps
+        )
+        Onboarding(state)
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Dashboard item", group = "Onboarding", styleName = "Step 2")
+@Composable
+fun PreviewOnboardingStep2() {
+    HabitTrackerTheme {
+        val state = OnboardingState(
+            step = OnboardingData.steps[1],
+            totalSteps = OnboardingData.totalSteps
+        )
+        Onboarding(state)
     }
 }

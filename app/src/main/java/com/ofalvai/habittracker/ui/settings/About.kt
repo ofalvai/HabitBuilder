@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.BuildConfig
 import com.ofalvai.habittracker.R
@@ -98,12 +99,15 @@ private fun AboutScreen(
         OutlinedButton(onClick = onOpenSourceClick) {
             Text(text = stringResource(R.string.about_button_licenses))
         }
+        Spacer(Modifier.height(16.dp))
+        ShowkaseLauncherButton() // no-op in release build
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "About", group = "Settings")
 @Composable
-private fun PreviewAboutScreen() {
+fun PreviewAboutScreen() {
     HabitTrackerTheme {
         AboutScreen(
             version = "1.0.0 release",

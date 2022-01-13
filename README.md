@@ -37,6 +37,12 @@ TODO
 - More layouts and customization
 - More statistics and charts
 
+## Development
+
+### Gradle tasks
+
+- `analyzeReleaseBundle`: Run Spotify Ruler
+
 ## License
 
 ```

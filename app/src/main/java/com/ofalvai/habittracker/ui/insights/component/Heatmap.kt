@@ -39,10 +39,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
@@ -57,6 +59,7 @@ import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.theme.AppIcons
+import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import com.ofalvai.habittracker.ui.theme.gray2
 import java.time.LocalDate
 import java.time.YearMonth
@@ -78,6 +81,16 @@ fun Heatmap(viewModel: InsightsViewModel) {
         viewModel.fetchHeatmap(yearMonth)
     }
 
+    Heatmap(yearMonth, heatmapState, onPreviousMonth, onNextMonth)
+}
+
+@Composable
+fun Heatmap(
+    yearMonth: YearMonth,
+    heatmapState: Result<HeatmapMonth>,
+    onPreviousMonth: () -> Unit,
+    onNextMonth: () -> Unit
+) {
     InsightCard(
         iconPainter = AppIcons.Heatmap,
         title = stringResource(R.string.insights_heatmap_title),
@@ -94,7 +107,7 @@ fun Heatmap(viewModel: InsightsViewModel) {
 
             when (heatmapState) {
                 is Result.Success -> {
-                    val heatmapData = (heatmapState as Result.Success).value // no smart cast :'(
+                    val heatmapData = heatmapState.value
                     val enoughData = hasEnoughData(heatmapData)
 
                     if (!enoughData) {
@@ -324,5 +337,44 @@ private fun Color.adjustToBucketIndex(index: Int, bucketCount: Int): Color {
         return Color.Transparent
     } else {
         this.copy(alpha = index / bucketCount.toFloat())
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Heatmap", group = "Insights")
+@Composable
+fun PreviewHeatmap() {
+    HabitTrackerTheme {
+        var yearMonth by remember { mutableStateOf(YearMonth.of(2021, 4)) }
+        val heatmapState = Result.Success(
+            HeatmapMonth(
+                yearMonth = yearMonth,
+                dayMap = mapOf(
+                    LocalDate.of(2021, 4, 20) to HeatmapMonth.BucketInfo(2, 2),
+                    LocalDate.of(2021, 4, 21) to HeatmapMonth.BucketInfo(1, 1),
+                    LocalDate.of(2021, 4, 22) to HeatmapMonth.BucketInfo(0, 0),
+                    LocalDate.of(2021, 4, 23) to HeatmapMonth.BucketInfo(3, 3),
+                    LocalDate.of(2021, 4, 24) to HeatmapMonth.BucketInfo(4, 4),
+                ),
+                totalHabitCount = 4,
+                bucketCount = 5,
+                bucketMaxValues = listOf(
+                    0 to 0,
+                    1 to 1,
+                    2 to 2,
+                    3 to 3,
+                    4 to 4
+                )
+            )
+        )
+
+        val onPreviousMonth = {
+            yearMonth = yearMonth.minusMonths(1)
+        }
+        val onNextMonth = {
+            yearMonth = yearMonth.plusMonths(1)
+        }
+
+        Heatmap(yearMonth, heatmapState, onPreviousMonth, onNextMonth)
     }
 }

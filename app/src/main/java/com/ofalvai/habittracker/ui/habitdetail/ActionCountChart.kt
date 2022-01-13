@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.ui.model.ActionCountChart
 import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
 import kotlin.math.max
@@ -68,7 +69,7 @@ fun ActionCountChart(
                     Column(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.Bottom,
-                        ) {
+                    ) {
                         val value = chartItem.value
                         val heightRatio = if (maxValue > 0) value / maxValue.toFloat() else 0f
                         val isEven = index % 2 == 0
@@ -98,30 +99,30 @@ fun ActionCountChart(
     }
 }
 
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Action count chart", group = "Habit details", styleName = "Months")
 @Composable
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
-fun PreviewActionCountChart() {
+fun PreviewActionCountChartMonths() {
     HabitTrackerTheme {
-        Column {
-            ActionCountChart(listOf(
+        ActionCountChart(
+            listOf(
                 ActionCountChart.ChartItem("6", 2021, 15),
                 ActionCountChart.ChartItem("7", 2021, 0),
                 ActionCountChart.ChartItem("8", 2021, 7),
                 ActionCountChart.ChartItem("9", 2021, 5),
                 ActionCountChart.ChartItem("10", 2021, 19)
-            ))
-            ActionCountChart(listOf(
-                ActionCountChart.ChartItem("2", 2021, 0),
-                ActionCountChart.ChartItem("3", 2021, 0),
-                ActionCountChart.ChartItem("4", 2021, 0),
-                ActionCountChart.ChartItem("5", 2021, 0),
-                ActionCountChart.ChartItem("6", 2021, 0),
-                ActionCountChart.ChartItem("7", 2021, 0),
-                ActionCountChart.ChartItem("8", 2021, 0),
-                ActionCountChart.ChartItem("9", 2021, 0),
-                ActionCountChart.ChartItem("10", 2021, 0)
-            ))
-            ActionCountChart(listOf(
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Action count chart", group = "Habit details", styleName = "Weeks")
+@Composable
+fun PreviewActionCountChartMonth() {
+    HabitTrackerTheme {
+        ActionCountChart(
+            listOf(
                 ActionCountChart.ChartItem("W22", 2021, 0),
                 ActionCountChart.ChartItem("W33", 2021, 1),
                 ActionCountChart.ChartItem("W44", 2021, 2),
@@ -131,7 +132,28 @@ fun PreviewActionCountChart() {
                 ActionCountChart.ChartItem("W88", 2021, 6),
                 ActionCountChart.ChartItem("W99", 2021, 7),
                 ActionCountChart.ChartItem("W10", 2021, 8)
-            ))
-        }
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Action count chart", group = "Habit details", styleName = "Empty")
+@Composable
+fun PreviewActionCountChartEmpty() {
+    HabitTrackerTheme {
+        ActionCountChart(
+            listOf(
+                ActionCountChart.ChartItem("2", 2021, 0),
+                ActionCountChart.ChartItem("3", 2021, 0),
+                ActionCountChart.ChartItem("4", 2021, 0),
+                ActionCountChart.ChartItem("5", 2021, 0),
+                ActionCountChart.ChartItem("6", 2021, 0),
+                ActionCountChart.ChartItem("7", 2021, 0),
+                ActionCountChart.ChartItem("8", 2021, 0),
+                ActionCountChart.ChartItem("9", 2021, 0),
+                ActionCountChart.ChartItem("10", 2021, 0)
+            )
+        )
     }
 }

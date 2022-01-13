@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
 import com.ofalvai.habittracker.ui.model.HabitId
@@ -209,9 +210,10 @@ fun Vibrator.vibrateCompat(timings: LongArray, repeat: Int = -1) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Day labels", group = "Dashboard")
 @Composable
-private fun PreviewDayLabels() {
+fun PreviewDayLabels() {
     HabitTrackerTheme {
         DayLegend(
             modifier = Modifier.padding(horizontal = 16.dp),

@@ -78,6 +78,8 @@ android {
     }
 
     testOptions {
+        animationsDisabled = true
+
         unitTests.all {
             jacoco {
                 includeNoLocationClasses = true
@@ -198,6 +200,10 @@ dependencies {
 
     // Required by layout inspector
     debugImplementation libs.kotlin.reflect
+
+    implementation libs.showkase.annotation
+    debugImplementation libs.showkase.full
+    kspDebug libs.showkase.processor
 
     testImplementation libs.junit
     testImplementation libs.kotlin.coroutines.test

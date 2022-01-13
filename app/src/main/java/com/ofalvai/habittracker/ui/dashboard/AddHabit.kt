@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
@@ -194,12 +195,22 @@ private fun SuggestionChip(habit: String, onClick: () -> Unit) {
     }
 }
 
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Form", group = "Add habit")
 @Composable
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 fun PreviewAddHabit() {
     HabitTrackerTheme {
         Column {
             AddHabitForm(onSave = { })
         }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Suggestions", group = "Add habit")
+@Composable
+fun PreviewSuggestions() {
+    HabitTrackerTheme {
+        Suggestions(habits = Suggestions.habits, onSelect = {})
     }
 }

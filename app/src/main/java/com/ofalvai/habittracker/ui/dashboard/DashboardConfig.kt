@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.HorizontalGrid
 import com.ofalvai.habittracker.ui.model.DashboardConfig
@@ -222,9 +223,11 @@ private fun CompactOutlineBox(toggled: Boolean) {
 
 
 @Composable
-@Preview(showBackground = true, widthDp = 300, backgroundColor = 0xFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Config dialog", "Dashboard")
 fun PreviewDialogContent() {
     HabitTrackerTheme {
-        DialogContent(DashboardConfig.FiveDay, {}, {})
+        var config by remember { mutableStateOf(DashboardConfig.FiveDay) }
+        DialogContent(config, { config = it }, {})
     }
 }

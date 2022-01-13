@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.common.ErrorView
@@ -141,9 +142,10 @@ private fun hasEnoughData(days: List<TopDayItem>): Boolean {
     return days.any { it.count >= 2 }
 }
 
-@Preview(showBackground = true, widthDp = 300, backgroundColor = 0xFFFDEDCE)
+@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@ShowkaseComposable(name = "Top days table", group = "Insights")
 @Composable
-private fun PreviewTopDaysTable() {
+fun PreviewTopDaysTable() {
     val topDays = listOf(
         TopDayItem(
             habitId = 1,
