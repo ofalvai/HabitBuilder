@@ -42,10 +42,11 @@ This project is also a testing ground for new technologies/libraries I'd like to
     - [Licensee](https://github.com/cashapp/licensee): 3rd party dependency validation, license report JSON for the Licenses screen
     - [Ruler](https://github.com/spotify/ruler): a Gradle plugin that measures app size and libraries contributing to it
     - [Gradle version catalog](https://github.com/ofalvai/HabitTracker/blob/main/gradle/libs.versions.toml)
+    - [Renovate](https://github.com/ofalvai/HabitTracker/issues/10): Automating dependency update PRs (works with Gradle version catalogs!)
 
 ## Development
 
-### Gradle tasks
+### Notable Gradle tasks
 
 - `analyzeReleaseBundle`: Run Spotify Ruler
 - `licenseeRelease`: Run license check, generate `app/build/reports/licensee/release/artifacts.json`, which should be copied over to `assets/licenses.json`
