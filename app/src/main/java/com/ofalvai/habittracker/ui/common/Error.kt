@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 @Composable
 fun ErrorView(
@@ -54,11 +54,11 @@ fun ErrorView(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Error view", group = "Common")
 @Composable
 fun PreviewErrorView() {
-    HabitTrackerTheme {
+    PreviewTheme {
         Column {
             ErrorView(label = "Failed to add new habit. Please try again.")
         }

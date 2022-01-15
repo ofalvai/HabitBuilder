@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
 import com.ofalvai.habittracker.ui.theme.gray2
 
@@ -150,11 +150,11 @@ fun HabitColor(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Color picker", "Common")
 @Composable
 fun PreviewHabitColorPicker() {
-    HabitTrackerTheme {
+    PreviewTheme {
         var color by remember { mutableStateOf(Habit.Color.Yellow) }
         HabitColorPicker(initialColor = color, onColorPick = { color = it })
     }

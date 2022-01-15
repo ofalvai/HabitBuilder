@@ -351,11 +351,11 @@ private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
     )
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Single stats", group = "Habit details")
 @Composable
 fun PreviewSingleStats() {
-    HabitTrackerTheme {
+    PreviewTheme {
         SingleStatRow(totalCount = 18, weeklyCount = 2, completionRate = 0.423555f)
     }
 }

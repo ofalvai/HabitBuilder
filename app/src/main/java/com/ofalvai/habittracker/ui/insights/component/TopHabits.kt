@@ -47,7 +47,7 @@ import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.TopHabitItem
 import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.gray1
 
 @Composable
@@ -192,7 +192,7 @@ private fun hasEnoughData(habits: List<TopHabitItem>): Boolean {
     return habits.size >= 2
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Top habits table", group = "Insights")
 @Composable
 fun PreviewTopHabitsTable() {
@@ -229,7 +229,7 @@ fun PreviewTopHabitsTable() {
         )
     )
 
-    HabitTrackerTheme {
+    PreviewTheme {
         TopHabitsTable(
             habits = topHabits,
             onHabitClick = {  }

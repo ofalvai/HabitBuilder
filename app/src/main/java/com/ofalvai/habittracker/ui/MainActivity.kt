@@ -53,7 +53,7 @@ import com.ofalvai.habittracker.ui.insights.InsightsScreen
 import com.ofalvai.habittracker.ui.settings.AboutScreen
 import com.ofalvai.habittracker.ui.settings.LicensesScreen
 import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            HabitTrackerTheme {
+            AppTheme {
                 ProvideWindowInsets {
                     val navController = rememberAnimatedNavController()
                     val systemUiController = rememberSystemUiController()

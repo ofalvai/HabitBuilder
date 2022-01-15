@@ -44,7 +44,7 @@ import com.ofalvai.habittracker.ui.common.*
 import com.ofalvai.habittracker.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
 import com.ofalvai.habittracker.ui.model.*
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
 import com.ofalvai.habittracker.ui.theme.surfaceVariant
 import kotlinx.coroutines.cancel
@@ -233,11 +233,11 @@ private fun Modifier.surfaceBackground() = composed {
     this.background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Screen", group = "Habit details")
 @Composable
 fun PreviewHabitDetailScreen() {
-    HabitTrackerTheme {
+    PreviewTheme {
         HabitDetailScreen(
             habitDetailState = Result.Success(
                 HabitWithActions(

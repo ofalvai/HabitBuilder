@@ -59,7 +59,7 @@ import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.gray2
 import java.time.LocalDate
 import java.time.YearMonth
@@ -340,11 +340,11 @@ private fun Color.adjustToBucketIndex(index: Int, bucketCount: Int): Color {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Heatmap", group = "Insights")
 @Composable
 fun PreviewHeatmap() {
-    HabitTrackerTheme {
+    PreviewTheme {
         var yearMonth by remember { mutableStateOf(YearMonth.of(2021, 4)) }
         val heatmapState = Result.Success(
             HeatmapMonth(

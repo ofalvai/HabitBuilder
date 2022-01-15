@@ -38,7 +38,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.BuildConfig
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.Destination
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 private const val SOURCE_URL = "https://github.com/ofalvai/HabitTracker"
 private const val MARKET_URL = "market://details?id=${BuildConfig.APPLICATION_ID}"
@@ -104,11 +104,11 @@ private fun AboutScreen(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "About", group = "Settings")
 @Composable
 fun PreviewAboutScreen() {
-    HabitTrackerTheme {
+    PreviewTheme {
         AboutScreen(
             version = "1.0.0 release",
             onRateClick = {},

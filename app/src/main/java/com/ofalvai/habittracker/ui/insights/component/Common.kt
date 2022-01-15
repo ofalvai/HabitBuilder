@@ -33,7 +33,7 @@ import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 @Composable
 fun InsightCard(
@@ -109,11 +109,11 @@ fun EmptyView(label: String) {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Card", group = "Insights")
 @Composable
 fun PreviewInsightCard() {
-    HabitTrackerTheme {
+    PreviewTheme {
         InsightCard(
             modifier = Modifier.padding(16.dp),
             iconPainter = AppIcons.Habits,

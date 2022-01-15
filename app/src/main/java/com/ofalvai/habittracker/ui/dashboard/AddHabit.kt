@@ -47,7 +47,7 @@ import com.ofalvai.habittracker.ui.TextFieldError
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.surfaceVariant
 
 @Composable
@@ -195,22 +195,22 @@ private fun SuggestionChip(habit: String, onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Form", group = "Add habit")
 @Composable
 fun PreviewAddHabit() {
-    HabitTrackerTheme {
+    PreviewTheme {
         Column {
             AddHabitForm(onSave = { })
         }
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Suggestions", group = "Add habit")
 @Composable
 fun PreviewSuggestions() {
-    HabitTrackerTheme {
+    PreviewTheme {
         Suggestions(habits = Suggestions.habits, onSelect = {})
     }
 }

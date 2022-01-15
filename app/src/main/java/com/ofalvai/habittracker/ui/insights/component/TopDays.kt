@@ -44,7 +44,7 @@ import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 @Composable
 fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
@@ -142,7 +142,7 @@ private fun hasEnoughData(days: List<TopDayItem>): Boolean {
     return days.any { it.count >= 2 }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Top days table", group = "Insights")
 @Composable
 fun PreviewTopDaysTable() {
@@ -179,7 +179,7 @@ fun PreviewTopDaysTable() {
         )
     )
 
-    HabitTrackerTheme {
+    PreviewTheme {
         TopDaysTable(
             items = topDays,
             onHabitClick = {  }

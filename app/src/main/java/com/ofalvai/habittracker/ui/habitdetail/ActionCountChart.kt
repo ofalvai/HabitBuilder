@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.ui.model.ActionCountChart
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import kotlin.math.max
 
 private const val MinBarHeight = 0.02f
@@ -59,7 +59,7 @@ fun ActionCountChart(
     ) { items ->
         val maxValue = items.maxByOrNull { it.value }!!.value
         LazyRow(
-            modifier = modifier.height(200.dp),
+            modifier = modifier.height(200.dp).fillMaxWidth(),
             reverseLayout = true
         ) {
             itemsIndexed(items) { index, chartItem ->
@@ -99,11 +99,11 @@ fun ActionCountChart(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Action count chart", group = "Habit details", styleName = "Months")
 @Composable
 fun PreviewActionCountChartMonths() {
-    HabitTrackerTheme {
+    PreviewTheme {
         ActionCountChart(
             listOf(
                 ActionCountChart.ChartItem("6", 2021, 15),
@@ -116,11 +116,11 @@ fun PreviewActionCountChartMonths() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Action count chart", group = "Habit details", styleName = "Weeks")
 @Composable
 fun PreviewActionCountChartMonth() {
-    HabitTrackerTheme {
+    PreviewTheme {
         ActionCountChart(
             listOf(
                 ActionCountChart.ChartItem("W22", 2021, 0),
@@ -137,11 +137,11 @@ fun PreviewActionCountChartMonth() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Action count chart", group = "Habit details", styleName = "Empty")
 @Composable
 fun PreviewActionCountChartEmpty() {
-    HabitTrackerTheme {
+    PreviewTheme {
         ActionCountChart(
             listOf(
                 ActionCountChart.ChartItem("2", 2021, 0),

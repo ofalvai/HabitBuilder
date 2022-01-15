@@ -16,13 +16,14 @@
 
 package com.ofalvai.habittracker.ui.theme
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 private val LightColorPalette = lightColors(
@@ -60,20 +61,40 @@ val shapes = Shapes(
 )
 
 @Composable
-fun HabitTrackerTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
-
+fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colors = colors,
+        colors = if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
         typography = typography,
         shapes = shapes,
-        content = content
+        content = {
+            Box(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                content()
+            }
+        }
     )
 }
+
+@Composable
+fun PreviewTheme(content: @Composable () -> Unit) {
+    val isDark = isSystemInDarkTheme()
+    MaterialTheme(
+        colors = if (isDark) DarkColorPalette else LightColorPalette,
+        typography = typography,
+        shapes = shapes,
+        content = {
+            // Draw a real background around content
+            Box(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                // Workaround for incorrect colors in Showkase dark mode preview
+                val onBackgroundColor = if (isDark) {
+                    DarkColorPalette.onBackground
+                } else {
+                    LightColorPalette.onBackground
+                }
+                CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
+                    content()
+                }
+            }
+        }
+    )
+}
+

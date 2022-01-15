@@ -48,7 +48,7 @@ import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import kotlinx.coroutines.launch
 import java.time.Instant
 
@@ -243,11 +243,11 @@ private fun EmptyView() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Screen", group = "Archive", styleName = "Empty")
 @Composable
 fun PreviewArchiveScreenEmpty() {
-    HabitTrackerTheme {
+    PreviewTheme {
         ArchiveScreen(
             habits = Result.Success(emptyList()),
             showDeleteDialog = false,
@@ -260,11 +260,11 @@ fun PreviewArchiveScreenEmpty() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Screen", group = "Archive", styleName = "Items")
 @Composable
 fun PreviewArchiveScreenItems() {
-    HabitTrackerTheme {
+    PreviewTheme {
         val items = listOf(
             ArchivedHabit(id = 1, name = "Meditation", totalActionCount = 45, lastAction = Instant.ofEpochMilli(1624563468000)),
             ArchivedHabit(id = 2, name = "Yoga", totalActionCount = 0, lastAction = null)

@@ -50,7 +50,7 @@ import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.ActionHistory
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
 import com.ofalvai.habittracker.ui.theme.gray2
 import java.time.Instant
@@ -226,7 +226,7 @@ private fun Modifier.draggableCard(
     }
 
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Fiveday layout", group = "Dashboard")
 @Composable
 fun PreviewHabitCard() {
@@ -252,7 +252,7 @@ fun PreviewHabitCard() {
     }
     val actions2 = actions1.shuffled()
 
-    HabitTrackerTheme {
+    PreviewTheme {
         Column(Modifier.padding(16.dp)) {
             HabitCard(habit1, actions1, 14, ActionHistory.Clean, { _, _, _ -> }, {}, 0f)
             Spacer(modifier = Modifier.height(16.dp))

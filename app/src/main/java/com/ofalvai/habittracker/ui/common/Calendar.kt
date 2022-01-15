@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import java.time.Year
 import java.time.YearMonth
 import java.time.format.TextStyle
@@ -114,11 +114,11 @@ fun CalendarDayLegend() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Pager", group = "Calendar")
 @Composable
 fun PreviewCalendarPager() {
-    HabitTrackerTheme {
+    PreviewTheme {
         var yearMonth by remember { mutableStateOf(YearMonth.of(2022, 1)) }
         CalendarPager(
             yearMonth = yearMonth,
@@ -128,11 +128,11 @@ fun PreviewCalendarPager() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFF5E5)
+@Preview
 @ShowkaseComposable(name = "Day legend", group = "Calendar")
 @Composable
 fun PreviewCalendarDayLegend() {
-    HabitTrackerTheme {
+    PreviewTheme {
         CalendarDayLegend()
     }
 }
