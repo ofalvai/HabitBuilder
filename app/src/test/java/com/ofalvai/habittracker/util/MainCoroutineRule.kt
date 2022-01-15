@@ -16,15 +16,14 @@
 
 package com.ofalvai.habittracker.util
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import kotlin.coroutines.ContinuationInterceptor
 
 /**
  * Sets the main coroutines dispatcher to a [TestCoroutineScope] for unit testing. A
@@ -36,25 +35,13 @@ import kotlin.coroutines.ContinuationInterceptor
  * @get:Rule
  * var mainCoroutineRule = MainCoroutineRule()
  * ```
- *
- * Use it directly as a [TestCoroutineScope]:
- *
- * ```
- * mainCoroutineRule.pauseDispatcher()
- * ...
- * mainCoroutineRule.resumeDispatcher()
- * ...
- * mainCoroutineRule.runBlockingTest { }
- * ...
- *
- * ```
  */
 @ExperimentalCoroutinesApi
-class MainCoroutineRule : TestWatcher(), TestCoroutineScope by TestCoroutineScope() {
+class MainCoroutineRule : TestWatcher() {
 
     override fun starting(description: Description?) {
         super.starting(description)
-        Dispatchers.setMain(this.coroutineContext[ContinuationInterceptor] as CoroutineDispatcher)
+        Dispatchers.setMain(StandardTestDispatcher())
     }
 
     override fun finished(description: Description?) {

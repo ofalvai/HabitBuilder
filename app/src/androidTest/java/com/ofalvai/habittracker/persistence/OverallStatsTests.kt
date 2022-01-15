@@ -23,8 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ofalvai.habittracker.persistence.entity.*
 import com.ofalvai.habittracker.util.BaseInstrumentedTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -69,7 +68,6 @@ class OverallStatsTests : BaseInstrumentedTest() {
 
     private lateinit var habitDao: HabitDao
     private lateinit var db: AppDatabase
-    private val testCoroutineScope = TestCoroutineScope()
 
     @Before
     fun before() {
@@ -85,7 +83,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testActionCountForHabits() = testCoroutineScope.runBlockingTest {
+    fun testActionCountForHabits() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
         habitDao.insertAction(*TestData.actions)
@@ -117,7 +115,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testActionCountForHabitsForOneMonth() = testCoroutineScope.runBlockingTest {
+    fun testActionCountForHabitsForOneMonth() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
         habitDao.insertAction(*TestData.actions)
@@ -137,7 +135,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testActionCountForEmptyHabits() = testCoroutineScope.runBlockingTest {
+    fun testActionCountForEmptyHabits() = runTest {
         // Given
 
         // When
@@ -148,7 +146,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testMostSuccessfulHabits() = testCoroutineScope.runBlockingTest {
+    fun testMostSuccessfulHabits() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
         habitDao.insertAction(*TestData.actions)
@@ -193,7 +191,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testMostSuccessfulEmptyHabits() = testCoroutineScope.runBlockingTest {
+    fun testMostSuccessfulEmptyHabits() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
 
@@ -237,7 +235,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testMostSuccessfulNoHabits() = testCoroutineScope.runBlockingTest {
+    fun testMostSuccessfulNoHabits() = runTest {
         // Given
 
         // When
@@ -248,7 +246,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testMostSuccessfulHabitsWithLimit() = testCoroutineScope.runBlockingTest {
+    fun testMostSuccessfulHabitsWithLimit() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
         habitDao.insertAction(*TestData.actions)
@@ -275,7 +273,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testTopDayForHabits() = testCoroutineScope.runBlockingTest {
+    fun testTopDayForHabits() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
         habitDao.insertAction(*TestData.actions)
@@ -320,7 +318,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testTopDayForEmptyHabits() = testCoroutineScope.runBlockingTest {
+    fun testTopDayForEmptyHabits() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
 
@@ -364,7 +362,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testTopDayForNoHabits() = testCoroutineScope.runBlockingTest {
+    fun testTopDayForNoHabits() = runTest {
         // Given
 
         // When

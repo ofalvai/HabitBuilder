@@ -28,8 +28,7 @@ import com.ofalvai.habittracker.util.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -52,7 +51,7 @@ class InsightsViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     @Test
-    fun `Given habit and actions When ViewModel loads Then habit count and heatmap data are combined into ViewModel state once`() = runBlocking {
+    fun `Given habit and actions When ViewModel loads Then habit count and heatmap data are combined into ViewModel state once`() = runTest {
         // Given
         val habitCountFlow = MutableStateFlow(1)
         given(dao.getTotalHabitCount()).willReturn(habitCountFlow)
@@ -67,14 +66,13 @@ class InsightsViewModelTest {
 
         // Then
         viewModel.heatmapState.test {
-            // First item is Loading, but we only subscribe after the constructor has run
-            // Which executes the fetching in a blocking way
+            assertEquals(Result.Loading, awaitItem())
             assertEquals(1, (awaitItem() as Result.Success).value.totalHabitCount)
         }
     }
 
     @Test
-    fun `Given loaded ViewModel When habit count changes and heatmap reloaded Then ViewModel state is updated once with new habit count`() = runBlocking {
+    fun `Given loaded ViewModel When habit count changes and heatmap reloaded Then ViewModel state is updated once with new habit count`() = runTest {
         // Given
         val habitCountFlow = MutableStateFlow(1)
         given(dao.getTotalHabitCount()).willReturn(habitCountFlow)
@@ -89,6 +87,7 @@ class InsightsViewModelTest {
 
         // Then
         viewModel.heatmapState.test {
+            assertEquals(Result.Loading, awaitItem())
             val loadedState = awaitItem() as Result.Success
             assertEquals(1, loadedState.value.totalHabitCount)
 
@@ -101,7 +100,7 @@ class InsightsViewModelTest {
     }
 
     @Test
-    fun `Given exception in heatmap loading When heatmap data is fetched Then ViewModel state is Failure`() = runBlockingTest {
+    fun `Given exception in heatmap loading When heatmap data is fetched Then ViewModel state is Failure`() = runTest {
         // Given
         val exception = RuntimeException("Mocked exception")
         given(dao.getSumActionCountByDay(any(), any())).willThrow(exception)
@@ -114,8 +113,7 @@ class InsightsViewModelTest {
 
         // Then
         viewModel.heatmapState.test {
-            // First item is Loading, but we only subscribe after the constructor has run
-            // Which executes the fetching in a blocking way
+            assertEquals(Result.Loading, awaitItem())
             assertEquals(Result.Failure(exception), awaitItem())
         }
         viewModel.topHabits.test {
@@ -127,7 +125,7 @@ class InsightsViewModelTest {
     }
 
     @Test
-    fun `Given exception in top habits loading When top habits are fetched Then ViewModel state is Failure`() = runBlockingTest {
+    fun `Given exception in top habits loading When top habits are fetched Then ViewModel state is Failure`() = runTest {
         // Given
         val exception = RuntimeException("Mocked exception")
         given(dao.getSumActionCountByDay(any(), any())).willReturn(emptyList())
@@ -140,8 +138,7 @@ class InsightsViewModelTest {
 
         // Then
         viewModel.topHabits.test {
-            // First item is Loading, but we only subscribe after the constructor has run
-            // Which executes the fetching in a blocking way
+            assertEquals(Result.Loading, awaitItem())
             assertEquals(Result.Failure(exception), awaitItem())
         }
         viewModel.heatmapState.test {
@@ -160,7 +157,7 @@ class InsightsViewModelTest {
     }
 
     @Test
-    fun `Given exception in top days loading When top days are fetched Then ViewModel state is Failure`() = runBlockingTest {
+    fun `Given exception in top days loading When top days are fetched Then ViewModel state is Failure`() = runTest {
         // Given
         val exception = RuntimeException("Mocked exception")
         given(dao.getSumActionCountByDay(any(), any())).willReturn(emptyList())
@@ -173,8 +170,7 @@ class InsightsViewModelTest {
 
         // Then
         viewModel.habitTopDays.test {
-            // First item is Loading, but we only subscribe after the constructor has run
-            // Which executes the fetching in a blocking way
+            assertEquals(Result.Loading, awaitItem())
             assertEquals(Result.Failure(exception), awaitItem())
         }
         viewModel.topHabits.test {

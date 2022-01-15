@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -63,7 +63,7 @@ class DashboardViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     @Test
-    fun `Given habits without actions When VM loaded Then list contains habits with empty history`() = runBlockingTest {
+    fun `Given habits without actions When VM loaded Then list contains habits with empty history`() = runTest {
         // Given
         given(dao.getActiveHabitsWithActions()).willReturn(flowOf(listOf(
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green, 0, false, ""), emptyList()),
@@ -88,7 +88,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given habits and actions in DB When Flow is observed Then collector is notified once`() = runBlockingTest {
+    fun `Given habits and actions in DB When Flow is observed Then collector is notified once`() = runTest {
         // Given
         given(dao.getActiveHabitsWithActions()).willReturn(flowOf((listOf(
             HabitWithActionsEntity(HabitEntity(0, "Meditation", ColorEntity.Green, 0, false, ""), emptyList()),
@@ -113,7 +113,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given observed habit list When a habit is updated Then collector is notified`() = runBlockingTest {
+    fun `Given observed habit list When a habit is updated Then collector is notified`() = runTest {
         // Given
         val instantNow = Instant.now()
         val mockFlow = MutableSharedFlow<List<HabitWithActionsEntity>>(replay = 0)
@@ -160,7 +160,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given exception when toggling action When action is toggled Then error event is sent to UI`() = runBlockingTest {
+    fun `Given exception when toggling action When action is toggled Then error event is sent to UI`() = runTest {
         // Given
         val exception = RuntimeException("Mocked error")
         given(dao.insertAction()).willThrow(exception)
@@ -181,7 +181,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given exception when loading habits When habits are loaded Then ViewModel state is Failure`() = runBlockingTest {
+    fun `Given exception when loading habits When habits are loaded Then ViewModel state is Failure`() = runTest {
         // Given
         val exception = RuntimeException("Mocked error")
         val habitFlow = flow<List<HabitWithActionsEntity>> {
@@ -201,7 +201,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given non-continuous item orders When moving an item Then it is persisted in the DB`() = runBlockingTest {
+    fun `Given non-continuous item orders When moving an item Then it is persisted in the DB`() = runTest {
         // Given
         val habit1 = HabitEntity(id = 1, name = "First habit", color = ColorEntity.Yellow, order = 0, false, "")
         val habit2 = HabitEntity(id = 2, name = "Second habit", color = ColorEntity.Red, order = 9, false, "")
@@ -236,7 +236,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `When moving multiple items Then they are persisted in consistent order to the DB`() = runBlockingTest {
+    fun `When moving multiple items Then they are persisted in consistent order to the DB`() = runTest {
         // Given
         val habit1 = HabitEntity(id = 1, name = "First habit", color = ColorEntity.Yellow, order = 0, false, "")
         val habit2 = HabitEntity(id = 2, name = "Second habit", color = ColorEntity.Red, order = 1, false, "")
@@ -284,7 +284,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given error in handling the event When moving an item Then error is handled and processing continues`() = runBlockingTest {
+    fun `Given error in handling the event When moving an item Then error is handled and processing continues`() = runTest {
         // Given
         val habit1 = HabitEntity(id = 5, name = "First habit", color = ColorEntity.Yellow, order = 0, false, "")
         val habit2 = HabitEntity(id = 6, name = "Second habit", color = ColorEntity.Red, order = 1, false, "")

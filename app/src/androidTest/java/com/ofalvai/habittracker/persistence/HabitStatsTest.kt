@@ -23,8 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ofalvai.habittracker.persistence.entity.*
 import com.ofalvai.habittracker.util.BaseInstrumentedTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -61,10 +60,9 @@ class HabitStatsTest : BaseInstrumentedTest() {
 
     private lateinit var habitDao: HabitDao
     private lateinit var db: AppDatabase
-    private val testCoroutineScope = TestCoroutineScope()
 
     @Before
-    fun before() = testCoroutineScope.runBlockingTest {
+    fun before() = runTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         habitDao = db.habitDao()
@@ -80,7 +78,7 @@ class HabitStatsTest : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testActionCountByWeek() = testCoroutineScope.runBlockingTest {
+    fun testActionCountByWeek() = runTest {
         val actionCountsByWeek = habitDao.getActionCountByWeek(TestData.habit1.id)
 
         val expected = listOf(
@@ -95,14 +93,14 @@ class HabitStatsTest : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testEmptyActionCountByWeek() = testCoroutineScope.runBlockingTest {
+    fun testEmptyActionCountByWeek() = runTest {
         val actionCountsByWeek = habitDao.getActionCountByWeek(TestData.habit4.id)
 
         assertEquals(emptyList<ActionCountByWeek>(), actionCountsByWeek)
     }
 
     @Test
-    fun testActionCountByMonth() = testCoroutineScope.runBlockingTest {
+    fun testActionCountByMonth() = runTest {
         val actionCountByMonth = habitDao.getActionCountByMonth(TestData.habit1.id)
 
         val expected = listOf(
@@ -116,14 +114,14 @@ class HabitStatsTest : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testEmptyActionCountByMonth() = testCoroutineScope.runBlockingTest {
+    fun testEmptyActionCountByMonth() = runTest {
         val actionCountByMonth = habitDao.getActionCountByMonth(TestData.habit4.id)
 
         assertEquals(emptyList<ActionCountByMonth>(), actionCountByMonth)
     }
 
     @Test
-    fun testCompletionRate() = testCoroutineScope.runBlockingTest {
+    fun testCompletionRate() = runTest {
         val completionRate = habitDao.getCompletionRate(TestData.habit1.id)
 
         val expectedCompletion = ActionCompletionRate(
@@ -137,7 +135,7 @@ class HabitStatsTest : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testEmptyCompletionRate() = testCoroutineScope.runBlockingTest {
+    fun testEmptyCompletionRate() = runTest {
         val completionRate = habitDao.getCompletionRate(TestData.habit4.id)
 
         val expectedCompletion = ActionCompletionRate(
@@ -151,7 +149,7 @@ class HabitStatsTest : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testSingleItemCompletionRate() = testCoroutineScope.runBlockingTest {
+    fun testSingleItemCompletionRate() = runTest {
         val completionRate = habitDao.getCompletionRate(TestData.habit2.id)
 
         val expectedCompletion = ActionCompletionRate(
@@ -165,7 +163,7 @@ class HabitStatsTest : BaseInstrumentedTest() {
     }
 
     @Test
-    fun testSingleItemCompletionRateOnSameDay() = testCoroutineScope.runBlockingTest {
+    fun testSingleItemCompletionRateOnSameDay() = runTest {
         val completionRate = habitDao.getCompletionRate(TestData.habit2.id)
 
         val expectedCompletion = ActionCompletionRate(

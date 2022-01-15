@@ -19,11 +19,9 @@ package com.ofalvai.habittracker
 import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.repo.ActionRepository
 import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.util.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
@@ -39,11 +37,8 @@ class ActionRepositoryTest {
 
     private val dao = mock<HabitDao>()
 
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
-
     @Test
-    fun `Given empty habit When action is created Then inserted action date is correct`() = runBlockingTest {
+    fun `Given empty habit When action is created Then inserted action date is correct`() = runTest {
         // Given
         val repo = givenRepo()
         val now = Instant.now()
@@ -71,7 +66,7 @@ class ActionRepositoryTest {
     }
 
     @Test
-    fun `Given habit with action When action is removed Then inserted action date is correct`() = runBlockingTest {
+    fun `Given habit with action When action is removed Then inserted action date is correct`() = runTest {
         // Given
         val repo = givenRepo()
         val now = Instant.now()

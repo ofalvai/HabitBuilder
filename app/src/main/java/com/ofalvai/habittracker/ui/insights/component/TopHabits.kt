@@ -24,8 +24,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -155,7 +153,7 @@ private fun TopHabitsRow(
 
         IconButton(onClick = { onClick(item.habitId) }) {
             Icon(
-                imageVector = Icons.Rounded.KeyboardArrowRight,
+                painter = AppIcons.ChevronRight,
                 contentDescription = stringResource(
                     R.string.insights_tophabits_navigate,
                     item.name

@@ -23,7 +23,7 @@ import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.model.OnboardingState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -37,7 +37,7 @@ class OnboardingTest {
     private val appPreferences = mock<AppPreferences>()
 
     @Test
-    fun `Given empty app state When initialized Then state is first step`() = runBlockingTest {
+    fun `Given empty app state When initialized Then state is first step`() = runTest {
         // Given
         given(appPreferences.onboardingFirstHabitCreated).willReturn(false)
         given(appPreferences.onboardingFirstActionCompleted).willReturn(false)
@@ -54,7 +54,7 @@ class OnboardingTest {
     }
 
     @Test
-    fun `Given completed onboarding When initialized Then state is null`() = runBlockingTest {
+    fun `Given completed onboarding When initialized Then state is null`() = runTest {
         // Given
         given(appPreferences.onboardingFirstHabitCreated).willReturn(true)
         given(appPreferences.onboardingFirstActionCompleted).willReturn(true)
@@ -70,7 +70,7 @@ class OnboardingTest {
     }
 
     @Test
-    fun `Given empty app state When each step is completed Then state is persisted and updated`() = runBlockingTest {
+    fun `Given empty app state When each step is completed Then state is persisted and updated`() = runTest {
         // Given
         given(appPreferences.onboardingFirstHabitCreated).willReturn(false)
         given(appPreferences.onboardingFirstActionCompleted).willReturn(false)
@@ -109,7 +109,7 @@ class OnboardingTest {
     }
 
     @Test
-    fun `Given first habit created When initialized Then state is second step`() = runBlockingTest {
+    fun `Given first habit created When initialized Then state is second step`() = runTest {
         // Given
         given(appPreferences.onboardingFirstHabitCreated).willReturn(true)
         given(appPreferences.onboardingFirstActionCompleted).willReturn(false)
@@ -126,7 +126,7 @@ class OnboardingTest {
     }
 
     @Test
-    fun `Given first habit created but action not completed When initialized Then state is second step`() = runBlockingTest {
+    fun `Given first habit created but action not completed When initialized Then state is second step`() = runTest {
         // Given
         given(appPreferences.onboardingFirstHabitCreated).willReturn(true)
         given(appPreferences.onboardingFirstActionCompleted).willReturn(false)
@@ -143,7 +143,7 @@ class OnboardingTest {
     }
 
     @Test
-    fun `Given empty app state When opening habit details before completing first action Then state is correctly updated`() = runBlockingTest {
+    fun `Given empty app state When opening habit details before completing first action Then state is correctly updated`() = runTest {
         // Given
         given(appPreferences.onboardingFirstHabitCreated).willReturn(false)
         given(appPreferences.onboardingFirstActionCompleted).willReturn(false)
@@ -180,7 +180,7 @@ class OnboardingTest {
     }
 
     @Test
-    fun `Given first habit created When insights opened before anything else Then state is correctly updated`() = runBlockingTest {
+    fun `Given first habit created When insights opened before anything else Then state is correctly updated`() = runTest {
         // Given
         given(appPreferences.onboardingFirstHabitCreated).willReturn(true)
         given(appPreferences.onboardingFirstActionCompleted).willReturn(false)
