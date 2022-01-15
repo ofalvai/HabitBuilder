@@ -11,7 +11,7 @@ buildscript {
         classpath libs.kotlin.gradle
         classpath libs.licensee
         classpath libs.bugsnag.gradle
-        classpath(libs.ruler)
+        classpath libs.ruler
     }
 }
 

@@ -2,7 +2,6 @@
 
 [![Build Status](https://app.bitrise.io/app/46845b0b84193b80/status.svg?token=SHqpol98nJjn_O5hbFPjIg&branch=main)](https://app.bitrise.io/app/46845b0b84193b80)
 [![codecov](https://codecov.io/gh/ofalvai/HabitTracker/branch/main/graph/badge.svg?token=0PGWK5GQ1P)](https://codecov.io/gh/ofalvai/HabitTracker)
-[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B22373%2Fgit%40github.com%3Aofalvai%2FHabitTracker.git.svg?type=small)](https://app.fossa.com/projects/custom%2B22373%2Fgit%40github.com%3Aofalvai%2FHabitTracker.git?ref=badge_small)
 
 TODO Google Play badge
 
@@ -12,30 +11,45 @@ TODO screenshots table
 
 TODO
 
-## Features
+This project is also a testing ground for new technologies/libraries I'd like to test on a moderately complex project.
 
+## Features
 - Keep track of your new habits and see your progress
 - Statistics: aggregate and per-habit stats
   - Per-habit: completion rate, weekly and overall count, streaks
   - Overall: calendar heatmap, top habits, top days for habits
-- Customizable layouts
+- Customizable habit list layout, reorderable list
 - All data is persisted on-device in a database
+- Onboarding hints, habit archive
 
-## Tech stack and architecture
+## 🛠 Built with
 
-- Compose-only UI, no AppCompat dependency
-- Persistence using Room and SQLite
-- Async operations with Kotlin Coroutines and Flow
-- Instrumented tests for persistence and custom SQL queries
-- Unit tests for most of the business logic
+- [Compose-only](https://developer.android.com/jetpack/compose) UI:
+    - Material You-ish design
+    - Light and dark theme
+    - Smooth and delightful animations
+    - no AppCompat dependency, single Activity
+- [Room](https://developer.android.com/training/data-storage/room): for storing data locally
+- [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlinlang.org/docs/flow.html): for async operations
+- Testing:
+    - Unit tests for most of the business logic (ViewModels, mappings, etc.)
+    - Instrumented tests for DB operations
+    - UI tests for some Compose screens
+    - Kotlin Flow testing with [Turbine](https://github.com/cashapp/turbine)
+- [Showkase](https://github.com/airbnb/Showkase): UI component browser in debug builds
+- [Bugnsag](https://www.bugsnag.com/): Crash and error reporting
+- Other interesting bits and integrations:
+    - [Licensee](https://github.com/cashapp/licensee): 3rd party dependency validation, license report JSON for the Licenses screen
+    - [Ruler](https://github.com/spotify/ruler): a Gradle plugin that measures app size and libraries contributing to it
+    - [Gradle version catalog](https://github.com/ofalvai/HabitTracker/blob/main/gradle/libs.versions.toml)
 
+## Development
 
-## Feature roadmap
+### Gradle tasks
 
-- Export data to CSV
-- Customizable reminder notifications
-- More layouts and customization
-- More statistics and charts
+- `analyzeReleaseBundle`: Run Spotify Ruler
+- `licenseeRelease`: Run license check, generate `app/build/reports/licensee/release/artifacts.json`, which should be copied over to `assets/licenses.json`
+- `jacocoTestReport`: Generate test coverage (for unit tests)
 
 ## License
 

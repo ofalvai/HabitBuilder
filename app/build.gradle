@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id("com.spotify.ruler")
+    id 'com.spotify.ruler'
 }
 
 apply plugin: 'com.google.devtools.ksp'
@@ -163,6 +163,7 @@ licensee {
     allowDependency("com.github.kizitonwose", "CalendarView", "1.0.4") {
         because "Artifact declares no licenses, but it's MIT according to GitHub"
     }
+    allowUrl("https://github.com/airbnb/Showkase/blob/master/LICENSE") // https://github.com/airbnb/Showkase/pull/208
 }
 
 // https://www.zacsweers.dev/kapts-hidden-test-costs/
