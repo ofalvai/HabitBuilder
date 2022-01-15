@@ -41,8 +41,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
 import com.ofalvai.habittracker.ui.theme.gray2
 
@@ -50,15 +51,10 @@ enum class ColorPickerState { Default, Selected }
 
 @Composable
 fun HabitColorPicker(
-    initialColor: Habit.Color,
+    color: Habit.Color,
     onColorPick: (Habit.Color) -> Unit
 ) {
     val colors = remember { Habit.Color.values().toList() }
-
-    // Note: state is duplicated to make color picking responsive:
-    // - UI is wired to this local state (otherwise UI would only update after the source of truth (DB) is updated)
-    // - But remember() is invalidated if the outside state (source of truth) changes
-    var color by remember(initialColor) { mutableStateOf(initialColor) }
 
     LazyRow(
         Modifier.padding(vertical = 32.dp).fillMaxWidth(),
@@ -76,10 +72,7 @@ fun HabitColorPicker(
             HabitColor(
                 color = it,
                 transition = transition,
-                onClick = {
-                    color = it
-                    onColorPick(it)
-                }
+                onClick = { onColorPick(it) }
             )
         }
     }
@@ -149,10 +142,12 @@ fun HabitColor(
     }
 }
 
+@Preview
+@ShowkaseComposable(name = "Color picker", "Common")
 @Composable
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 fun PreviewHabitColorPicker() {
-    HabitTrackerTheme {
-        HabitColorPicker(initialColor = Habit.Color.Green, onColorPick = { })
+    PreviewTheme {
+        var color by remember { mutableStateOf(Habit.Color.Yellow) }
+        HabitColorPicker(color = color, onColorPick = { color = it })
     }
 }

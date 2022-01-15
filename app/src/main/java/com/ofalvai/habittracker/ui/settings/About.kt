@@ -33,11 +33,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.BuildConfig
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.Destination
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 private const val SOURCE_URL = "https://github.com/ofalvai/HabitTracker"
 private const val MARKET_URL = "market://details?id=${BuildConfig.APPLICATION_ID}"
@@ -98,13 +99,16 @@ private fun AboutScreen(
         OutlinedButton(onClick = onOpenSourceClick) {
             Text(text = stringResource(R.string.about_button_licenses))
         }
+        Spacer(Modifier.height(16.dp))
+        ShowkaseLauncherButton() // no-op in release build
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview
+@ShowkaseComposable(name = "About", group = "Settings")
 @Composable
-private fun PreviewAboutScreen() {
-    HabitTrackerTheme {
+fun PreviewAboutScreen() {
+    PreviewTheme {
         AboutScreen(
             version = "1.0.0 release",
             onRateClick = {},

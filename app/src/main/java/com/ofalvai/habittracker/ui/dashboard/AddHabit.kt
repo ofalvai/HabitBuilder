@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.ui.dashboard
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -39,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
@@ -46,7 +48,7 @@ import com.ofalvai.habittracker.ui.TextFieldError
 import com.ofalvai.habittracker.ui.common.HabitColorPicker
 import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.surfaceVariant
 
 @Composable
@@ -134,7 +136,7 @@ fun AddHabitForm(
             style = MaterialTheme.typography.caption
         )
 
-        HabitColorPicker(initialColor = color, onColorPick = { color = it })
+        HabitColorPicker(color = color, onColorPick = { color = it })
 
         Button(
             modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
@@ -152,8 +154,8 @@ private fun Suggestions(habits: List<String>, onSelect: (String) -> Unit) {
         contentPadding = PaddingValues(start = 32.dp, end = 32.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(habits.size) { index ->
-            SuggestionChip(habit = habits[index], onClick = { onSelect(habits[index]) })
+        items(habits) {
+            SuggestionChip(habit = it, onClick = { onSelect(it) })
         }
     }
 }
@@ -194,12 +196,22 @@ private fun SuggestionChip(habit: String, onClick: () -> Unit) {
     }
 }
 
+@Preview
+@ShowkaseComposable(name = "Form", group = "Add habit")
 @Composable
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
 fun PreviewAddHabit() {
-    HabitTrackerTheme {
+    PreviewTheme {
         Column {
             AddHabitForm(onSave = { })
         }
+    }
+}
+
+@Preview
+@ShowkaseComposable(name = "Suggestions", group = "Add habit")
+@Composable
+fun PreviewSuggestions() {
+    PreviewTheme {
+        Suggestions(habits = Suggestions.habits, onSelect = {})
     }
 }

@@ -25,8 +25,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,18 +33,20 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.content.getSystemService
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.HorizontalGrid
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.composeColor
-import com.ofalvai.habittracker.ui.theme.gray1
+import com.ofalvai.habittracker.ui.theme.*
+import java.time.Instant
+import kotlin.random.Random
 
 @Composable
 fun HabitItem(
@@ -81,7 +81,7 @@ fun HabitItem(
                 onClick = { onDetailClick(habit) }
             ) {
                 Icon(
-                    Icons.Rounded.KeyboardArrowRight,
+                    AppIcons.ChevronRight,
                     contentDescription = stringResource(R.string.dashboard_item_details)
                 )
             }
@@ -169,3 +169,38 @@ private fun Modifier.draggableCard(
     .graphicsLayer {
         translationY = if (offset == 0f) 0f else offset
     }
+
+@Preview
+@ShowkaseComposable(name = "Compact layout", group = "Dashboard")
+@Composable
+fun PreviewHabitItem() {
+    val habit1 = Habit(
+        id = 1,
+        name = "Meditation",
+        color = Habit.Color.Yellow,
+        notes = ""
+    )
+    val habit2 = Habit(
+        id = 2,
+        name = "Workout",
+        color = Habit.Color.Green,
+        notes = ""
+    )
+
+    val actions1 = (1..7).map {
+        Action(
+            id = it,
+            toggled = Random.Default.nextBoolean(),
+            timestamp = Instant.now()
+        )
+    }
+    val actions2 = actions1.shuffled()
+
+    PreviewTheme {
+        Column(Modifier.padding(16.dp)) {
+            HabitItem(habit1, actions1, { _, _, _ -> }, {}, 0f)
+            Spacer(modifier = Modifier.height(16.dp))
+            HabitItem(habit2, actions2, { _, _, _ -> }, {}, 0f)
+        }
+    }
+}

@@ -44,11 +44,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
 import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.HabitWithActions
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import org.burnoutcrew.reorderable.*
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -209,12 +210,13 @@ fun Vibrator.vibrateCompat(timings: LongArray, repeat: Int = -1) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview
+@ShowkaseComposable(name = "Day labels", group = "Dashboard")
 @Composable
-private fun PreviewDayLabels() {
-    HabitTrackerTheme {
+fun PreviewDayLabels() {
+    PreviewTheme {
         DayLegend(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
             mostRecentDay = LocalDate.now(),
             pastDayCount = 4
         )

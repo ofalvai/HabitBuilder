@@ -22,7 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ofalvai.habittracker.ui.MainActivity
 import com.ofalvai.habittracker.ui.dashboard.AddHabitForm
 import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.util.BaseInstrumentedTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -46,7 +46,7 @@ class AddHabitTest : BaseInstrumentedTest() {
         val onSave: (Habit) -> Unit = {}
 
         composeRule.setContent {
-            HabitTrackerTheme {
+            PreviewTheme {
                 AddHabitForm(onSave)
             }
         }
@@ -59,7 +59,7 @@ class AddHabitTest : BaseInstrumentedTest() {
         val onSave: (Habit) -> Unit = {}
 
         composeRule.setContent {
-            HabitTrackerTheme {
+            PreviewTheme {
                 AddHabitForm(onSave)
             }
         }
@@ -83,7 +83,7 @@ class AddHabitTest : BaseInstrumentedTest() {
         }
 
         composeRule.setContent {
-            HabitTrackerTheme {
+            PreviewTheme {
                 AddHabitForm(onSave)
             }
         }

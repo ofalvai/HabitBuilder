@@ -24,11 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 @Composable
 fun ErrorView(
@@ -48,17 +50,18 @@ fun ErrorView(
         Spacer(Modifier.height(16.dp))
         Text(
             text = label,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.body1,
+            textAlign = TextAlign.Center
         )
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview
+@ShowkaseComposable(name = "Error view", group = "Common")
 @Composable
 fun PreviewErrorView() {
-    HabitTrackerTheme {
+    PreviewTheme {
         Column {
-            ErrorView(label = "Failed to load habits.")
             ErrorView(label = "Failed to add new habit. Please try again.")
         }
     }

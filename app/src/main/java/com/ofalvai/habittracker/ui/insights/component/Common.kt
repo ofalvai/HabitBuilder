@@ -29,10 +29,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 @Composable
 fun InsightCard(
@@ -43,7 +44,7 @@ fun InsightCard(
     content: @Composable () -> Unit
 ) {
     Card(modifier = modifier, elevation = 2.dp) {
-        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
+        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)) {
             InsightHeader(iconPainter, title, description)
 
             content()
@@ -61,20 +62,20 @@ fun InsightHeader(
     Column(Modifier.fillMaxWidth()) {
         var expanded by remember { mutableStateOf(false) }
 
-        Row {
+        Row(Modifier.fillMaxWidth()) {
             Icon(
                 painter = iconPainter,
                 contentDescription = title,
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.align(Alignment.CenterVertically)
             )
             Text(
                 text = title,
                 style = AppTextStyle.insightCardTitle,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 17.dp),
+                modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.CenterVertically),
             )
             IconButton(
                 onClick = { expanded = !expanded },
-                modifier = Modifier.padding(top = 4.dp),
+                modifier = Modifier.align(Alignment.CenterVertically),
             ) {
                 Icon(
                     painter = AppIcons.InfoOutlined,
@@ -108,10 +109,11 @@ fun EmptyView(label: String) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview
+@ShowkaseComposable(name = "Card", group = "Insights")
 @Composable
 fun PreviewInsightCard() {
-    HabitTrackerTheme {
+    PreviewTheme {
         InsightCard(
             modifier = Modifier.padding(16.dp),
             iconPainter = AppIcons.Habits,

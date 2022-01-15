@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.common.ErrorView
@@ -43,7 +44,7 @@ import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 @Composable
 fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
@@ -141,9 +142,10 @@ private fun hasEnoughData(days: List<TopDayItem>): Boolean {
     return days.any { it.count >= 2 }
 }
 
-@Preview(showBackground = true, widthDp = 300, backgroundColor = 0xFFFDEDCE)
+@Preview
+@ShowkaseComposable(name = "Top days table", group = "Insights")
 @Composable
-private fun PreviewTopDaysTable() {
+fun PreviewTopDaysTable() {
     val topDays = listOf(
         TopDayItem(
             habitId = 1,
@@ -177,7 +179,7 @@ private fun PreviewTopDaysTable() {
         )
     )
 
-    HabitTrackerTheme {
+    PreviewTheme {
         TopDaysTable(
             items = topDays,
             onHabitClick = {  }

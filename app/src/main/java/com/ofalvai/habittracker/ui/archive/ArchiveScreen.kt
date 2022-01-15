@@ -32,9 +32,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
@@ -46,7 +48,9 @@ import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.AppTextStyle
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import kotlinx.coroutines.launch
+import java.time.Instant
 
 @Composable
 fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
@@ -67,26 +71,51 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
         }
     }
 
+    val onBack: () -> Unit = { navController.popBackStack() }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var pendingHabitToDelete by remember { mutableStateOf<ArchivedHabit?>(null) }
-    val onDelete: (ArchivedHabit) -> Unit = {
+    val onDeleteRequest: (ArchivedHabit) -> Unit = {
         showDeleteDialog = true
         pendingHabitToDelete = it
     }
-
     val onUnarchive: (ArchivedHabit) -> Unit = { viewModel.unarchiveHabit(it) }
+    val onDeleteDismiss: () -> Unit = {
+        showDeleteDialog = false
+    }
+    val onDeleteConfirm: () -> Unit = {
+        pendingHabitToDelete?.let { viewModel.deleteHabit(it) }
+        pendingHabitToDelete = null
+        showDeleteDialog = false
+    }
 
+    ArchiveScreen(
+        habits,
+        showDeleteDialog,
+        onDeleteDismiss,
+        onDeleteConfirm,
+        onBack,
+        onUnarchive,
+        onDeleteRequest
+    )
+}
+
+@Composable
+private fun ArchiveScreen(
+    habits: Result<List<ArchivedHabit>>,
+    showDeleteDialog: Boolean,
+    onDeleteDismiss: () -> Unit,
+    onDeleteConfirm: () -> Unit,
+    onBack: () -> Unit,
+    onUnarchive: (ArchivedHabit) -> Unit,
+    onDeleteRequest: (ArchivedHabit) -> Unit,
+) {
     ConfirmationDialog(
         showDialog = showDeleteDialog,
         title = stringResource(R.string.archive_delete_title),
         description = stringResource(R.string.archive_delete_description),
         confirmText = stringResource(R.string.archive_delete_confirm),
-        onDismiss = { showDeleteDialog = false },
-        onConfirm = {
-            pendingHabitToDelete?.let { viewModel.deleteHabit(it) }
-            pendingHabitToDelete = null
-            showDeleteDialog = false
-        }
+        onDismiss = onDeleteDismiss,
+        onConfirm = onDeleteConfirm
     )
 
 
@@ -95,7 +124,7 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
             modifier = Modifier.statusBarsPadding(),
             title = { Text(stringResource(R.string.archive_title)) },
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = onBack) {
                     Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
                 }
             },
@@ -106,9 +135,9 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
         when (habits) {
             is Result.Success -> {
                 ArchivedHabitList(
-                    (habits as Result.Success<List<ArchivedHabit>>).value,
+                    habits.value,
                     onUnarchive,
-                    onDelete
+                    onDeleteRequest
                 )
             }
             Result.Loading -> {}
@@ -210,6 +239,44 @@ private fun EmptyView() {
             text = stringResource(R.string.archive_empty),
             style = MaterialTheme.typography.body1,
             textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Preview
+@ShowkaseComposable(name = "Screen", group = "Archive", styleName = "Empty")
+@Composable
+fun PreviewArchiveScreenEmpty() {
+    PreviewTheme {
+        ArchiveScreen(
+            habits = Result.Success(emptyList()),
+            showDeleteDialog = false,
+            onDeleteDismiss = {},
+            onDeleteConfirm = {},
+            onBack = {},
+            onUnarchive = {},
+            onDeleteRequest = {}
+        )
+    }
+}
+
+@Preview
+@ShowkaseComposable(name = "Screen", group = "Archive", styleName = "Items")
+@Composable
+fun PreviewArchiveScreenItems() {
+    PreviewTheme {
+        val items = listOf(
+            ArchivedHabit(id = 1, name = "Meditation", totalActionCount = 45, lastAction = Instant.ofEpochMilli(1624563468000)),
+            ArchivedHabit(id = 2, name = "Yoga", totalActionCount = 0, lastAction = null)
+        )
+        ArchiveScreen(
+            habits = Result.Success(items),
+            showDeleteDialog = false,
+            onDeleteDismiss = {},
+            onDeleteConfirm = {},
+            onBack = {},
+            onUnarchive = {},
+            onDeleteRequest = {}
         )
     }
 }

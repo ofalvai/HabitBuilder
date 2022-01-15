@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.ErrorView
@@ -170,7 +171,7 @@ private fun HabitHeaderEditingContent(
             )
         )
         HabitColorPicker(
-            initialColor = habitDetails.habit.color,
+            color = editingColor,
             onColorPick = { editingColor = it }
         )
     }
@@ -350,10 +351,11 @@ private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
     )
 }
 
-@Preview(showBackground = true, widthDp = 400)
+@Preview
+@ShowkaseComposable(name = "Single stats", group = "Habit details")
 @Composable
-private fun PreviewSingleStats() {
-    HabitTrackerTheme {
+fun PreviewSingleStats() {
+    PreviewTheme {
         SingleStatRow(totalCount = 18, weeklyCount = 2, completionRate = 0.423555f)
     }
 }

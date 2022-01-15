@@ -25,18 +25,17 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowLeft
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.AppIcons
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import java.time.Year
 import java.time.YearMonth
 import java.time.format.TextStyle
@@ -57,7 +56,7 @@ fun CalendarPager(
     ) {
         IconButton(onClick = onPreviousClick) {
             Icon(
-                Icons.Rounded.KeyboardArrowLeft,
+                AppIcons.ChevronLeft,
                 contentDescription = stringResource(R.string.calendar_previous_month)
             )
         }
@@ -79,7 +78,7 @@ fun CalendarPager(
 
         IconButton(onClick = onNextClick) {
             Icon(
-                Icons.Rounded.KeyboardArrowRight,
+                AppIcons.ChevronRight,
                 contentDescription = stringResource(R.string.calendar_next_month)
             )
         }
@@ -113,22 +112,25 @@ fun CalendarDayLegend() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview
+@ShowkaseComposable(name = "Pager", group = "Calendar")
 @Composable
-private fun PreviewCalendarPager() {
-    HabitTrackerTheme {
+fun PreviewCalendarPager() {
+    PreviewTheme {
+        var yearMonth by remember { mutableStateOf(YearMonth.of(2022, 1)) }
         CalendarPager(
-            yearMonth = YearMonth.now(),
-            onPreviousClick = {},
-            onNextClick = {}
+            yearMonth = yearMonth,
+            onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
+            onNextClick = { yearMonth = yearMonth.plusMonths(1) }
         )
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview
+@ShowkaseComposable(name = "Day legend", group = "Calendar")
 @Composable
-private fun PreviewCalendarDayLegend() {
-    HabitTrackerTheme {
+fun PreviewCalendarDayLegend() {
+    PreviewTheme {
         CalendarDayLegend()
     }
 }

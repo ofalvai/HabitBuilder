@@ -37,13 +37,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.*
 import com.ofalvai.habittracker.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
 import com.ofalvai.habittracker.ui.model.*
-import com.ofalvai.habittracker.ui.theme.HabitTrackerTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.theme.composeColor
 import com.ofalvai.habittracker.ui.theme.surfaceVariant
 import kotlinx.coroutines.cancel
@@ -184,7 +185,7 @@ private fun HabitStats(
     chartData: ActionCountChart,
     onStatTypeChange: (ActionCountChart.Type) -> Unit
 ) {
-    Column(Modifier.padding(top = 16.dp).surfaceBackground()) {
+    Column(Modifier.padding(top = 16.dp).fillMaxWidth().surfaceBackground()) {
         Row(Modifier.align(Alignment.End).padding(top = 8.dp, end = 16.dp)) {
             Text(
                 modifier = Modifier.align(CenterVertically),
@@ -232,10 +233,11 @@ private fun Modifier.surfaceBackground() = composed {
     this.background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
 }
 
-@Preview(showBackground = true, widthDp = 400, backgroundColor = 0xFFFDEDCE)
+@Preview
+@ShowkaseComposable(name = "Screen", group = "Habit details")
 @Composable
-private fun PreviewHabitDetailScreen() {
-    HabitTrackerTheme {
+fun PreviewHabitDetailScreen() {
+    PreviewTheme {
         HabitDetailScreen(
             habitDetailState = Result.Success(
                 HabitWithActions(
