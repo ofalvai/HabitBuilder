@@ -3,7 +3,7 @@ kotlin = "1.6.10"
 compose = "1.1.0-rc01"
 room = "2.4.0"
 accompanist = "0.22.0-rc"
-showkase = "1.0.0-beta10"
+showkase = "1.0.0-kotlin1.5.30-1"
 
 [plugins]
 ksp = "com.google.devtools.ksp:1.6.10-1.0.2"
