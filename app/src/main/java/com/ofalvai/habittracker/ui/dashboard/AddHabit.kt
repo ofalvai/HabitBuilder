@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.ui.dashboard
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -135,7 +136,7 @@ fun AddHabitForm(
             style = MaterialTheme.typography.caption
         )
 
-        HabitColorPicker(initialColor = color, onColorPick = { color = it })
+        HabitColorPicker(color = color, onColorPick = { color = it })
 
         Button(
             modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
@@ -153,8 +154,8 @@ private fun Suggestions(habits: List<String>, onSelect: (String) -> Unit) {
         contentPadding = PaddingValues(start = 32.dp, end = 32.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(habits.size) { index ->
-            SuggestionChip(habit = habits[index], onClick = { onSelect(habits[index]) })
+        items(habits) {
+            SuggestionChip(habit = it, onClick = { onSelect(it) })
         }
     }
 }

@@ -25,9 +25,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowLeft
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.ui.theme.AppIcons
 import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import java.time.Year
 import java.time.YearMonth
@@ -58,7 +56,7 @@ fun CalendarPager(
     ) {
         IconButton(onClick = onPreviousClick) {
             Icon(
-                Icons.Rounded.KeyboardArrowLeft,
+                AppIcons.ChevronLeft,
                 contentDescription = stringResource(R.string.calendar_previous_month)
             )
         }
@@ -80,7 +78,7 @@ fun CalendarPager(
 
         IconButton(onClick = onNextClick) {
             Icon(
-                Icons.Rounded.KeyboardArrowRight,
+                AppIcons.ChevronRight,
                 contentDescription = stringResource(R.string.calendar_next_month)
             )
         }

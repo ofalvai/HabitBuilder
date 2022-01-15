@@ -171,7 +171,7 @@ private fun HabitHeaderEditingContent(
             )
         )
         HabitColorPicker(
-            initialColor = habitDetails.habit.color,
+            color = editingColor,
             onColorPick = { editingColor = it }
         )
     }

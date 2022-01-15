@@ -25,8 +25,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,10 +44,7 @@ import com.ofalvai.habittracker.ui.common.HorizontalGrid
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import com.ofalvai.habittracker.ui.model.Action
 import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.ui.theme.composeColor
-import com.ofalvai.habittracker.ui.theme.gray1
+import com.ofalvai.habittracker.ui.theme.*
 import java.time.Instant
 import kotlin.random.Random
 
@@ -86,7 +81,7 @@ fun HabitItem(
                 onClick = { onDetailClick(habit) }
             ) {
                 Icon(
-                    Icons.Rounded.KeyboardArrowRight,
+                    AppIcons.ChevronRight,
                     contentDescription = stringResource(R.string.dashboard_item_details)
                 )
             }

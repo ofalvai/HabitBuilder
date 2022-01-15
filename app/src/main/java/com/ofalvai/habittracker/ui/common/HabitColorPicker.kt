@@ -51,15 +51,10 @@ enum class ColorPickerState { Default, Selected }
 
 @Composable
 fun HabitColorPicker(
-    initialColor: Habit.Color,
+    color: Habit.Color,
     onColorPick: (Habit.Color) -> Unit
 ) {
     val colors = remember { Habit.Color.values().toList() }
-
-    // Note: state is duplicated to make color picking responsive:
-    // - UI is wired to this local state (otherwise UI would only update after the source of truth (DB) is updated)
-    // - But remember() is invalidated if the outside state (source of truth) changes
-    var color by remember(initialColor) { mutableStateOf(initialColor) }
 
     LazyRow(
         Modifier.padding(vertical = 32.dp).fillMaxWidth(),
@@ -77,10 +72,7 @@ fun HabitColorPicker(
             HabitColor(
                 color = it,
                 transition = transition,
-                onClick = {
-                    color = it
-                    onColorPick(it)
-                }
+                onClick = { onColorPick(it) }
             )
         }
     }
@@ -156,6 +148,6 @@ fun HabitColor(
 fun PreviewHabitColorPicker() {
     PreviewTheme {
         var color by remember { mutableStateOf(Habit.Color.Yellow) }
-        HabitColorPicker(initialColor = color, onColorPick = { color = it })
+        HabitColorPicker(color = color, onColorPick = { color = it })
     }
 }

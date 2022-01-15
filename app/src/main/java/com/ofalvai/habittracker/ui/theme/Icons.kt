@@ -54,5 +54,13 @@ object AppIcons {
     val Archive: Painter
         @Composable
         get() = painterResource(R.drawable.ic_archive)
+
+    val ChevronLeft: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_chevron_left)
+
+    val ChevronRight: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_chevron_right)
 }
 

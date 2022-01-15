@@ -44,7 +44,7 @@ fun InsightCard(
     content: @Composable () -> Unit
 ) {
     Card(modifier = modifier, elevation = 2.dp) {
-        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
+        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)) {
             InsightHeader(iconPainter, title, description)
 
             content()
@@ -62,20 +62,20 @@ fun InsightHeader(
     Column(Modifier.fillMaxWidth()) {
         var expanded by remember { mutableStateOf(false) }
 
-        Row {
+        Row(Modifier.fillMaxWidth()) {
             Icon(
                 painter = iconPainter,
                 contentDescription = title,
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.align(Alignment.CenterVertically)
             )
             Text(
                 text = title,
                 style = AppTextStyle.insightCardTitle,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 17.dp),
+                modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.CenterVertically),
             )
             IconButton(
                 onClick = { expanded = !expanded },
-                modifier = Modifier.padding(top = 4.dp),
+                modifier = Modifier.align(Alignment.CenterVertically),
             ) {
                 Icon(
                     painter = AppIcons.InfoOutlined,
