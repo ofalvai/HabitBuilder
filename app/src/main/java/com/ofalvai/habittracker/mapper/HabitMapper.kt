@@ -58,6 +58,8 @@ fun HabitEntity.Color.toUIColor(): Habit.Color = when (this) {
     HabitEntity.Color.Green -> Habit.Color.Green
     HabitEntity.Color.Blue -> Habit.Color.Blue
     HabitEntity.Color.Yellow -> Habit.Color.Yellow
+    HabitEntity.Color.Cyan -> Habit.Color.Cyan
+    HabitEntity.Color.Pink -> Habit.Color.Pink
 }
 
 fun Habit.Color.toEntityColor(): HabitEntity.Color = when (this) {
@@ -65,4 +67,6 @@ fun Habit.Color.toEntityColor(): HabitEntity.Color = when (this) {
     Habit.Color.Green -> HabitEntity.Color.Green
     Habit.Color.Blue -> HabitEntity.Color.Blue
     Habit.Color.Yellow -> HabitEntity.Color.Yellow
+    Habit.Color.Cyan -> HabitEntity.Color.Cyan
+    Habit.Color.Pink -> HabitEntity.Color.Pink
 }
