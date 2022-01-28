@@ -54,7 +54,7 @@ showkase-full = { module = "com.airbnb.android:showkase", version.ref = "showkas
 showkase-processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 
 junit = "junit:junit:4.13.2"
-mockito-android = "org.mockito:mockito-android:4.2.0"
+mockito-android = "org.mockito:mockito-android:4.3.1"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
 turbine = "app.cash.turbine:turbine:0.7.0"
 
