@@ -29,7 +29,7 @@
     <string name="common_interpunct">%1$s · %2$s</string>
 
     <string name="addhabit_appbar_title">Create new habit</string>
-    <string name="addhabit_name_label">Name your habit</string>
+    <string name="addhabit_name_label">Habit name</string>
     <string name="addhabit_name_error">Enter a name for new habit</string>
     <string name="addhabit_notes_label">Notes</string>
     <string name="addhabit_notes_description">Recording the exact time and location of the new habit increases the odds of sticking to it. Avoid vague habits like \"Exercise more\".</string>
@@ -80,9 +80,9 @@
         <item quantity="other">%d missed days</item>
     </plurals>
 
-    <string name="habitdetails_singlestat_total">Total times done</string>
-    <string name="habitdetails_singlestat_weekly">Done this week</string>
-    <string name="habitdetails_singlestat_completionrate">Completion rate</string>
+    <string name="habitdetails_singlestat_total">times total</string>
+    <string name="habitdetails_singlestat_weekly">times this week</string>
+    <string name="habitdetails_singlestat_completionrate">completion rate</string>
     <string name="habitdetails_archive_confirm">Archive</string>
     <string name="habitdetails_archive_cancel">Cancel</string>
     <string name="habitdetails_archive_title">Archive habit?</string>
@@ -98,8 +98,8 @@
     <string name="insights_screen_title">Insights</string>
     <string name="insights_more_info">More information</string>
     <string name="insights_heatmap_title">Heatmap</string>
-    <string name="insights_heatmap_description">Heatmap shows you the number of habits done each day. Darker days mean more completed habits on a given day. Tap on a day to see the actual number.</string>
-    <string name="insights_heatmap_legend_label">Number of habits</string>
+    <string name="insights_heatmap_description">Heatmap shows you the number of habits performed each day. Darker days mean more completed habits on a given day. Tap on a day to see the actual number.</string>
+    <string name="insights_heatmap_legend_label">Number of performed habits</string>
     <plurals name="insights_heatmap_popup_action_count">
         <item quantity="one">%d completed habit</item>
         <item quantity="other">%d completed habits</item>
@@ -111,9 +111,9 @@
     <string name="insights_tophabits_navigate">Navigate to %s</string>
     <string name="insights_tophabits_see_all">See all</string>
     <string name="insights_tophabits_error">Failed to load top habits</string>
-    <string name="insights_tophabits_empty_label">Create more habits and complete them at least once to see your success rate here.</string>
+    <string name="insights_tophabits_empty_label">Create more habits and perform them at least once to see your success rate here.</string>
     <string name="insights_topdays_title">Top days</string>
-    <string name="insights_topdays_description">Your most successful days. The list shows the day of week when each habit is performed most often and the number of completed habits on those days.</string>
+    <string name="insights_topdays_description">Your most successful days. The list shows the day when each habit is performed most often and the number of completed habits on the day.</string>
     <string name="insights_topdays_error">Failed to load top days</string>
     <string name="insights_topdays_empty_label">A bit more data is needed to display your top days. Add more habits and perform them a few times.</string>
 
@@ -121,7 +121,7 @@
     <string name="menu_archive">Archived habits</string>
 
     <string name="licenses_title">❤️ Open Source</string>
-    <string name="licenses_description">This app is built with the following open source projects:</string>
+    <string name="licenses_description">This app is built with the following open source libraries:</string>
     <string name="licenses_unknown_license">Unknown</string>
 
     <string name="about_version_label">Version: %s</string>
@@ -139,7 +139,7 @@
     <string name="archive_habit_last_action_never">never</string>
     <string name="archive_action_unarchive">Unarchive</string>
     <string name="archive_action_delete">Delete</string>
-    <string name="archive_empty">You can archive habits that are on pause or no longer relevant. Navigate to the habit edit screen, then tap Archive.\n\nArchived habits can be later unarchived or deleted permanently.</string>
+    <string name="archive_empty">You can archive habits that are on pause or no longer relevant, but don\'t want to delete forever. Navigate to the habit edit screen, then tap Archive.\n\nArchived habits can be later unarchived or deleted permanently.</string>
 
     <string name="onboarding_step_create_title">Your first habit</string>
     <string name="onboarding_step_create_subtitle">Your habits will be listed here. Now, create your first habit.</string>
