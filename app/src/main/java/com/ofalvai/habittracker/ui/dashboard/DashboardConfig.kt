@@ -38,6 +38,7 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.common.HorizontalGrid
 import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.ui.theme.gray1
 import com.ofalvai.habittracker.ui.theme.gray2
 
 
@@ -214,7 +215,7 @@ private fun CompactOutlineBox(toggled: Boolean) {
             .aspectRatio(1f)
             .then(
                 if (toggled) Modifier.placeholderBackground() else Modifier.background(
-                    MaterialTheme.colors.gray2
+                    MaterialTheme.colors.gray1
                 )
             )
             .border(1.dp, MaterialTheme.colors.background)

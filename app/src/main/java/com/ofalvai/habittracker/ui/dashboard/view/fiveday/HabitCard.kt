@@ -133,7 +133,7 @@ fun ActionCircles(
                 )
             }
         }
-        if (singlePressCounter >= 3) {
+        if (singlePressCounter >= 2) {
             Text(
                 modifier = Modifier.align(Alignment.End),
                 text = stringResource(R.string.dashboard_toggle_help),

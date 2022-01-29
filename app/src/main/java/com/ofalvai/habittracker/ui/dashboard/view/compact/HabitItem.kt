@@ -122,7 +122,7 @@ fun ActionSquares(
                 )
             }
         }
-        if (singlePressCounter >= 3) {
+        if (singlePressCounter >= 2) {
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
