@@ -104,6 +104,8 @@ private fun AboutScreen(
         }
         Spacer(Modifier.height(16.dp))
         ShowkaseLauncherButton() // no-op in release build
+        Spacer(Modifier.height(16.dp))
+        SampleDataInserterButton() // no-op in release build
     }
 }
 

@@ -35,6 +35,9 @@ interface HabitDao {
     @Delete(entity = Habit::class)
     suspend fun deleteHabit(habitById: HabitById)
 
+    @Query("DELETE FROM habit")
+    suspend fun deleteAllHabits()
+
     @Update
     suspend fun updateHabit(habit: Habit)
 

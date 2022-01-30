@@ -52,7 +52,7 @@ object Dependencies {
         .addMigrations(*MIGRATIONS)
         .build()
 
-    private val dao = db.habitDao()
+    val dao = db.habitDao()
 
     private val actionRepository = ActionRepository(dao)
 
