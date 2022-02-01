@@ -19,6 +19,6 @@ package com.ofalvai.habittracker.ui.settings
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ShowkaseLauncherButton() {
-    // No-op in release build
+fun DebugSettings() {
+    // No-op in release variant
 }

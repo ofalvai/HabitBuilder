@@ -72,7 +72,7 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
         config = it
         viewModel.dashboardConfig = it
     }
-    val onAboutClick = { navController.navigate(Destination.About.route) }
+    val onSettingsClick = { navController.navigate(Destination.Settings.route) }
     val onArchiveClick = { navController.navigate(Destination.Archive.route) }
     val onMove: (ItemMoveEvent) -> Unit = { viewModel.persistItemMove(it) }
 
@@ -93,7 +93,7 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
                 onConfigClick,
                 onActionToggle,
                 onHabitDetail,
-                onAboutClick,
+                onSettingsClick,
                 onArchiveClick,
                 onMove
             )
@@ -136,12 +136,12 @@ private fun LoadedDashboard(
     onConfigClick: () -> Unit,
     onActionToggle: (Action, Habit, Int) -> Unit,
     onHabitDetail: (Habit) -> (Unit),
-    onAboutClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     onArchiveClick: () -> Unit,
     onMove: (ItemMoveEvent) -> Unit
 ) {
     Column(Modifier.fillMaxSize().statusBarsPadding()) {
-        DashboardAppBar(onConfigClick, onAboutClick, onArchiveClick)
+        DashboardAppBar(onConfigClick, onSettingsClick, onArchiveClick)
 
         if (onboardingState != null) {
             Onboarding(onboardingState)
@@ -172,7 +172,7 @@ private fun LoadedDashboard(
 @Composable
 private fun DashboardAppBar(
     onConfigClick: () -> Unit,
-    onAboutClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     onArchiveClick: () -> Unit
 ) {
     AppBar(
@@ -191,8 +191,8 @@ private fun DashboardAppBar(
             DropdownMenuItem(onClick = onArchiveClick) {
                 Text(stringResource(R.string.menu_archive))
             }
-            DropdownMenuItem(onClick = onAboutClick) {
-                Text(stringResource(R.string.menu_about))
+            DropdownMenuItem(onClick = onSettingsClick) {
+                Text(stringResource(R.string.menu_settings))
             }
         }
     )

@@ -44,7 +44,7 @@ fun InsightsScreen(navController: NavController) {
     val viewModel: InsightsViewModel = viewModel(factory = Dependencies.viewModelFactory)
 
     Column(Modifier.statusBarsPadding()) {
-        InsightsAppBar(onAboutClick = { navController.navigate(Destination.About.route) })
+        InsightsAppBar(onSettingsClick = { navController.navigate(Destination.Settings.route) })
 
         Column(
             modifier = Modifier
@@ -62,7 +62,7 @@ fun InsightsScreen(navController: NavController) {
 }
 
 @Composable
-private fun InsightsAppBar(onAboutClick: () -> Unit) {
+private fun InsightsAppBar(onSettingsClick: () -> Unit) {
     AppBar(
         title = {
             Text(
@@ -71,8 +71,8 @@ private fun InsightsAppBar(onAboutClick: () -> Unit) {
             )
         },
         dropdownMenuItems = {
-            DropdownMenuItem(onClick = onAboutClick) {
-                Text(stringResource(R.string.menu_about))
+            DropdownMenuItem(onClick = onSettingsClick) {
+                Text(stringResource(R.string.menu_settings))
             }
         }
     )
