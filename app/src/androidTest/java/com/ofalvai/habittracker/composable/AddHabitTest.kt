@@ -51,7 +51,7 @@ class AddHabitTest : BaseInstrumentedTest() {
             }
         }
 
-        composeRule.onNodeWithText("Name your habit").assertIsFocused()
+        composeRule.onNodeWithText("Habit name").assertIsFocused()
     }
 
     @Test
@@ -66,7 +66,7 @@ class AddHabitTest : BaseInstrumentedTest() {
 
         composeRule.apply {
             onNodeWithText("Create habit").performClick()
-            onNodeWithText("Name your habit").assertIsFocused()
+            onNodeWithText("Habit name").assertIsFocused()
             onNodeWithText("Enter a name for new habit").assertExists("TextField error message not found")
         }
     }
@@ -89,8 +89,8 @@ class AddHabitTest : BaseInstrumentedTest() {
         }
 
         composeRule.apply {
-            onNodeWithText("Name your habit").performTextInput(expectedHabitName)
-            onNodeWithText("Name your habit").performImeAction()
+            onNodeWithText("Habit name").performTextInput(expectedHabitName)
+            onNodeWithText("Habit name").performImeAction()
             onNodeWithText("Notes").assertIsFocused().performTextInput(expectedNotes)
             onNodeWithText("Create habit").performClick()
             assertTrue(onSaveCalled)
