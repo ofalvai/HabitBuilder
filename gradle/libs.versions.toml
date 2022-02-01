@@ -13,7 +13,7 @@ gradle-cachefix = "org.gradle.android.cache-fix:2.4.6"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-android-tools-gradle = "com.android.tools.build:gradle:7.1.0"
+android-tools-gradle = "com.android.tools.build:gradle:7.3.0-alpha01"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }

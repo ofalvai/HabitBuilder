@@ -15,8 +15,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ofalvai.habittracker">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Required for writing coverage.ec to sdcard -->
     <uses-permission

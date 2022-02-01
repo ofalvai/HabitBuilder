@@ -17,6 +17,8 @@ ext {
 }
 
 android {
+    namespace PACKAGE_NAME
+
     compileSdk 31
 
     defaultConfig {
@@ -38,8 +40,8 @@ android {
         manifestPlaceholders = [api_key_bugsnag: "${API_KEY_BUGSNAG}"]
     }
 
-    lintOptions {
-        enable "DuplicateStrings", "NewerVersionAvailable"
+    lint {
+        enable 'DuplicateStrings', 'NewerVersionAvailable'
     }
 
     buildTypes {
@@ -69,13 +71,15 @@ android {
         // kotlinCompilerExtensionVersion libs.versions.compose.get()
         kotlinCompilerExtensionVersion = "1.2.0-SNAPSHOT" // TODO: temporary workaround for a Kotlin 1.6.10 compatible Compose compiler
     }
-
     packagingOptions {
-        exclude "META-INF/licenses/**"
-        exclude "META-INF/AL2.0"
-        exclude "META-INF/LGPL2.1"
-        exclude "**/attach_hotspot_windows.dll"
+        jniLibs {
+            excludes += ['META-INF/licenses/**']
+        }
+        resources {
+            excludes += ['META-INF/licenses/**', 'META-INF/AL2.0', 'META-INF/LGPL2.1', '**/attach_hotspot_windows.dll']
+        }
     }
+
 
     testOptions {
         animationsDisabled = true
