@@ -50,15 +50,17 @@ class TelemetryImpl(
 ) : Telemetry {
 
     override fun initialize() {
-        if (appPreferences.crashReportingEnabled) {
-            Bugsnag.start(appContext)
-            initStrictModeListener()
-        }
+        if (!appPreferences.crashReportingEnabled) return
+
+        Bugsnag.start(appContext)
+        initStrictModeListener()
     }
 
     override fun logNonFatal(e: Throwable) {
         logcat { e.asLog() }
-        Bugsnag.notify(e)
+        if (appPreferences.crashReportingEnabled) {
+            Bugsnag.notify(e)
+        }
     }
 
     override fun leaveBreadcrumb(
@@ -66,6 +68,8 @@ class TelemetryImpl(
         metadata: Map<String, Any>,
         type: Telemetry.BreadcrumbType
     ) {
+        if (!appPreferences.crashReportingEnabled) return
+
         val bugsnagType = when (type) {
             Telemetry.BreadcrumbType.Navigation -> BreadcrumbType.NAVIGATION
             Telemetry.BreadcrumbType.State -> BreadcrumbType.STATE
