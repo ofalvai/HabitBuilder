@@ -54,14 +54,14 @@ object Destination {
         enterTransition = {
             when (initialState.destination.route) {
                 Insights.route -> AppTransition.fadeThroughEnter
-                About.route, Archive.route, AddHabit.route, HabitDetails.route -> AppTransition.sharedZAxisEnterBackward
+                Settings.route, Archive.route, AddHabit.route, HabitDetails.route -> AppTransition.sharedZAxisEnterBackward
                 else -> AppTransition.defaultEnter
             }
         },
         exitTransition = {
             when (targetState.destination.route) {
                 Insights.route -> AppTransition.fadeThroughExit
-                About.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisExitForward
+                Settings.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisExitForward
                 else -> AppTransition.defaultExit
             }
         }
@@ -72,14 +72,14 @@ object Destination {
         enterTransition = {
             when (initialState.destination.route) {
                 Dashboard.route -> AppTransition.fadeThroughEnter
-                About.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisEnterBackward
+                Settings.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisEnterBackward
                 else -> AppTransition.defaultEnter
             }
         },
         exitTransition = {
             when (targetState.destination.route) {
                 Dashboard.route -> AppTransition.fadeThroughExit
-                About.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisExitForward
+                Settings.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisExitForward
                 else -> AppTransition.defaultExit
             }
         }
@@ -91,8 +91,8 @@ object Destination {
         exitTransition = { AppTransition.sharedZAxisExitBackward }
     )
 
-    object About : Screen(
-        route = "about",
+    object Settings : Screen(
+        route = "settings",
         enterTransition = {
             when (initialState.destination.route) {
                 Dashboard.route, Insights.route -> AppTransition.sharedZAxisEnterForward

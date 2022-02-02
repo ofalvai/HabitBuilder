@@ -30,6 +30,7 @@ private val LightColorPalette = lightColors(
     primary = AppColor.Light.primary,
     primaryVariant = AppColor.Light.primaryVariant,
     secondary = AppColor.Light.secondary,
+    secondaryVariant = AppColor.Light.secondary,
 
     background = AppColor.Light.background,
     surface = AppColor.Light.surface,
@@ -44,6 +45,7 @@ private val DarkColorPalette = darkColors(
     primary = AppColor.Dark.primary,
     primaryVariant = AppColor.Dark.primaryVariant,
     secondary = AppColor.Dark.secondary,
+    secondaryVariant = AppColor.Dark.secondary,
 
     background = AppColor.Dark.background,
     surface = AppColor.Dark.surface,

@@ -17,8 +17,6 @@ ext {
 }
 
 android {
-    namespace PACKAGE_NAME
-
     compileSdk 31
 
     defaultConfig {

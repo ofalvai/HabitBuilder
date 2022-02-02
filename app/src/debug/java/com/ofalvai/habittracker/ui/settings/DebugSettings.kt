@@ -16,24 +16,39 @@
 
 package com.ofalvai.habittracker.ui.settings
 
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import com.airbnb.android.showkase.annotation.ShowkaseRoot
 import com.airbnb.android.showkase.annotation.ShowkaseRootModule
 import com.airbnb.android.showkase.models.Showkase
+import com.ofalvai.habittracker.Dependencies
+import kotlinx.coroutines.launch
 
 @ShowkaseRoot
 class AppRootModule: ShowkaseRootModule
 
 @Composable
-fun ShowkaseLauncherButton() {
+fun DebugSettings() {
     val context = LocalContext.current
-    val onClick = {
-        context.startActivity(Showkase.getBrowserIntent(context))
+    SettingHeader("Debug area \uD83D\uDC40")
+
+    NavigationSetting(
+        name = "Launch Showkase",
+        onClick = { context.startActivity(Showkase.getBrowserIntent(context)) }
+    )
+
+    var isSuccess by remember { mutableStateOf(false) }
+    val inserter = remember { SampleDataInserter(Dependencies.dao) }
+    val coroutineScope = rememberCoroutineScope()
+
+    val onClick: () -> Unit = {
+        coroutineScope.launch {
+            inserter.insert()
+            isSuccess = true
+        }
     }
-    Button(onClick) {
-        Text(text = "Launch Showkase")
-    }
+    NavigationSetting(
+        name = "Insert sample data" + if (isSuccess) " ✅" else "",
+        onClick = onClick
+    )
 }
