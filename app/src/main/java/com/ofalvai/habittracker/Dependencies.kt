@@ -37,6 +37,7 @@ import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.settings.LicensesViewModel
+import com.ofalvai.habittracker.ui.settings.SettingsViewModel
 import logcat.logcat
 
 object Dependencies {
@@ -63,7 +64,7 @@ object Dependencies {
 
     private val onboardingManager = OnboardingManager(appPreferences)
 
-    val telemetry = TelemetryImpl(appContext)
+    val telemetry = TelemetryImpl(appContext, appPreferences)
 
     val viewModelFactory = AppViewModelFactory(
         dao, actionRepository, appPreferences, appContext, telemetry, onboardingManager
@@ -104,6 +105,9 @@ class AppViewModelFactory(
         }
         if (ArchiveViewModel::class.java.isAssignableFrom(modelClass)) {
             return ArchiveViewModel(habitDao, telemetry) as T
+        }
+        if (SettingsViewModel::class.java.isAssignableFrom(modelClass)) {
+            return SettingsViewModel(appPreferences) as T
         }
         throw IllegalArgumentException("No matching ViewModel for ${modelClass.canonicalName}")
     }

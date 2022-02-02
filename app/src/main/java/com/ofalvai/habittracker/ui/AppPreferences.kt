@@ -24,6 +24,7 @@ private const val KEY_ONBOARDING_FIRST_HABIT_CREATED = "onboarding_first_habit_c
 private const val KEY_ONBOARDING_FIRST_ACTION_COMPLETED = "onboarding_first_action_completed"
 private const val KEY_ONBOARDING_HABIT_DETAILS_OPENED = "onboarding_habit_details_opened"
 private const val KEY_ONBOARDING_INSIGHTS_OPENED = "onboarding_insights_opened"
+private const val KEY_CRASH_REPORTING = "crash_reporting"
 
 class AppPreferences(
     private val sharedPreferences: SharedPreferences
@@ -55,4 +56,8 @@ class AppPreferences(
     var onboardingInsightsOpened: Boolean
         get() = sharedPreferences.getBoolean(KEY_ONBOARDING_INSIGHTS_OPENED, false)
         set(value) = sharedPreferences.edit().putBoolean(KEY_ONBOARDING_INSIGHTS_OPENED, value).apply()
+
+    var crashReportingEnabled: Boolean
+        get() = sharedPreferences.getBoolean(KEY_CRASH_REPORTING, true)
+        set(value) = sharedPreferences.edit().putBoolean(KEY_CRASH_REPORTING, value).apply()
 }

@@ -24,6 +24,7 @@ import com.bugsnag.android.Bugsnag
 import com.bugsnag.android.BugsnagThreadViolationListener
 import com.bugsnag.android.BugsnagVmViolationListener
 import com.ofalvai.habittracker.BuildConfig
+import com.ofalvai.habittracker.ui.AppPreferences
 import logcat.asLog
 import logcat.logcat
 
@@ -43,11 +44,16 @@ interface Telemetry {
 
 }
 
-class TelemetryImpl(private val appContext: Context) : Telemetry {
+class TelemetryImpl(
+    private val appContext: Context,
+    private val appPreferences: AppPreferences
+) : Telemetry {
 
     override fun initialize() {
-        Bugsnag.start(appContext)
-        initStrictModeListener()
+        if (appPreferences.crashReportingEnabled) {
+            Bugsnag.start(appContext)
+            initStrictModeListener()
+        }
     }
 
     override fun logNonFatal(e: Throwable) {
