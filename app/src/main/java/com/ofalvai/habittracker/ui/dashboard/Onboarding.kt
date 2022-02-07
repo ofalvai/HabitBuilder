@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.ui.model.OnboardingState
 import com.ofalvai.habittracker.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.ui.theme.PreviewTheme2
 import com.ofalvai.habittracker.ui.theme.surfaceVariant
 import kotlin.math.roundToInt
 
@@ -103,7 +104,7 @@ fun PreviewOnboardingStep1() {
 @ShowkaseComposable(name = "Dashboard item", group = "Onboarding", styleName = "Step 2")
 @Composable
 fun PreviewOnboardingStep2() {
-    PreviewTheme {
+    PreviewTheme2 {
         val state = OnboardingState(
             step = OnboardingData.steps[1],
             totalSteps = OnboardingData.totalSteps

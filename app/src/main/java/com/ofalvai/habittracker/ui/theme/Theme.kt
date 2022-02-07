@@ -16,14 +16,22 @@
 
 package com.ofalvai.habittracker.ui.theme
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 
 private val LightColorPalette = lightColors(
@@ -98,5 +106,90 @@ fun PreviewTheme(content: @Composable () -> Unit) {
             }
         }
     )
+}
+
+@Composable
+fun PreviewTheme2(content: @Composable () -> Unit) {
+
+    val baseConfiguration = LocalContext.current.resources.configuration
+    val darkModeConfig = Configuration(baseConfiguration).apply {
+        uiMode = Configuration.UI_MODE_NIGHT_YES
+    }
+
+    Column {
+        MaterialTheme(
+            colors = if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
+            typography = typography,
+            shapes = shapes,
+            content = {
+                // Draw a real background around content
+                Box(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                    content()
+                }
+            }
+        )
+
+        CompositionLocalProvider(LocalConfiguration provides darkModeConfig) {
+            MaterialTheme(
+                colors = if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
+                typography = typography,
+                shapes = shapes,
+                content = {
+                    // Draw a real background around content
+                    Box(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                        content()
+                    }
+                }
+            )
+        }
+
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            MaterialTheme(
+                colors = if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
+                typography = typography,
+                shapes = shapes,
+                content = {
+                    // Draw a real background around content
+                    Box(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                        content()
+                    }
+                }
+            )
+        }
+
+        val baseDensity = LocalDensity.current
+        val fontScaledDensity = Density(fontScale = baseDensity.fontScale * 2, density = baseDensity.density)
+        CompositionLocalProvider(LocalDensity provides fontScaledDensity) {
+            MaterialTheme(
+                colors = if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
+                typography = typography,
+                shapes = shapes,
+                content = {
+                    // Draw a real background around content
+                    Box(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                        content()
+                    }
+                }
+            )
+        }
+
+        val scaledDensity = Density(density = baseDensity.density * 2f)
+        CompositionLocalProvider(LocalDensity provides scaledDensity) {
+            MaterialTheme(
+                colors = if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
+                typography = typography,
+                shapes = shapes,
+                content = {
+                    // Draw a real background around content
+                    Box(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                        content()
+                    }
+                }
+            )
+        }
+    }
+
+
+
 }
 
