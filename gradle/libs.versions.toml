@@ -19,7 +19,7 @@ kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0"
 
-androidx-navigation-compose = "androidx.navigation:navigation-compose:2.4.0-rc01"
+androidx-navigation-compose = "androidx.navigation:navigation-compose:2.4.1"
 androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
 
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
