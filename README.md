@@ -46,7 +46,7 @@ This project is also a testing ground for new technologies/libraries I'd like to
 
 ## Development
 
-### Notable Gradle tasks
+### Useful Gradle tasks
 
 - `analyzeReleaseBundle`: Run Spotify Ruler
 - `licenseeRelease`: Run license check, generate `app/build/reports/licensee/release/artifacts.json`, which should be copied over to `assets/licenses.json`
