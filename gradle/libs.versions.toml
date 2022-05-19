@@ -49,7 +49,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist"}
 
 bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.2.0"
-bugsnag-runtime = "com.bugsnag:bugsnag-android:5.19.2"
+bugsnag-runtime = "com.bugsnag:bugsnag-android:5.22.3"
 
 showkase-annotation = { module = "com.airbnb.android:showkase-annotation", version.ref = "showkase" }
 showkase-full = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
