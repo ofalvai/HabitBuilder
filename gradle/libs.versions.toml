@@ -10,6 +10,7 @@ ksp = "com.google.devtools.ksp:1.6.10-1.0.2"
 gradle-doctor = "com.osacky.doctor:0.8.0"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.0.0"
 gradle-cachefix = "org.gradle.android.cache-fix:2.4.6"
+dependencyanalysis = "com.autonomousapps.dependency-analysis:1.2.1"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"

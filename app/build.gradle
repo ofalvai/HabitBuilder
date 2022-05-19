@@ -205,7 +205,7 @@ dependencies {
     }
 
     // Required by layout inspector
-    debugImplementation libs.kotlin.reflect
+    debugRuntimeOnly libs.kotlin.reflect
 
     implementation libs.showkase.annotation
     debugImplementation libs.showkase.full
@@ -221,8 +221,6 @@ dependencies {
     androidTestImplementation libs.androidx.espresso
     androidTestImplementation libs.androidx.core.testing
     androidTestImplementation libs.androidx.test.rules
-    androidTestImplementation libs.mockito.kotlin
-    androidTestImplementation libs.mockito.android
     androidTestImplementation libs.turbine
     androidTestImplementation libs.compose.ui.test
 }

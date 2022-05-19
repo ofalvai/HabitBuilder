@@ -20,6 +20,7 @@ plugins {
     alias(libs.plugins.gradle.doctor)
     alias(libs.plugins.gradle.buildtimetracker)
     alias(libs.plugins.gradle.cachefix) apply false
+    alias(libs.plugins.dependencyanalysis)
 }
 
 doctor {
@@ -44,5 +45,29 @@ task clean(type: Delete) {
 subprojects {
     plugins.withType(AndroidBasePlugin) {
         project.apply plugin: "org.gradle.android.cache-fix"
+    }
+}
+
+dependencyAnalysis {
+    issues {
+        all {
+            ignoreKtx(true)
+            onUnusedDependencies {
+                severity("fail")
+                exclude(
+                        "androidx.compose.ui:ui-tooling", // Required for IDE previews
+                        "com.bugsnag:bugsnag-android", // False positive
+                )
+            }
+            onIncorrectConfiguration {
+                severity("fail")
+            }
+            onUnusedAnnotationProcessors {
+                severity("fail")
+            }
+            onRedundantPlugins {
+                severity("fail")
+            }
+        }
     }
 }
