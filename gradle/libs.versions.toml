@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.6.10"
+kotlin = "1.6.21"
 compose = "1.1.0-rc01"
 room = "2.4.1"
 accompanist = "0.22.0-rc"
