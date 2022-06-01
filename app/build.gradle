@@ -45,7 +45,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            testCoverageEnabled true
+//            testCoverageEnabled true TODO: investigate why device tests are stuck when this is enabled
         }
 
         release {
