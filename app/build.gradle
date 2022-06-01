@@ -45,7 +45,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            testCoverageEnabled true
+//            testCoverageEnabled true TODO: investigate why device tests are stuck when this is enabled
         }
 
         release {
@@ -66,8 +66,7 @@ android {
     }
 
     composeOptions {
-        // kotlinCompilerExtensionVersion libs.versions.compose.get()
-        kotlinCompilerExtensionVersion = "1.2.0-SNAPSHOT" // TODO: temporary workaround for a Kotlin 1.6.10 compatible Compose compiler
+         kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
     packagingOptions {
         jniLibs {
@@ -199,10 +198,7 @@ dependencies {
     implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.navigation
 
-    implementation (libs.bugsnag.runtime) {
-        exclude group: "com.bugsnag", module: "bugsnag-plugin-android-anr"
-        exclude group: "com.bugsnag", module: "bugsnag-plugin-android-ndk"
-    }
+    implementation libs.bugsnag.runtime
 
     // Required by layout inspector
     debugRuntimeOnly libs.kotlin.reflect
@@ -223,4 +219,5 @@ dependencies {
     androidTestImplementation libs.androidx.test.rules
     androidTestImplementation libs.turbine
     androidTestImplementation libs.compose.ui.test
+    debugImplementation libs.compose.ui.test.manifest
 }

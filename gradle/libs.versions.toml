@@ -1,12 +1,12 @@
 [versions]
-kotlin = "1.6.10"
-compose = "1.1.0-rc01"
+kotlin = "1.6.21"
+compose = "1.2.0-beta02"
 room = "2.4.2"
-accompanist = "0.22.0-rc"
-showkase = "1.0.0-beta10"
+accompanist = "0.23.1"
+showkase = "1.0.0-beta12"
 
 [plugins]
-ksp = "com.google.devtools.ksp:1.6.10-1.0.2"
+ksp = "com.google.devtools.ksp:1.6.21-1.0.5"
 gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
 gradle-cachefix = "org.gradle.android.cache-fix:2.5.3"
@@ -14,7 +14,7 @@ dependencyanalysis = "com.autonomousapps.dependency-analysis:1.4.0"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-android-tools-gradle = "com.android.tools.build:gradle:7.1.3"
+android-tools-gradle = "com.android.tools.build:gradle:7.2.1"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -39,6 +39,7 @@ compose-animation = { module = "androidx.compose.animation:animation", version.r
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-toolingpreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose"}
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 
 logcat = "com.squareup.logcat:logcat:0.1"
 calendarview = "com.github.kizitonwose:CalendarView:1.0.4"
@@ -49,7 +50,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist"}
 
 bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.2.1"
-bugsnag-runtime = "com.bugsnag:bugsnag-android:5.22.4"
+bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.22.4"
 
 showkase-annotation = { module = "com.airbnb.android:showkase-annotation", version.ref = "showkase" }
 showkase-full = { module = "com.airbnb.android:showkase", version.ref = "showkase" }

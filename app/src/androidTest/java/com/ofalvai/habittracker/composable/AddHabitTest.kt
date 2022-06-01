@@ -17,9 +17,8 @@
 package com.ofalvai.habittracker.composable
 
 import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ofalvai.habittracker.ui.MainActivity
 import com.ofalvai.habittracker.ui.dashboard.AddHabitForm
 import com.ofalvai.habittracker.ui.model.Habit
 import com.ofalvai.habittracker.ui.theme.PreviewTheme
@@ -34,7 +33,7 @@ import org.junit.runner.RunWith
 class AddHabitTest : BaseInstrumentedTest() {
 
     @get:Rule
-    val composeRule = createAndroidComposeRule<MainActivity>()
+    val composeRule = createComposeRule()
 
     // https://github.com/mockito/mockito-kotlin/issues/272
     open class OnSaveCallback: (Habit) -> Unit {
