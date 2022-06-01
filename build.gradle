@@ -57,6 +57,7 @@ dependencyAnalysis {
                 exclude(
                         "androidx.compose.ui:ui-tooling", // Required for IDE previews
                         "com.bugsnag:bugsnag-android", // False positive
+                        "org.burnoutcrew.composereorderable:reorderable", // False positive
                 )
             }
             onIncorrectConfiguration {
