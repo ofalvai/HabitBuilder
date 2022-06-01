@@ -61,7 +61,7 @@ fun ReorderableHabitList(
     verticalArrangement: Arrangement.Vertical,
     onMove: (ItemMoveEvent) -> Unit,
     onAddHabitClick: () -> Unit,
-    itemContent: @Composable LazyListScope.(HabitWithActions, ReorderableState) -> Unit
+    itemContent: @Composable LazyListScope.(HabitWithActions, ReorderableLazyListState) -> Unit
 ) {
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
@@ -70,7 +70,6 @@ fun ReorderableHabitList(
     // background. The cache key is the original list so that any change (eg. action completion)
     // is reflected in the in-memory copy.
     val inMemoryList = remember(habits) { habits.toMutableStateList() }
-    val reorderState = rememberReorderState()
     val onItemMove: (fromPos: ItemPosition, toPos: ItemPosition) -> (Unit) = { from, to ->
         vibrator.vibrateCompat(longArrayOf(0, 50))
         inMemoryList.move(from.index, to.index)
@@ -80,12 +79,13 @@ fun ReorderableHabitList(
         // Last item of the list is the fixed CreateHabitButton, it's not reorderable
         it.index < inMemoryList.size
     }
+    val reorderState = rememberReorderLazyListState(onMove = onItemMove, canDragOver = canDragOver)
 
     LazyColumn(
         state = reorderState.listState,
         contentPadding = PaddingValues(bottom = 48.dp),
         verticalArrangement = verticalArrangement,
-        modifier = Modifier.reorderable(reorderState, onItemMove, canDragOver)
+        modifier = Modifier.reorderable(reorderState)
     ) {
         items(inMemoryList, key = { it.habit.id }) { item ->
             this@LazyColumn.itemContent(item, reorderState)

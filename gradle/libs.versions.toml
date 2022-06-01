@@ -43,7 +43,7 @@ compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", ve
 
 logcat = "com.squareup.logcat:logcat:0.1"
 calendarview = "com.github.kizitonwose:CalendarView:1.0.4"
-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.7.4"
+reorderable = "org.burnoutcrew.composereorderable:reorderable:0.8.1"
 
 accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }

@@ -55,7 +55,7 @@ fun CompactHabitList(
                 onDetailClick = onHabitClick,
                 // Null and 0 drag offset is intentionally treated as the same because dragging
                 // is using the same gesture detection as the long-press Action toggle modifier
-                dragOffset = reorderState.offsetByKey(item.habit.id) ?: 0f,
+                dragOffset = reorderState.offsetByKey(item.habit.id)?.y?.toFloat() ?: 0f,
                 modifier = Modifier.detectReorderAfterLongPress(reorderState)
             )
         }
