@@ -34,7 +34,6 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven { url 'https://androidx.dev/snapshots/builds/8003490/artifacts/repository' } // TODO: temporary workaround for a Kotlin 1.6.10 compatible Compose compiler
     }
 }
 
@@ -56,8 +55,8 @@ dependencyAnalysis {
                 severity("fail")
                 exclude(
                         "androidx.compose.ui:ui-tooling", // Required for IDE previews
-                        "com.bugsnag:bugsnag-android", // False positive
                         "org.burnoutcrew.composereorderable:reorderable", // False positive
+                        "androidx.compose.ui:ui-test-manifest", // Required for device testing
                 )
             }
             onIncorrectConfiguration {
