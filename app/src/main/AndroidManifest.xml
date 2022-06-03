@@ -15,8 +15,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ofalvai.habittracker"
-    xmlns:tools="http://schemas.android.com/tools">
+    package="com.ofalvai.habittracker">
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -27,8 +26,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/HabitTrackerTheme"
-        tools:ignore="AllowBackup">
+        android:theme="@style/HabitTrackerTheme">
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">

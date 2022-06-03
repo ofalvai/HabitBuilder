@@ -17,7 +17,6 @@
 package com.ofalvai.habittracker.ui.insights.component
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -52,7 +51,6 @@ fun InsightCard(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun InsightHeader(
     iconPainter: Painter,

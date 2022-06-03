@@ -167,7 +167,6 @@ private class DayViewContainer(
     }
 }
 
-@OptIn(ExperimentalUnsignedTypes::class)
 private fun Color.toColorInt(): Int {
     // This isn't 100% correct, but works with SRGB color space
     return (value shr 32).toInt()

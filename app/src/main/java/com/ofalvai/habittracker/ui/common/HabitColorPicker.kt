@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
@@ -78,7 +77,6 @@ fun HabitColorPicker(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HabitColor(
     color: Habit.Color,

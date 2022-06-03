@@ -18,7 +18,6 @@ package com.ofalvai.habittracker.ui.settings
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -68,7 +67,6 @@ fun LicensesScreen(navController: NavController) {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun DependencyList(dependencies: List<Dependency>) {
     val context = LocalContext.current
