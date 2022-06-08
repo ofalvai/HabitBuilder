@@ -51,6 +51,7 @@ This project is also a testing ground for new technologies/libraries I'd like to
 - `analyzeReleaseBundle`: Run Spotify Ruler
 - `licenseeRelease`: Run license check, generate `app/build/reports/licensee/release/artifacts.json`, which should be copied over to `assets/licenses.json`
 - `jacocoTestReport`: Generate test coverage (for unit tests)
+- `assembleRelease -Phabittracker.enableComposeCompilerReports=true`: Writes Compose compiler metrics to `$module/build/compose_metrics`
 
 ## Development
 
