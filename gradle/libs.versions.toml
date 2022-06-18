@@ -9,7 +9,7 @@ showkase = "1.0.0-beta12"
 ksp = "com.google.devtools.ksp:1.6.21-1.0.5"
 gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
-gradle-cachefix = "org.gradle.android.cache-fix:2.5.3"
+gradle-cachefix = "org.gradle.android.cache-fix:2.5.5"
 dependencyanalysis = "com.autonomousapps.dependency-analysis:1.5.0"
 
 [libraries]
