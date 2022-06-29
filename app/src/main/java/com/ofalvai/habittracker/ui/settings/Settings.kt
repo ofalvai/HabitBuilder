@@ -46,6 +46,7 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.ui.theme.gray1
 
 private const val SOURCE_URL = "https://github.com/ofalvai/HabitTracker"
 private const val MARKET_URL = "market://details?id=${BuildConfig.APPLICATION_ID}"
@@ -144,14 +145,21 @@ fun SettingsScreen(
 
 @Composable
 internal fun SettingHeader(name: String) {
-    Text(
-        modifier = Modifier
+    Column {
+        Box(modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 2.dp, top = 8.dp),
-        text = name,
-        style = MaterialTheme.typography.body2,
-        color = MaterialTheme.colors.secondaryVariant
-    )
+            .height(1.dp)
+            .background(MaterialTheme.colors.gray1))
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 72.dp, end = 16.dp, bottom = 2.dp, top = 16.dp),
+            text = name,
+            style = MaterialTheme.typography.body2,
+            color = MaterialTheme.colors.secondaryVariant
+        )
+    }
+
 }
 
 @Composable
@@ -169,7 +177,7 @@ private fun SwitchSetting(
         Text(
             text = name,
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(vertical = 24.dp)
+            modifier = Modifier.padding(top = 20.dp, bottom = 20.dp, start = 56.dp)
         )
         Spacer(Modifier.weight(1f))
         Switch(checked, onCheckedChange = onCheckedChange)
@@ -185,7 +193,7 @@ internal fun NavigationSetting(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 24.dp),
+            .padding(start = 72.dp, end = 16.dp, top = 20.dp, bottom = 20.dp),
         text = name,
         style = MaterialTheme.typography.body1
     )
@@ -193,9 +201,9 @@ internal fun NavigationSetting(
 
 @Composable
 internal fun TextRow(name: String, subtitle: String) {
-    Column(Modifier.padding(horizontal = 16.dp, vertical = 16.dp)) {
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(start = 56.dp),
             text = name,
             style = MaterialTheme.typography.body1
         )
@@ -203,7 +211,7 @@ internal fun TextRow(name: String, subtitle: String) {
         Text(
             text = subtitle,
             style = MaterialTheme.typography.body2,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(start = 56.dp)
         )
     }
 }

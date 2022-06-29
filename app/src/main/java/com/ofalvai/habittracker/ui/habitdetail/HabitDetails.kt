@@ -21,10 +21,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -206,10 +203,9 @@ private fun HabitStats(
             ) {
                 Text(text = stringResource(R.string.habitdetails_actioncount_selector_monthly))
             }
-
         }
         ActionCountChart(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp, start = 16.dp, end = 16.dp),
             values = chartData.items
         )
     }
@@ -222,10 +218,26 @@ private fun ToggleButton(
     onCheckedChange: (Boolean) -> Unit,
     content: @Composable () -> Unit
 ) {
-    if (checked) {
-        Button(onClick = { onCheckedChange(!checked) }) { content() }
+    OutlinedButton(
+        onClick = {
+            if (!checked) { onCheckedChange(false) }
+        },
+        colors = toggleButtonColors(checked)
+    ) { content() }
+}
+
+@Composable
+private fun toggleButtonColors(checked: Boolean): ButtonColors {
+    return if (checked) {
+        ButtonDefaults.outlinedButtonColors(
+            backgroundColor = MaterialTheme.colors.primaryVariant,
+            contentColor = MaterialTheme.colors.onPrimary
+        )
     } else {
-        OutlinedButton(onClick = { onCheckedChange(!checked) }) { content() }
+        ButtonDefaults.outlinedButtonColors(
+            backgroundColor = MaterialTheme.colors.surfaceVariant,
+            contentColor = MaterialTheme.colors.onBackground
+        )
     }
 }
 
@@ -248,7 +260,14 @@ fun PreviewHabitDetailScreen() {
                 )
             ),
             singleStats = SingleStats(LocalDate.now(), 2, 1, 0.15f),
-            chartData = Result.Success(ActionCountChart(emptyList(), ActionCountChart.Type.Weekly)),
+            chartData = Result.Success(ActionCountChart(
+                listOf(
+                    ActionCountChart.ChartItem("W23", 2022, 3),
+                    ActionCountChart.ChartItem("W24", 2022, 0),
+                    ActionCountChart.ChartItem("W25", 2022, 6),
+                ),
+                ActionCountChart.Type.Weekly)
+            ),
             onChartTypeChange = {},
             onBack = { },
             onEdit = { },

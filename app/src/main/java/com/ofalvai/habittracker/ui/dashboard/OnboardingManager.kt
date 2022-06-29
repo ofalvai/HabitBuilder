@@ -31,8 +31,8 @@ object OnboardingData {
             ),
             Step(
                 index = 1,
-                title = R.string.onboarding_step_logpress_title,
-                subtitle = R.string.onboarding_step_logpress_subtitle
+                title = R.string.onboarding_step_longpress_title,
+                subtitle = R.string.onboarding_step_longpress_subtitle
             ),
             Step(
                 index = 2,
