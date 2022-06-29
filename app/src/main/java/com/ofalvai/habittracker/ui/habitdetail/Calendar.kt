@@ -18,6 +18,7 @@ package com.ofalvai.habittracker.ui.habitdetail
 
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -113,6 +115,9 @@ private class DayViewContainer(
 
     val textView = view.findViewById<TextView>(R.id.calendarDayText)!!
     val backgroundColor = ContextCompat.getColor(view.context, R.color.calendarCellBackground)
+    val backgroundDrawable: Drawable = DrawableCompat.wrap(
+        ContextCompat.getDrawable(view.context, R.drawable.bg_calendar_day)!!
+    )
 
     lateinit var day: CalendarDay
     lateinit var action: Action
@@ -143,9 +148,12 @@ private class DayViewContainer(
             View.INVISIBLE // View.GONE would mess up the grid-like layout
         }
 
-        textView.setBackgroundColor(
+        DrawableCompat.setTint(
+            backgroundDrawable,
             if (action.toggled) habitColor.toColorInt() else backgroundColor
         )
+        textView.background = backgroundDrawable
+
         textView.setTextColor(
             (if (action.toggled) textColorActive else textColor).toColorInt()
         )

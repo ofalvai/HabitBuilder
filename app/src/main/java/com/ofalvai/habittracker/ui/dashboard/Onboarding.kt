@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
@@ -67,7 +68,8 @@ fun Onboarding(state: OnboardingState) {
                 Text(
                     text = "${(progress * 100).roundToInt()}%",
                     modifier = Modifier.align(Alignment.Center),
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.caption,
+                    fontWeight = FontWeight.Bold
                 )
             }
 

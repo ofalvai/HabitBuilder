@@ -19,6 +19,8 @@ package com.ofalvai.habittracker.ui.dashboard
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -203,6 +205,7 @@ private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
             .wrapContentWidth()
             .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -211,7 +214,7 @@ private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
 
         Image(
             painter = painterResource(R.drawable.illustration_empty_state),
-            contentDescription = ""
+            contentDescription = null
         )
 
         Text(

@@ -18,6 +18,7 @@ package com.ofalvai.habittracker.ui.insights.component
 
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -44,6 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -275,6 +278,9 @@ private class DayViewContainer(
 ) : ViewContainer(view) {
 
     val textView = view.findViewById<TextView>(R.id.calendarDayText)!!
+    val backgroundDrawable: Drawable = DrawableCompat.wrap(
+        ContextCompat.getDrawable(view.context, R.drawable.bg_calendar_day)!!
+    )
 
     lateinit var day: CalendarDay
     lateinit var bucketInfo: HeatmapMonth.BucketInfo
@@ -296,7 +302,8 @@ private class DayViewContainer(
 
         val today = LocalDate.now()
         val color = primaryColor.adjustToBucketIndex(bucketInfo.bucketIndex, bucketCount)
-        textView.setBackgroundColor(color.toColorInt())
+        DrawableCompat.setTint(backgroundDrawable, color.toColorInt())
+        textView.background = backgroundDrawable
 
         textView.visibility = if (day.owner == DayOwner.THIS_MONTH) {
             View.VISIBLE
