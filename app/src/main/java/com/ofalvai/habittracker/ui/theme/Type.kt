@@ -17,7 +17,6 @@
 package com.ofalvai.habittracker.ui.theme
 
 import androidx.compose.material.Typography
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -35,9 +34,7 @@ private val patua = FontFamily(
     Font(R.font.patua_one_regular)
 )
 
-val typography: Typography
-    @Composable
-    get() = Typography(
+val typography = Typography(
         defaultFontFamily = lato,
         button = TextStyle(
             fontWeight = FontWeight.Medium,
@@ -48,28 +45,16 @@ val typography: Typography
 
 object AppTextStyle {
 
-    val screenTitle: TextStyle
-        @Composable
-        get() = typography.h6.copy(fontFamily = patua)
+    val screenTitle = typography.h6.copy(fontFamily = patua)
 
-    val habitTitle: TextStyle
-        @Composable
-        get() = typography.h4.copy(fontFamily = patua, fontSize = 36.sp)
+    val habitTitle = typography.h4.copy(fontFamily = patua, fontSize = 36.sp)
 
-    val habitCompactTitle: TextStyle
-        @Composable
-        get() = typography.subtitle2.copy(fontFamily = patua)
+    val habitCompactTitle = typography.subtitle2.copy(fontFamily = patua)
 
-    val habitSubtitle: TextStyle
-        @Composable
-        get() = typography.h6.copy(fontFamily = patua)
+    val habitSubtitle = typography.h6.copy(fontFamily = patua)
 
-    val insightCardTitle: TextStyle
-        @Composable
-        get() = typography.h6.copy(fontWeight = FontWeight.Bold) // Lato doesn't have medium
+    val insightCardTitle = typography.h6.copy(fontWeight = FontWeight.Bold) // Lato doesn't have medium
 
-    val singleStatValue: TextStyle
-        @Composable
-        get() = typography.h5.copy(fontFamily = patua)
+    val singleStatValue = typography.h5.copy(fontFamily = patua)
 
 }

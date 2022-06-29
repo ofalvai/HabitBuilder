@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.ui.theme
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import com.ofalvai.habittracker.ui.model.Habit
 
@@ -78,44 +79,36 @@ object AppColor {
  * It's a single color in both light and dark mode (higher elevation won't make it lighter)
  */
 val Colors.surfaceVariant: Color
-    @Composable
     get() = if (isLight) AppColor.Light.surfaceVariant else AppColor.Dark.surfaceVariant
 
 val Colors.gray1: Color
-    @Composable
     get() = if (isLight) AppColor.Light.gray1 else AppColor.Dark.gray1
 
 val Colors.gray2: Color
-    @Composable
     get() = if (isLight) AppColor.Light.gray2 else AppColor.Dark.gray2
 
 val Colors.habitRed: Color
-    @Composable
     get() = if (isLight) AppColor.Light.habitRed else AppColor.Dark.habitRed
 
 val Colors.habitGreen: Color
-    @Composable
     get() = if (isLight) AppColor.Light.habitGreen else AppColor.Dark.habitGreen
 
 val Colors.habitBlue: Color
-    @Composable
     get() = if (isLight) AppColor.Light.habitBlue else AppColor.Dark.habitBlue
 
 val Colors.habitYellow: Color
-    @Composable
     get() = if (isLight) AppColor.Light.habitYellow else AppColor.Dark.habitYellow
 
 val Colors.habitCyan: Color
-    @Composable
     get() = if (isLight) AppColor.Light.habitCyan else AppColor.Dark.habitCyan
 
 val Colors.habitPink: Color
-    @Composable
     get() = if (isLight) AppColor.Light.habitPink else AppColor.Dark.habitPink
 
 
 val Habit.Color.composeColor: Color
     @Composable
+    @ReadOnlyComposable
     get() = when (this) {
         Habit.Color.Green -> MaterialTheme.colors.habitGreen
         Habit.Color.Blue -> MaterialTheme.colors.habitBlue
