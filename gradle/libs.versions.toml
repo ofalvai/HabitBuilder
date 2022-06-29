@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.6.21"
-compose = "1.2.0-beta02"
+compose = "1.2.0-rc03"
 room = "2.4.2"
 accompanist = "0.23.1"
 showkase = "1.0.0-beta12"
