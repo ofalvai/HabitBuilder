@@ -16,12 +16,12 @@
 
 package com.ofalvai.habittracker.mapper
 
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.ActionHistory
+import com.ofalvai.habittracker.core.model.Action
+import com.ofalvai.habittracker.core.model.ActionHistory
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
+import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
 private const val RECENT_ACTIONS_PER_HABIT = 7
 

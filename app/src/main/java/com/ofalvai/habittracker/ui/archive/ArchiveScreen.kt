@@ -40,17 +40,18 @@ import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.ui.component.ConfirmationDialog
+import com.ofalvai.habittracker.core.ui.component.ErrorView
+import com.ofalvai.habittracker.core.ui.state.Result
+import com.ofalvai.habittracker.core.ui.state.asEffect
+import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
+import com.ofalvai.habittracker.core.ui.theme.CoreIcons
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
-import com.ofalvai.habittracker.ui.common.ConfirmationDialog
-import com.ofalvai.habittracker.ui.common.ErrorView
-import com.ofalvai.habittracker.ui.common.Result
-import com.ofalvai.habittracker.ui.common.asEffect
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
-import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import kotlinx.coroutines.launch
 import java.time.Instant
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
 fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
@@ -125,7 +126,7 @@ private fun ArchiveScreen(
             title = { Text(stringResource(R.string.archive_title)) },
             navigationIcon = {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
+                    Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
                 }
             },
             backgroundColor = Color.Transparent,
@@ -230,8 +231,8 @@ private fun EmptyView() {
     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 32.dp)) {
         Icon(
             modifier = Modifier.size(64.dp).align(Alignment.CenterHorizontally).alpha(0.5f),
-            painter = AppIcons.Archive,
-            contentDescription = stringResource(R.string.common_archive)
+            painter = CoreIcons.Archive,
+            contentDescription = stringResource(coreR.string.common_archive)
         )
         Spacer(Modifier.height(16.dp))
         Text(

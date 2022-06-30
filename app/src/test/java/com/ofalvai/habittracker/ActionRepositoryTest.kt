@@ -16,9 +16,9 @@
 
 package com.ofalvai.habittracker
 
-import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.repo.ActionRepository
-import com.ofalvai.habittracker.ui.model.Action
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -30,7 +30,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
+import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
 @ExperimentalCoroutinesApi
 class ActionRepositoryTest {

@@ -21,12 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ofalvai.habittracker.core.model.Action
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
 import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
 import com.ofalvai.habittracker.ui.dashboard.view.ReorderableHabitList
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import java.time.LocalDate
 

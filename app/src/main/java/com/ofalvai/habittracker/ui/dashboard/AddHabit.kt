@@ -44,12 +44,13 @@ import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.ui.component.HabitColorPicker
+import com.ofalvai.habittracker.core.ui.state.asEffect
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.ui.TextFieldError
-import com.ofalvai.habittracker.ui.common.HabitColorPicker
-import com.ofalvai.habittracker.ui.common.asEffect
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.ui.theme.surfaceVariant
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
 fun AddHabitScreen(navController: NavController) {
@@ -166,7 +167,7 @@ private fun AddHabitAppBar(onBack: () -> Unit) {
         title = { Text(stringResource(R.string.addhabit_appbar_title)) },
         navigationIcon = {
             IconButton(onClick = onBack) {
-                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
+                Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
             }
         },
         backgroundColor = Color.Transparent,

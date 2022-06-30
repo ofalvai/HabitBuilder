@@ -44,9 +44,10 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.BuildConfig
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.gray1
 import com.ofalvai.habittracker.ui.Destination
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.ui.theme.gray1
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 private const val SOURCE_URL = "https://github.com/ofalvai/HabitTracker"
 private const val MARKET_URL = "market://details?id=${BuildConfig.APPLICATION_ID}"
@@ -105,7 +106,7 @@ fun SettingsScreen(
             title = { Text(stringResource(R.string.settings_title)) },
             navigationIcon = {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
+                    Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
                 }
             },
             backgroundColor = Color.Transparent,

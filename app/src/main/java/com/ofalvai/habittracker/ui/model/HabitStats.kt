@@ -17,6 +17,7 @@
 package com.ofalvai.habittracker.ui.model
 
 import androidx.annotation.FloatRange
+import com.ofalvai.habittracker.core.model.HabitId
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth

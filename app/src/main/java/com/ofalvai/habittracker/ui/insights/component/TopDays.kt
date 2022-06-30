@@ -35,14 +35,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.model.HabitId
+import com.ofalvai.habittracker.core.ui.component.ErrorView
+import com.ofalvai.habittracker.core.ui.state.Result
+import com.ofalvai.habittracker.core.ui.theme.CoreIcons
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.ui.AppIcons
 import com.ofalvai.habittracker.ui.Destination
-import com.ofalvai.habittracker.ui.common.ErrorView
-import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
-import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.TopDayItem
-import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
 
 @Composable
 fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
@@ -126,7 +127,7 @@ private fun TopDaysRow(
 
         IconButton(onClick = { onClick(item.habitId) }) {
             Icon(
-                painter = AppIcons.ChevronRight,
+                painter = CoreIcons.ChevronRight,
                 contentDescription = stringResource(
                     R.string.insights_tophabits_navigate,
                     item.name

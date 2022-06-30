@@ -38,7 +38,7 @@ import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.model.Action
+import com.ofalvai.habittracker.core.model.Action
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth

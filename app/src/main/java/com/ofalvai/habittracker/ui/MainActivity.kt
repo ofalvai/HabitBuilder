@@ -44,6 +44,8 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.ui.theme.AppTheme
+import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.archive.ArchiveScreen
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
@@ -52,8 +54,6 @@ import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.ui.insights.InsightsScreen
 import com.ofalvai.habittracker.ui.settings.LicensesScreen
 import com.ofalvai.habittracker.ui.settings.SettingsScreen
-import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -172,7 +172,7 @@ private fun AppBottomNavigation(navController: NavController) {
 
             AppBottomNavigationItem(
                 rootScreen = Destination.Dashboard,
-                icon = { Icon(AppIcons.Habits, stringResource(R.string.tab_dashboard)) },
+                icon = { Icon(CoreIcons.Habits, stringResource(R.string.tab_dashboard)) },
                 label = stringResource(R.string.tab_dashboard),
                 currentDestination = currentDestination,
                 navController = navController

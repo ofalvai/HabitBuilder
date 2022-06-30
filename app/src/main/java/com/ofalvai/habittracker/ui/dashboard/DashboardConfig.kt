@@ -35,11 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.common.HorizontalGrid
+import com.ofalvai.habittracker.core.ui.component.HorizontalGrid
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.gray1
+import com.ofalvai.habittracker.core.ui.theme.gray2
 import com.ofalvai.habittracker.ui.model.DashboardConfig
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.ui.theme.gray1
-import com.ofalvai.habittracker.ui.theme.gray2
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 
 @Composable
@@ -116,7 +117,7 @@ private fun DialogContent(
             onClick = onDismissed,
             modifier = Modifier.align(Alignment.End).padding(top = 16.dp)
         ) {
-            Text(text = stringResource(R.string.common_save))
+            Text(text = stringResource(coreR.string.common_save))
         }
     }
 }

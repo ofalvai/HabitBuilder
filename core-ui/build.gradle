@@ -1,0 +1,14 @@
+plugins {
+    id 'habittracker.android.library'
+    id 'habittracker.android.library.compose'
+}
+
+android {
+    namespace 'com.ofalvai.habittracker.core.ui'
+}
+
+dependencies {
+    api project(':core-model')
+
+    implementation libs.androidx.lifecycle.runtime
+}

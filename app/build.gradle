@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.spotify.ruler'
+    id 'habittracker.android.app'
 }
 
 apply plugin: 'com.google.devtools.ksp'
@@ -11,29 +12,14 @@ apply plugin: 'com.bugsnag.android.gradle'
 
 ext {
     PACKAGE_NAME = "com.ofalvai.habittracker"
-    VERSION_CODE = 1
-    VERSION_NAME = "0.1.0"
     API_KEY_BUGSNAG = "2e13a542ae3ed09ad42a5c82444925af"
 }
 
 android {
-    compileSdk 31
-
     defaultConfig {
         applicationId PACKAGE_NAME
-        minSdk 21
-        targetSdk 31
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            ksp {
-                arg("room.incremental", "true")
-                arg("room.schemaLocation", "$projectDir/schemas".toString())
-            }
-        }
 
         manifestPlaceholders = [api_key_bugsnag: "${API_KEY_BUGSNAG}"]
     }
@@ -59,9 +45,10 @@ android {
     }
     kotlinOptions {
         useIR = true
-        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+        freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
     }
     buildFeatures {
+        buildConfig true
         compose true
     }
 
@@ -76,7 +63,6 @@ android {
             excludes += ['META-INF/licenses/**', 'META-INF/AL2.0', 'META-INF/LGPL2.1', '**/attach_hotspot_windows.dll']
         }
     }
-
 
     testOptions {
         animationsDisabled = true
@@ -167,14 +153,10 @@ licensee {
     }
 }
 
-// https://www.zacsweers.dev/kapts-hidden-test-costs/
-tasks
-    .matching {
-        it.name.startsWith("ksp") && it.name.endsWith("TestKotlin")
-    }
-    .configureEach { it.enabled = false }
-
 dependencies {
+    implementation project(':core-database')
+    implementation project(':core-ui')
+    implementation project(':core-model')
     coreLibraryDesugaring libs.android.tools.desugar
 
     implementation libs.bundles.compose
@@ -184,10 +166,7 @@ dependencies {
     implementation libs.androidx.navigation.compose
     implementation libs.androidx.activity.compose
 
-    implementation libs.androidx.lifecycle.runtime
-
-    implementation libs.androidx.room.ktx
-    ksp libs.androidx.room.compiler
+    implementation libs.androidx.room.runtime
 
     implementation libs.logcat
     implementation libs.calendarview
@@ -205,11 +184,13 @@ dependencies {
     debugImplementation libs.showkase.full
     kspDebug libs.showkase.processor
 
+    testImplementation project(':core-testing')
     testImplementation libs.junit
     testImplementation libs.kotlin.coroutines.test
     testImplementation libs.mockito.kotlin
     testImplementation libs.turbine
 
+    androidTestImplementation project(':core-testing')
     androidTestImplementation libs.kotlin.coroutines.test
     androidTestImplementation libs.androidx.junit.ext
     androidTestImplementation libs.androidx.espresso

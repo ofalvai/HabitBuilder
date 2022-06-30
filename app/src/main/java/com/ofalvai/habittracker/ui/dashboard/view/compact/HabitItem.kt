@@ -40,11 +40,11 @@ import androidx.compose.ui.zIndex
 import androidx.core.content.getSystemService
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.common.HorizontalGrid
+import com.ofalvai.habittracker.core.model.Action
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.ui.component.HorizontalGrid
+import com.ofalvai.habittracker.core.ui.theme.*
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.*
 import java.time.Instant
 import kotlin.random.Random
 
@@ -81,7 +81,7 @@ fun HabitItem(
                 onClick = { onDetailClick(habit) }
             ) {
                 Icon(
-                    AppIcons.ChevronRight,
+                    CoreIcons.ChevronRight,
                     contentDescription = stringResource(R.string.dashboard_item_details)
                 )
             }
@@ -190,7 +190,7 @@ fun PreviewHabitItem() {
     val actions1 = (1..7).map {
         Action(
             id = it,
-            toggled = Random.Default.nextBoolean(),
+            toggled = Random.nextBoolean(),
             timestamp = Instant.now()
         )
     }

@@ -46,10 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.model.HabitId
+import com.ofalvai.habittracker.core.model.HabitWithActions
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
-import com.ofalvai.habittracker.ui.model.HabitId
-import com.ofalvai.habittracker.ui.model.HabitWithActions
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
 import org.burnoutcrew.reorderable.*
 import java.time.LocalDate
 import java.time.format.TextStyle
