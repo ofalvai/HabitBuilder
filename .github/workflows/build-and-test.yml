@@ -45,8 +45,8 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-debug.html'
       
-      - name: Unit test
-        run: ./gradlew testDebugUnitTest --stacktrace
+      - name: Unit test (all modules)
+        run: ./gradlew test --stacktrace
       
       - name: Upload test reports
         uses: actions/upload-artifact@v3
