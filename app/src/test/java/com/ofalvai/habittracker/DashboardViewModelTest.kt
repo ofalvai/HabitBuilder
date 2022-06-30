@@ -17,20 +17,20 @@
 package com.ofalvai.habittracker
 
 import app.cash.turbine.test
-import com.ofalvai.habittracker.persistence.HabitDao
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.model.Action
+import com.ofalvai.habittracker.core.model.ActionHistory
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.model.HabitWithActions
+import com.ofalvai.habittracker.core.testing.MainCoroutineRule
+import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.repo.ActionRepository
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.AppPreferences
-import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.dashboard.DashboardEvent
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.ActionHistory
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
-import com.ofalvai.habittracker.util.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -43,10 +43,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.*
 import java.time.Instant
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
-import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
-import com.ofalvai.habittracker.persistence.entity.Habit.Color as ColorEntity
-import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
+import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
+import com.ofalvai.habittracker.core.database.entity.Habit as HabitEntity
+import com.ofalvai.habittracker.core.database.entity.Habit.Color as ColorEntity
+import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
 @ExperimentalCoroutinesApi
 class DashboardViewModelTest {

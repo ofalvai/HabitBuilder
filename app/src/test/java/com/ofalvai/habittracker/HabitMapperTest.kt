@@ -16,18 +16,18 @@
 
 package com.ofalvai.habittracker
 
+import com.ofalvai.habittracker.core.model.Action
+import com.ofalvai.habittracker.core.model.ActionHistory
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.ActionHistory
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
-import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
-import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
+import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
+import com.ofalvai.habittracker.core.database.entity.Habit as HabitEntity
+import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
 class HabitMapperTest {
 

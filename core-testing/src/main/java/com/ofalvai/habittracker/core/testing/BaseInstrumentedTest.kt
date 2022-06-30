@@ -1,0 +1,40 @@
+/*
+ * Copyright 2021 Olivér Falvai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ofalvai.habittracker.core.testing
+
+import android.Manifest
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.rule.GrantPermissionRule
+import org.junit.Rule
+
+open class BaseInstrumentedTest {
+
+    /**
+     * Required for exporting test coverage file (coverage.ec) to sdcard
+     */
+    @get:Rule
+    val runtimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+
+    /**
+     * https://github.com/Kotlin/kotlinx.coroutines/issues/1204
+     */
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
+}

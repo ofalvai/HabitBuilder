@@ -32,12 +32,12 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.ui.component.AppBar
+import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.ui.Destination
-import com.ofalvai.habittracker.ui.common.AppBar
 import com.ofalvai.habittracker.ui.insights.component.Heatmap
 import com.ofalvai.habittracker.ui.insights.component.TopDays
 import com.ofalvai.habittracker.ui.insights.component.TopHabits
-import com.ofalvai.habittracker.ui.theme.AppTextStyle
 
 @Composable
 fun InsightsScreen(navController: NavController) {

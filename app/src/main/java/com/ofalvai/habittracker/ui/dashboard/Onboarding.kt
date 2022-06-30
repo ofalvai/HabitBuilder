@@ -34,9 +34,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.ui.model.OnboardingState
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.ui.theme.surfaceVariant
 import kotlin.math.roundToInt
 
 @Composable

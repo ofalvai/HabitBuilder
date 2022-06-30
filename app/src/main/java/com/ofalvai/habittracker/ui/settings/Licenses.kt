@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
 fun LicensesScreen(navController: NavController) {
@@ -56,7 +57,7 @@ fun LicensesScreen(navController: NavController) {
             title = { Text(stringResource(R.string.licenses_title)) },
             navigationIcon = {
                 IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
+                    Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
                 }
             },
             backgroundColor = Color.Transparent,

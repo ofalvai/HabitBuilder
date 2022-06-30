@@ -38,15 +38,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.model.HabitId
+import com.ofalvai.habittracker.core.ui.component.ErrorView
+import com.ofalvai.habittracker.core.ui.state.Result
+import com.ofalvai.habittracker.core.ui.theme.CoreIcons
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.gray1
 import com.ofalvai.habittracker.ui.Destination
-import com.ofalvai.habittracker.ui.common.ErrorView
-import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
-import com.ofalvai.habittracker.ui.model.HabitId
 import com.ofalvai.habittracker.ui.model.TopHabitItem
-import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.ui.theme.gray1
 
 @Composable
 fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
@@ -58,7 +58,7 @@ fun TopHabits(viewModel: InsightsViewModel, navController: NavController) {
     }
 
     InsightCard(
-        iconPainter = AppIcons.Habits,
+        iconPainter = CoreIcons.Habits,
         title = stringResource(R.string.insights_tophabits_title),
         description = stringResource(R.string.insights_tophabits_description)
     ) {
@@ -153,7 +153,7 @@ private fun TopHabitsRow(
 
         IconButton(onClick = { onClick(item.habitId) }) {
             Icon(
-                painter = AppIcons.ChevronRight,
+                painter = CoreIcons.ChevronRight,
                 contentDescription = stringResource(
                     R.string.insights_tophabits_navigate,
                     item.name

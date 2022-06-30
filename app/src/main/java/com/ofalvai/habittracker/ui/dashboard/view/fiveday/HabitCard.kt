@@ -45,16 +45,17 @@ import androidx.compose.ui.zIndex
 import androidx.core.content.getSystemService
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.model.Action
+import com.ofalvai.habittracker.core.model.ActionHistory
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.composeColor
+import com.ofalvai.habittracker.core.ui.theme.gray2
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.ActionHistory
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.ui.theme.composeColor
-import com.ofalvai.habittracker.ui.theme.gray2
 import java.time.Instant
 import kotlin.random.Random
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -160,13 +161,14 @@ fun ActionCircle(
                 animationSpec = tween(250, delayMillis = 250, easing = CubicBezierEasing(0.46f, 1.83f, 0.64f, 1f))
             ) with scaleOut(
                 animationSpec = tween(250)
-            )).using(SizeTransform(clip = false ))
+            )).using(SizeTransform(clip = false))
         }
     ) { targetToggled ->
         val backgroundColor = if (targetToggled) activeColor else MaterialTheme.colors.surface
         val borderColor = if (targetToggled) MaterialTheme.colors.gray2 else activeColor
         val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
-        val rippleRadius = remember { Constants.CircleSize / 1.7f } // Make it a bit bigger than D / 2
+        val rippleRadius =
+            remember { Constants.CircleSize / 1.7f } // Make it a bit bigger than D / 2
         val shape = CircleShape
         Box(
             contentAlignment = Alignment.Center,
@@ -208,7 +210,7 @@ fun ActionHistoryLabel(totalActionCount: Int, actionHistory: ActionHistory) {
             R.plurals.common_action_count_streak, actionHistory.days, actionHistory.days
         )
     }
-    val mergedLabel = stringResource(R.string.common_interpunct, totalLabel, actionHistoryLabel)
+    val mergedLabel = stringResource(coreR.string.common_interpunct, totalLabel, actionHistoryLabel)
 
     Text(
         text = mergedLabel,
@@ -246,7 +248,7 @@ fun PreviewHabitCard() {
     val actions1 = (1..5).map {
         Action(
             id = it,
-            toggled = Random.Default.nextBoolean(),
+            toggled = Random.nextBoolean(),
             timestamp = Instant.now()
         )
     }

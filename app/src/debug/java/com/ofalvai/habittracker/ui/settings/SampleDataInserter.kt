@@ -23,9 +23,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
 import com.ofalvai.habittracker.Dependencies
-import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.persistence.entity.Action
-import com.ofalvai.habittracker.persistence.entity.Habit
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.database.entity.Action
+import com.ofalvai.habittracker.core.database.entity.Habit
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate

@@ -23,9 +23,9 @@ import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
-import com.ofalvai.habittracker.persistence.AppDatabase
-import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.persistence.MIGRATIONS
+import com.ofalvai.habittracker.core.database.AppDatabase
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.database.MIGRATIONS
 import com.ofalvai.habittracker.repo.ActionRepository
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.telemetry.TelemetryImpl

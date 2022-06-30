@@ -17,16 +17,6 @@
 <resources>
     <string name="app_name">HabitTracker</string>
 
-    <string name="common_back">Back</string>
-    <string name="common_edit">Edit</string>
-    <string name="common_save">Save</string>
-    <string name="common_archive">Archive</string>
-    <string name="common_more">More</string>
-    <string name="common_error">Error</string>
-    <string name="common_empty">Empty</string>
-    <string name="common_cancel">Cancel</string>
-    <string name="common_interpunct">%1$s · %2$s</string>
-
     <string name="addhabit_appbar_title">Create new habit</string>
     <string name="addhabit_name_label">Habit name</string>
     <string name="addhabit_name_error">Enter a name for new habit</string>
@@ -61,9 +51,6 @@
 
     <string name="tab_dashboard">Habits</string>
     <string name="tab_insights">Insights</string>
-
-    <string name="calendar_previous_month">Previous month</string>
-    <string name="calendar_next_month">Next month</string>
 
     <string name="common_action_count_clean">Start today</string>
     <plurals name="common_action_count_total">

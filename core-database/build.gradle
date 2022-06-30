@@ -1,0 +1,45 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+apply plugin: 'com.google.devtools.ksp'
+
+android {
+    namespace 'com.ofalvai.habittracker.core.database'
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            ksp {
+                arg("room.incremental", "true")
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+
+        coreLibraryDesugaringEnabled true
+    }
+}
+
+dependencies {
+    api libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    ksp libs.androidx.room.compiler
+
+    testImplementation libs.junit
+
+    androidTestImplementation project(':core-testing')
+    androidTestImplementation libs.kotlin.coroutines.test
+    androidTestImplementation libs.androidx.junit.ext
+    androidTestImplementation libs.turbine
+}

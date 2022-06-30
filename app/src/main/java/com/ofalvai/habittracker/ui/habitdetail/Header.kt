@@ -39,14 +39,15 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.common.ErrorView
-import com.ofalvai.habittracker.ui.common.HabitColorPicker
-import com.ofalvai.habittracker.ui.common.Result
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.model.HabitWithActions
+import com.ofalvai.habittracker.core.ui.component.ErrorView
+import com.ofalvai.habittracker.core.ui.component.HabitColorPicker
+import com.ofalvai.habittracker.core.ui.state.Result
+import com.ofalvai.habittracker.core.ui.theme.*
 import com.ofalvai.habittracker.ui.model.SingleStats
-import com.ofalvai.habittracker.ui.theme.*
 import kotlin.math.roundToInt
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
 internal fun HabitDetailHeader(
@@ -293,13 +294,13 @@ private fun HabitDetailAppBar(
         title = { },
         navigationIcon = {
             IconButton(onClick = onBack) {
-                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
+                Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
             }
         },
         actions = {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
                 IconButton(onClick = onEdit) {
-                    Icon(Icons.Rounded.Edit, stringResource(R.string.common_edit))
+                    Icon(Icons.Rounded.Edit, stringResource(coreR.string.common_edit))
                 }
             }
         },
@@ -318,16 +319,16 @@ private fun HabitDetailEditingAppBar(
         title = { },
         navigationIcon = {
             IconButton(onClick = onBack) {
-                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
+                Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
             }
         },
         actions = {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
                 IconButton(onClick = onSave) {
-                    Icon(Icons.Rounded.Check, stringResource(R.string.common_save))
+                    Icon(Icons.Rounded.Check, stringResource(coreR.string.common_save))
                 }
                 IconButton(onClick = onArchive) {
-                    Icon(AppIcons.Archive, stringResource(R.string.common_archive))
+                    Icon(CoreIcons.Archive, stringResource(coreR.string.common_archive))
                 }
             }
         },
@@ -343,7 +344,7 @@ private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
         title = { },
         navigationIcon = {
             IconButton(onClick = onBack) {
-                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.common_back))
+                Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
             }
         },
         backgroundColor = Color.Transparent,

@@ -16,13 +16,13 @@
 
 package com.ofalvai.habittracker.repo
 
-import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.ui.model.Action
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.model.Action
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.OffsetDateTime
-import com.ofalvai.habittracker.persistence.entity.Action as ActionEntity
+import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
 class ActionRepository(
     private val dao: HabitDao,

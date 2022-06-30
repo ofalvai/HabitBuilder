@@ -16,11 +16,11 @@
 
 package com.ofalvai.habittracker.mapper
 
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.model.HabitWithActions
-import com.ofalvai.habittracker.persistence.entity.Habit as HabitEntity
-import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
+import com.ofalvai.habittracker.core.database.entity.Habit as HabitEntity
+import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
 fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): List<HabitWithActions> {
     return habitsWithActions.map {

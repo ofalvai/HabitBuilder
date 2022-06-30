@@ -18,12 +18,12 @@ package com.ofalvai.habittracker.ui.insights
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.mapper.mapHabitActionCount
 import com.ofalvai.habittracker.mapper.mapHabitTopDay
 import com.ofalvai.habittracker.mapper.mapSumActionCountByDay
-import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.telemetry.Telemetry
-import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.TopDayItem

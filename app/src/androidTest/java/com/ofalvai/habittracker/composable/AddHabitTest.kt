@@ -19,10 +19,10 @@ package com.ofalvai.habittracker.composable
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.testing.BaseInstrumentedTest
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.dashboard.AddHabitForm
-import com.ofalvai.habittracker.ui.model.Habit
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.util.BaseInstrumentedTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule

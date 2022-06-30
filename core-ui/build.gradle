@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+android {
+    namespace 'com.ofalvai.habittracker.core.ui'
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro" // TODO
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn' // TODO: apply to all modules
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
+    }
+}
+
+dependencies {
+    api project(':core-model')
+
+    coreLibraryDesugaring libs.android.tools.desugar
+
+    implementation libs.androidx.lifecycle.runtime
+
+    api libs.bundles.compose
+    implementation libs.compose.ui.toolingpreview
+    debugImplementation libs.compose.ui.tooling
+
+    implementation libs.showkase.annotation
+}

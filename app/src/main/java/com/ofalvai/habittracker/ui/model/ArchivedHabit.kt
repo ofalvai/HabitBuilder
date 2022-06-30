@@ -16,6 +16,7 @@
 
 package com.ofalvai.habittracker.ui.model
 
+import com.ofalvai.habittracker.core.model.HabitId
 import java.time.Instant
 
 data class ArchivedHabit(

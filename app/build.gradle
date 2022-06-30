@@ -28,13 +28,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        javaCompileOptions {
-            ksp {
-                arg("room.incremental", "true")
-                arg("room.schemaLocation", "$projectDir/schemas".toString())
-            }
-        }
-
         manifestPlaceholders = [api_key_bugsnag: "${API_KEY_BUGSNAG}"]
     }
 
@@ -62,6 +55,7 @@ android {
         freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
     }
     buildFeatures {
+        buildConfig true
         compose true
     }
 
@@ -167,14 +161,10 @@ licensee {
     }
 }
 
-// https://www.zacsweers.dev/kapts-hidden-test-costs/
-tasks
-    .matching {
-        it.name.startsWith("ksp") && it.name.endsWith("TestKotlin")
-    }
-    .configureEach { it.enabled = false }
-
 dependencies {
+    implementation project(':core-database')
+    implementation project(':core-ui')
+    implementation project(':core-model')
     coreLibraryDesugaring libs.android.tools.desugar
 
     implementation libs.bundles.compose
@@ -184,10 +174,7 @@ dependencies {
     implementation libs.androidx.navigation.compose
     implementation libs.androidx.activity.compose
 
-    implementation libs.androidx.lifecycle.runtime
-
-    implementation libs.androidx.room.ktx
-    ksp libs.androidx.room.compiler
+    implementation libs.androidx.room.runtime
 
     implementation libs.logcat
     implementation libs.calendarview
@@ -205,11 +192,13 @@ dependencies {
     debugImplementation libs.showkase.full
     kspDebug libs.showkase.processor
 
+    testImplementation project(':core-testing')
     testImplementation libs.junit
     testImplementation libs.kotlin.coroutines.test
     testImplementation libs.mockito.kotlin
     testImplementation libs.turbine
 
+    androidTestImplementation project(':core-testing')
     androidTestImplementation libs.kotlin.coroutines.test
     androidTestImplementation libs.androidx.junit.ext
     androidTestImplementation libs.androidx.espresso

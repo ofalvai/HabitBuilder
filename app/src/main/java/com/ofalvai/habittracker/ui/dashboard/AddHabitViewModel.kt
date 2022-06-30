@@ -18,10 +18,10 @@ package com.ofalvai.habittracker.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.mapper.toEntity
-import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.telemetry.Telemetry
-import com.ofalvai.habittracker.ui.model.Habit
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

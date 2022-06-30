@@ -30,9 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.ui.theme.AppIcons
-import com.ofalvai.habittracker.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
+import com.ofalvai.habittracker.core.ui.theme.CoreIcons
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.ui.AppIcons
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
 fun InsightCard(
@@ -97,7 +99,7 @@ fun EmptyView(label: String) {
         Icon(
             modifier = Modifier.size(64.dp).align(Alignment.CenterHorizontally).alpha(0.5f),
             painter = painterResource(R.drawable.ic_insights_placeholder),
-            contentDescription = stringResource(R.string.common_empty)
+            contentDescription = stringResource(coreR.string.common_empty)
         )
         Spacer(Modifier.height(16.dp))
         Text(
@@ -114,7 +116,7 @@ fun PreviewInsightCard() {
     PreviewTheme {
         InsightCard(
             modifier = Modifier.padding(16.dp),
-            iconPainter = AppIcons.Habits,
+            iconPainter = CoreIcons.Habits,
             title = "Test stats",
             description = "Heatmap shows you the number of habits done every day. Darker days mean more completed habits on a given day."
         ) {

@@ -18,11 +18,11 @@ package com.ofalvai.habittracker.ui.archive
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.database.entity.HabitById
+import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.mapper.mapHabitEntityToArchivedModel
-import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.persistence.entity.HabitById
 import com.ofalvai.habittracker.telemetry.Telemetry
-import com.ofalvai.habittracker.ui.common.Result
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
+import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
 enum class ArchiveEvent {
     UnarchiveError,

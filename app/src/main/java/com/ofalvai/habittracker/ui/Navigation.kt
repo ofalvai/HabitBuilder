@@ -22,7 +22,7 @@ import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import com.google.accompanist.navigation.animation.composable
-import com.ofalvai.habittracker.ui.theme.AppTransition
+import com.ofalvai.habittracker.core.ui.theme.AppTransition
 
 sealed class Screen constructor(
     val route: String,

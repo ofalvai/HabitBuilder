@@ -16,11 +16,11 @@
 
 package com.ofalvai.habittracker
 
+import com.ofalvai.habittracker.core.database.entity.*
 import com.ofalvai.habittracker.mapper.mapHabitActionCount
 import com.ofalvai.habittracker.mapper.mapHabitSingleStats
 import com.ofalvai.habittracker.mapper.mapHabitTopDay
 import com.ofalvai.habittracker.mapper.mapSumActionCountByDay
-import com.ofalvai.habittracker.persistence.entity.*
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.SingleStats
 import com.ofalvai.habittracker.ui.model.TopDayItem
@@ -417,7 +417,10 @@ class StatsMapperTest {
         // Given
         val now = LocalDate.now()
         val locale = Locale("hu", "hu")
-        val completionRate = ActionCompletionRate(first_day = Instant.EPOCH, action_count = 0)
+        val completionRate = ActionCompletionRate(
+            first_day = Instant.EPOCH,
+            action_count = 0
+        )
         val weeklyActionCountList = emptyList<ActionCountByWeek>()
 
         // When
@@ -540,10 +543,25 @@ class StatsMapperTest {
             HabitTopDay(0, "Sunday habit", DayOfWeek.SUNDAY, 2),
             HabitTopDay(0, "Monday habit", DayOfWeek.MONDAY, 13),
             HabitTopDay(0, "Tuesday habit", DayOfWeek.TUESDAY, 3),
-            HabitTopDay(0, "Wednesday habit", DayOfWeek.WEDNESDAY, 234),
-            HabitTopDay(0, "Thursday habit", DayOfWeek.THURSDAY, 2),
+            HabitTopDay(
+                0,
+                "Wednesday habit",
+                DayOfWeek.WEDNESDAY,
+                234
+            ),
+            HabitTopDay(
+                0,
+                "Thursday habit",
+                DayOfWeek.THURSDAY,
+                2
+            ),
             HabitTopDay(0, "Friday habit", DayOfWeek.FRIDAY, 6),
-            HabitTopDay(0, "Saturday habit", DayOfWeek.SATURDAY, 1),
+            HabitTopDay(
+                0,
+                "Saturday habit",
+                DayOfWeek.SATURDAY,
+                1
+            ),
             HabitTopDay(0, "Empty habit", DayOfWeek.SUNDAY, 0),
         )
 

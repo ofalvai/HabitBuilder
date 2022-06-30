@@ -17,10 +17,10 @@
 package com.ofalvai.habittracker.mapper
 
 import com.kizitonwose.calendarview.utils.yearMonth
-import com.ofalvai.habittracker.persistence.entity.ActionCompletionRate
-import com.ofalvai.habittracker.persistence.entity.HabitActionCount
-import com.ofalvai.habittracker.persistence.entity.HabitTopDay
-import com.ofalvai.habittracker.persistence.entity.SumActionCountByDay
+import com.ofalvai.habittracker.core.database.entity.ActionCompletionRate
+import com.ofalvai.habittracker.core.database.entity.HabitActionCount
+import com.ofalvai.habittracker.core.database.entity.HabitTopDay
+import com.ofalvai.habittracker.core.database.entity.SumActionCountByDay
 import com.ofalvai.habittracker.ui.model.*
 import java.time.*
 import java.time.format.TextStyle
@@ -28,8 +28,8 @@ import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 import java.util.*
 import kotlin.math.min
-import com.ofalvai.habittracker.persistence.entity.ActionCountByMonth as ActionCountByMonthEntity
-import com.ofalvai.habittracker.persistence.entity.ActionCountByWeek as ActionCountByWeekEntity
+import com.ofalvai.habittracker.core.database.entity.ActionCountByMonth as ActionCountByMonthEntity
+import com.ofalvai.habittracker.core.database.entity.ActionCountByWeek as ActionCountByWeekEntity
 
 fun mapHabitSingleStats(
     completionRate: ActionCompletionRate,
@@ -83,7 +83,7 @@ fun mapSumActionCountByDay(
 
     entityList.forEach {
         if (it.date?.yearMonth == yearMonth) {
-            dayMap[it.date] = actionCountToBucket(totalHabitCount, it.action_count)
+            dayMap[it.date!!] = actionCountToBucket(totalHabitCount, it.action_count)
         }
     }
 

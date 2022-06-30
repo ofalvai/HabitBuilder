@@ -18,22 +18,22 @@ package com.ofalvai.habittracker.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.model.Action
+import com.ofalvai.habittracker.core.model.HabitId
+import com.ofalvai.habittracker.core.model.HabitWithActions
+import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
-import com.ofalvai.habittracker.persistence.HabitDao
 import com.ofalvai.habittracker.repo.ActionRepository
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.AppPreferences
-import com.ofalvai.habittracker.ui.common.Result
-import com.ofalvai.habittracker.ui.model.Action
-import com.ofalvai.habittracker.ui.model.HabitId
-import com.ofalvai.habittracker.ui.model.HabitWithActions
 import com.ofalvai.habittracker.ui.model.OnboardingState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import com.ofalvai.habittracker.persistence.entity.HabitWithActions as HabitWithActionsEntity
+import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
 enum class DashboardEvent {
     ToggleActionError,

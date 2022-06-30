@@ -5,5 +5,9 @@ pluginManagement {
 }
 
 rootProject.name = "HabitTracker"
+
 include ':app'
-enableFeaturePreview("VERSION_CATALOGS")
+include ':core-database'
+include ':core-testing'
+include ':core-ui'
+include ':core-model'
