@@ -23,7 +23,7 @@ class AndroidAppConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             extensions.configure<AppExtension> {
-                compileSdkVersion = "android-$Constants.COMPILE_SDK"
+                compileSdkVersion = "android-${Constants.COMPILE_SDK}"
 
                 defaultConfig {
                     minSdk = Constants.MIN_SDK
