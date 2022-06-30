@@ -58,7 +58,6 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.component.CalendarDayLegend
 import com.ofalvai.habittracker.core.ui.component.CalendarPager
 import com.ofalvai.habittracker.core.ui.component.ErrorView
-import com.ofalvai.habittracker.core.ui.component.ImmutableHolder
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.gray2

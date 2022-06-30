@@ -1,27 +1,9 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id 'habittracker.android.library'
 }
-
-apply plugin: 'com.google.devtools.ksp'
 
 android {
     namespace 'com.ofalvai.habittracker.core.testing'
-    compileSdk 31
-
-    defaultConfig {
-        minSdk 21
-        targetSdk 31
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-
-    }
 }
 
 dependencies {

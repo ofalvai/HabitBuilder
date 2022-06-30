@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.spotify.ruler'
+    id 'habittracker.android.app'
 }
 
 apply plugin: 'com.google.devtools.ksp'
@@ -11,20 +12,12 @@ apply plugin: 'com.bugsnag.android.gradle'
 
 ext {
     PACKAGE_NAME = "com.ofalvai.habittracker"
-    VERSION_CODE = 1
-    VERSION_NAME = "0.1.0"
     API_KEY_BUGSNAG = "2e13a542ae3ed09ad42a5c82444925af"
 }
 
 android {
-    compileSdk 31
-
     defaultConfig {
         applicationId PACKAGE_NAME
-        minSdk 21
-        targetSdk 31
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -52,7 +45,7 @@ android {
     }
     kotlinOptions {
         useIR = true
-        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+        freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
     }
     buildFeatures {
         buildConfig true
@@ -70,7 +63,6 @@ android {
             excludes += ['META-INF/licenses/**', 'META-INF/AL2.0', 'META-INF/LGPL2.1', '**/attach_hotspot_windows.dll']
         }
     }
-
 
     testOptions {
         animationsDisabled = true

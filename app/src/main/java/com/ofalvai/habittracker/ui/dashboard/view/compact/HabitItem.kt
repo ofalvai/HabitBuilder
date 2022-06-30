@@ -43,7 +43,6 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.ui.component.HorizontalGrid
-import com.ofalvai.habittracker.core.ui.component.recomposeHighlighter
 import com.ofalvai.habittracker.core.ui.theme.*
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import java.time.Instant
