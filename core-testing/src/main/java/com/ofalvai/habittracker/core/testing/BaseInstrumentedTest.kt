@@ -16,21 +16,10 @@
 
 package com.ofalvai.habittracker.core.testing
 
-import android.Manifest
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 
 open class BaseInstrumentedTest {
-
-    /**
-     * Required for exporting test coverage file (coverage.ec) to sdcard
-     */
-    @get:Rule
-    val runtimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
 
     /**
      * https://github.com/Kotlin/kotlinx.coroutines/issues/1204
