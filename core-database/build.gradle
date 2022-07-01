@@ -28,6 +28,7 @@ dependencies {
 
     androidTestImplementation project(':core-testing')
     androidTestImplementation libs.kotlin.coroutines.test
+    androidTestImplementation libs.androidx.test.rules
     androidTestImplementation libs.androidx.junit.ext
     androidTestImplementation libs.turbine
 }
