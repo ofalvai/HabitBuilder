@@ -17,7 +17,6 @@
 package com.ofalvai.habittracker.core.testing
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
@@ -36,15 +35,14 @@ import org.junit.runner.Description
  * var mainCoroutineRule = MainCoroutineRule()
  * ```
  */
-@ExperimentalCoroutinesApi
 class MainCoroutineRule : TestWatcher() {
 
-    override fun starting(description: Description?) {
+    override fun starting(description: Description) {
         super.starting(description)
         Dispatchers.setMain(StandardTestDispatcher())
     }
 
-    override fun finished(description: Description?) {
+    override fun finished(description: Description) {
         super.finished(description)
         Dispatchers.resetMain()
     }

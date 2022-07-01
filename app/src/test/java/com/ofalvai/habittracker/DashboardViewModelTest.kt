@@ -31,12 +31,10 @@ import com.ofalvai.habittracker.ui.dashboard.DashboardEvent
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -48,7 +46,6 @@ import com.ofalvai.habittracker.core.database.entity.Habit as HabitEntity
 import com.ofalvai.habittracker.core.database.entity.Habit.Color as ColorEntity
 import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
-@ExperimentalCoroutinesApi
 class DashboardViewModelTest {
 
     private val dao = mock<HabitDao>()
@@ -160,23 +157,21 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given exception when toggling action When action is toggled Then error event is sent to UI`() = runTest {
+    fun `Given exception when toggling action When action is toggled Then error event is sent to UI`() = runTest() {
         // Given
         val exception = RuntimeException("Mocked error")
-        given(dao.insertAction()).willThrow(exception)
+        given(repo.toggleAction(any(), any(), any())).willThrow(exception)
         viewModel = createViewModel()
 
         // When
-        launch { // https://github.com/cashapp/turbine/issues/33
-            viewModel.dashboardEvent.test {
-                val action = Action(id = 0, toggled = true, timestamp = Instant.EPOCH)
-                viewModel.toggleAction(habitId = 0, action = action, daysInPast = 2)
+        viewModel.dashboardEvent.test {
+            val action = Action(id = 0, toggled = true, timestamp = Instant.EPOCH)
+            viewModel.toggleAction(habitId = 0, action = action, daysInPast = 2)
 
-                // Then
-                assertEquals(DashboardEvent.ActionPerformed, awaitItem())
-                assertEquals(DashboardEvent.ToggleActionError, awaitItem())
-                cancelAndConsumeRemainingEvents()
-            }
+            // Then
+            assertEquals(DashboardEvent.ActionPerformed, awaitItem())
+            assertEquals(DashboardEvent.ToggleActionError, awaitItem())
+            cancelAndConsumeRemainingEvents()
         }
     }
 
@@ -224,7 +219,7 @@ class DashboardViewModelTest {
             viewModel.persistItemMove(event)
 
             // Then
-            awaitItem()
+            skipItems(1)
             verifyNoInteractions(telemetry) // No exceptions
             verify(dao).updateHabitOrders(
                 id1 = 1,
@@ -263,7 +258,7 @@ class DashboardViewModelTest {
             viewModel.persistItemMove(event2)
 
             // Then
-            awaitItem()
+            skipItems(1)
             verify(dao).updateHabitOrders(
                 id1 = 1,
                 order1 = 1,
@@ -271,7 +266,7 @@ class DashboardViewModelTest {
                 order2 = 0
             )
 
-            awaitItem()
+            skipItems(1)
             verify(dao).updateHabitOrders(
                 id1 = 1,
                 order1 = 2,
@@ -312,13 +307,13 @@ class DashboardViewModelTest {
             viewModel.persistItemMove(event)
 
             // Then
-            awaitItem()
+            skipItems(1)
             verify(telemetry).logNonFatal(any())
 
             // Try another, non-throwing operation
             viewModel.persistItemMove(ItemMoveEvent(firstHabitId = 5, secondHabitId = 6))
 
-            awaitItem()
+            skipItems(1)
             verifyNoMoreInteractions(telemetry)
             verify(dao, times(2)).updateHabitOrders(
                 id1 = 5,

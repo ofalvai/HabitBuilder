@@ -19,7 +19,6 @@ package com.ofalvai.habittracker
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.repo.ActionRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -32,7 +31,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
-@ExperimentalCoroutinesApi
 class ActionRepositoryTest {
 
     private val dao = mock<HabitDao>()

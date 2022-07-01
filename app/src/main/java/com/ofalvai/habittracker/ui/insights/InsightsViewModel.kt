@@ -29,6 +29,7 @@ import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.model.TopHabitItem
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -64,14 +65,12 @@ class InsightsViewModel(
 
     private fun fetchStats() {
         viewModelScope.launch {
-            @Suppress("DeferredResultUnused")
-            async { reloadHeatmap(yearMonth = YearMonth.now()) }
-
-            @Suppress("DeferredResultUnused")
-            async { reloadTopHabits() }
-
-            @Suppress("DeferredResultUnused")
-            async { reloadHabitTopDays() }
+            val deferreds = listOf(
+                async { reloadHeatmap(yearMonth = YearMonth.now()) },
+                async { reloadTopHabits() },
+                async { reloadHabitTopDays() },
+            )
+            deferreds.awaitAll()
         }
     }
 

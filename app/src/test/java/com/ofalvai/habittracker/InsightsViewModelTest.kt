@@ -25,7 +25,6 @@ import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -38,7 +37,6 @@ import org.mockito.kotlin.mock
 import java.time.LocalDate
 import java.time.YearMonth
 
-@ExperimentalCoroutinesApi
 class InsightsViewModelTest {
 
     private val dao = mock<HabitDao>()
