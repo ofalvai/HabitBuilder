@@ -7,7 +7,6 @@ plugins {
 
 apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'app.cash.licensee'
-apply plugin: 'jacoco'
 apply plugin: 'com.bugsnag.android.gradle'
 
 ext {
@@ -31,7 +30,6 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-//            testCoverageEnabled true TODO: investigate why device tests are stuck when this is enabled
         }
 
         release {
@@ -66,32 +64,6 @@ android {
 
     testOptions {
         animationsDisabled = true
-
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
-    }
-}
-
-jacoco {
-    toolVersion = "0.8.7"
-}
-
-configurations.all{
-    resolutionStrategy {
-        eachDependency { details ->
-            if ('org.jacoco' == details.requested.group) {
-                details.useVersion "0.8.7"
-            }
-        }
-    }
-}
-
-afterEvaluate {
-    tasks.withType(Test) {
-        jacoco.excludes = ['jdk.internal.*']
     }
 }
 
@@ -100,49 +72,6 @@ ruler {
     locale.set("en")
     screenDensity.set(480)
     sdkVersion.set(27)
-}
-
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-    def fileFilter = [
-            '**/R.class',
-            '**/R$*.class',
-            '**/Manifest*.*',
-            'android/**/*.*',
-            '**/BuildConfig.*',
-            '**/*$ViewBinder*.*',
-            '**/*$ViewInjector*.*',
-            '**/Lambda$*.class',
-            '**/Lambda.class',
-            '**/*Lambda.class',
-            '**/*Lambda*.class',
-            '**/*Module.*',
-            '**/*Dagger*.*',
-            '**/*_MembersInjector.class',
-            '**/Dagger*Component*.class',
-            '**/Dagger*Subcomponent*.class',
-            '**/*Subcomponent$Builder.class',
-            '**/*Module_*Factory.class',
-            '**/*Dao_Impl.*'
-    ]
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/app_classes/debug").matching {
-        exclude fileFilter
-    }
-
-    sourceDirectories.setFrom(files([
-            android.sourceSets.main.java.srcDirs,
-            "$project.projectDir/src/main/java"
-    ]))
-    classDirectories.setFrom(files([debugTree]))
-    executionData.setFrom(fileTree(dir: "$buildDir", includes: [
-            "outputs/unit_test_code_coverage/debugUnitTest/*.exec",
-            "outputs/code_coverage/debugAndroidTest/connected/*coverage.ec"
-    ]))
 }
 
 licensee {
@@ -195,7 +124,6 @@ dependencies {
     androidTestImplementation libs.androidx.junit.ext
     androidTestImplementation libs.androidx.espresso
     androidTestImplementation libs.androidx.core.testing
-    androidTestImplementation libs.androidx.test.rules
     androidTestImplementation libs.turbine
     androidTestImplementation libs.compose.ui.test
     debugImplementation libs.compose.ui.test.manifest

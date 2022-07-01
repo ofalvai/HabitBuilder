@@ -9,7 +9,6 @@ android {
 dependencies {
     api libs.junit
     api libs.androidx.core.testing
-    api libs.androidx.test.rules
 
     api libs.kotlin.coroutines.test
 }
