@@ -26,7 +26,6 @@ import com.ofalvai.habittracker.core.database.entity.Habit
 import com.ofalvai.habittracker.core.database.entity.HabitById
 import com.ofalvai.habittracker.core.database.entity.HabitWithActions
 import com.ofalvai.habittracker.core.testing.BaseInstrumentedTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -36,7 +35,6 @@ import org.junit.runner.RunWith
 import java.io.IOException
 import java.time.Instant
 
-@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class HabitEntityTest : BaseInstrumentedTest() {
 

@@ -22,7 +22,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ofalvai.habittracker.core.database.entity.*
 import com.ofalvai.habittracker.core.testing.BaseInstrumentedTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -34,7 +33,6 @@ import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
 
-@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class OverallStatsTests : BaseInstrumentedTest() {
 

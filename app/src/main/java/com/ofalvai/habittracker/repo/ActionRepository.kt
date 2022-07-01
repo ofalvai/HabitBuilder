@@ -18,6 +18,9 @@ package com.ofalvai.habittracker.repo
 
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Action
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -26,21 +29,24 @@ import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
 class ActionRepository(
     private val dao: HabitDao,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     suspend fun toggleAction(
         habitId: Int,
         updatedAction: Action,
         date: LocalDate,
     ) {
-        if (updatedAction.toggled) {
-            val newAction = ActionEntity(
-                habit_id = habitId,
-                timestamp = LocalDateTime.of(date, LocalTime.now())
-                    .toInstant(OffsetDateTime.now().offset)
-            )
-            dao.insertAction(newAction)
-        } else {
-            dao.deleteAction(updatedAction.id)
+        withContext(dispatcher) {
+            if (updatedAction.toggled) {
+                val newAction = ActionEntity(
+                    habit_id = habitId,
+                    timestamp = LocalDateTime.of(date, LocalTime.now())
+                        .toInstant(OffsetDateTime.now().offset)
+                )
+                dao.insertAction(newAction)
+            } else {
+                dao.deleteAction(updatedAction.id)
+            }
         }
     }
 }
