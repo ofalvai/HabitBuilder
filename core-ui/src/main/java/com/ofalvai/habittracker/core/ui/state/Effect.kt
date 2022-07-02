@@ -17,9 +17,7 @@
 package com.ofalvai.habittracker.core.ui.state
 
 import android.annotation.SuppressLint
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +30,11 @@ fun <T> Flow<T>.asEffect(action: (T) -> Unit) {
         this.flowWithLifecycle(lifecycleOwner.lifecycle)
     }
 
+    // Make sure the LaunchedEffect lambda refers to the latest `action` value,
+    // even if a recomposition happens with a new `action`
+    val currentAction by rememberUpdatedState(action)
+
     LaunchedEffect(this, lifecycleOwner) {
-        lifecycleAwareFlow.collect { action(it) }
+        lifecycleAwareFlow.collect { currentAction(it) }
     }
 }
