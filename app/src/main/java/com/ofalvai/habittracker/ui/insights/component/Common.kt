@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -75,11 +76,18 @@ fun InsightHeader(
             )
             IconButton(
                 onClick = { expanded = !expanded },
-                modifier = Modifier.align(Alignment.CenterVertically),
+                modifier = Modifier.layout { measurable, constraints ->
+                    // Align to end of parent
+                    val placeable = measurable.measure(constraints)
+                    layout(placeable.width, placeable.height) {
+                        placeable.placeRelative(constraints.maxWidth - (placeable.width), 0)
+                    }
+                },
             ) {
                 Icon(
                     painter = AppIcons.InfoOutlined,
                     contentDescription = stringResource(R.string.insights_more_info),
+                    modifier = Modifier.alpha(.5f)
                 )
             }
         }
