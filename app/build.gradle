@@ -44,6 +44,7 @@ android {
     kotlinOptions {
         useIR = true
         freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
+        freeCompilerArgs += '-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'
     }
     buildFeatures {
         buildConfig true
@@ -91,6 +92,8 @@ dependencies {
     implementation libs.bundles.compose
     implementation libs.compose.ui.toolingpreview
     debugImplementation libs.compose.ui.tooling
+
+    implementation libs.kotlin.coroutines.core
 
     implementation libs.androidx.navigation.compose
     implementation libs.androidx.activity.compose

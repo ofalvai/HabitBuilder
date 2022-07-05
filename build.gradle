@@ -61,4 +61,21 @@ dependencyAnalysis {
             }
         }
     }
+    dependencies {
+        bundle("compose-ui") {
+            includeGroup("androidx.compose.ui")
+            includeGroup("androidx.compose.runtime")
+            includeDependency("androidx.compose.foundation:foundation")
+            includeDependency("androidx.compose.foundation:foundation-layout")
+        }
+        bundle("compose-animation") {
+            includeGroup("androidx.compose.animation")
+        }
+        bundle("compose-runtime") {
+            includeGroup("androidx.compose.runtime")
+        }
+        bundle("compose-material") {
+            includeGroup("androidx.compose.material")
+        }
+    }
 }

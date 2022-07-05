@@ -10,7 +10,7 @@ ksp = "com.google.devtools.ksp:1.6.21-1.0.5"
 gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
 gradle-cachefix = "org.gradle.android.cache-fix:2.5.5"
-dependencyanalysis = "com.autonomousapps.dependency-analysis:1.9.0"
+dependencyanalysis = "com.autonomousapps.dependency-analysis:1.10.0"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.6"
@@ -18,10 +18,11 @@ android-tools-gradle = "com.android.tools.build:gradle:7.2.1"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
 kotlin-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3"
 
 androidx-navigation-compose = "androidx.navigation:navigation-compose:2.4.2"
-androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
+androidx-activity-compose = "androidx.activity:activity-compose:1.5.0"
 
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }

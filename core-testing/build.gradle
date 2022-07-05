@@ -9,6 +9,6 @@ android {
 dependencies {
     api libs.junit
     api libs.androidx.core.testing
-
+    implementation libs.kotlin.coroutines.core
     api libs.kotlin.coroutines.test
 }

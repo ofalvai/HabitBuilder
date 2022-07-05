@@ -10,5 +10,7 @@ android {
 dependencies {
     api project(':core-model')
 
+    api libs.compose.ui.ui
     implementation libs.androidx.lifecycle.runtime
+    implementation libs.kotlin.coroutines.core
 }
