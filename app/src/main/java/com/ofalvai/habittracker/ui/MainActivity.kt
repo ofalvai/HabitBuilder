@@ -50,6 +50,7 @@ import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.archive.ArchiveScreen
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.DashboardScreen
+import com.ofalvai.habittracker.ui.export.ExportScreen
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.ui.insights.InsightsScreen
 import com.ofalvai.habittracker.ui.settings.LicensesScreen
@@ -119,6 +120,7 @@ private fun Screens(navController: NavHostController,
         appDestination(Destination.Settings) { SettingsScreen(navController) }
         appDestination(Destination.Licenses) { LicensesScreen(navController) }
         appDestination(Destination.Archive) { ArchiveScreen(navController, scaffoldState) }
+        appDestination(Destination.Export) { ExportScreen(navController) }
     }
 }
 

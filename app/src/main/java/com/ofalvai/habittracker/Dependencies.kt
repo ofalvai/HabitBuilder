@@ -34,6 +34,7 @@ import com.ofalvai.habittracker.ui.archive.ArchiveViewModel
 import com.ofalvai.habittracker.ui.dashboard.AddHabitViewModel
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
+import com.ofalvai.habittracker.ui.export.ExportViewModel
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.settings.LicensesViewModel
@@ -108,6 +109,9 @@ class AppViewModelFactory(
         }
         if (SettingsViewModel::class.java.isAssignableFrom(modelClass)) {
             return SettingsViewModel(appPreferences) as T
+        }
+        if (ExportViewModel::class.java.isAssignableFrom(modelClass)) {
+            return ExportViewModel(appContext, habitDao) as T
         }
         throw IllegalArgumentException("No matching ViewModel for ${modelClass.canonicalName}")
     }

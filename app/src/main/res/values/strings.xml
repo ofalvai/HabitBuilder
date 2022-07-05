@@ -103,6 +103,7 @@
 
     <string name="menu_settings">Settings</string>
     <string name="menu_archive">Archived habits</string>
+    <string name="menu_export">Export</string>
 
     <string name="licenses_title">❤️ Open Source</string>
     <string name="licenses_description">This app is built with the following open source libraries:</string>
