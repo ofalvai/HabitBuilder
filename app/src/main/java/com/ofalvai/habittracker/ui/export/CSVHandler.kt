@@ -26,7 +26,6 @@ import java.io.Reader
 private val FORMAT = CSVFormat.DEFAULT
     .builder()
     .setRecordSeparator("\n")
-    .setHeader()
     .build()
 private val TYPE_CONVERTERS = EntityTypeConverters()
 
@@ -36,11 +35,9 @@ object CSVHandler {
         val stringBuilder = StringBuilder()
         val printer = CSVPrinter(stringBuilder, FORMAT)
         printer.printRecord("id", "name", "color", "order", "archived", "notes")
-        printer.println()
 
         habits.forEach {
             printer.printRecord(it.id, it.name, it.color, it.order, it.archived, it.notes)
-            printer.println()
         }
 
         return stringBuilder
@@ -50,18 +47,16 @@ object CSVHandler {
         val stringBuilder = StringBuilder()
         val printer = CSVPrinter(stringBuilder, FORMAT)
         printer.printRecord("id", "habit_id", "timestamp")
-        printer.println()
 
         actions.forEach {
             printer.printRecord(it.id, it.habit_id, TYPE_CONVERTERS.fromInstant(it.timestamp))
-            printer.println()
         }
 
         return stringBuilder
     }
 
     fun importHabitList(csvReader: Reader): List<Habit> {
-        val habits = FORMAT.parse(csvReader).map {
+        val habits = FORMAT.builder().setHeader().build().parse(csvReader).map {
             Habit(
                 id = it.get("id").toInt(),
                 name = it.get("name"),
@@ -75,7 +70,7 @@ object CSVHandler {
     }
 
     fun importActionList(csvReader: Reader): List<Action> {
-        val actions = FORMAT.parse(csvReader).map {
+        val actions = FORMAT.builder().setHeader().build().parse(csvReader).map {
             Action(
                 id = it.get("id").toInt(),
                 habit_id = it.get("habit_id").toInt(),

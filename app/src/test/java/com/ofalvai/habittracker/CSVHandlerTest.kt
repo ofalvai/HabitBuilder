@@ -40,14 +40,10 @@ class CSVHandlerTest {
 
         // Then
         val expectedCSV = """id,name,color,order,archived,notes
-
 1,Meditation,Blue,0,false,
-
 2,Meditation,Yellow,1,false,Notes notes notes
-
 3,Meditation,Red,3,true,"Multi-line 
  description"
-
 """
         assertEquals(expectedCSV, csv)
     }
@@ -62,8 +58,6 @@ class CSVHandlerTest {
 
         // Then
         val expectedCSV = """id,name,color,order,archived,notes
-
-
 """
         assertEquals(expectedCSV, csv)
     }
@@ -82,13 +76,9 @@ class CSVHandlerTest {
 
         // Then
         val expectedCSV = """id,habit_id,timestamp
-
 1,1,1656878248000
-
 2,1,1656878248000
-
 3,2,0
-
 """
         assertEquals(expectedCSV, csv)
     }
@@ -103,7 +93,6 @@ class CSVHandlerTest {
 
         // Then
         val expectedCSV = """id,habit_id,timestamp
-
 """
         assertEquals(expectedCSV, csv)
     }
