@@ -14,6 +14,8 @@ ext {
     API_KEY_BUGSNAG = "2e13a542ae3ed09ad42a5c82444925af"
 }
 
+def useReleaseKeystore = rootProject.file("release/app-release.jks").exists()
+
 android {
     defaultConfig {
         applicationId PACKAGE_NAME
@@ -26,6 +28,23 @@ android {
     lint {
         enable 'DuplicateStrings', 'NewerVersionAvailable'
     }
+    lintOptions {
+        // Ignore any tests
+        ignoreTestSources true
+        // Make the build fail on any lint errors
+        abortOnError true
+    }
+
+    signingConfigs {
+        release {
+            if (useReleaseKeystore) {
+                storeFile rootProject.file("release/app-release.jks")
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+        }
+    }
 
     buildTypes {
         debug {
@@ -33,8 +52,14 @@ android {
         }
 
         release {
-            signingConfig = debug.signingConfig
+            if (useReleaseKeystore) {
+                signingConfig signingConfigs.release
+            } else {
+                // Otherwise just use the debug keystore (this is mainly for PR CI builds)
+                signingConfig signingConfigs.debug
+            }
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
