@@ -29,13 +29,16 @@ interface HabitDao {
     suspend fun getHabits(): List<Habit>
 
     @Insert
-    suspend fun insertHabit(vararg habit: Habit)
+    suspend fun insertHabits(habits: List<Habit>)
 
     @Delete(entity = Habit::class)
     suspend fun deleteHabit(habitById: HabitById)
 
     @Query("DELETE FROM habit")
     suspend fun deleteAllHabits()
+
+    @Query("DELETE FROM `action`")
+    suspend fun deleteAllActions()
 
     @Update
     suspend fun updateHabit(habit: Habit)
@@ -80,10 +83,18 @@ interface HabitDao {
     suspend fun getActionsAfter(after: Instant): List<Action>
 
     @Insert
-    suspend fun insertAction(vararg action: Action)
+    suspend fun insertActions(actions: List<Action>)
 
     @Query("DELETE FROM `action` WHERE id = :id")
     suspend fun deleteAction(id: Int)
+
+    @Transaction
+    suspend fun restoreBackup(habitsToRestore: List<Habit>, actionsToRestore: List<Action>) {
+        deleteAllHabits()
+        deleteAllActions()
+        insertHabits(habitsToRestore)
+        insertActions(actionsToRestore)
+    }
 
     /**
      * When there are no actions returns UNIX epoch time as first_day and action_count of 0

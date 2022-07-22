@@ -31,13 +31,24 @@ import com.ofalvai.habittracker.Dependencies
 fun ExportScreen(navController: NavController) {
     val viewModel = viewModel<ExportViewModel>(factory = Dependencies.viewModelFactory)
 
-    val launcher = rememberLauncherForActivityResult(viewModel.getCreateDocumentContract()) {
-        viewModel.onCreateDocumentResult(it)
+    val createDocumentLauncher = rememberLauncherForActivityResult(
+        viewModel.createDocumentContract
+    ) {
+            viewModel.onCreateDocumentResult(it)
+        }
+    val openDocumentLauncher = rememberLauncherForActivityResult(
+        viewModel.openDocumentContract
+    ) {
+        viewModel.onOpenDocumentResult(it)
     }
 
     Column(modifier = Modifier.statusBarsPadding()) {
-        Button(onClick = { launcher.launch(viewModel.getDocumentName()) }) {
+        Button(onClick = { createDocumentLauncher.launch(viewModel.exportDocumentName) }) {
             Text(text = "Export data")
+        }
+
+        Button(onClick = { openDocumentLauncher.launch(viewModel.importDocumentFormats) }) {
+            Text(text = "Import data")
         }
     }
 }

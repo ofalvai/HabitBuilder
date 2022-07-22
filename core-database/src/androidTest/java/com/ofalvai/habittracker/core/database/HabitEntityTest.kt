@@ -71,7 +71,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
             notes = ""
         )
 
-        habitDao.insertHabit(newHabit1, newHabit2)
+        habitDao.insertHabits(listOf(newHabit1, newHabit2))
 
         val habits = habitDao.getHabits()
         val expected = listOf(newHabit1.copy(id = 1), newHabit2.copy(id = 2))
@@ -98,8 +98,8 @@ class HabitEntityTest : BaseInstrumentedTest() {
             timestamp = Instant.parse("2020-12-23T10:16:30Z")
         )
 
-        habitDao.insertHabit(habit)
-        habitDao.insertAction(action1, action2)
+        habitDao.insertHabits(listOf(habit))
+        habitDao.insertActions(listOf(action1, action2))
 
         val actions = habitDao.getActionsForHabit(habitId)
         val expectedActions = listOf(action1.copy(id = 1), action2.copy(id = 2))
@@ -148,8 +148,8 @@ class HabitEntityTest : BaseInstrumentedTest() {
             timestamp = Instant.parse("2020-12-23T10:19:10Z")
         )
 
-        habitDao.insertHabit(habit1, habit2, habit3)
-        habitDao.insertAction(action1, action2, action3, action4)
+        habitDao.insertHabits(listOf(habit1, habit2, habit3))
+        habitDao.insertActions(listOf(action1, action2, action3, action4))
 
         val actions = habitDao.getActionsForHabit(habitId)
         val expectedActions = listOf(action1.copy(id = 1), action2.copy(id = 2))
@@ -187,8 +187,8 @@ class HabitEntityTest : BaseInstrumentedTest() {
             timestamp = Instant.parse("2020-12-26T10:19:10Z")
         )
 
-        habitDao.insertHabit(habit)
-        habitDao.insertAction(action1, action2, action3, action4)
+        habitDao.insertHabits(listOf(habit))
+        habitDao.insertActions(listOf(action1, action2, action3, action4))
 
         val actions = habitDao.getActionsAfter(Instant.parse("2020-12-24T20:00:00Z"))
         assertEquals(listOf(action3, action4), actions)
@@ -241,8 +241,8 @@ class HabitEntityTest : BaseInstrumentedTest() {
             timestamp = Instant.parse("2020-12-26T10:19:10Z")
         )
 
-        habitDao.insertHabit(habit1, habit2, habit3)
-        habitDao.insertAction(action1, action2, action3, action4)
+        habitDao.insertHabits(listOf(habit1, habit2, habit3))
+        habitDao.insertActions(listOf(action1, action2, action3, action4))
 
         habitDao.getActiveHabitsWithActions().test {
             val expectedHabitsWithActions = listOf(
@@ -273,8 +273,8 @@ class HabitEntityTest : BaseInstrumentedTest() {
             timestamp = Instant.parse("2021-05-31T10:16:30Z")
         )
 
-        habitDao.insertHabit(habit)
-        habitDao.insertAction(action1, action2)
+        habitDao.insertHabits(listOf(habit))
+        habitDao.insertActions(listOf(action1, action2))
         habitDao.deleteHabit(HabitById(habit.id))
 
         val actions = habitDao.getActionsForHabit(habitId)
@@ -317,7 +317,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
             notes = ""
         )
 
-        habitDao.insertHabit(newHabit1, newHabit2, newHabit3, newHabit4)
+        habitDao.insertHabits(listOf(newHabit1, newHabit2, newHabit3, newHabit4))
 
         val habits = habitDao.getHabits()
         val expected = listOf(
@@ -364,7 +364,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
             notes = ""
         )
 
-        habitDao.insertHabit(newHabit1, newHabit2, newHabit3, newHabit4)
+        habitDao.insertHabits(listOf(newHabit1, newHabit2, newHabit3, newHabit4))
 
         val habitPair = habitDao.getHabitPair(newHabit3.id, newHabit4.id)
         habitDao.updateHabitOrders(

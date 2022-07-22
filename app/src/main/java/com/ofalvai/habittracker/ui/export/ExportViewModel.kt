@@ -29,25 +29,30 @@ import kotlinx.coroutines.withContext
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
-import java.io.FileDescriptor
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
 private const val BACKUP_VERSION = 1
+
+private class BackupContent(
+    val habitsCSV: String,
+    val actionsCSV: String,
+    val metadata: Metadata
+) {
+    class Metadata(val backupVersion: Int)
+}
 
 class ExportViewModel(
     @SuppressLint("StaticFieldLeak") private val appContext: Context,
     private val habitDao: HabitDao
 ) : ViewModel() {
 
-    fun getDocumentName(): String {
-        return "HabitTracker-backup.zip" // TODO: include timestamp
-    }
-
-    fun getCreateDocumentContract() = ActivityResultContracts.CreateDocument("application/zip")
+    val exportDocumentName = "HabitTracker-backup.zip" // TODO: include timestamp
+    val importDocumentFormats = arrayOf("application/zip")
+    val createDocumentContract = ActivityResultContracts.CreateDocument("application/zip")
+    val openDocumentContract = ActivityResultContracts.OpenDocument()
 
     fun onCreateDocumentResult(uri: Uri?) {
         if (uri == null) {
@@ -60,16 +65,43 @@ class ExportViewModel(
                 val habitsCsv = CSVHandler.exportHabitList(habits)
                 val actionsCsv = CSVHandler.exportActionList(actions)
 
-                writeFileContents(uri, habitsCsv.toString(), actionsCsv.toString())
+                val backupContent = BackupContent(
+                    habitsCSV = habitsCsv.toString(),
+                    actionsCSV = actionsCsv.toString(),
+                    metadata = BackupContent.Metadata(backupVersion = BACKUP_VERSION)
+                )
+                writeFileContents(uri, backupContent)
             }
         }
     }
 
-    private suspend fun writeFileContents(uri: Uri, habitsCsv: String, actionsCsv: String) {
+    fun onOpenDocumentResult(uri: Uri?) {
+        if (uri == null) {
+            // TODO: error handling
+        } else {
+            viewModelScope.launch {
+                val backup = readBackup(uri)
+                val habits = CSVHandler.importHabitList(StringReader(backup.habitsCSV))
+                val actions = CSVHandler.importActionList(StringReader(backup.actionsCSV))
+
+                if (backup.metadata.backupVersion > BACKUP_VERSION) {
+                    // TODO: handle error
+                }
+
+                habitDao.deleteAllHabits()
+
+            }
+        }
+    }
+
+    private suspend fun writeFileContents(uri: Uri, content: BackupContent) {
         withContext(Dispatchers.IO) {
             try {
+                appContext.contentResolver.openOutputStream(uri).use {
+                    checkNotNull(it)
+                    createZip(it, content)
+                }
                 appContext.contentResolver.openFileDescriptor(uri, "w")?.use {
-                    createZip(it.fileDescriptor, habitsCsv, actionsCsv)
                 }
             } catch (e: FileNotFoundException) {
                 logcat("ExportScreen", LogPriority.ERROR) { e.asLog() }
@@ -79,22 +111,59 @@ class ExportViewModel(
         }
     }
 
-    private fun createZip(fileDescriptor: FileDescriptor, habitsCsv: String, actionsCsv: String) {
-        ZipOutputStream(FileOutputStream(fileDescriptor)).use { outputStream ->
+    private fun createZip(output: OutputStream, content: BackupContent) {
+        ZipOutputStream(output).use { outputStream ->
             outputStream.putNextEntry(ZipEntry("habits.csv"))
-            outputStream.write(habitsCsv.toByteArray())
+            outputStream.write(content.habitsCSV.toByteArray())
             outputStream.closeEntry()
 
             outputStream.putNextEntry(ZipEntry("actions.csv"))
-            outputStream.write(actionsCsv.toByteArray())
+            outputStream.write(content.actionsCSV.toByteArray())
             outputStream.closeEntry()
 
             outputStream.putNextEntry(ZipEntry("metadata.txt"))
-            outputStream.write("backup_version=$BACKUP_VERSION".toByteArray())
+            outputStream.write("backup_version=${content.metadata.backupVersion}".toByteArray())
             outputStream.closeEntry()
-
         }
     }
 
+    private fun readBackup(uri: Uri): BackupContent {
+        val habitsStream = ByteArrayOutputStream()
+        val actionsStream = ByteArrayOutputStream()
+        val metadataStream = ByteArrayOutputStream()
 
+        appContext.contentResolver.openInputStream(uri).use {
+            checkNotNull(it)
+            ZipInputStream(it).use { inputStream ->
+                var zipEntry = inputStream.nextEntry
+
+                while (zipEntry != null) {
+                    if (!zipEntry.isDirectory) {
+                        when (zipEntry.name) {
+                            "habits.csv" -> inputStream.copyTo(habitsStream)
+                            "actions.csv" -> inputStream.copyTo(actionsStream)
+                            "metadata.txt" -> inputStream.copyTo(metadataStream)
+                        }
+                    }
+
+                    zipEntry = inputStream.nextEntry
+                }
+            }
+        }
+
+        val metadataContent = metadataStream.toString()
+        val backupVersion = metadataContent
+            .split("=")
+            .lastOrNull()
+            ?.toIntOrNull()
+            ?: throw InvalidBackupException("Couldn't find backup version in metadata.txt. File contents: $metadataContent")
+
+        return BackupContent(
+            habitsCSV = habitsStream.toString(),
+            actionsCSV = actionsStream.toString(),
+            metadata = BackupContent.Metadata(backupVersion)
+        )
+    }
 }
+
+class InvalidBackupException(message: String) : IllegalArgumentException(message)

@@ -70,7 +70,7 @@ class HabitStatsTest : BaseInstrumentedTest() {
             notes = ""
         )
 
-        val actions = arrayOf(
+        val actions = listOf(
             Action(
                 habit_id = habit1.id,
                 timestamp = Instant.parse("2019-12-23T18:16:30Z")
@@ -123,8 +123,8 @@ class HabitStatsTest : BaseInstrumentedTest() {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         habitDao = db.habitDao()
 
-        habitDao.insertHabit(TestData.habit1, TestData.habit2, TestData.habit3, TestData.habit4)
-        habitDao.insertAction(*TestData.actions)
+        habitDao.insertHabits(listOf(TestData.habit1, TestData.habit2, TestData.habit3, TestData.habit4))
+        habitDao.insertActions(TestData.actions)
     }
 
     @After
