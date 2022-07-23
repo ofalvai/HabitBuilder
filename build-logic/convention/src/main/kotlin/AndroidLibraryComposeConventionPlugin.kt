@@ -36,7 +36,7 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 buildFeatures.compose = true
 
-                composeOptions.kotlinCompilerExtensionVersion = libs.findVersion("compose").get().toString()
+                composeOptions.kotlinCompilerExtensionVersion = libs.findVersion("compose-compiler").get().toString()
 
                 (this as ExtensionAware).extensions.configure<KotlinJvmOptions>("kotlinOptions") {
                     freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
