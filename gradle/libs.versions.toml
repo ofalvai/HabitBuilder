@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.6.21"
+kotlin = "1.7.10"
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin#pre-release_kotlin_compatibility
 compose-compiler = "1.2.0-beta02"
 compose-libs = "1.2.0-beta02"
