@@ -40,6 +40,7 @@ androidx-espresso = "androidx.test.espresso:espresso-core:3.4.0"
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-libs" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose-libs" }
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose-libs" }
+compose-ui-googlefonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "compose-libs" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-libs" }
 compose-ui-toolingpreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-libs" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-libs"}
