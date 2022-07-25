@@ -57,7 +57,6 @@ bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.2.1"
 bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.24.0"
 
 apache-csv = "org.apache.commons:commons-csv:1.9.0"
-apache-io = "commons-io:commons-io:2.11.0"
 
 showkase-annotation = { module = "com.airbnb.android:showkase-annotation", version.ref = "showkase" }
 showkase-full = { module = "com.airbnb.android:showkase", version.ref = "showkase" }

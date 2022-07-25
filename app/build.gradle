@@ -151,7 +151,6 @@ dependencies {
     implementation libs.bugsnag.runtime
 
     implementation libs.apache.csv
-    implementation libs.apache.io
 
     // Required by layout inspector
     debugRuntimeOnly libs.kotlin.reflect
