@@ -29,7 +29,7 @@ private val FORMAT = CSVFormat.DEFAULT
     .build()
 private val TYPE_CONVERTERS = EntityTypeConverters()
 
-object CSVHandler {
+internal object CSVHandler {
 
     fun exportHabitList(habits: List<Habit>): StringBuilder {
         val stringBuilder = StringBuilder()
