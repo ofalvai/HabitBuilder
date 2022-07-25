@@ -114,6 +114,7 @@
     <string name="settings_item_rate">Rate app on Google Play</string>
     <string name="settings_item_view_source">View source on GitHub</string>
     <string name="settings_item_licenses">Open-source libraries</string>
+    <string name="settings_item_privacy_policy">Privacy policy</string>
     <string name="settings_crash_reporting_restart_message">Restart the app for the changes to take effect</string>
 
     <string name="archive_title">Archived habits</string>

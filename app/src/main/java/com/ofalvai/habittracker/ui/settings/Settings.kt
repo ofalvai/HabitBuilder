@@ -49,7 +49,6 @@ import com.ofalvai.habittracker.core.ui.theme.gray1
 import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.core.ui.R as coreR
 
-private const val SOURCE_URL = "https://github.com/ofalvai/HabitTracker"
 private const val MARKET_URL = "market://details?id=${BuildConfig.APPLICATION_ID}"
 
 
@@ -65,11 +64,15 @@ fun SettingsScreen(navController: NavController) {
         context.startActivity(intent)
     }
     val onSourceClick = {
-        val uri = SOURCE_URL.toUri()
+        val uri = BuildConfig.URL_SOURCE_CODE.toUri()
         val intent = Intent(Intent.ACTION_VIEW).apply { data = uri }
         context.startActivity(intent)
     }
     val onLicensesClick = { navController.navigate(Destination.Licenses.route) }
+    val onPrivacyClick = {
+        val intent = Intent(Intent.ACTION_VIEW).apply { data = BuildConfig.URL_PRIVACY_POLICY.toUri() }
+        context.startActivity(intent)
+    }
 
     val crashReportingEnabled by viewModel.crashReportingEnabled.collectAsState()
     val onCrashReportingChange: (Boolean) -> Unit = {
@@ -83,6 +86,7 @@ fun SettingsScreen(navController: NavController) {
         onRateClick,
         onSourceClick,
         onLicensesClick,
+        onPrivacyClick,
         onCrashReportingChange,
     )
 }
@@ -94,6 +98,7 @@ fun SettingsScreen(
     onRateClick: () -> Unit,
     onSourceClick: () -> Unit,
     onLicensesClick: () -> Unit,
+    onPrivacyClick: () -> Unit,
     onCrashReportingChange: (Boolean) -> Unit
 ) {
     Column(
@@ -137,6 +142,10 @@ fun SettingsScreen(
             NavigationSetting(
                 name = stringResource(R.string.settings_item_licenses),
                 onClick = onLicensesClick
+            )
+            NavigationSetting(
+                name = stringResource(R.string.settings_item_privacy_policy),
+                onClick = onPrivacyClick
             )
 
             DebugSettings() // no-op in release variant
@@ -227,6 +236,7 @@ fun PreviewSettingsScreen() {
             onBack = {},
             onSourceClick = {},
             onLicensesClick = {},
+            onPrivacyClick = {},
             onRateClick = {},
             onCrashReportingChange = {}
         )
