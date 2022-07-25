@@ -30,7 +30,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room"}
 
-androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
+androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
 
 androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
 androidx-test-rules = "androidx.test:rules:1.4.0"
