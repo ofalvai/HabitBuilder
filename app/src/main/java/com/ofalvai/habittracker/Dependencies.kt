@@ -18,16 +18,13 @@
 
 package com.ofalvai.habittracker
 
-import android.content.Context
 import android.preference.PreferenceManager
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.room.Room
 import com.ofalvai.habittracker.core.database.AppDatabase
-import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.MIGRATIONS
 import com.ofalvai.habittracker.repo.ActionRepository
-import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.telemetry.TelemetryImpl
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.archive.ArchiveViewModel
@@ -67,52 +64,23 @@ object Dependencies {
 
     val telemetry = TelemetryImpl(appContext, appPreferences)
 
-    val viewModelFactory = AppViewModelFactory(
-        dao, actionRepository, appPreferences, appContext, telemetry, onboardingManager
-    )
+    val viewModelFactory = viewModelFactory {
+        initializer { AddHabitViewModel(dao, onboardingManager, telemetry) }
+        initializer {
+            DashboardViewModel(dao, actionRepository, appPreferences, telemetry, onboardingManager)
+        }
+        initializer { HabitDetailViewModel(dao, actionRepository, telemetry, onboardingManager) }
+        initializer { InsightsViewModel(dao, telemetry, onboardingManager) }
+        initializer { LicensesViewModel(appContext) }
+        initializer { ArchiveViewModel(dao, telemetry) }
+        initializer { SettingsViewModel(appPreferences) }
+        initializer { ExportViewModel(appContext, dao) }
+    }
 }
 
 private fun roomQueryLogCallback(sqlQuery: String, bindArgs: List<Any>) {
     logcat("RoomQueryLog") { "Query: $sqlQuery" }
     if (bindArgs.isNotEmpty()) {
         logcat("RoomQueryLog") { "Args: $bindArgs" }
-    }
-}
-
-@Suppress("UNCHECKED_CAST")
-class AppViewModelFactory(
-    private val habitDao: HabitDao,
-    private val actionRepository: ActionRepository,
-    private val appPreferences: AppPreferences,
-    private val appContext: Context,
-    private val telemetry: Telemetry,
-    private val onboardingManager: OnboardingManager
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (AddHabitViewModel::class.java.isAssignableFrom(modelClass)) {
-            return AddHabitViewModel(habitDao, onboardingManager, telemetry) as T
-        }
-        if (DashboardViewModel::class.java.isAssignableFrom(modelClass)) {
-            return DashboardViewModel(habitDao, actionRepository, appPreferences, telemetry, onboardingManager) as T
-        }
-        if (HabitDetailViewModel::class.java.isAssignableFrom(modelClass)) {
-            return HabitDetailViewModel(habitDao, actionRepository, telemetry, onboardingManager) as T
-        }
-        if (InsightsViewModel::class.java.isAssignableFrom(modelClass)) {
-            return InsightsViewModel(habitDao, telemetry, onboardingManager) as T
-        }
-        if (LicensesViewModel::class.java.isAssignableFrom(modelClass)) {
-            return LicensesViewModel(appContext) as T
-        }
-        if (ArchiveViewModel::class.java.isAssignableFrom(modelClass)) {
-            return ArchiveViewModel(habitDao, telemetry) as T
-        }
-        if (SettingsViewModel::class.java.isAssignableFrom(modelClass)) {
-            return SettingsViewModel(appPreferences) as T
-        }
-        if (ExportViewModel::class.java.isAssignableFrom(modelClass)) {
-            return ExportViewModel(appContext, habitDao) as T
-        }
-        throw IllegalArgumentException("No matching ViewModel for ${modelClass.canonicalName}")
     }
 }

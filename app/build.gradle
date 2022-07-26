@@ -28,6 +28,8 @@ apply plugin: 'com.bugsnag.android.gradle'
 ext {
     PACKAGE_NAME = "com.ofalvai.habittracker"
     API_KEY_BUGSNAG = "2e13a542ae3ed09ad42a5c82444925af"
+    URL_PRIVACY_POLICY = "https://habit-builder-97708.web.app/privacy-policy.html"
+    URL_SOURCE_CODE = "https://github.com/ofalvai/HabitTracker"
 }
 
 def useReleaseKeystore = rootProject.file("release/app-release.jks").exists()
@@ -39,6 +41,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders = [api_key_bugsnag: "${API_KEY_BUGSNAG}"]
+        buildConfigField("String", "URL_PRIVACY_POLICY", "\"$URL_PRIVACY_POLICY\"")
+        buildConfigField("String", "URL_SOURCE_CODE", "\"$URL_SOURCE_CODE\"")
     }
 
     lint {

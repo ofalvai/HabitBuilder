@@ -11,7 +11,7 @@ showkase = "1.0.0-beta12"
 ksp = "com.google.devtools.ksp:1.6.21-1.0.5"
 gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
-gradle-cachefix = "org.gradle.android.cache-fix:2.5.5"
+gradle-cachefix = "org.gradle.android.cache-fix:2.5.6"
 dependencyanalysis = "com.autonomousapps.dependency-analysis:1.10.0"
 
 [libraries]
@@ -30,7 +30,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room"}
 
-androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
+androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
 
 androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
 androidx-test-rules = "androidx.test:rules:1.4.0"
@@ -40,6 +40,7 @@ androidx-espresso = "androidx.test.espresso:espresso-core:3.4.0"
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-libs" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose-libs" }
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose-libs" }
+compose-ui-googlefonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "compose-libs" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-libs" }
 compose-ui-toolingpreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-libs" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-libs"}
