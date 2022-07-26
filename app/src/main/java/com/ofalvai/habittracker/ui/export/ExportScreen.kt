@@ -16,20 +16,32 @@
 
 package com.ofalvai.habittracker.ui.export
 
+import android.content.Intent
+import android.net.Uri
+import android.text.format.DateUtils
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.Dependencies
 
+val initialSummary = DataSummary(habitCount = 0, actionCount = 0, lastActivity = null)
+
 @Composable
 fun ExportScreen(navController: NavController) {
     val viewModel = viewModel<ExportViewModel>(factory = Dependencies.viewModelFactory)
+    
+    val summary by viewModel.dataSummary.collectAsState(initial = initialSummary)
+    val exportState by viewModel.exportState.collectAsState()
 
     val createDocumentLauncher = rememberLauncherForActivityResult(
         viewModel.createDocumentContract
@@ -43,12 +55,57 @@ fun ExportScreen(navController: NavController) {
     }
 
     Column(modifier = Modifier.statusBarsPadding()) {
-        Button(onClick = { createDocumentLauncher.launch(viewModel.exportDocumentName) }) {
-            Text(text = "Export data")
-        }
+        DataSummary(summary)
+
+        val context = LocalContext.current
+        Exporter(
+            state = exportState,
+            onExportClick = { createDocumentLauncher.launch(viewModel.exportDocumentName) },
+            onShareClick = { uri ->
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_STREAM, uri)
+                    type = viewModel.exportDocumentMimeType
+                }
+                startActivity(context, Intent.createChooser(shareIntent, null), null)
+            }
+        )
 
         Button(onClick = { openDocumentLauncher.launch(viewModel.importDocumentFormats) }) {
             Text(text = "Import data")
+        }
+    }
+}
+
+@Composable
+private fun DataSummary(summary: DataSummary) {
+    Column {
+        Text(text = "Habits: ${summary.habitCount}")
+        Text(text = "Actions performed: ${summary.actionCount}")
+        val lastActivityString = if (summary.lastActivity != null) {
+            DateUtils.getRelativeTimeSpanString(
+                summary.lastActivity.toEpochMilli(),
+                System.currentTimeMillis(),
+                0
+            )
+        } else "-"
+        Text(text = "Last activity: $lastActivityString")
+    }
+}
+
+@Composable
+private fun Exporter(
+    state: ExportState,
+    onExportClick: () -> Unit,
+    onShareClick: (Uri) -> Unit
+) {
+    Button(onClick = onExportClick) {
+        Text(text = "Export data")
+    }
+
+    if (state.zipUri != null) {
+        Button(onClick = { onShareClick(state.zipUri) }) {
+            Text(text = "Share")
         }
     }
 }

@@ -74,7 +74,7 @@ object Dependencies {
         initializer { LicensesViewModel(appContext) }
         initializer { ArchiveViewModel(dao, telemetry) }
         initializer { SettingsViewModel(appPreferences) }
-        initializer { ExportViewModel(appContext, dao) }
+        initializer { ExportViewModel(appContext, dao, telemetry) }
     }
 }
 

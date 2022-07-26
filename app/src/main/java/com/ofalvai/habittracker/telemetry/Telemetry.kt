@@ -25,6 +25,7 @@ import com.bugsnag.android.BugsnagThreadViolationListener
 import com.bugsnag.android.BugsnagVmViolationListener
 import com.ofalvai.habittracker.BuildConfig
 import com.ofalvai.habittracker.ui.AppPreferences
+import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
 
@@ -57,7 +58,7 @@ class TelemetryImpl(
     }
 
     override fun logNonFatal(e: Throwable) {
-        logcat { e.asLog() }
+        logcat(LogPriority.ERROR) { e.asLog() }
         if (appPreferences.crashReportingEnabled) {
             Bugsnag.notify(e)
         }

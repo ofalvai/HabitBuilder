@@ -56,7 +56,7 @@ interface HabitDao {
     fun getArchivedHabitsWithActions(): Flow<List<HabitWithActions>>
 
     @Query("SELECT * FROM `action` ORDER BY timestamp ASC")
-    suspend fun getAllActions(): List<Action>
+    fun getAllActions(): Flow<List<Action>>
 
     @Query("SELECT * FROM habit WHERE id IN (:id1, :id2)")
     suspend fun getHabitPair(id1: HabitId, id2: HabitId): List<Habit>
