@@ -2,7 +2,7 @@
 kotlin = "1.6.21"
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin#pre-release_kotlin_compatibility
 compose-compiler = "1.2.0-beta02"
-compose-libs = "1.2.0-beta02"
+compose-libs = "1.2.0"
 room = "2.4.2"
 accompanist = "0.23.1"
 showkase = "1.0.0-beta12"
