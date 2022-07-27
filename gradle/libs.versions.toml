@@ -54,8 +54,8 @@ accompanist-insets = { module = "com.google.accompanist:accompanist-insets", ver
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist"}
 
-bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.2.1"
-bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.24.0"
+bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.3.0"
+bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.25.0"
 
 showkase-annotation = { module = "com.airbnb.android:showkase-annotation", version.ref = "showkase" }
 showkase-full = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
