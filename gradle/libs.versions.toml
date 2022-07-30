@@ -16,7 +16,7 @@ dependencyanalysis = "com.autonomousapps.dependency-analysis:1.10.0"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.1.6"
-android-tools-gradle = "com.android.tools.build:gradle:7.2.1"
+android-tools-gradle = "com.android.tools.build:gradle:7.3.0-beta05"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -30,7 +30,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room"}
 
-androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
+androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 
 androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
 androidx-test-rules = "androidx.test:rules:1.4.0"
@@ -54,8 +54,8 @@ accompanist-insets = { module = "com.google.accompanist:accompanist-insets", ver
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist"}
 
-bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.2.1"
-bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.24.0"
+bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.3.0"
+bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.25.0"
 
 apache-csv = "org.apache.commons:commons-csv:1.9.0"
 
