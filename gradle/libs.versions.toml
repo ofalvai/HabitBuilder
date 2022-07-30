@@ -4,7 +4,7 @@ kotlin = "1.6.21"
 compose-compiler = "1.2.0-beta02"
 compose-libs = "1.2.0-beta02"
 room = "2.4.2"
-accompanist = "0.23.1"
+accompanist = "0.25.0"
 showkase = "1.0.0-beta12"
 
 [plugins]
