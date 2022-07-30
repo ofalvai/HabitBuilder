@@ -29,6 +29,12 @@ private val FORMAT = CSVFormat.DEFAULT
     .build()
 private val TYPE_CONVERTERS = EntityTypeConverters()
 
+internal class BackupData(
+    val habits: List<Habit>,
+    val actions: List<Action>,
+    val backupVersion: Int
+)
+
 internal object CSVHandler {
 
     fun exportHabitList(habits: List<Habit>): StringBuilder {

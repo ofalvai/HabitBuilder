@@ -28,9 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import logcat.LogPriority
-import logcat.asLog
-import logcat.logcat
 import java.io.StringReader
 import java.time.Instant
 import java.time.LocalDateTime
@@ -48,11 +45,19 @@ data class DataSummary(
 
 enum class ExportImportError {
     FilePickerURIEmpty,
-    ExportFailed
+    ExportFailed,
+    ImportFailed,
+    BackupVersionTooHigh
 }
 
 data class ExportState(
     val zipUri: Uri?,
+    val error: ExportImportError?
+)
+
+data class ImportState(
+    val zipUri: Uri?,
+    val backupSummary: DataSummary?,
     val error: ExportImportError?
 )
 
@@ -66,8 +71,11 @@ class ExportViewModel(
     val dataSummary: Flow<DataSummary> = habitDao.getTotalHabitCount()
         .combine(habitDao.getAllActions(), ::combineDataSummary)
         .distinctUntilChanged()
+
     val exportState: MutableStateFlow<ExportState> =
         MutableStateFlow(ExportState(zipUri = null, error = null))
+
+    val importState: MutableStateFlow<ImportState> = MutableStateFlow(ImportState(zipUri = null, backupSummary = null, error = null))
 
     val exportDocumentName
         get() = "HabitTracker-backup-${
@@ -114,37 +122,66 @@ class ExportViewModel(
 
     fun onOpenDocumentResult(uri: Uri?) {
         if (uri == null) {
-            // TODO: error handling
-        } else {
-            viewModelScope.launch {
-                try {
-                    withContext(Dispatchers.IO) {
-                        val backup = readBackup(uri)
-                        if (backup.metadata.backupVersion > BACKUP_VERSION) {
-                            throw InvalidBackupException("Backup was created with a newer app version. Update the app to the latest version and try again.")
-                        }
-
-                        val habits = CSVHandler.importHabitList(StringReader(backup.habitsCSV))
-                        val actions =
-                            CSVHandler.importActionList(StringReader(backup.actionsCSV))
-                        habitDao.restoreBackup(habits, actions)
-                    }
-                } catch (e: Exception) {
-                    logcat(LogPriority.ERROR) { e.asLog() }
-                    // TODO
+            telemetry.logNonFatal(IllegalArgumentException("onOpenDocumentResult: null URI"))
+            importState.value = ImportState(
+                zipUri = null, backupSummary = null, error = ExportImportError.FilePickerURIEmpty
+            )
+            return
+        }
+        viewModelScope.launch {
+            try {
+                val backup = loadBackup(uri)
+                if (backup.backupVersion > BACKUP_VERSION) {
+                    telemetry.logNonFatal(IllegalArgumentException("Backup version too high: ${backup.backupVersion}, app defines $BACKUP_VERSION"))
+                    importState.value = ImportState(
+                        zipUri = null, backupSummary = null, error = ExportImportError.BackupVersionTooHigh
+                    )
                 }
+
+                val backupSummary = DataSummary(
+                    habitCount = backup.habits.size,
+                    actionCount = backup.actions.size,
+                    lastActivity = backup.actions.maxByOrNull { it.timestamp.epochSecond }?.timestamp
+                )
+                importState.value = ImportState(zipUri = uri, backupSummary, error = null)
+            } catch (e: Exception) {
+                telemetry.logNonFatal(e)
+                importState.value = ImportState(
+                    zipUri = null, backupSummary = null, error = ExportImportError.ImportFailed
+                )
             }
         }
     }
 
-    private fun readBackup(uri: Uri): BackupContent {
-        val inputStream = appContext.contentResolver.openInputStream(uri)
-        checkNotNull(inputStream)
-        return ArchiveHandler.readBackup(inputStream)
+    fun onRestoreBackup(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                val backup = loadBackup(uri)
+                habitDao.restoreBackup(backup.habits, backup.actions)
+            } catch (e: Exception) {
+                telemetry.logNonFatal(e)
+                importState.value = ImportState(
+                    zipUri = null, backupSummary = null, error = ExportImportError.ImportFailed
+                )
+            }
+        }
     }
 
-    private fun combineDataSummary(count: Int, actions: List<Action>) = DataSummary(
-        habitCount = count,
+    private suspend fun loadBackup(uri: Uri): BackupData = withContext(Dispatchers.IO) {
+        val inputStream = appContext.contentResolver.openInputStream(uri)
+        checkNotNull(inputStream)
+        val backup = ArchiveHandler.readBackup(inputStream)
+        val habits = CSVHandler.importHabitList(StringReader(backup.habitsCSV))
+        val actions = CSVHandler.importActionList(StringReader(backup.actionsCSV))
+        return@withContext BackupData(
+            habits = habits,
+            actions = actions,
+            backupVersion = backup.metadata.backupVersion
+        )
+    }
+
+    private fun combineDataSummary(habitCount: Int, actions: List<Action>) = DataSummary(
+        habitCount = habitCount,
         actionCount = actions.size,
         lastActivity = actions.lastOrNull()?.timestamp
     )

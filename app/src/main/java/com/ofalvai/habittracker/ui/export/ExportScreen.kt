@@ -39,18 +39,15 @@ val initialSummary = DataSummary(habitCount = 0, actionCount = 0, lastActivity =
 @Composable
 fun ExportScreen(navController: NavController) {
     val viewModel = viewModel<ExportViewModel>(factory = Dependencies.viewModelFactory)
-    
+
     val summary by viewModel.dataSummary.collectAsState(initial = initialSummary)
     val exportState by viewModel.exportState.collectAsState()
+    val importState by viewModel.importState.collectAsState()
 
-    val createDocumentLauncher = rememberLauncherForActivityResult(
-        viewModel.createDocumentContract
-    ) {
-            viewModel.onCreateDocumentResult(it)
-        }
-    val openDocumentLauncher = rememberLauncherForActivityResult(
-        viewModel.openDocumentContract
-    ) {
+    val createDocumentLauncher = rememberLauncherForActivityResult(viewModel.createDocumentContract) {
+        viewModel.onCreateDocumentResult(it)
+    }
+    val openDocumentLauncher = rememberLauncherForActivityResult(viewModel.openDocumentContract) {
         viewModel.onOpenDocumentResult(it)
     }
 
@@ -71,9 +68,11 @@ fun ExportScreen(navController: NavController) {
             }
         )
 
-        Button(onClick = { openDocumentLauncher.launch(viewModel.importDocumentFormats) }) {
-            Text(text = "Import data")
-        }
+        Importer(
+            state = importState,
+            onChooseFileClick = { openDocumentLauncher.launch(viewModel.importDocumentFormats) },
+            onConfirmImport = { viewModel.onRestoreBackup(it) }
+        )
     }
 }
 
@@ -108,5 +107,29 @@ private fun Exporter(
             Text(text = "Share")
         }
     }
+}
+
+@Composable
+private fun Importer(
+    state: ImportState,
+    onChooseFileClick: () -> Unit,
+    onConfirmImport: (Uri) -> Unit
+) {
+    Column {
+        if (state.backupSummary != null) {
+            DataSummary(summary = state.backupSummary)
+        }
+        if (state.zipUri != null) {
+            Button(onClick = { onConfirmImport(state.zipUri) }) {
+                Text(text = "Restore backup")
+            }
+        } else {
+            Button(onClick = onChooseFileClick) {
+                Text(text = "Choose backup")
+            }
+        }
+    }
+
+
 }
 
