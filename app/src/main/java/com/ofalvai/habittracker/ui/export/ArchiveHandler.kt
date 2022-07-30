@@ -24,12 +24,12 @@ import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
 
-internal class BackupContent(
+internal data class BackupContent(
     val habitsCSV: String,
     val actionsCSV: String,
     val metadata: Metadata
 ) {
-    class Metadata(val backupVersion: Int)
+    data class Metadata(val backupVersion: Int)
 }
 
 internal object ArchiveHandler {
@@ -59,9 +59,12 @@ internal object ArchiveHandler {
         }
 
         val metadataContent = metadataStream.toString()
+
         val backupVersion = metadataContent
-            .split("=")
-            .lastOrNull()
+            .split("\n")
+            .firstOrNull { it.startsWith("backup_version") }
+            ?.split("=")
+            ?.lastOrNull()
             ?.toIntOrNull()
             ?: throw InvalidBackupException("Couldn't find backup version in metadata.txt. File contents: $metadataContent")
 
