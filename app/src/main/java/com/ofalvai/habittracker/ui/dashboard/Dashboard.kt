@@ -196,19 +196,18 @@ private fun DashboardAppBar(
             IconButton(onClick = onConfigClick) {
                 Icon(AppIcons.DashboardLayout, stringResource(R.string.dashboard_change_layout))
             }
-        },
-        dropdownMenuItems = {
-            DropdownMenuItem(onClick = onArchiveClick) {
-                Text(stringResource(R.string.menu_archive))
-            }
-            DropdownMenuItem(onClick = onSettingsClick) {
-                Text(stringResource(R.string.menu_settings))
-            }
-            DropdownMenuItem(onClick = onExportClick) {
-                Text(stringResource(R.string.menu_export))
-            }
         }
-    )
+    ) {
+        DropdownMenuItem(onClick = onArchiveClick) {
+            Text(stringResource(R.string.menu_archive))
+        }
+        DropdownMenuItem(onClick = onSettingsClick) {
+            Text(stringResource(R.string.menu_settings))
+        }
+        DropdownMenuItem(onClick = onExportClick) {
+            Text(stringResource(R.string.menu_export))
+        }
+    }
 }
 
 @Composable

@@ -17,7 +17,6 @@
 package com.ofalvai.habittracker.ui.export
 
 import android.content.Context
-import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,6 +28,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.StringReader
+import java.net.URI
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -51,12 +51,12 @@ enum class ExportImportError {
 }
 
 data class ExportState(
-    val zipUri: Uri?,
+    val zipUri: URI?,
     val error: ExportImportError?
 )
 
 data class ImportState(
-    val zipUri: Uri?,
+    val zipUri: URI?,
     val backupSummary: DataSummary?,
     val error: ExportImportError?
 )
@@ -72,21 +72,18 @@ class ExportViewModel(
         .combine(habitDao.getAllActions(), ::combineDataSummary)
         .distinctUntilChanged()
 
-    val exportState: MutableStateFlow<ExportState> =
-        MutableStateFlow(ExportState(zipUri = null, error = null))
+    val exportState: MutableStateFlow<ExportState> = MutableStateFlow(ExportState(zipUri = null, error = null))
 
     val importState: MutableStateFlow<ImportState> = MutableStateFlow(ImportState(zipUri = null, backupSummary = null, error = null))
 
     val exportDocumentName
-        get() = "HabitTracker-backup-${
-            LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
-        }.zip"
+        get() = "HabitTracker-backup-${LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)}.zip"
     val exportDocumentMimeType = "application/zip"
     val importDocumentFormats = arrayOf(exportDocumentMimeType)
     val createDocumentContract = ActivityResultContracts.CreateDocument(exportDocumentMimeType)
     val openDocumentContract = ActivityResultContracts.OpenDocument()
 
-    fun onCreateDocumentResult(uri: Uri?) {
+    fun onCreateDocumentResult(uri: URI?) {
         if (uri == null) {
             telemetry.logNonFatal(IllegalArgumentException("onCreateDocumentResult: null URI"))
             exportState.value = ExportState(
@@ -107,7 +104,7 @@ class ExportViewModel(
                     metadata = BackupContent.Metadata(backupVersion = BACKUP_VERSION)
                 )
                 withContext(Dispatchers.IO) {
-                    appContext.contentResolver.openOutputStream(uri).use {
+                    appContext.contentResolver.openOutputStream(uri.toAndroidURI()).use {
                         checkNotNull(it)
                         ArchiveHandler.writeBackup(it, backupContent)
                     }
@@ -120,7 +117,7 @@ class ExportViewModel(
         }
     }
 
-    fun onOpenDocumentResult(uri: Uri?) {
+    fun onOpenDocumentResult(uri: URI?) {
         if (uri == null) {
             telemetry.logNonFatal(IllegalArgumentException("onOpenDocumentResult: null URI"))
             importState.value = ImportState(
@@ -153,7 +150,7 @@ class ExportViewModel(
         }
     }
 
-    fun onRestoreBackup(uri: Uri) {
+    fun onRestoreBackup(uri: URI) {
         viewModelScope.launch {
             try {
                 val backup = loadBackup(uri)
@@ -167,8 +164,8 @@ class ExportViewModel(
         }
     }
 
-    private suspend fun loadBackup(uri: Uri): BackupData = withContext(Dispatchers.IO) {
-        val inputStream = appContext.contentResolver.openInputStream(uri)
+    private suspend fun loadBackup(uri: URI): BackupData = withContext(Dispatchers.IO) {
+        val inputStream = appContext.contentResolver.openInputStream(uri.toAndroidURI())
         checkNotNull(inputStream)
         val backup = ArchiveHandler.readBackup(inputStream)
         val habits = CSVHandler.importHabitList(StringReader(backup.habitsCSV))
@@ -185,4 +182,6 @@ class ExportViewModel(
         actionCount = actions.size,
         lastActivity = actions.lastOrNull()?.timestamp
     )
+
+    private fun URI.toAndroidURI() = android.net.Uri.parse(toString())
 }

@@ -130,6 +130,15 @@
     <string name="archive_action_delete">Delete</string>
     <string name="archive_empty">You can archive habits that are on pause or no longer relevant, but don\'t want to delete forever. Navigate to the habit edit screen, then tap Archive.\n\nArchived habits can be later unarchived or deleted permanently.</string>
 
+    <string name="export_title">Backup and restore</string>
+    <string name="export_datasummary_habits">habits</string>
+    <string name="export_datasummary_actions">actions performed</string>
+    <string name="export_datasummary_last_activity">last activity</string>
+    <string name="export_error_export_failed">Failed to export app data, please try again.</string>
+    <string name="export_error_uri_empty">Invalid file selected, please try a different one.</string>
+    <string name="export_error_import_failed">Failed to import backup, please try again.</string>
+    <string name="export_error_backup_version_too_high">This backup was created with a newer app version. Upgrade the app to the latest version, then try again.</string>
+
     <string name="onboarding_step_create_title">First habit</string>
     <string name="onboarding_step_create_subtitle">Your habits will be listed here. Now, create your first.</string>
     <string name="onboarding_step_longpress_title">A circle each day</string>
