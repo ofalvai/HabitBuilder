@@ -84,8 +84,6 @@ android {
         coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
-        useIR = true
-        freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
         freeCompilerArgs += '-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'
     }
     buildFeatures {
@@ -145,7 +143,6 @@ dependencies {
     implementation libs.logcat
     implementation libs.calendarview
     implementation(libs.reorderable)
-    implementation libs.accompanist.insets
     implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.navigation
 
@@ -174,5 +171,5 @@ dependencies {
     androidTestImplementation libs.androidx.core.testing
     androidTestImplementation libs.turbine
     androidTestImplementation libs.compose.ui.test
-    debugImplementation libs.compose.ui.test.manifest
+    debugRuntimeOnly libs.compose.ui.test.manifest
 }

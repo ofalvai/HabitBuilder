@@ -54,7 +54,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
                 (this as ExtensionAware).extensions.configure<KotlinJvmOptions>("kotlinOptions") {
                     freeCompilerArgs = freeCompilerArgs + listOf(
-                        "-opt-in=kotlin.RequiresOptIn",
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                     )
 
