@@ -77,7 +77,7 @@ interface HabitDao {
     suspend fun getActionsAfter(after: Instant): List<Action>
 
     @Insert
-    suspend fun insertAction(vararg action: Action)
+    suspend fun insertActions(actions: List<Action>)
 
     @Query("DELETE FROM `action` WHERE id = :id")
     suspend fun deleteAction(id: Int)

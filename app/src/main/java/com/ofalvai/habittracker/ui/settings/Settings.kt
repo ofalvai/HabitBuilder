@@ -40,7 +40,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.google.accompanist.insets.statusBarsPadding
 import com.ofalvai.habittracker.BuildConfig
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R

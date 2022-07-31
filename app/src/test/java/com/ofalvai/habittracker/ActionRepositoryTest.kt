@@ -50,11 +50,9 @@ class ActionRepositoryTest {
         )
 
         // Then
-        // Mockito doesn't support capturing vararg methods correctly
-        val argument = argumentCaptor<Any>()
-        verify(dao).insertAction(argument.capture() as ActionEntity)
-        @Suppress("UNCHECKED_CAST")
-        val insertedAction = (argument.allValues[0] as Array<ActionEntity>)[0]
+        val argument = argumentCaptor<List<ActionEntity>>()
+        verify(dao).insertActions(argument.capture())
+        val insertedAction = (argument.allValues[0])[0]
         assertEquals(0, insertedAction.habit_id)
         assertEquals(0, insertedAction.id)
         val actionDateTime = LocalDateTime.ofInstant(

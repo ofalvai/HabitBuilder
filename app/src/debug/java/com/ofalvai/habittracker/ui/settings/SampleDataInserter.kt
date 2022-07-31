@@ -68,7 +68,7 @@ class SampleDataInserter(private val dao: HabitDao) {
 
         dao.insertHabit(*habits)
 
-        val actions = arrayOf(
+        val actions = listOf(
             Action(habit_id = 1, timestamp = toTimestamp(today.minusDays(1))),
             Action(habit_id = 1, timestamp = toTimestamp(today.minusDays(2))),
             Action(habit_id = 1, timestamp = toTimestamp(today.minusDays(7))),
@@ -111,7 +111,7 @@ class SampleDataInserter(private val dao: HabitDao) {
             Action(habit_id = 4, timestamp = toTimestamp(today.minusDays(24))),
         )
 
-        dao.insertAction(*actions)
+        dao.insertActions(actions)
     }
 
     private fun toTimestamp(date: LocalDate): Instant {

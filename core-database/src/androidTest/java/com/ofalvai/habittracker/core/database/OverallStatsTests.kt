@@ -44,7 +44,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
         val habit5 = Habit(id = 879, name = "Habit I do mostly on Friday", color = Habit.Color.Blue, order = 4, archived = false, notes = "")
         val habits = arrayOf(habit1, habit2, habit3, habit4, habit5)
 
-        val actions = arrayOf(
+        val actions = listOf(
             Action(habit_id = habit1.id, timestamp = Instant.parse("2019-12-23T18:16:30Z")),// Mon
             Action(habit_id = habit1.id, timestamp = Instant.parse("2020-12-23T18:16:30Z")),// Wed
             Action(habit_id = habit1.id, timestamp = Instant.parse("2020-12-24T18:16:40Z")),// Thu
@@ -84,7 +84,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     fun testActionCountForHabits() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
-        habitDao.insertAction(*TestData.actions)
+        habitDao.insertActions(TestData.actions)
 
         // When
         val actionCounts = habitDao.getSumActionCountByDay(
@@ -116,7 +116,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     fun testActionCountForHabitsForOneMonth() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
-        habitDao.insertAction(*TestData.actions)
+        habitDao.insertActions(TestData.actions)
 
         // When
         val actionCounts = habitDao.getSumActionCountByDay(
@@ -147,7 +147,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     fun testMostSuccessfulHabits() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
-        habitDao.insertAction(*TestData.actions)
+        habitDao.insertActions(TestData.actions)
 
         // When
         val mostSuccessfulHabits = habitDao.getMostSuccessfulHabits(5)
@@ -247,7 +247,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     fun testMostSuccessfulHabitsWithLimit() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
-        habitDao.insertAction(*TestData.actions)
+        habitDao.insertActions(TestData.actions)
 
         // When
         val mostSuccessfulHabits = habitDao.getMostSuccessfulHabits(2)
@@ -274,7 +274,7 @@ class OverallStatsTests : BaseInstrumentedTest() {
     fun testTopDayForHabits() = runTest {
         // Given
         habitDao.insertHabit(*TestData.habits)
-        habitDao.insertAction(*TestData.actions)
+        habitDao.insertActions(TestData.actions)
 
         // When
         val topDayForHabits = habitDao.getTopDayForHabits()

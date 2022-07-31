@@ -37,8 +37,6 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -66,30 +64,28 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme {
-                ProvideWindowInsets {
-                    val navController = rememberAnimatedNavController()
-                    val systemUiController = rememberSystemUiController()
-                    val useDarkIcons = MaterialTheme.colors.isLight
-                    val scaffoldState = rememberScaffoldState()
+                val navController = rememberAnimatedNavController()
+                val systemUiController = rememberSystemUiController()
+                val useDarkIcons = MaterialTheme.colors.isLight
+                val scaffoldState = rememberScaffoldState()
 
-                    SideEffect {
-                        systemUiController.setSystemBarsColor(
-                            color = Color.Transparent,
-                            darkIcons = useDarkIcons
-                        )
-                    }
+                SideEffect {
+                    systemUiController.setSystemBarsColor(
+                        color = Color.Transparent,
+                        darkIcons = useDarkIcons
+                    )
+                }
 
-                    LaunchedEffect(navController) {
-                        navController.addOnDestinationChangedListener(onDestinationChanged)
-                    }
+                LaunchedEffect(navController) {
+                    navController.addOnDestinationChangedListener(onDestinationChanged)
+                }
 
-                    Scaffold(
-                        bottomBar = { AppBottomNavigation(navController) },
-                        scaffoldState = scaffoldState,
-                        modifier = Modifier.fillMaxSize()
-                    ) { innerPadding ->
-                        Screens(navController, scaffoldState, innerPadding)
-                    }
+                Scaffold(
+                    bottomBar = { AppBottomNavigation(navController) },
+                    scaffoldState = scaffoldState,
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
+                    Screens(navController, scaffoldState, innerPadding)
                 }
             }
         }

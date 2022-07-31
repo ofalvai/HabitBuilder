@@ -43,7 +43,7 @@ class ActionRepository(
                     timestamp = LocalDateTime.of(date, LocalTime.now())
                         .toInstant(OffsetDateTime.now().offset)
                 )
-                dao.insertAction(newAction)
+                dao.insertActions(listOf(newAction))
             } else {
                 dao.deleteAction(updatedAction.id)
             }

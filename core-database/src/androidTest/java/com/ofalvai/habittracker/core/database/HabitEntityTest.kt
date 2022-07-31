@@ -99,7 +99,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
         )
 
         habitDao.insertHabit(habit)
-        habitDao.insertAction(action1, action2)
+        habitDao.insertActions(listOf(action1, action2))
 
         val actions = habitDao.getActionsForHabit(habitId)
         val expectedActions = listOf(action1.copy(id = 1), action2.copy(id = 2))
@@ -149,7 +149,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
         )
 
         habitDao.insertHabit(habit1, habit2, habit3)
-        habitDao.insertAction(action1, action2, action3, action4)
+        habitDao.insertActions(listOf(action1, action2, action3, action4))
 
         val actions = habitDao.getActionsForHabit(habitId)
         val expectedActions = listOf(action1.copy(id = 1), action2.copy(id = 2))
@@ -188,7 +188,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
         )
 
         habitDao.insertHabit(habit)
-        habitDao.insertAction(action1, action2, action3, action4)
+        habitDao.insertActions(listOf(action1, action2, action3, action4))
 
         val actions = habitDao.getActionsAfter(Instant.parse("2020-12-24T20:00:00Z"))
         assertEquals(listOf(action3, action4), actions)
@@ -242,7 +242,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
         )
 
         habitDao.insertHabit(habit1, habit2, habit3)
-        habitDao.insertAction(action1, action2, action3, action4)
+        habitDao.insertActions(listOf(action1, action2, action3, action4))
 
         habitDao.getActiveHabitsWithActions().test {
             val expectedHabitsWithActions = listOf(
@@ -274,7 +274,7 @@ class HabitEntityTest : BaseInstrumentedTest() {
         )
 
         habitDao.insertHabit(habit)
-        habitDao.insertAction(action1, action2)
+        habitDao.insertActions(listOf(action1, action2))
         habitDao.deleteHabit(HabitById(habit.id))
 
         val actions = habitDao.getActionsForHabit(habitId)
