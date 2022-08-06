@@ -21,7 +21,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -46,6 +45,7 @@ import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import kotlinx.coroutines.launch
@@ -176,12 +176,11 @@ private fun ArchivedHabitItem(
     onUnarchive: (ArchivedHabit) -> Unit,
     onDelete: (ArchivedHabit) -> Unit
 ) {
-    Card(
-        elevation = 2.dp,
-        shape = RoundedCornerShape(16.dp),
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
             .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
             Text(

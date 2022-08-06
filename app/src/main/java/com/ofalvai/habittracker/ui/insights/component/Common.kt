@@ -17,8 +17,12 @@
 package com.ofalvai.habittracker.ui.insights.component
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +38,7 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.ui.AppIcons
 import com.ofalvai.habittracker.core.ui.R as coreR
 
@@ -45,7 +50,7 @@ fun InsightCard(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    Card(modifier = modifier, elevation = 2.dp) {
+    Box(modifier = modifier.background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)) {
         Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)) {
             InsightHeader(iconPainter, title, description)
 
@@ -87,7 +92,6 @@ fun InsightHeader(
                 Icon(
                     painter = AppIcons.InfoOutlined,
                     contentDescription = stringResource(R.string.insights_more_info),
-                    modifier = Modifier.alpha(.5f)
                 )
             }
         }

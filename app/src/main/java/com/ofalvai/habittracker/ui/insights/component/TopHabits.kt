@@ -181,7 +181,7 @@ private fun HabitBar(
             .clip(shape)
             .fillMaxWidth(fraction = progress)
             .height(height)
-            .background(MaterialTheme.colors.primary)
+            .background(MaterialTheme.colors.secondary)
         )
     }
 }

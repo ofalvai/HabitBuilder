@@ -29,9 +29,9 @@ object AppColor {
         val primary = Color(0xFF7B5800)
         val primaryVariant = Color(0xFF6C5C3F)
         val secondary = Color(0xFF4B6545)
-        val background = Color(0xFFFFF5E5)
+        val background = Color(0xFFF9F3EC) // Color palette: Surface at +1
         val surface = Color(0xFFFFFBF8)
-        val surfaceVariant = Color(0xFFEEE1CF)
+        val surfaceVariant = Color(0xFFF2E9DD) // Color palette: Surface at +3
 
         val onPrimary = Color.White
         val onSecondary = Color.White
@@ -51,7 +51,7 @@ object AppColor {
 
     object Dark {
         val primary = Color(0xFFF5BE48)
-        val primaryVariant = Color(0xFF412D00)
+        val primaryVariant = Color(0xFFD9C4A0)
         val secondary = Color(0xFF4B6545)
         val background = Color(0xFF1E1B16)
         val surface = Color(0xFF1E1B16)
