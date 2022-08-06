@@ -63,7 +63,7 @@ showkase-processor = { module = "com.airbnb.android:showkase-processor", version
 junit = "junit:junit:4.13.2"
 mockito-android = "org.mockito:mockito-android:4.6.1"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
-turbine = "app.cash.turbine:turbine:0.8.0"
+turbine = "app.cash.turbine:turbine:0.9.0"
 
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.5.0"
 ruler = "com.spotify.ruler:ruler-gradle-plugin:1.3.0"
