@@ -19,17 +19,16 @@ package com.ofalvai.habittracker.ui.export
 import android.content.Intent
 import android.text.format.DateUtils
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalContext
@@ -43,10 +42,8 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.component.AppBar
 import com.ofalvai.habittracker.core.ui.component.SingleStat
-import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
-import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.errorContainer
-import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
+import com.ofalvai.habittracker.core.ui.theme.*
+import com.ofalvai.habittracker.ui.AppIcons
 import java.net.URI
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -84,6 +81,8 @@ fun ExportScreen(navController: NavController) {
         )
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            BackupInfo(Modifier.padding(vertical = 16.dp))
+
             DataSummary(summary)
 
             val context = LocalContext.current
@@ -153,7 +152,7 @@ private fun DataSummary(summary: DataSummary) {
 
 @Composable
 private fun ExportImportError(error: ExportImportError, modifier: Modifier = Modifier) {
-    val errorMessage = when(error) {
+    val errorMessage = when (error) {
         ExportImportError.ExportFailed -> stringResource(R.string.export_error_export_failed)
         ExportImportError.FilePickerURIEmpty -> stringResource(R.string.export_error_uri_empty)
         ExportImportError.ImportFailed -> stringResource(R.string.export_error_import_failed)
@@ -168,10 +167,31 @@ private fun ExportImportError(error: ExportImportError, modifier: Modifier = Mod
     ) {
         Text(
             text = stringResource(id = commonR.string.common_something_went_wrong),
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.body1
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = errorMessage, style = MaterialTheme.typography.body2)
+    }
+}
+
+@Composable
+private fun BackupInfo(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .surfaceBackground()
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Icon(
+            painter = AppIcons.InfoOutlined,
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(
+            text = "App data is backed up regularly using Android's automatic backup mechanism.\nYou can also export your data manually on this screen.",
+            style = MaterialTheme.typography.body2
+        )
     }
 }
 
@@ -188,20 +208,52 @@ private fun Exporter(
             .surfaceBackground()
             .padding(16.dp)
     ) {
+        Text(
+            text = "Export",
+            style = MaterialTheme.typography.h6
+        )
+
+        Text(
+            text = "Export your habit data to CSV format",
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+
         if (state.error != null) {
             ExportImportError(state.error, modifier = Modifier.padding(vertical = 16.dp))
         }
 
-        OutlinedButton(onClick = onExportClick) {
-            Text(text = "Export data")
+        OutlinedButton(
+            modifier = Modifier.padding(top = 16.dp),
+            onClick = onExportClick
+        ) {
+            Text(text = "Choose export location")
         }
 
-        if (state.zipUri != null) {
-            OutlinedButton(onClick = { onShareClick(state.zipUri) }) {
-                Text(text = "Share")
+        AnimatedVisibility(visible = state.zipUri != null) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .background(MaterialTheme.colors.successContainer, MaterialTheme.shapes.medium)
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Column {
+                    Text(
+                        text = "Export is ready",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Text(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        text = "Path: ${state.zipUri!!.path}",
+                        style = MaterialTheme.typography.caption
+                    )
+                    OutlinedButton(onClick = { onShareClick(state.zipUri) }) {
+                        Text(text = "Share file")
+                    }
+                }
             }
         }
-
     }
 }
 

@@ -46,7 +46,8 @@ fun InsightsScreen(navController: NavController) {
     Column(Modifier.statusBarsPadding()) {
         InsightsAppBar(
             onSettingsClick = { navController.navigate(Destination.Settings.route) },
-            onArchiveClick = { navController.navigate(Destination.Archive.route) }
+            onArchiveClick = { navController.navigate(Destination.Archive.route) },
+            onExportClick = { navController.navigate(Destination.Export.route) }
         )
 
         Column(
@@ -68,6 +69,7 @@ fun InsightsScreen(navController: NavController) {
 private fun InsightsAppBar(
     onSettingsClick: () -> Unit,
     onArchiveClick: () -> Unit,
+    onExportClick: () -> Unit
 ) {
     AppBar(
         title = {
@@ -81,6 +83,11 @@ private fun InsightsAppBar(
                 Icon(painter = CoreIcons.Archive, contentDescription = null)
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text(stringResource(R.string.menu_archive))
+            }
+            DropdownMenuItem(onClick = onExportClick) {
+                Icon(painter = CoreIcons.Export, contentDescription = null)
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text(stringResource(R.string.menu_export))
             }
             DropdownMenuItem(onClick = onSettingsClick) {
                 Icon(painter = CoreIcons.Settings, contentDescription = null)
