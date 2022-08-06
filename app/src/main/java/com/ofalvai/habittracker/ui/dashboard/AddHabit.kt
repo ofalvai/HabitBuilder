@@ -140,9 +140,13 @@ fun AddHabitForm(
 
         Button(
             modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
-            onClick = onSaveClick
+            onClick = onSaveClick,
+            elevation = ButtonDefaults.elevation(defaultElevation = 0.dp, pressedElevation = 0.dp)
         ) {
-            Text(stringResource(R.string.addhabit_save))
+            Text(
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                text = stringResource(R.string.addhabit_save)
+            )
         }
     }
 }

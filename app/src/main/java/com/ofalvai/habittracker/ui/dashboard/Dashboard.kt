@@ -42,6 +42,7 @@ import com.ofalvai.habittracker.core.ui.component.ErrorView
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
+import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.ui.AppIcons
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.Destination
@@ -198,9 +199,13 @@ private fun DashboardAppBar(
         }
     ) {
         DropdownMenuItem(onClick = onArchiveClick) {
+            Icon(painter = CoreIcons.Archive, contentDescription = null)
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
             Text(stringResource(R.string.menu_archive))
         }
         DropdownMenuItem(onClick = onSettingsClick) {
+            Icon(painter = CoreIcons.Settings, contentDescription = null)
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
             Text(stringResource(R.string.menu_settings))
         }
         DropdownMenuItem(onClick = onExportClick) {
@@ -233,7 +238,8 @@ private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
 
         Button(
             modifier = Modifier.padding(16.dp),
-            onClick = onAddHabitClick
+            onClick = onAddHabitClick,
+            elevation = ButtonDefaults.elevation(defaultElevation = 0.dp, pressedElevation = 0.dp)
         ) {
             Icon(Icons.Rounded.Add, null, Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))

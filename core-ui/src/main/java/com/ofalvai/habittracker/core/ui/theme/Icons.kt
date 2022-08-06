@@ -42,5 +42,9 @@ object CoreIcons {
     val ChevronRight: Painter
         @Composable
         get() = painterResource(R.drawable.ic_chevron_right)
+
+    val Settings: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_settings)
 }
 

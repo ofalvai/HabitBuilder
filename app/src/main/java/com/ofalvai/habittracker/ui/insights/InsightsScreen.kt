@@ -16,13 +16,12 @@
 
 package com.ofalvai.habittracker.ui.insights
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,6 +33,7 @@ import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.component.AppBar
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
+import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.insights.component.Heatmap
 import com.ofalvai.habittracker.ui.insights.component.TopDays
@@ -78,9 +78,13 @@ private fun InsightsAppBar(
         },
         dropdownMenuItems = {
             DropdownMenuItem(onClick = onArchiveClick) {
+                Icon(painter = CoreIcons.Archive, contentDescription = null)
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text(stringResource(R.string.menu_archive))
             }
             DropdownMenuItem(onClick = onSettingsClick) {
+                Icon(painter = CoreIcons.Settings, contentDescription = null)
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text(stringResource(R.string.menu_settings))
             }
         }
