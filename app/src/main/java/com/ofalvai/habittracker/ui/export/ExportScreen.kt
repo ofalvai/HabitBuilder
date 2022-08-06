@@ -25,12 +25,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +43,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
-import com.ofalvai.habittracker.core.ui.component.AppBar
 import com.ofalvai.habittracker.core.ui.component.SingleStat
 import com.ofalvai.habittracker.core.ui.theme.*
 import com.ofalvai.habittracker.ui.AppIcons
@@ -74,10 +76,15 @@ fun ExportScreen(navController: NavController) {
             .statusBarsPadding()
             .padding(horizontal = 16.dp)
     ) {
-        AppBar(
-            title = {
-                Text(text = stringResource(R.string.export_title), style = AppTextStyle.screenTitle)
-            }
+        TopAppBar(
+            title = { Text(text = stringResource(R.string.export_title)) },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(Icons.Rounded.ArrowBack, stringResource(commonR.string.common_back))
+                }
+            },
+            backgroundColor = Color.Transparent,
+            elevation = 0.dp
         )
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -106,8 +113,6 @@ fun ExportScreen(navController: NavController) {
                 onConfirmImport = { viewModel.onRestoreBackup(it) }
             )
         }
-
-
     }
 }
 
@@ -189,7 +194,7 @@ private fun BackupInfo(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.size(16.dp))
         Text(
-            text = "App data is backed up regularly using Android's automatic backup mechanism.\nYou can also export your data manually on this screen.",
+            text = stringResource(R.string.export_backup_info),
             style = MaterialTheme.typography.body2
         )
     }
@@ -209,12 +214,12 @@ private fun Exporter(
             .padding(16.dp)
     ) {
         Text(
-            text = "Export",
+            text = stringResource(R.string.export_widget_export_title),
             style = MaterialTheme.typography.h6
         )
 
         Text(
-            text = "Export your habit data to CSV format",
+            text = stringResource(R.string.export_widget_export_description),
             style = MaterialTheme.typography.body2,
             modifier = Modifier.padding(top = 8.dp)
         )
@@ -227,7 +232,7 @@ private fun Exporter(
             modifier = Modifier.padding(top = 16.dp),
             onClick = onExportClick
         ) {
-            Text(text = "Choose export location")
+            Text(text = stringResource(R.string.export_widget_export_filepicker_button))
         }
 
         AnimatedVisibility(visible = state.zipUri != null) {
@@ -240,16 +245,16 @@ private fun Exporter(
             ) {
                 Column {
                     Text(
-                        text = "Export is ready",
+                        text = stringResource(R.string.export_widget_export_success_title),
                         style = MaterialTheme.typography.body1
                     )
                     Text(
                         modifier = Modifier.padding(vertical = 8.dp),
-                        text = "Path: ${state.zipUri!!.path}",
+                        text = stringResource(R.string.export_widget_export_success_path, state.zipUri!!.path),
                         style = MaterialTheme.typography.caption
                     )
                     OutlinedButton(onClick = { onShareClick(state.zipUri) }) {
-                        Text(text = "Share file")
+                        Text(text = stringResource(R.string.export_widget_export_success_share_button))
                     }
                 }
             }
@@ -259,21 +264,43 @@ private fun Exporter(
 
 @Composable
 private fun Importer(
+    modifier: Modifier = Modifier,
     state: ImportState,
     onChooseFileClick: () -> Unit,
     onConfirmImport: (URI) -> Unit
 ) {
-    Column {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .surfaceBackground()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.export_widget_import_title),
+            style = MaterialTheme.typography.h6
+        )
+
+        Text(
+            text = stringResource(R.string.export_widget_import_description),
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+
+        if (state.error != null) {
+            ExportImportError(state.error, modifier = Modifier.padding(vertical = 16.dp))
+        }
+
         if (state.backupSummary != null) {
+            // TODO
             DataSummary(summary = state.backupSummary)
         }
         if (state.zipUri != null) {
-            Button(onClick = { onConfirmImport(state.zipUri) }) {
-                Text(text = "Restore backup")
+            OutlinedButton(onClick = { onConfirmImport(state.zipUri) }) {
+                Text(text = stringResource(R.string.export_widget_import_restore_button))
             }
         }
-        Button(onClick = onChooseFileClick) {
-            Text(text = "Choose backup")
+        OutlinedButton(onClick = onChooseFileClick) {
+            Text(text = stringResource(R.string.export_widget_import_filepicker_button))
         }
     }
 
