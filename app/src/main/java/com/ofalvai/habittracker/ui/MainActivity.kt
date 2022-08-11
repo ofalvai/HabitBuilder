@@ -170,14 +170,14 @@ private fun AppBottomNavigation(navController: NavController) {
 
             AppBottomNavigationItem(
                 rootScreen = Destination.Dashboard,
-                icon = { Icon(CoreIcons.Habits, stringResource(R.string.tab_dashboard)) },
+                content = { Icon(CoreIcons.Habits, stringResource(R.string.tab_dashboard)) },
                 label = stringResource(R.string.tab_dashboard),
                 currentDestination = currentDestination,
                 navController = navController
             )
             AppBottomNavigationItem(
                 rootScreen = Destination.Insights,
-                icon = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
+                content = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
                 label = stringResource(R.string.tab_insights),
                 currentDestination = currentDestination,
                 navController = navController
@@ -189,13 +189,13 @@ private fun AppBottomNavigation(navController: NavController) {
 @Composable
 private fun RowScope.AppBottomNavigationItem(
     rootScreen: Screen,
-    icon: @Composable () -> Unit,
     label: String,
     currentDestination: NavDestination?,
-    navController: NavController
+    navController: NavController,
+    content: @Composable () -> Unit
 ) {
     BottomNavigationItem(
-        icon = icon,
+        icon = content,
         selected = currentDestination?.hierarchy?.any { it.route == rootScreen.route } == true,
         onClick = {
             navController.navigate(rootScreen.route) {
