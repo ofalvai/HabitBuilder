@@ -133,7 +133,6 @@
     <string name="export_title">Backup and restore</string>
     <string name="export_datasummary_habits">habits</string>
     <string name="export_datasummary_actions">actions performed</string>
-    <string name="export_datasummary_last_activity">Last activity:</string>
     <string name="export_error_export_failed">Failed to export app data, please try again.</string>
     <string name="export_error_uri_empty">Invalid file selected, please try a different one.</string>
     <string name="export_error_import_failed">Failed to import backup, please try again.</string>

@@ -134,6 +134,7 @@ object Destination {
 
     object Export : Screen(
         route = "export",
-        // TODO: define transitions
+        enterTransition = { AppTransition.sharedZAxisEnterForward },
+        exitTransition = { AppTransition.sharedZAxisExitBackward }
     )
 }

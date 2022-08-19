@@ -155,6 +155,7 @@ class ExportViewModel(
             try {
                 val backup = loadBackup(uri)
                 habitDao.restoreBackup(backup.habits, backup.actions)
+                importState.value = ImportState(zipUri = null, backupSummary = null, error = null)
             } catch (e: Exception) {
                 telemetry.logNonFatal(e)
                 importState.value = ImportState(
