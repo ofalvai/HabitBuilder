@@ -36,17 +36,26 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.component.SingleStat
-import com.ofalvai.habittracker.core.ui.theme.*
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.errorContainer
+import com.ofalvai.habittracker.core.ui.theme.successContainer
+import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.ui.AppIcons
 import java.net.URI
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import com.ofalvai.habittracker.core.ui.R as commonR
@@ -124,14 +133,6 @@ private fun DataSummary(summary: DataSummary) {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        val lastActivityString = if (summary.lastActivity != null) {
-            DateUtils.getRelativeTimeSpanString(
-                summary.lastActivity.toEpochMilli(),
-                System.currentTimeMillis(),
-                0
-            )
-        } else "-"
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -139,17 +140,12 @@ private fun DataSummary(summary: DataSummary) {
             SingleStat(
                 value = summary.habitCount.toString(),
                 label = stringResource(R.string.export_datasummary_habits),
-                modifier = Modifier.weight(0.33f)
+                modifier = Modifier.weight(0.5f)
             )
             SingleStat(
                 value = summary.actionCount.toString(),
                 label = stringResource(R.string.export_datasummary_actions),
-                modifier = Modifier.weight(0.33f)
-            )
-            SingleStat(
-                value = lastActivityString.toString(),
-                label = stringResource(R.string.export_datasummary_last_activity),
-                modifier = Modifier.weight(0.33f)
+                modifier = Modifier.weight(0.5f)
             )
         }
     }
@@ -224,8 +220,8 @@ private fun Exporter(
             modifier = Modifier.padding(top = 8.dp)
         )
 
-        if (state.error != null) {
-            ExportImportError(state.error, modifier = Modifier.padding(vertical = 16.dp))
+        AnimatedVisibility(visible = state.error != null) {
+            ExportImportError(state.error!!, modifier = Modifier.padding(vertical = 16.dp))
         }
 
         OutlinedButton(
@@ -250,7 +246,10 @@ private fun Exporter(
                     )
                     Text(
                         modifier = Modifier.padding(vertical = 8.dp),
-                        text = stringResource(R.string.export_widget_export_success_path, state.zipUri!!.path),
+                        text = stringResource(
+                            R.string.export_widget_export_success_path,
+                            state.zipUri!!.path
+                        ),
                         style = MaterialTheme.typography.caption
                     )
                     OutlinedButton(onClick = { onShareClick(state.zipUri) }) {
@@ -286,25 +285,80 @@ private fun Importer(
             modifier = Modifier.padding(top = 8.dp)
         )
 
-        if (state.error != null) {
-            ExportImportError(state.error, modifier = Modifier.padding(vertical = 16.dp))
+        AnimatedVisibility(visible = state.error != null) {
+            ExportImportError(state.error!!, modifier = Modifier.padding(vertical = 16.dp))
         }
 
-        if (state.backupSummary != null) {
-            // TODO
-            DataSummary(summary = state.backupSummary)
+        AnimatedVisibility(visible = state.backupSummary != null) {
+            BackupSummary(state = state)
         }
-        if (state.zipUri != null) {
-            OutlinedButton(onClick = { onConfirmImport(state.zipUri) }) {
+
+        AnimatedVisibility(visible = state.zipUri != null) {
+            OutlinedButton(onClick = { onConfirmImport(state.zipUri!!) }) {
                 Text(text = stringResource(R.string.export_widget_import_restore_button))
             }
         }
-        OutlinedButton(onClick = onChooseFileClick) {
+
+        OutlinedButton(
+            modifier = Modifier.padding(top = 16.dp),
+            onClick = onChooseFileClick
+        ) {
             Text(text = stringResource(R.string.export_widget_import_filepicker_button))
         }
     }
+}
 
+@Composable
+private fun BackupSummary(state: ImportState) {
+    Column(
+        modifier = Modifier.padding(top = 16.dp)
+    ) {
+        val boldStyle = SpanStyle(fontWeight = FontWeight.Bold)
+        if (state.zipUri != null) {
+            Text(
+                style = MaterialTheme.typography.body2,
+                text = buildAnnotatedString {
+                    withStyle(boldStyle) {
+                        append(stringResource(R.string.export_widget_import_file_path))
+                    }
+                    append(" ")
+                    append(state.zipUri.path)
+                },
+            )
+        }
+        if (state.backupSummary != null) {
+            Text(
+                style = MaterialTheme.typography.body2,
+                text = buildAnnotatedString {
+                    withStyle(boldStyle) {
+                        append(stringResource(R.string.export_widget_import_habit_count))
+                    }
+                    append(" ")
+                    append(state.backupSummary.habitCount.toString())
+                    append("\n")
+                    withStyle(boldStyle) {
+                        append(stringResource(R.string.export_widget_import_action_count))
+                    }
+                    append(" ")
+                    append(state.backupSummary.actionCount.toString())
+                    append("\n")
+                    withStyle(boldStyle) {
+                        append(stringResource(R.string.export_widget_import_last_activity))
+                    }
+                    val lastActivityString = if (state.backupSummary.lastActivity != null) {
+                        DateUtils.getRelativeTimeSpanString(
+                            state.backupSummary.lastActivity.toEpochMilli(),
+                            System.currentTimeMillis(),
+                            0
+                        )
+                    } else "-"
+                    append(" ")
+                    append(lastActivityString.toString())
 
+                }
+            )
+        }
+    }
 }
 
 private fun Modifier.surfaceBackground() = composed {
@@ -312,6 +366,7 @@ private fun Modifier.surfaceBackground() = composed {
 }
 
 @Preview
+@ShowkaseComposable(name = "Data summary", group = "Backup and restore")
 @Composable
 fun PreviewDataSummary() {
     val data = DataSummary(
@@ -328,9 +383,46 @@ fun PreviewDataSummary() {
 
 @Preview
 @Composable
+@ShowkaseComposable(name = "Error", group = "Backup and restore")
 fun PreviewExportImportError() {
     PreviewTheme {
         ExportImportError(ExportImportError.BackupVersionTooHigh)
     }
 }
 
+@Preview
+@Composable
+@ShowkaseComposable("Importer", group = "Backup and restore")
+fun PreviewImporter() {
+    PreviewTheme {
+        val state = ImportState(
+            zipUri = URI.create("documents/HabitTracker-export.zip"),
+            backupSummary = DataSummary(
+                habitCount = 5,
+                actionCount = 34,
+                lastActivity = Instant.now()
+            ),
+            error = null
+        )
+        Importer(
+            state = state,
+            onChooseFileClick = { },
+            onConfirmImport = {})
+    }
+}
+
+@Preview
+@Composable
+@ShowkaseComposable("Exporter", group = "Backup and restore")
+fun PreviewExporter() {
+    PreviewTheme {
+        val state = ExportState(
+            zipUri = URI.create("documents/HabitTracker-export.zip"),
+            error = null
+        )
+        Exporter(
+            state = state,
+            onExportClick = { },
+            onShareClick = {})
+    }
+}
