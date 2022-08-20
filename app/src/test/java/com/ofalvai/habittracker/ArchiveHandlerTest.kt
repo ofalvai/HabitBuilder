@@ -18,7 +18,6 @@ package com.ofalvai.habittracker
 
 import com.ofalvai.habittracker.ui.export.ArchiveHandler
 import com.ofalvai.habittracker.ui.export.BackupContent
-import com.ofalvai.habittracker.ui.export.InvalidBackupException
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.ByteArrayInputStream
@@ -146,7 +145,7 @@ class ArchiveHandlerTest {
             ?.split("=")
             ?.lastOrNull()
             ?.toIntOrNull()
-            ?: throw InvalidBackupException("Couldn't find backup version in metadata.txt. File contents: $metadataContent")
+            ?: throw IllegalStateException("Couldn't find backup version in metadata.txt. File contents: $metadataContent")
 
         return BackupContent(
             habitsCSV = habitsStream.toString(),

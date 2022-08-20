@@ -16,18 +16,17 @@
 
 package com.ofalvai.habittracker.ui.export
 
-import com.ofalvai.habittracker.core.database.EntityTypeConverters
 import com.ofalvai.habittracker.core.database.entity.Action
 import com.ofalvai.habittracker.core.database.entity.Habit
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import java.io.Reader
+import java.time.Instant
 
 private val FORMAT = CSVFormat.DEFAULT
     .builder()
     .setRecordSeparator("\n")
     .build()
-private val TYPE_CONVERTERS = EntityTypeConverters()
 
 internal class BackupData(
     val habits: List<Habit>,
@@ -55,7 +54,7 @@ internal object CSVHandler {
         printer.printRecord("id", "habit_id", "timestamp")
 
         actions.forEach {
-            printer.printRecord(it.id, it.habit_id, TYPE_CONVERTERS.fromInstant(it.timestamp))
+            printer.printRecord(it.id, it.habit_id, it.timestamp.toEpochMilli())
         }
 
         return stringBuilder
@@ -80,7 +79,7 @@ internal object CSVHandler {
             Action(
                 id = it.get("id").toInt(),
                 habit_id = it.get("habit_id").toInt(),
-                timestamp = TYPE_CONVERTERS.toInstant(it.get("timestamp").toLong())
+                timestamp = Instant.ofEpochMilli(it.get("timestamp").toLong())
             )
         }
         return actions

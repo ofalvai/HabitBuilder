@@ -34,27 +34,25 @@ internal data class BackupContent(
 
 internal object ArchiveHandler {
 
-    fun readBackup(inputStream: InputStream): BackupContent {
+    fun readBackup(input: InputStream): BackupContent {
         val habitsStream = ByteArrayOutputStream()
         val actionsStream = ByteArrayOutputStream()
         val metadataStream = ByteArrayOutputStream()
 
-        inputStream.use {
-            ZipInputStream(it).use { inputStream ->
-                var zipEntry = inputStream.nextEntry
-                while (zipEntry != null) {
-                    if (zipEntry.isDirectory) {
-                        zipEntry = inputStream.nextEntry
-                        continue
-                    }
-                    when (zipEntry.name) {
-                        "habits.csv" -> inputStream.copyTo(habitsStream)
-                        "actions.csv" -> inputStream.copyTo(actionsStream)
-                        "metadata.txt" -> inputStream.copyTo(metadataStream)
-                    }
-
+        ZipInputStream(input).use { inputStream ->
+            var zipEntry = inputStream.nextEntry
+            while (zipEntry != null) {
+                if (zipEntry.isDirectory) {
                     zipEntry = inputStream.nextEntry
+                    continue
                 }
+                when (zipEntry.name) {
+                    "habits.csv" -> inputStream.copyTo(habitsStream)
+                    "actions.csv" -> inputStream.copyTo(actionsStream)
+                    "metadata.txt" -> inputStream.copyTo(metadataStream)
+                }
+
+                zipEntry = inputStream.nextEntry
             }
         }
 
@@ -66,7 +64,7 @@ internal object ArchiveHandler {
             ?.split("=")
             ?.lastOrNull()
             ?.toIntOrNull()
-            ?: throw InvalidBackupException("Couldn't find backup version in metadata.txt. File contents: $metadataContent")
+            ?: throw IllegalStateException("Couldn't find backup version in metadata.txt. File contents: $metadataContent")
 
         return BackupContent(
             habitsCSV = habitsStream.toString(),

@@ -72,10 +72,19 @@ fun ExportScreen(navController: NavController) {
 
     val createDocumentLauncher =
         rememberLauncherForActivityResult(viewModel.createDocumentContract) {
-            viewModel.onCreateDocumentResult(URI.create(it.toString()))
+            viewModel.exportToFile(URI.create(it.toString()))
         }
     val openDocumentLauncher = rememberLauncherForActivityResult(viewModel.openDocumentContract) {
-        viewModel.onOpenDocumentResult(URI.create(it.toString()))
+        viewModel.importFromFile(URI.create(it.toString()))
+    }
+    val context = LocalContext.current
+    val onShareClick: (URI) -> Unit =  {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, it)
+            type = viewModel.exportDocumentMimeType
+        }
+        startActivity(context, Intent.createChooser(shareIntent, null), null)
     }
 
     Column(
@@ -83,7 +92,6 @@ fun ExportScreen(navController: NavController) {
             .background(MaterialTheme.colors.background)
             .fillMaxSize()
             .statusBarsPadding()
-            .padding(horizontal = 16.dp)
     ) {
         TopAppBar(
             title = { Text(text = stringResource(R.string.export_title)) },
@@ -96,24 +104,19 @@ fun ExportScreen(navController: NavController) {
             elevation = 0.dp
         )
 
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Column(modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp)
+        ) {
             BackupInfo(Modifier.padding(vertical = 16.dp))
 
             DataSummary(summary)
 
-            val context = LocalContext.current
             Exporter(
                 modifier = Modifier.padding(vertical = 32.dp),
                 state = exportState,
                 onExportClick = { createDocumentLauncher.launch(viewModel.exportDocumentName) },
-                onShareClick = { uri ->
-                    val shareIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_STREAM, uri)
-                        type = viewModel.exportDocumentMimeType
-                    }
-                    startActivity(context, Intent.createChooser(shareIntent, null), null)
-                }
+                onShareClick = onShareClick
             )
 
             Importer(
@@ -231,7 +234,7 @@ private fun Exporter(
             Text(text = stringResource(R.string.export_widget_export_filepicker_button))
         }
 
-        AnimatedVisibility(visible = state.zipUri != null) {
+        AnimatedVisibility(visible = state.outputFileURI != null) {
             Box(
                 modifier = Modifier
                     .padding(top = 16.dp)
@@ -248,11 +251,11 @@ private fun Exporter(
                         modifier = Modifier.padding(vertical = 8.dp),
                         text = stringResource(
                             R.string.export_widget_export_success_path,
-                            state.zipUri!!.path
+                            state.outputFileURI!!.path
                         ),
                         style = MaterialTheme.typography.caption
                     )
-                    OutlinedButton(onClick = { onShareClick(state.zipUri) }) {
+                    OutlinedButton(onClick = { onShareClick(state.outputFileURI) }) {
                         Text(text = stringResource(R.string.export_widget_export_success_share_button))
                     }
                 }
@@ -293,8 +296,8 @@ private fun Importer(
             BackupSummary(state = state)
         }
 
-        AnimatedVisibility(visible = state.zipUri != null) {
-            OutlinedButton(onClick = { onConfirmImport(state.zipUri!!) }) {
+        AnimatedVisibility(visible = state.backupFileURI != null) {
+            OutlinedButton(onClick = { onConfirmImport(state.backupFileURI!!) }) {
                 Text(text = stringResource(R.string.export_widget_import_restore_button))
             }
         }
@@ -314,7 +317,7 @@ private fun BackupSummary(state: ImportState) {
         modifier = Modifier.padding(top = 16.dp)
     ) {
         val boldStyle = SpanStyle(fontWeight = FontWeight.Bold)
-        if (state.zipUri != null) {
+        if (state.backupFileURI != null) {
             Text(
                 style = MaterialTheme.typography.body2,
                 text = buildAnnotatedString {
@@ -322,7 +325,7 @@ private fun BackupSummary(state: ImportState) {
                         append(stringResource(R.string.export_widget_import_file_path))
                     }
                     append(" ")
-                    append(state.zipUri.path)
+                    append(state.backupFileURI.path)
                 },
             )
         }
@@ -396,7 +399,7 @@ fun PreviewExportImportError() {
 fun PreviewImporter() {
     PreviewTheme {
         val state = ImportState(
-            zipUri = URI.create("documents/HabitTracker-export.zip"),
+            backupFileURI = URI.create("documents/HabitTracker-export.zip"),
             backupSummary = DataSummary(
                 habitCount = 5,
                 actionCount = 34,
@@ -417,7 +420,7 @@ fun PreviewImporter() {
 fun PreviewExporter() {
     PreviewTheme {
         val state = ExportState(
-            zipUri = URI.create("documents/HabitTracker-export.zip"),
+            outputFileURI = URI.create("documents/HabitTracker-export.zip"),
             error = null
         )
         Exporter(
