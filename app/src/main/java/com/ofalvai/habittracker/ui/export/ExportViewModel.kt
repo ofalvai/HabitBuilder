@@ -16,12 +16,12 @@
 
 package com.ofalvai.habittracker.ui.export
 
-import android.content.Context
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.Action
+import com.ofalvai.habittracker.repo.StreamOpener
 import com.ofalvai.habittracker.telemetry.Telemetry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -34,9 +34,8 @@ import java.time.format.DateTimeFormatter
 
 private const val BACKUP_VERSION = 1
 
-// TODO: add tests
 class ExportViewModel(
-    private val appContext: Context,
+    private val streamOpener: StreamOpener,
     private val habitDao: HabitDao,
     private val telemetry: Telemetry
 ) : ViewModel() {
@@ -77,8 +76,7 @@ class ExportViewModel(
                     metadata = BackupContent.Metadata(backupVersion = BACKUP_VERSION)
                 )
                 withContext(Dispatchers.IO) {
-                    appContext.contentResolver.openOutputStream(uri.toAndroidURI()).use {
-                        checkNotNull(it)
+                    streamOpener.openOutputStream(uri).use {
                         ArchiveHandler.writeBackup(it, backupContent)
                     }
                 }
@@ -104,8 +102,9 @@ class ExportViewModel(
                 if (backup.backupVersion > BACKUP_VERSION) {
                     telemetry.logNonFatal(IllegalArgumentException("Backup version in ZIP too high: ${backup.backupVersion}, app defines $BACKUP_VERSION"))
                     importState.value = ImportState(
-                        backupFileURI = null, backupSummary = null, error = ExportImportError.BackupVersionTooHigh
+                        backupFileURI = uri, backupSummary = null, error = ExportImportError.BackupVersionTooHigh
                     )
+                    return@launch
                 }
 
                 val backupSummary = DataSummary(
@@ -139,8 +138,7 @@ class ExportViewModel(
     }
 
     private suspend fun loadBackup(uri: URI): BackupData = withContext(Dispatchers.IO) {
-        appContext.contentResolver.openInputStream(uri.toAndroidURI()).use { inputStream ->
-            checkNotNull(inputStream)
+        streamOpener.openInputStream(uri).use { inputStream ->
             val backup = ArchiveHandler.readBackup(inputStream)
             val habits = CSVHandler.importHabitList(StringReader(backup.habitsCSV))
             val actions = CSVHandler.importActionList(StringReader(backup.actionsCSV))
@@ -157,6 +155,4 @@ class ExportViewModel(
         actionCount = actions.size,
         lastActivity = actions.lastOrNull()?.timestamp
     )
-
-    private fun URI.toAndroidURI() = android.net.Uri.parse(toString())
 }
