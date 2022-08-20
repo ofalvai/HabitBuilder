@@ -157,7 +157,7 @@ class DashboardViewModelTest {
     }
 
     @Test
-    fun `Given exception when toggling action When action is toggled Then error event is sent to UI`() = runTest() {
+    fun `Given exception when toggling action When action is toggled Then error event is sent to UI`() = runTest {
         // Given
         val exception = RuntimeException("Mocked error")
         given(repo.toggleAction(any(), any(), any())).willThrow(exception)

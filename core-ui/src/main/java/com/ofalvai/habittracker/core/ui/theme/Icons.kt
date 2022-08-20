@@ -46,5 +46,9 @@ object CoreIcons {
     val Settings: Painter
         @Composable
         get() = painterResource(R.drawable.ic_settings)
+
+    val Export: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_export)
 }
 

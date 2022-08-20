@@ -25,12 +25,14 @@ import androidx.room.Room
 import com.ofalvai.habittracker.core.database.AppDatabase
 import com.ofalvai.habittracker.core.database.MIGRATIONS
 import com.ofalvai.habittracker.repo.ActionRepository
+import com.ofalvai.habittracker.repo.AndroidStreamOpener
 import com.ofalvai.habittracker.telemetry.TelemetryImpl
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.archive.ArchiveViewModel
 import com.ofalvai.habittracker.ui.dashboard.AddHabitViewModel
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
+import com.ofalvai.habittracker.ui.export.ExportViewModel
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.settings.LicensesViewModel
@@ -63,6 +65,8 @@ object Dependencies {
 
     val telemetry = TelemetryImpl(appContext, appPreferences)
 
+    private val streamOpener = AndroidStreamOpener(appContext)
+
     val viewModelFactory = viewModelFactory {
         initializer { AddHabitViewModel(dao, onboardingManager, telemetry) }
         initializer {
@@ -73,6 +77,7 @@ object Dependencies {
         initializer { LicensesViewModel(appContext) }
         initializer { ArchiveViewModel(dao, telemetry) }
         initializer { SettingsViewModel(appPreferences) }
+        initializer { ExportViewModel(streamOpener, dao, telemetry) }
     }
 }
 

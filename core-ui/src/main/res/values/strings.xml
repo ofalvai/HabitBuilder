@@ -21,6 +21,7 @@
     <string name="common_archive">Archive</string>
     <string name="common_more">More</string>
     <string name="common_error">Error</string>
+    <string name="common_something_went_wrong">Something went wrong</string>
     <string name="common_empty">Empty</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_interpunct">%1$s · %2$s</string>

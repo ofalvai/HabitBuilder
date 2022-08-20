@@ -48,6 +48,7 @@ import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.archive.ArchiveScreen
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.DashboardScreen
+import com.ofalvai.habittracker.ui.export.ExportScreen
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.ui.insights.InsightsScreen
 import com.ofalvai.habittracker.ui.settings.LicensesScreen
@@ -115,6 +116,7 @@ private fun Screens(navController: NavHostController,
         appDestination(Destination.Settings) { SettingsScreen(navController) }
         appDestination(Destination.Licenses) { LicensesScreen(navController) }
         appDestination(Destination.Archive) { ArchiveScreen(navController, scaffoldState) }
+        appDestination(Destination.Export) { ExportScreen(navController) }
     }
 }
 
@@ -168,14 +170,14 @@ private fun AppBottomNavigation(navController: NavController) {
 
             AppBottomNavigationItem(
                 rootScreen = Destination.Dashboard,
-                icon = { Icon(CoreIcons.Habits, stringResource(R.string.tab_dashboard)) },
+                content = { Icon(CoreIcons.Habits, stringResource(R.string.tab_dashboard)) },
                 label = stringResource(R.string.tab_dashboard),
                 currentDestination = currentDestination,
                 navController = navController
             )
             AppBottomNavigationItem(
                 rootScreen = Destination.Insights,
-                icon = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
+                content = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
                 label = stringResource(R.string.tab_insights),
                 currentDestination = currentDestination,
                 navController = navController
@@ -187,13 +189,13 @@ private fun AppBottomNavigation(navController: NavController) {
 @Composable
 private fun RowScope.AppBottomNavigationItem(
     rootScreen: Screen,
-    icon: @Composable () -> Unit,
     label: String,
     currentDestination: NavDestination?,
-    navController: NavController
+    navController: NavController,
+    content: @Composable () -> Unit
 ) {
     BottomNavigationItem(
-        icon = icon,
+        icon = content,
         selected = currentDestination?.hierarchy?.any { it.route == rootScreen.route } == true,
         onClick = {
             navController.navigate(rootScreen.route) {

@@ -29,13 +29,16 @@ interface HabitDao {
     suspend fun getHabits(): List<Habit>
 
     @Insert
-    suspend fun insertHabit(vararg habit: Habit)
+    suspend fun insertHabits(habits: List<Habit>)
 
     @Delete(entity = Habit::class)
     suspend fun deleteHabit(habitById: HabitById)
 
     @Query("DELETE FROM habit")
     suspend fun deleteAllHabits()
+
+    @Query("DELETE FROM `action`")
+    suspend fun deleteAllActions()
 
     @Update
     suspend fun updateHabit(habit: Habit)
@@ -51,6 +54,9 @@ interface HabitDao {
     @Transaction
     @Query("SELECT * FROM habit WHERE archived == 1 ORDER BY `id` ASC")
     fun getArchivedHabitsWithActions(): Flow<List<HabitWithActions>>
+
+    @Query("SELECT * FROM `action` ORDER BY timestamp ASC")
+    fun getAllActions(): Flow<List<Action>>
 
     @Query("SELECT * FROM habit WHERE id IN (:id1, :id2)")
     suspend fun getHabitPair(id1: HabitId, id2: HabitId): List<Habit>
@@ -81,6 +87,14 @@ interface HabitDao {
 
     @Query("DELETE FROM `action` WHERE id = :id")
     suspend fun deleteAction(id: Int)
+
+    @Transaction
+    suspend fun restoreBackup(habitsToRestore: List<Habit>, actionsToRestore: List<Action>) {
+        deleteAllHabits()
+        deleteAllActions()
+        insertHabits(habitsToRestore)
+        insertActions(actionsToRestore)
+    }
 
     /**
      * When there are no actions returns UNIX epoch time as first_day and action_count of 0

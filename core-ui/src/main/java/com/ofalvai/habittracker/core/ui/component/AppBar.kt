@@ -35,7 +35,7 @@ import com.ofalvai.habittracker.core.ui.R
 fun AppBar(
     title: @Composable () -> Unit,
     iconActions: @Composable RowScope.() -> Unit = {},
-    dropdownMenuItems: @Composable ColumnScope.() -> Unit,
+    dropdownMenuItems: @Composable (ColumnScope.() -> Unit)? = null,
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
 
@@ -47,16 +47,18 @@ fun AppBar(
         Row(Modifier.align(Alignment.CenterEnd)) {
             iconActions()
 
-            Box {
-                IconButton(onClick = { menuExpanded = true }) {
-                    Icon(Icons.Rounded.MoreVert, stringResource(R.string.common_more))
-                }
-                DropdownMenu(
-                    expanded = menuExpanded,
-                    onDismissRequest = { menuExpanded = false },
-                    offset = DpOffset(8.dp, 0.dp)
-                ) {
-                    dropdownMenuItems()
+            if (dropdownMenuItems != null) {
+                Box {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(Icons.Rounded.MoreVert, stringResource(R.string.common_more))
+                    }
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false },
+                        offset = DpOffset(8.dp, 0.dp)
+                    ) {
+                        dropdownMenuItems()
+                    }
                 }
             }
         }

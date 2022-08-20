@@ -40,6 +40,8 @@ object AppColor {
 
         val gray1 = Color.Black.copy(alpha = 0.1f)
         val gray2 = Color.Black.copy(alpha = 0.25f)
+        val errorContainer = Color(0xFFFFDAD4)
+        val successContainer = Color(0xFFCEEBC2)
 
         val habitRed = Color(0xFF9C4043)
         val habitGreen = Color(0xFF008768)
@@ -64,6 +66,8 @@ object AppColor {
 
         val gray1 = Color.White.copy(alpha = 0.1f)
         val gray2 = Color.White.copy(alpha = 0.25f)
+        val errorContainer = Color(0xFF410001)
+        val successContainer = Color(0xFF354D2F)
 
         val habitRed = Color(0xFFFFB3B2)
         val habitGreen = Color(0xFF63DBB6)
@@ -86,6 +90,12 @@ val Colors.gray1: Color
 
 val Colors.gray2: Color
     get() = if (isLight) AppColor.Light.gray2 else AppColor.Dark.gray2
+
+val Colors.errorContainer: Color
+    get() = if (isLight) AppColor.Light.errorContainer else AppColor.Dark.errorContainer
+
+val Colors.successContainer: Color
+    get() = if (isLight) AppColor.Light.successContainer else AppColor.Dark.successContainer
 
 val Colors.habitRed: Color
     get() = if (isLight) AppColor.Light.habitRed else AppColor.Dark.habitRed

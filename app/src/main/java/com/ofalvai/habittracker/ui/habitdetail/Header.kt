@@ -27,7 +27,6 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -42,6 +41,7 @@ import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.core.ui.component.ErrorView
 import com.ofalvai.habittracker.core.ui.component.HabitColorPicker
+import com.ofalvai.habittracker.core.ui.component.SingleStat
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.theme.*
 import com.ofalvai.habittracker.ui.model.SingleStats
@@ -241,45 +241,6 @@ private fun SingleStatRow(
             value = (completionRate * 100).roundToInt().toString() + "%",
             label = stringResource(R.string.habitdetails_singlestat_completionrate),
             modifier = Modifier.weight(0.33f)
-        )
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-private fun SingleStat(
-    value: String,
-    label: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier.padding(horizontal = 4.dp)
-    ) {
-        AnimatedContent(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            targetState = value,
-            transitionSpec = {
-                if (targetState > initialState) {
-                    slideInVertically { height -> height } + fadeIn() with slideOutVertically { height -> -height } + fadeOut()
-                } else {
-                    slideInVertically { height -> -height } + fadeIn() with slideOutVertically { height -> height } + fadeOut()
-                }.using(
-                    // Disable clipping since the faded slide-in/out should be displayed
-                    // out of bounds.
-                    SizeTransform(clip = false)
-                )
-            }
-        ) { targetValue ->
-            Text(
-                text = targetValue,
-                style = AppTextStyle.singleStatValue
-            )
-        }
-        Text(
-            text = label,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.caption,
-            textAlign = TextAlign.Center
         )
     }
 }

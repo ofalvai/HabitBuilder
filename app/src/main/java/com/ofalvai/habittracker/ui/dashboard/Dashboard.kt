@@ -80,6 +80,7 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
     }
     val onSettingsClick = { navController.navigate(Destination.Settings.route) }
     val onArchiveClick = { navController.navigate(Destination.Archive.route) }
+    val onExportClick = { navController.navigate(Destination.Export.route) }
     val onMove: (ItemMoveEvent) -> Unit = { viewModel.persistItemMove(it) }
 
     DashboardConfigDialog(
@@ -101,6 +102,7 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
                 onHabitDetail,
                 onSettingsClick,
                 onArchiveClick,
+                onExportClick, // TODO: unify click event listeners
                 onMove
             )
         }
@@ -144,10 +146,11 @@ private fun LoadedDashboard(
     onHabitDetail: (Habit) -> (Unit),
     onSettingsClick: () -> Unit,
     onArchiveClick: () -> Unit,
+    onExportClick: () -> Unit,
     onMove: (ItemMoveEvent) -> Unit
 ) {
     Column(Modifier.fillMaxSize().statusBarsPadding()) {
-        DashboardAppBar(onConfigClick, onSettingsClick, onArchiveClick)
+        DashboardAppBar(onConfigClick, onSettingsClick, onArchiveClick, onExportClick)
 
         if (onboardingState != null) {
             Onboarding(onboardingState)
@@ -179,7 +182,8 @@ private fun LoadedDashboard(
 private fun DashboardAppBar(
     onConfigClick: () -> Unit,
     onSettingsClick: () -> Unit,
-    onArchiveClick: () -> Unit
+    onArchiveClick: () -> Unit,
+    onExportClick: () -> Unit
 ) {
     AppBar(
         title = {
@@ -192,20 +196,24 @@ private fun DashboardAppBar(
             IconButton(onClick = onConfigClick) {
                 Icon(AppIcons.DashboardLayout, stringResource(R.string.dashboard_change_layout))
             }
-        },
-        dropdownMenuItems = {
-            DropdownMenuItem(onClick = onArchiveClick) {
-                Icon(painter = CoreIcons.Archive, contentDescription = null)
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(stringResource(R.string.menu_archive))
-            }
-            DropdownMenuItem(onClick = onSettingsClick) {
-                Icon(painter = CoreIcons.Settings, contentDescription = null)
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(stringResource(R.string.menu_settings))
-            }
         }
-    )
+    ) {
+        DropdownMenuItem(onClick = onArchiveClick) {
+            Icon(painter = CoreIcons.Archive, contentDescription = null)
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text(stringResource(R.string.menu_archive))
+        }
+        DropdownMenuItem(onClick = onExportClick) {
+            Icon(painter = CoreIcons.Export, contentDescription = null)
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text(stringResource(R.string.menu_export))
+        }
+        DropdownMenuItem(onClick = onSettingsClick) {
+            Icon(painter = CoreIcons.Settings, contentDescription = null)
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text(stringResource(R.string.menu_settings))
+        }
+    }
 }
 
 @Composable

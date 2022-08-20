@@ -42,7 +42,7 @@ class AddHabitViewModel(
             try {
                 val habitCount = dao.getTotalHabitCount().first()
                 val habitEntity = habit.toEntity(order = habitCount, archived = false)
-                dao.insertHabit(habitEntity)
+                dao.insertHabits(listOf(habitEntity))
                 onboardingManager.firstHabitCreated()
                 backNavigationEventChannel.send(Unit)
             } catch (e: Throwable) {

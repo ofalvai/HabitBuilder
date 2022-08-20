@@ -123,7 +123,7 @@ class HabitStatsTest : BaseInstrumentedTest() {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         habitDao = db.habitDao()
 
-        habitDao.insertHabit(TestData.habit1, TestData.habit2, TestData.habit3, TestData.habit4)
+        habitDao.insertHabits(listOf(TestData.habit1, TestData.habit2, TestData.habit3, TestData.habit4))
         habitDao.insertActions(TestData.actions)
     }
 

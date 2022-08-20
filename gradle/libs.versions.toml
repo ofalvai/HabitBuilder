@@ -16,7 +16,7 @@ dependencyanalysis = "com.autonomousapps.dependency-analysis:1.12.0"
 
 [libraries]
 android-tools-desugar = "com.android.tools:desugar_jdk_libs:1.2.0"
-android-tools-gradle = "com.android.tools.build:gradle:7.3.0-beta05"
+android-tools-gradle = "com.android.tools.build:gradle:7.3.0-rc01"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -55,6 +55,8 @@ accompanist-navigation = { module = "com.google.accompanist:accompanist-navigati
 
 bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:7.3.0"
 bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.25.0"
+
+apache-csv = "org.apache.commons:commons-csv:1.9.0"
 
 showkase-annotation = { module = "com.airbnb.android:showkase-annotation", version.ref = "showkase" }
 showkase-full = { module = "com.airbnb.android:showkase", version.ref = "showkase" }

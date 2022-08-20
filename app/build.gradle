@@ -41,13 +41,12 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders = [api_key_bugsnag: "${API_KEY_BUGSNAG}"]
+        manifestPlaceholders += ["api_key_bugsnag": "${API_KEY_BUGSNAG}"]
         buildConfigField("String", "URL_PRIVACY_POLICY", "\"$URL_PRIVACY_POLICY\"")
         buildConfigField("String", "URL_SOURCE_CODE", "\"$URL_SOURCE_CODE\"")
     }
 
     lint {
-        enable 'DuplicateStrings', 'NewerVersionAvailable'
         abortOnError true
         ignoreTestSources true
     }
@@ -147,6 +146,8 @@ dependencies {
     implementation libs.accompanist.navigation
 
     implementation libs.bugsnag.runtime
+
+    implementation libs.apache.csv
 
     // Required by layout inspector
     debugRuntimeOnly libs.kotlin.reflect
