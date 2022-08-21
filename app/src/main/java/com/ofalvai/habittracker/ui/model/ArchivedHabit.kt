@@ -16,9 +16,11 @@
 
 package com.ofalvai.habittracker.ui.model
 
+import androidx.compose.runtime.Immutable
 import com.ofalvai.habittracker.core.model.HabitId
 import java.time.Instant
 
+@Immutable
 data class ArchivedHabit(
     val id: HabitId,
     val name: String,

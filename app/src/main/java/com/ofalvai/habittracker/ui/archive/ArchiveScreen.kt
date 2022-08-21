@@ -48,6 +48,8 @@ import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.ui.ContentWithPlaceholder
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import java.time.Instant
 import com.ofalvai.habittracker.core.ui.R as coreR
@@ -101,7 +103,7 @@ fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
 
 @Composable
 private fun ArchiveScreen(
-    habits: Result<List<ArchivedHabit>>,
+    habits: Result<ImmutableList<ArchivedHabit>>,
     showDeleteDialog: Boolean,
     onDeleteDismiss: () -> Unit,
     onDeleteConfirm: () -> Unit,
@@ -151,7 +153,7 @@ private fun ArchiveScreen(
 
 @Composable
 private fun ArchivedHabitList(
-    habits: List<ArchivedHabit>,
+    habits: ImmutableList<ArchivedHabit>,
     onUnarchive: (ArchivedHabit) -> Unit,
     onDelete: (ArchivedHabit) -> Unit
 ) {
@@ -248,7 +250,7 @@ private fun EmptyView() {
 fun PreviewArchiveScreenEmpty() {
     PreviewTheme {
         ArchiveScreen(
-            habits = Result.Success(emptyList()),
+            habits = Result.Success(persistentListOf()),
             showDeleteDialog = false,
             onDeleteDismiss = {},
             onDeleteConfirm = {},
@@ -264,7 +266,7 @@ fun PreviewArchiveScreenEmpty() {
 @Composable
 fun PreviewArchiveScreenItems() {
     PreviewTheme {
-        val items = listOf(
+        val items = persistentListOf(
             ArchivedHabit(id = 1, name = "Meditation", totalActionCount = 45, lastAction = Instant.ofEpochMilli(1624563468000)),
             ArchivedHabit(id = 2, name = "Yoga", totalActionCount = 0, lastAction = null)
         )

@@ -16,8 +16,11 @@
 
 package com.ofalvai.habittracker.core.model
 
+import androidx.compose.runtime.Immutable
+
 typealias HabitId = Int
 
+@Immutable
 data class Habit(
     val id: HabitId = 0,
     val name: String,

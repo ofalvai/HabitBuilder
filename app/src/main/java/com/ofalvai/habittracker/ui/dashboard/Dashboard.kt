@@ -50,6 +50,7 @@ import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.DashboardConfig
 import com.ofalvai.habittracker.ui.model.OnboardingState
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -93,7 +94,7 @@ fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) 
     when (habits) {
         is Result.Success -> {
             LoadedDashboard(
-                habits = (habits as Result.Success<List<HabitWithActions>>).value,
+                habits = (habits as Result.Success<ImmutableList<HabitWithActions>>).value,
                 config,
                 onboardingState,
                 onAddHabitClick,
@@ -137,7 +138,7 @@ private fun DisplaySnackbarEvents(
 
 @Composable
 private fun LoadedDashboard(
-    habits: List<HabitWithActions>,
+    habits: ImmutableList<HabitWithActions>,
     config: DashboardConfig,
     onboardingState: OnboardingState?,
     onAddHabitClick: () -> Unit,

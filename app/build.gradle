@@ -133,6 +133,7 @@ dependencies {
     debugImplementation libs.compose.ui.tooling
 
     implementation libs.kotlin.coroutines.core
+    implementation libs.kotlin.immutable
 
     implementation libs.androidx.navigation.compose
     implementation libs.androidx.activity.compose

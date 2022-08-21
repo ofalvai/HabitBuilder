@@ -19,11 +19,13 @@ package com.ofalvai.habittracker.ui.dashboard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ofalvai.habittracker.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 object Suggestions {
 
-    val habits: List<String>
-        @Composable get() = listOf(
+    val habits: ImmutableList<String>
+        @Composable get() = persistentListOf(
             stringResource(R.string.habit_suggestion_reading),
             stringResource(R.string.habit_suggestion_workout),
             stringResource(R.string.habit_suggestion_meditation),

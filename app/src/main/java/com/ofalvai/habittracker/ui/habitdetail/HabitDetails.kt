@@ -54,6 +54,7 @@ import com.ofalvai.habittracker.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
 import com.ofalvai.habittracker.ui.model.ActionCountChart
 import com.ofalvai.habittracker.ui.model.SingleStats
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.cancel
 import java.time.Instant
 import java.time.LocalDate
@@ -264,14 +265,14 @@ fun PreviewHabitDetailScreen() {
             habitDetailState = Result.Success(
                 HabitWithActions(
                     Habit(0, "Meditation", Habit.Color.Red, ""),
-                    listOf(Action(0, true, Instant.now())),
+                    persistentListOf(Action(0, true, Instant.now())),
                     2,
                     ActionHistory.Clean
                 )
             ),
             singleStats = SingleStats(LocalDate.now(), 2, 1, 0.15f),
             chartData = Result.Success(ActionCountChart(
-                listOf(
+                persistentListOf(
                     ActionCountChart.ChartItem("W23", 2022, 3),
                     ActionCountChart.ChartItem("W24", 2022, 0),
                     ActionCountChart.ChartItem("W25", 2022, 6),

@@ -17,11 +17,15 @@
 package com.ofalvai.habittracker.ui.model
 
 import androidx.annotation.FloatRange
+import androidx.compose.runtime.Immutable
 import com.ofalvai.habittracker.core.model.HabitId
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
 
+@Immutable
 data class SingleStats(
     val firstDay: LocalDate?,
     val actionCount: Int,
@@ -29,19 +33,21 @@ data class SingleStats(
     @FloatRange(from = 0.0, to = 1.0) val completionRate: Float,
 )
 
+@Immutable
 data class ActionCountByWeek(
     val year: Year,
     val weekOfYear: Int,
     val actionCount: Int
 )
 
+@Immutable
 data class ActionCountByMonth(
     val yearMonth: YearMonth,
     val actionCount: Int
 )
 
 data class ActionCountChart(
-    val items: List<ChartItem>,
+    val items: ImmutableList<ChartItem>,
     val type: Type
 ) {
     data class ChartItem(
@@ -59,12 +65,13 @@ data class ActionCountChart(
 
 typealias BucketIndex = Int
 
+@Immutable
 data class HeatmapMonth(
     val yearMonth: YearMonth,
-    val dayMap: Map<LocalDate, BucketInfo>,
+    val dayMap: ImmutableMap<LocalDate, BucketInfo>,
     val totalHabitCount: Int,
     val bucketCount: Int,
-    val bucketMaxValues: List<Pair<BucketIndex, Int>>
+    val bucketMaxValues: ImmutableList<Pair<BucketIndex, Int>>
 ) {
     data class BucketInfo(
         val bucketIndex: BucketIndex,

@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.model.ActionCountChart
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlin.math.max
 
 private const val MinBarHeight = 0.02f
@@ -43,7 +45,7 @@ private val BarWidth = 32.dp
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ActionCountChart(
-    values: List<ActionCountChart.ChartItem>,
+    values: ImmutableList<ActionCountChart.ChartItem>,
     modifier: Modifier = Modifier
 ) {
     if (values.isEmpty()) {
@@ -105,7 +107,7 @@ fun ActionCountChart(
 fun PreviewActionCountChartMonths() {
     PreviewTheme {
         ActionCountChart(
-            listOf(
+            persistentListOf(
                 ActionCountChart.ChartItem("6", 2021, 15),
                 ActionCountChart.ChartItem("7", 2021, 0),
                 ActionCountChart.ChartItem("8", 2021, 7),
@@ -122,7 +124,7 @@ fun PreviewActionCountChartMonths() {
 fun PreviewActionCountChartMonth() {
     PreviewTheme {
         ActionCountChart(
-            listOf(
+            persistentListOf(
                 ActionCountChart.ChartItem("W22", 2021, 0),
                 ActionCountChart.ChartItem("W33", 2021, 1),
                 ActionCountChart.ChartItem("W44", 2021, 2),
@@ -143,7 +145,7 @@ fun PreviewActionCountChartMonth() {
 fun PreviewActionCountChartEmpty() {
     PreviewTheme {
         ActionCountChart(
-            listOf(
+            persistentListOf(
                 ActionCountChart.ChartItem("2", 2021, 0),
                 ActionCountChart.ChartItem("3", 2021, 0),
                 ActionCountChart.ChartItem("4", 2021, 0),

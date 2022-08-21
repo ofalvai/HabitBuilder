@@ -53,6 +53,8 @@ import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.core.ui.theme.gray2
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Instant
 import kotlin.random.Random
 import com.ofalvai.habittracker.core.ui.R as coreR
@@ -61,7 +63,7 @@ import com.ofalvai.habittracker.core.ui.R as coreR
 @Composable
 fun HabitCard(
     habit: Habit,
-    actions: List<Action>,
+    actions: ImmutableList<Action>,
     totalActionCount: Int,
     actionHistory: ActionHistory,
     onActionToggle: (Action, Habit, Int) -> Unit,
@@ -96,7 +98,7 @@ fun HabitCard(
 
             ActionCircles(
                 modifier = Modifier.align(Alignment.End).padding(top = 8.dp),
-                actions = actions.takeLast(Constants.DayCount),
+                actions = actions.takeLast(Constants.DayCount).toImmutableList(),
                 habitColor = habit.color,
                 onActionToggle = { action, dayIndex ->
                     val daysInPast = Constants.DayCount - 1 - dayIndex
@@ -110,7 +112,7 @@ fun HabitCard(
 @Composable
 fun ActionCircles(
     modifier: Modifier,
-    actions: List<Action>,
+    actions: ImmutableList<Action>,
     habitColor: Habit.Color,
     onActionToggle: (Action, Int) -> Unit
 ) {
@@ -256,9 +258,9 @@ fun PreviewHabitCard() {
 
     PreviewTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitCard(habit1, actions1, 14, ActionHistory.Clean, { _, _, _ -> }, {}, 0f)
+            HabitCard(habit1, actions1.toImmutableList(), 14, ActionHistory.Clean, { _, _, _ -> }, {}, 0f)
             Spacer(modifier = Modifier.height(16.dp))
-            HabitCard(habit2, actions2, 3, ActionHistory.Streak(3), { _, _, _ -> }, {}, 0f)
+            HabitCard(habit2, actions2.toImmutableList(), 3, ActionHistory.Streak(3), { _, _, _ -> }, {}, 0f)
         }
     }
 }

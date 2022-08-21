@@ -16,9 +16,11 @@
 
 package com.ofalvai.habittracker.ui.export
 
+import androidx.compose.runtime.Immutable
 import java.net.URI
 import java.time.Instant
 
+@Immutable
 data class DataSummary(
     val habitCount: Int,
     val actionCount: Int,
@@ -32,11 +34,13 @@ enum class ExportImportError {
     BackupVersionTooHigh
 }
 
+@Immutable
 data class ExportState(
     val outputFileURI: URI?,
     val error: ExportImportError?
 )
 
+@Immutable
 data class ImportState(
     val backupFileURI: URI?,
     val backupSummary: DataSummary?,

@@ -25,6 +25,8 @@ import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.SingleStats
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.model.TopHabitItem
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.*
@@ -45,10 +47,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 0,
             bucketCount = 0,
-            bucketMaxValues = emptyList()
+            bucketMaxValues = persistentListOf()
         )
         assertEquals(expected, heatmap)
     }
@@ -66,10 +68,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 2,
             bucketCount = 3,
-            bucketMaxValues = listOf(
+            bucketMaxValues =persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 2
@@ -81,7 +83,7 @@ class StatsMapperTest {
     @Test
     fun `Given habits and actions in the target month When mapped to heatmap Then bucketing is correct`() {
         // Given
-        val actionCountEntityList = listOf(
+        val actionCountEntityList = persistentListOf(
             SumActionCountByDay(LocalDate.of(2021, 4, 20), 2),
             SumActionCountByDay(LocalDate.of(2021, 4, 21), 1),
             SumActionCountByDay(LocalDate.of(2021, 4, 22), 0),
@@ -97,7 +99,7 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = mapOf(
+            dayMap = persistentMapOf(
                 LocalDate.of(2021, 4, 20) to HeatmapMonth.BucketInfo(2, 2),
                 LocalDate.of(2021, 4, 21) to HeatmapMonth.BucketInfo(1, 1),
                 LocalDate.of(2021, 4, 22) to HeatmapMonth.BucketInfo(0, 0),
@@ -106,7 +108,7 @@ class StatsMapperTest {
             ),
             totalHabitCount = 4,
             bucketCount = 5,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 2,
@@ -120,7 +122,7 @@ class StatsMapperTest {
     @Test
     fun `Given actions outside the target month When mapped to heatmap Then these are filtered`() {
         // Given
-        val actionCountEntityList = listOf(
+        val actionCountEntityList = persistentListOf(
             SumActionCountByDay(LocalDate.of(2021, 3, 15), 4),
             SumActionCountByDay(LocalDate.of(2021, 4, 20), 2),
             SumActionCountByDay(LocalDate.of(2021, 4, 21), 1),
@@ -138,12 +140,12 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = mapOf(
+            dayMap = persistentMapOf(
                 LocalDate.of(2021, 3, 15) to HeatmapMonth.BucketInfo(4, 4)
             ),
             totalHabitCount = 4,
             bucketCount = 5,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 2,
@@ -167,10 +169,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 1,
             bucketCount = 2,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1
             )
@@ -191,10 +193,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 2,
             bucketCount = 3,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 2
@@ -216,10 +218,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 3,
             bucketCount = 4,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 2,
@@ -242,10 +244,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 4,
             bucketCount = 5,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 2,
@@ -269,10 +271,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 5,
             bucketCount = 5,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 2,
@@ -296,10 +298,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 6,
             bucketCount = 5,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 3,
@@ -323,10 +325,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 7,
             bucketCount = 5,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 1,
                 2 to 3,
@@ -350,10 +352,10 @@ class StatsMapperTest {
         // Then
         val expected = HeatmapMonth(
             yearMonth = yearMonth,
-            dayMap = emptyMap(),
+            dayMap = persistentMapOf(),
             totalHabitCount = 8,
             bucketCount = 5,
-            bucketMaxValues = listOf(
+            bucketMaxValues = persistentListOf(
                 0 to 0,
                 1 to 2,
                 2 to 4,
@@ -445,7 +447,7 @@ class StatsMapperTest {
             first_day = now.atTime(9, 24).toInstant(OffsetDateTime.now().offset),
             action_count = 1
         )
-        val weeklyActionCountList = listOf(
+        val weeklyActionCountList = persistentListOf(
             ActionCountByWeek(
                 year = 2021,
                 week = 21,
@@ -477,7 +479,7 @@ class StatsMapperTest {
                 .toInstant(OffsetDateTime.now().offset),
             action_count = 5
         )
-        val weeklyActionCountList = listOf(
+        val weeklyActionCountList = persistentListOf(
             ActionCountByWeek(
                 year = 2021,
                 week = 20,
@@ -514,7 +516,7 @@ class StatsMapperTest {
                 .toInstant(OffsetDateTime.now().offset),
             action_count = 4
         )
-        val weeklyActionCountList = listOf(
+        val weeklyActionCountList = persistentListOf(
             ActionCountByWeek(
                 year = 2021,
                 week = 20,
@@ -539,7 +541,7 @@ class StatsMapperTest {
     fun `Given habit top days and locale When mapped Then weekday representation is correct`() {
         // Given
         val locale = Locale.US
-        val topDays = listOf(
+        val topDays = persistentListOf(
             HabitTopDay(0, "Sunday habit", DayOfWeek.SUNDAY, 2),
             HabitTopDay(0, "Monday habit", DayOfWeek.MONDAY, 13),
             HabitTopDay(0, "Tuesday habit", DayOfWeek.TUESDAY, 3),

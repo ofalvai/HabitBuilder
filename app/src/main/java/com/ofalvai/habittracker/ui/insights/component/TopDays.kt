@@ -44,6 +44,8 @@ import com.ofalvai.habittracker.ui.AppIcons
 import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.TopDayItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
@@ -78,7 +80,7 @@ fun TopDays(viewModel: InsightsViewModel, navController: NavController) {
 
 @Composable
 private fun TopDaysTable(
-    items: List<TopDayItem>,
+    items: ImmutableList<TopDayItem>,
     onHabitClick: (HabitId) -> Unit
 ) {
     Column(
@@ -145,7 +147,7 @@ private fun hasEnoughData(days: List<TopDayItem>): Boolean {
 @ShowkaseComposable(name = "Top days table", group = "Insights")
 @Composable
 fun PreviewTopDaysTable() {
-    val topDays = listOf(
+    val topDays = persistentListOf(
         TopDayItem(
             habitId = 1,
             name = "Short name",
