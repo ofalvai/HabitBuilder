@@ -70,7 +70,7 @@ mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
 turbine = "app.cash.turbine:turbine:0.9.0"
 
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.5.0"
-ruler = "com.spotify.ruler:ruler-gradle-plugin:1.3.0"
+ruler = "com.spotify.ruler:ruler-gradle-plugin:1.4.0"
 
 [bundles]
 compose = ["compose-ui-ui", "compose-material", "compose-animation"]
