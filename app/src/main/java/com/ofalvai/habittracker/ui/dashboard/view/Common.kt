@@ -50,6 +50,7 @@ import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
+import kotlinx.collections.immutable.ImmutableList
 import org.burnoutcrew.reorderable.*
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -57,7 +58,7 @@ import java.util.*
 
 @Composable
 fun ReorderableHabitList(
-    habits: List<HabitWithActions>,
+    habits: ImmutableList<HabitWithActions>,
     verticalArrangement: Arrangement.Vertical,
     onMove: (ItemMoveEvent) -> Unit,
     onAddHabitClick: () -> Unit,

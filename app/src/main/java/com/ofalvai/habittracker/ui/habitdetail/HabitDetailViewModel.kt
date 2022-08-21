@@ -31,6 +31,8 @@ import com.ofalvai.habittracker.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
 import com.ofalvai.habittracker.ui.model.ActionCountChart
 import com.ofalvai.habittracker.ui.model.SingleStats
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
@@ -41,7 +43,7 @@ import java.time.LocalDate
 import java.util.*
 
 private val initialSingleStats = SingleStats(null, 0, 0, 0f)
-private val initialChartData = ActionCountChart(emptyList(), ActionCountChart.Type.Weekly)
+private val initialChartData = ActionCountChart(persistentListOf(), ActionCountChart.Type.Weekly)
 
 enum class HabitDetailEvent {
     BackNavigation
@@ -82,7 +84,7 @@ class HabitDetailViewModel(
                         Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor(), it.habit.notes),
                         it.actions.map { action ->
                             Action(action.id, toggled = true, timestamp = action.timestamp)
-                        },
+                        }.toImmutableList(),
                         it.actions.size,
                         actionsToHistory(it.actions)
                     )

@@ -49,6 +49,7 @@ import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.ui.TextFieldError
+import kotlinx.collections.immutable.ImmutableList
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
@@ -152,7 +153,7 @@ fun AddHabitForm(
 }
 
 @Composable
-private fun Suggestions(habits: List<String>, onSelect: (String) -> Unit) {
+private fun Suggestions(habits: ImmutableList<String>, onSelect: (String) -> Unit) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(start = 32.dp, end = 32.dp),

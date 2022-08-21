@@ -20,10 +20,12 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.model.OnboardingState
 import com.ofalvai.habittracker.ui.model.Step
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 
 object OnboardingData {
-    val steps = listOf(
+    val steps: ImmutableList<Step> = persistentListOf(
             Step(
                 index = 0,
                 title = R.string.onboarding_step_create_title,

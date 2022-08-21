@@ -19,6 +19,9 @@ package com.ofalvai.habittracker.ui.settings
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONArray
 
@@ -37,10 +40,10 @@ class LicensesViewModel(
     @SuppressLint("StaticFieldLeak") private val appContext: Context
 ) : ViewModel() {
 
-    val dependencies = MutableStateFlow<List<Dependency>>(emptyList())
+    val dependencies = MutableStateFlow<ImmutableList<Dependency>>(persistentListOf())
 
     init {
-        dependencies.value = parseDependencies()
+        dependencies.value = parseDependencies().toImmutableList()
     }
 
     private fun parseDependencies(): List<Dependency> {

@@ -43,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import kotlinx.collections.immutable.ImmutableList
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
@@ -68,7 +69,7 @@ fun LicensesScreen(navController: NavController) {
 }
 
 @Composable
-private fun DependencyList(dependencies: List<Dependency>) {
+private fun DependencyList(dependencies: ImmutableList<Dependency>) {
     val context = LocalContext.current
     val onUrlClick: (String) -> Unit = {
         val uri = it.toUri()

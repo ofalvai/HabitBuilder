@@ -20,6 +20,8 @@ import com.kizitonwose.calendarview.utils.yearMonth
 import com.ofalvai.habittracker.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
 import com.ofalvai.habittracker.ui.model.ActionCountChart
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.*
 import java.time.temporal.IsoFields
 import java.time.temporal.WeekFields
@@ -27,18 +29,18 @@ import java.util.*
 
 fun mapActionCountByMonthListToItemList(
     list: List<ActionCountByMonth>, today: LocalDate
-): List<ActionCountChart.ChartItem> {
+): ImmutableList<ActionCountChart.ChartItem> {
     return fillActionCountByMonthListWithEmptyItems(list, today)
-        .map { it.toChartItem() }
+        .map { it.toChartItem() }.toImmutableList()
 }
 
 fun mapActionCountByWeekListToItemList(
     list: List<ActionCountByWeek>,
     today: LocalDate,
     locale: Locale
-): List<ActionCountChart.ChartItem> {
+): ImmutableList<ActionCountChart.ChartItem> {
     return fillActionCountByWeekListWithEmptyItems(list, today, locale)
-        .map { it.toChartItem() }
+        .map { it.toChartItem() }.toImmutableList()
 }
 
 fun fillActionCountByMonthListWithEmptyItems(

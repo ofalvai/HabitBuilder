@@ -25,6 +25,8 @@ import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -142,10 +144,10 @@ class InsightsViewModelTest {
         viewModel.heatmapState.test {
             val expected = Result.Success(HeatmapMonth(
                 yearMonth = YearMonth.now(),
-                dayMap = emptyMap(),
+                dayMap = persistentMapOf(),
                 totalHabitCount = 1,
                 bucketCount = 2,
-                bucketMaxValues = listOf(0 to 0, 1 to 1)
+                bucketMaxValues = persistentListOf(0 to 0, 1 to 1)
             ))
             assertEquals(expected, awaitItem())
         }
@@ -177,10 +179,10 @@ class InsightsViewModelTest {
         viewModel.heatmapState.test {
             val expected = Result.Success(HeatmapMonth(
                 yearMonth = YearMonth.now(),
-                dayMap = emptyMap(),
+                dayMap = persistentMapOf(),
                 totalHabitCount = 1,
                 bucketCount = 2,
-                bucketMaxValues = listOf(0 to 0, 1 to 1)
+                bucketMaxValues = persistentListOf(0 to 0, 1 to 1)
             ))
             assertEquals(expected, awaitItem())
         }

@@ -28,6 +28,7 @@ import com.ofalvai.habittracker.repo.ActionRepository
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.model.OnboardingState
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.*
@@ -59,10 +60,10 @@ class DashboardViewModel(
     private val onboardingManager: OnboardingManager
 ) : ViewModel() {
 
-    val habitsWithActions: Flow<Result<List<HabitWithActions>>> = dao
+    val habitsWithActions: Flow<Result<ImmutableList<HabitWithActions>>> = dao
         .getActiveHabitsWithActions()
         .distinctUntilChanged()
-        .map<List<HabitWithActionsEntity>, Result<List<HabitWithActions>>> {
+        .map<List<HabitWithActionsEntity>, Result<ImmutableList<HabitWithActions>>> {
             Result.Success(mapHabitEntityToModel(it))
         }
         .catch {

@@ -1,9 +1,19 @@
 plugins {
-    id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
+    // this would be a JVM module normally, but declaring the Compose Runtime dependency
+    // requires this for some reason
+    id "habittracker.android.library"
 }
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
+android {
+    namespace 'com.ofalvai.habittracker.core.model'
+}
+
+
+dependencies {
+    implementation libs.kotlin.immutable
+    implementation(libs.compose.runtime) {
+        because("All model classes need to be annotated with @Immutable in order to make " +
+                "downstream Composable functions skippable (because the Compose compiler " +
+                "can't infer immutability across modules)")
+    }
 }

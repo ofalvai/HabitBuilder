@@ -16,6 +16,9 @@
 
 package com.ofalvai.habittracker.core.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed class ActionHistory {
 
     object Clean : ActionHistory()

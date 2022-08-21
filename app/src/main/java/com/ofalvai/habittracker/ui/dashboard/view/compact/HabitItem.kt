@@ -45,13 +45,15 @@ import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.ui.component.HorizontalGrid
 import com.ofalvai.habittracker.core.ui.theme.*
 import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Instant
 import kotlin.random.Random
 
 @Composable
 fun HabitItem(
     habit: Habit,
-    actions: List<Action>,
+    actions: ImmutableList<Action>,
     onActionToggle: (Action, Habit, Int) -> Unit,
     onDetailClick: (Habit) -> Unit,
     dragOffset: Float,
@@ -99,7 +101,7 @@ fun HabitItem(
 
 @Composable
 fun ActionSquares(
-    actions: List<Action>,
+    actions: ImmutableList<Action>,
     habitColor: Habit.Color,
     onActionToggle: (Action, Int) -> Unit
 ) {
@@ -198,9 +200,9 @@ fun PreviewHabitItem() {
 
     PreviewTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitItem(habit1, actions1, { _, _, _ -> }, {}, 0f)
+            HabitItem(habit1, actions1.toImmutableList(), { _, _, _ -> }, {}, 0f)
             Spacer(modifier = Modifier.height(16.dp))
-            HabitItem(habit2, actions2, { _, _, _ -> }, {}, 0f)
+            HabitItem(habit2, actions2.toImmutableList(), { _, _, _ -> }, {}, 0f)
         }
     }
 }

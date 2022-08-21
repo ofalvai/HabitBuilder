@@ -19,10 +19,12 @@ package com.ofalvai.habittracker.mapper
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import com.ofalvai.habittracker.core.database.entity.Habit as HabitEntity
 import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
-fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): List<HabitWithActions> {
+fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): ImmutableList<HabitWithActions> {
     return habitsWithActions.map {
         HabitWithActions(
             habit = Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor(), it.habit.notes),
@@ -30,10 +32,10 @@ fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): List
             totalActionCount = it.actions.size,
             actionHistory = actionsToHistory(it.actions)
         )
-    }
+    }.toImmutableList()
 }
 
-fun mapHabitEntityToArchivedModel(habitsWithActions: List<HabitWithActionsEntity>): List<ArchivedHabit> {
+fun mapHabitEntityToArchivedModel(habitsWithActions: List<HabitWithActionsEntity>): ImmutableList<ArchivedHabit> {
     return habitsWithActions.map {
         ArchivedHabit(
             id = it.habit.id,
@@ -41,7 +43,7 @@ fun mapHabitEntityToArchivedModel(habitsWithActions: List<HabitWithActionsEntity
             totalActionCount = it.actions.size,
             lastAction = it.actions.lastOrNull()?.timestamp
         )
-    }
+    }.toImmutableList()
 }
 
 fun Habit.toEntity(order: Int, archived: Boolean) = HabitEntity(

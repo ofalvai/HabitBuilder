@@ -18,6 +18,8 @@ package com.ofalvai.habittracker.mapper
 
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.ActionHistory
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -25,7 +27,7 @@ import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
 private const val RECENT_ACTIONS_PER_HABIT = 7
 
-fun actionsToRecentDays(actions: List<ActionEntity>): List<Action> {
+fun actionsToRecentDays(actions: List<ActionEntity>): ImmutableList<Action> {
     val lastDay = LocalDate.now()
 
     val sortedActions = actions.sortedByDescending { action -> action.timestamp }
@@ -44,7 +46,7 @@ fun actionsToRecentDays(actions: List<ActionEntity>): List<Action> {
             toggled = actionOnDay != null,
             actionOnDay?.timestamp
         )
-    }
+    }.toImmutableList()
 }
 
 fun actionsToHistory(actions: List<ActionEntity>): ActionHistory {

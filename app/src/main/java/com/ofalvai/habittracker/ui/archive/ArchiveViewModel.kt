@@ -24,6 +24,7 @@ import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.mapper.mapHabitEntityToArchivedModel
 import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -45,9 +46,9 @@ class ArchiveViewModel(
     private val eventChannel = Channel<ArchiveEvent>(Channel.BUFFERED)
     val archiveEvent = eventChannel.receiveAsFlow()
 
-    val archivedHabitList: Flow<Result<List<ArchivedHabit>>> = dao
+    val archivedHabitList: Flow<Result<ImmutableList<ArchivedHabit>>> = dao
         .getArchivedHabitsWithActions()
-        .map<List<HabitWithActionsEntity>, Result<List<ArchivedHabit>>> {
+        .map<List<HabitWithActionsEntity>, Result<ImmutableList<ArchivedHabit>>> {
             Result.Success(mapHabitEntityToArchivedModel(it))
         }
         .catch {

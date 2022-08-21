@@ -28,6 +28,8 @@ import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
 import com.ofalvai.habittracker.ui.model.TopDayItem
 import com.ofalvai.habittracker.ui.model.TopHabitItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
@@ -43,8 +45,8 @@ class InsightsViewModel(
 ): ViewModel() {
 
     val heatmapState = MutableStateFlow<Result<HeatmapMonth>>(Result.Loading)
-    val topHabits = MutableStateFlow<Result<List<TopHabitItem>>>(Result.Loading)
-    val habitTopDays = MutableStateFlow<Result<List<TopDayItem>>>(Result.Loading)
+    val topHabits = MutableStateFlow<Result<ImmutableList<TopHabitItem>>>(Result.Loading)
+    val habitTopDays = MutableStateFlow<Result<ImmutableList<TopDayItem>>>(Result.Loading)
 
     private val habitCount: SharedFlow<Int> = habitDao.getTotalHabitCount().shareIn(
         scope = viewModelScope,
@@ -100,7 +102,7 @@ class InsightsViewModel(
                 .getMostSuccessfulHabits(100) // TODO: smaller number when "See all" screen is done
                 .filter { it.first_day != null }
                 .map { mapHabitActionCount(it, LocalDate.now()) }
-                .let { Result.Success(it) }
+                .let { Result.Success(it.toImmutableList()) }
         } catch (e: Throwable) {
             telemetry.logNonFatal(e)
             topHabits.value = Result.Failure(e)
@@ -112,7 +114,7 @@ class InsightsViewModel(
             habitTopDays.value = habitDao
                 .getTopDayForHabits()
                 .map { mapHabitTopDay(it, Locale.getDefault()) }
-                .let { Result.Success(it) }
+                .let { Result.Success(it.toImmutableList()) }
         } catch (e: Throwable) {
             telemetry.logNonFatal(e)
             habitTopDays.value = Result.Failure(e)

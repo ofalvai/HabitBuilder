@@ -21,6 +21,7 @@ import com.ofalvai.habittracker.core.model.ActionHistory
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
+import kotlinx.collections.immutable.toImmutableList
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.Instant
@@ -63,7 +64,7 @@ class HabitMapperTest {
                     Habit.Color.Red,
                     "Doing right after waking up in the living room"
                 ),
-                expectedActionHistory,
+                expectedActionHistory.toImmutableList(),
                 3,
                 ActionHistory.Streak(2)
             )
@@ -87,7 +88,7 @@ class HabitMapperTest {
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
-            expectedActionHistory,
+            expectedActionHistory.toImmutableList(),
             2,
             ActionHistory.MissedDays(10)
         ))
@@ -123,7 +124,7 @@ class HabitMapperTest {
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
-            expectedActionHistory,
+            expectedActionHistory.toImmutableList(),
             6,
             ActionHistory.Streak(2)
         ))
@@ -157,7 +158,7 @@ class HabitMapperTest {
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
-            expectedActionHistory,
+            expectedActionHistory.toImmutableList(),
             4,
             ActionHistory.Streak(4)
         ))
@@ -176,7 +177,7 @@ class HabitMapperTest {
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
-            expectedActionHistory,
+            expectedActionHistory.toImmutableList(),
             0,
             ActionHistory.Clean
         ))
@@ -207,7 +208,7 @@ class HabitMapperTest {
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
-            expectedActionHistory,
+            expectedActionHistory.toImmutableList(),
             1,
             ActionHistory.MissedDays(3)
         ))
@@ -238,7 +239,7 @@ class HabitMapperTest {
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
-            expectedActionHistory,
+            expectedActionHistory.toImmutableList(),
             1,
             ActionHistory.Streak(1)
         ))
@@ -269,7 +270,7 @@ class HabitMapperTest {
         )
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
-            expectedActionHistory,
+            expectedActionHistory.toImmutableList(),
             1,
             ActionHistory.MissedDays(1)
         ))
@@ -292,7 +293,7 @@ class HabitMapperTest {
         val expectedActionHistory = (1..7).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
-            expectedActionHistory,
+            expectedActionHistory.toImmutableList(),
             1,
             ActionHistory.Clean
         ))

@@ -64,6 +64,8 @@ import com.ofalvai.habittracker.core.ui.theme.gray2
 import com.ofalvai.habittracker.ui.AppIcons
 import com.ofalvai.habittracker.ui.insights.InsightsViewModel
 import com.ofalvai.habittracker.ui.model.HeatmapMonth
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -355,7 +357,7 @@ fun PreviewHeatmap() {
         val heatmapState = Result.Success(
             HeatmapMonth(
                 yearMonth = yearMonth,
-                dayMap = mapOf(
+                dayMap = persistentMapOf(
                     LocalDate.of(2021, 4, 20) to HeatmapMonth.BucketInfo(2, 2),
                     LocalDate.of(2021, 4, 21) to HeatmapMonth.BucketInfo(1, 1),
                     LocalDate.of(2021, 4, 22) to HeatmapMonth.BucketInfo(0, 0),
@@ -364,7 +366,7 @@ fun PreviewHeatmap() {
                 ),
                 totalHabitCount = 4,
                 bucketCount = 5,
-                bucketMaxValues = listOf(
+                bucketMaxValues = persistentListOf(
                     0 to 0,
                     1 to 1,
                     2 to 2,

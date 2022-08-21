@@ -27,12 +27,14 @@ import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
 import com.ofalvai.habittracker.ui.dashboard.view.DayLegend
 import com.ofalvai.habittracker.ui.dashboard.view.ReorderableHabitList
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import java.time.LocalDate
 
 @Composable
 fun CompactHabitList(
-    habits: List<HabitWithActions>,
+    habits: ImmutableList<HabitWithActions>,
     onActionToggle: (Action, Habit, Int) -> Unit,
     onHabitClick: (Habit) -> Unit,
     onAddHabitClick: () -> Unit,
@@ -50,7 +52,7 @@ fun CompactHabitList(
         ) { item, reorderState ->
             HabitItem(
                 habit = item.habit,
-                actions = item.actions.takeLast(Constants.DAY_COUNT),
+                actions = item.actions.takeLast(Constants.DAY_COUNT).toImmutableList(),
                 onActionToggle = onActionToggle,
                 onDetailClick = onHabitClick,
                 // Null and 0 drag offset is intentionally treated as the same because dragging

@@ -22,6 +22,8 @@ import com.ofalvai.habittracker.core.database.entity.HabitActionCount
 import com.ofalvai.habittracker.core.database.entity.HabitTopDay
 import com.ofalvai.habittracker.core.database.entity.SumActionCountByDay
 import com.ofalvai.habittracker.ui.model.*
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import java.time.*
 import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
@@ -91,10 +93,10 @@ fun mapSumActionCountByDay(
 
     return HeatmapMonth(
         yearMonth,
-        dayMap,
+        dayMap.toImmutableMap(),
         totalHabitCount,
         bucketCount = bucketData.size,
-        bucketMaxValues = bucketData
+        bucketMaxValues = bucketData.toImmutableList()
     )
 }
 
