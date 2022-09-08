@@ -49,6 +49,7 @@ android {
     lint {
         abortOnError true
         ignoreTestSources true
+        checkDependencies true
     }
 
     signingConfigs {
