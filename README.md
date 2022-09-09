@@ -1,7 +1,6 @@
 # Habit Builder
 
 [![Build Status](https://app.bitrise.io/app/46845b0b84193b80/status.svg?token=SHqpol98nJjn_O5hbFPjIg&branch=main)](https://app.bitrise.io/app/46845b0b84193b80)
-[![codecov](https://codecov.io/gh/ofalvai/HabitTracker/branch/main/graph/badge.svg?token=0PGWK5GQ1P)](https://codecov.io/gh/ofalvai/HabitTracker)
 
 TODO Google Play badge
 
@@ -9,26 +8,27 @@ TODO screenshots table
 
 ## Motivation
 
-TODO
+I needed a simple and minimal habit tracking app.
 
-This project is also a testing ground for new technologies/libraries I'd like to test on a moderately complex project.
+This project is also a testing ground for new technologies I'd like to explore.
 
 ## Features
-- Keep track of your new habits and see your progress
+
+- Keep track of new habits and see your progress
 - Statistics: aggregate and per-habit stats
   - Per-habit: completion rate, weekly and overall count, streaks
   - Overall: calendar heatmap, top habits, top days for habits
 - Customizable habit list layout, reorderable list
 - All data is persisted on-device in a database
-- Onboarding hints, habit archive
+- Export, import, archiving old items
 
 ## 🛠 Built with
 
 - [Compose-only](https://developer.android.com/jetpack/compose) UI:
-    - Material You-ish design
+    - Material You-ish design (not perfect yet!)
     - Light and dark theme
     - Smooth and delightful animations
-    - no AppCompat dependency, single Activity
+    - No AppCompat dependency, single Activity
 - [Room](https://developer.android.com/training/data-storage/room): for storing data locally
 - [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlinlang.org/docs/flow.html): for async operations
 - Testing:
@@ -37,8 +37,9 @@ This project is also a testing ground for new technologies/libraries I'd like to
     - UI tests for some Compose screens
     - Kotlin Flow testing with [Turbine](https://github.com/cashapp/turbine)
 - [Showkase](https://github.com/airbnb/Showkase): UI component browser in debug builds
-- [Bugnsag](https://www.bugsnag.com/): Crash and error reporting
 - Other interesting bits and integrations:
+    - Modular codebase according to best practices
+    - [Gradle convention plugins](https://github.com/ofalvai/HabitTracker/tree/main/build-logic) for configuring modules
     - [Licensee](https://github.com/cashapp/licensee): 3rd party dependency validation, license report JSON for the Licenses screen
     - [Ruler](https://github.com/spotify/ruler): a Gradle plugin that measures app size and libraries contributing to it
     - [Gradle version catalog](https://github.com/ofalvai/HabitTracker/blob/main/gradle/libs.versions.toml)
@@ -50,7 +51,7 @@ This project is also a testing ground for new technologies/libraries I'd like to
 
 - `analyzeReleaseBundle`: Run Spotify Ruler
 - `licenseeRelease`: Run license check and generate `app/build/reports/licensee/release/artifacts.json`, which should be copied over to `assets/licenses.json` for the Licenses screen
-- `assembleRelease -Phabittracker.enableComposeCompilerReports=true`: Writes Compose compiler metrics to `$module/build/compose_metrics`
+- `assembleRelease -Phabittracker.enableComposeCompilerReports=true`: Write Compose compiler metrics to `$module/build/compose_metrics`
 - `buildHealth`: Run dependency analysis (looking for unused dependencies, incorrect module structure)
 
 ## License
