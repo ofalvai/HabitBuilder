@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8">
-      <module name="HabitTracker.app" target="17" />
-      <module name="HabitTracker.core-database" target="17" />
-      <module name="HabitTracker.core-testing" target="17" />
-      <module name="HabitTracker.core-ui" target="17" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>
