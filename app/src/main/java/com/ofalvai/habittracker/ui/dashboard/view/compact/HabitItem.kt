@@ -48,7 +48,6 @@ import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Instant
-import kotlin.random.Random
 
 @Composable
 fun HabitItem(
@@ -192,11 +191,17 @@ fun PreviewHabitItem() {
     val actions1 = (1..7).map {
         Action(
             id = it,
-            toggled = Random.nextBoolean(),
+            toggled = it % 3 == 0,
             timestamp = Instant.now()
         )
     }
-    val actions2 = actions1.shuffled()
+    val actions2 = (1..7).map {
+        Action(
+            id = it,
+            toggled = it % 2 == 0,
+            timestamp = Instant.now()
+        )
+    }
 
     PreviewTheme {
         Column(Modifier.padding(16.dp)) {

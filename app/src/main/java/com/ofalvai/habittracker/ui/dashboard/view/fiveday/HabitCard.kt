@@ -56,7 +56,6 @@ import com.ofalvai.habittracker.ui.dashboard.view.satisfyingToggleable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Instant
-import kotlin.random.Random
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -250,11 +249,17 @@ fun PreviewHabitCard() {
     val actions1 = (1..5).map {
         Action(
             id = it,
-            toggled = Random.nextBoolean(),
+            toggled = it % 3 == 0,
             timestamp = Instant.now()
         )
     }
-    val actions2 = actions1.shuffled()
+    val actions2 = (1..5).map {
+        Action(
+            id = it,
+            toggled = it % 2 == 0,
+            timestamp = Instant.now()
+        )
+    }
 
     PreviewTheme {
         Column(Modifier.padding(16.dp)) {

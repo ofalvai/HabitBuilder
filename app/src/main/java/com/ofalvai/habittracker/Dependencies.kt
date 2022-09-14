@@ -43,11 +43,7 @@ object Dependencies {
 
     private val appContext = HabitTrackerApplication.INSTANCE.applicationContext
 
-    private val db = Room.databaseBuilder(
-        appContext,
-        AppDatabase::class.java,
-        "app-db"
-    )
+    private val db = Room.databaseBuilder(appContext, AppDatabase::class.java, "app-db")
         .setQueryCallback(::roomQueryLogCallback, Runnable::run)
         .addMigrations(*MIGRATIONS)
         .build()
