@@ -30,16 +30,4 @@ object AppIcons {
     val DashboardLayout: Painter
         @Composable
         get() = painterResource(R.drawable.ic_dashboard_layout)
-
-    val InfoOutlined: Painter
-        @Composable
-        get() = painterResource(R.drawable.ic_info_outlined)
-
-    val Heatmap: Painter
-        @Composable
-        get() = painterResource(R.drawable.ic_heatmap)
-
-    val TopDays: Painter
-        @Composable
-        get() = painterResource(R.drawable.ic_topdays)
 }

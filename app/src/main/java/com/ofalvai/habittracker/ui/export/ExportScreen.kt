@@ -43,17 +43,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.component.SingleStat
-import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.errorContainer
-import com.ofalvai.habittracker.core.ui.theme.successContainer
-import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
-import com.ofalvai.habittracker.ui.AppIcons
+import com.ofalvai.habittracker.core.ui.theme.*
 import java.net.URI
 import java.time.Instant
 import java.time.LocalDateTime
@@ -63,8 +59,8 @@ import com.ofalvai.habittracker.core.ui.R as commonR
 val initialSummary = DataSummary(habitCount = 0, actionCount = 0, lastActivity = null)
 
 @Composable
-fun ExportScreen(navController: NavController) {
-    val viewModel = viewModel<ExportViewModel>(factory = Dependencies.viewModelFactory)
+fun ExportScreen(vmFactory: ViewModelProvider.Factory, navController: NavController) {
+    val viewModel = viewModel<ExportViewModel>(factory = vmFactory)
 
     val summary by viewModel.dataSummary.collectAsState(initial = initialSummary)
     val exportState by viewModel.exportState.collectAsState()
@@ -187,7 +183,7 @@ private fun BackupInfo(modifier: Modifier = Modifier) {
             .padding(16.dp)
     ) {
         Icon(
-            painter = AppIcons.InfoOutlined,
+            painter = CoreIcons.InfoOutlined,
             contentDescription = null,
             modifier = Modifier.align(Alignment.CenterVertically)
         )

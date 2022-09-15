@@ -124,9 +124,11 @@ licensee {
 }
 
 dependencies {
+    implementation project(':core-common')
     implementation project(':core-database')
     implementation project(':core-ui')
     implementation project(':core-model')
+    implementation project(':feature-insights')
     coreLibraryDesugaring libs.android.tools.desugar
 
     implementation libs.bundles.compose
@@ -146,8 +148,6 @@ dependencies {
     implementation(libs.reorderable)
     implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.navigation
-
-    implementation libs.bugsnag.runtime
 
     implementation libs.apache.csv
 

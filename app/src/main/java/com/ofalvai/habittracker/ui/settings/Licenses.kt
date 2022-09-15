@@ -39,16 +39,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import kotlinx.collections.immutable.ImmutableList
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
-fun LicensesScreen(navController: NavController) {
-    val viewModel: LicensesViewModel = viewModel(factory = Dependencies.viewModelFactory)
+fun LicensesScreen(vmFactory: ViewModelProvider.Factory, navController: NavController) {
+    val viewModel: LicensesViewModel = viewModel(factory = vmFactory)
     val dependencies by viewModel.dependencies.collectAsState()
 
     Column {

@@ -32,10 +32,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.ActionHistory
@@ -50,10 +50,10 @@ import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
+import com.ofalvai.habittracker.feature.insights.model.SingleStats
 import com.ofalvai.habittracker.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.ui.dashboard.view.vibrateCompat
 import com.ofalvai.habittracker.ui.model.ActionCountChart
-import com.ofalvai.habittracker.ui.model.SingleStats
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.cancel
 import java.time.Instant
@@ -61,8 +61,8 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 @Composable
-fun HabitDetailScreen(habitId: Int, navController: NavController) {
-    val viewModel: HabitDetailViewModel = viewModel(factory = Dependencies.viewModelFactory)
+fun HabitDetailScreen(vmFactory: ViewModelProvider.Factory, habitId: Int, navController: NavController) {
+    val viewModel: HabitDetailViewModel = viewModel(factory = vmFactory)
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
     val habitDetailState by viewModel.habitWithActions.collectAsState()

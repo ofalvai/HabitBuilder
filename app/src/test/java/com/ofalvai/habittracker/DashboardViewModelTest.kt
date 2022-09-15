@@ -17,6 +17,9 @@
 package com.ofalvai.habittracker
 
 import app.cash.turbine.test
+import com.ofalvai.habittracker.core.common.AppPreferences
+import com.ofalvai.habittracker.core.common.OnboardingManager
+import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.ActionHistory
@@ -25,12 +28,9 @@ import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.core.testing.MainCoroutineRule
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.repo.ActionRepository
-import com.ofalvai.habittracker.telemetry.Telemetry
-import com.ofalvai.habittracker.ui.AppPreferences
 import com.ofalvai.habittracker.ui.dashboard.DashboardEvent
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.ui.dashboard.ItemMoveEvent
-import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow

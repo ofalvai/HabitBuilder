@@ -19,10 +19,10 @@ package com.ofalvai.habittracker.ui.export
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.Action
 import com.ofalvai.habittracker.repo.StreamOpener
-import com.ofalvai.habittracker.telemetry.Telemetry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

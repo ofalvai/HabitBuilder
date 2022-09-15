@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,27 @@ import java.time.*
 import java.time.temporal.IsoFields
 import java.time.temporal.WeekFields
 import java.util.*
+import com.ofalvai.habittracker.core.database.entity.ActionCountByMonth as ActionCountByMonthEntity
+import com.ofalvai.habittracker.core.database.entity.ActionCountByWeek as ActionCountByWeekEntity
+
+fun mapActionCountByWeek(entityList: List<ActionCountByWeekEntity>): List<ActionCountByWeek> {
+    return entityList.map {
+        ActionCountByWeek(
+            year = Year.of(it.year),
+            weekOfYear = it.week,
+            actionCount = it.action_count
+        )
+    }
+}
+
+fun mapActionCountByMonth(entityList: List<ActionCountByMonthEntity>): List<ActionCountByMonth> {
+    return entityList.map {
+        ActionCountByMonth(
+            yearMonth = YearMonth.of(it.year, it.month),
+            actionCount = it.action_count
+        )
+    }
+}
 
 fun mapActionCountByMonthListToItemList(
     list: List<ActionCountByMonth>, today: LocalDate

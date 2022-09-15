@@ -42,15 +42,15 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.ui.theme.AppTheme
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
-import com.ofalvai.habittracker.telemetry.Telemetry
+import com.ofalvai.habittracker.feature.insights.ui.InsightsScreen
 import com.ofalvai.habittracker.ui.archive.ArchiveScreen
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.DashboardScreen
 import com.ofalvai.habittracker.ui.export.ExportScreen
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
-import com.ofalvai.habittracker.ui.insights.InsightsScreen
 import com.ofalvai.habittracker.ui.settings.LicensesScreen
 import com.ofalvai.habittracker.ui.settings.SettingsScreen
 
@@ -95,28 +95,43 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun Screens(navController: NavHostController,
-                    scaffoldState: ScaffoldState,
-                    padding: PaddingValues
+private fun Screens(
+    navController: NavHostController,
+    scaffoldState: ScaffoldState,
+    padding: PaddingValues
 ) {
+    val vmFactory = Dependencies.viewModelFactory
+
     AnimatedNavHost(
         navController,
         startDestination = Destination.Dashboard.route,
         modifier = Modifier.padding(padding).fillMaxSize()
     ) {
-        appDestination(Destination.Dashboard) { DashboardScreen(navController, scaffoldState) }
-        appDestination(Destination.Insights) { InsightsScreen(navController) }
-        appDestination(Destination.AddHabit) { AddHabitScreen(navController) }
+        appDestination(Destination.Dashboard) { DashboardScreen(vmFactory, navController, scaffoldState) }
+        appDestination(Destination.Insights) {
+            InsightsScreen(
+                vmFactory,
+                navigateToArchive = { navController.navigate(Destination.Archive.route) },
+                navigateToSettings = { navController.navigate(Destination.Settings.route) },
+                navigateToExport = { navController.navigate(Destination.Export.route) },
+                navigateToHabitDetails = { habitId ->
+                    val route = Destination.HabitDetails.buildRoute(habitId = habitId)
+                    navController.navigate(route)
+                }
+            )
+        }
+        appDestination(Destination.AddHabit) { AddHabitScreen(vmFactory, navController) }
         appDestination(Destination.HabitDetails) { backStackEntry ->
             HabitDetailScreen(
+                vmFactory,
                 habitId = Destination.HabitDetails.idFrom(backStackEntry.arguments),
                 navController = navController
             )
         }
-        appDestination(Destination.Settings) { SettingsScreen(navController) }
-        appDestination(Destination.Licenses) { LicensesScreen(navController) }
-        appDestination(Destination.Archive) { ArchiveScreen(navController, scaffoldState) }
-        appDestination(Destination.Export) { ExportScreen(navController) }
+        appDestination(Destination.Settings) { SettingsScreen(vmFactory, navController) }
+        appDestination(Destination.Licenses) { LicensesScreen(vmFactory, navController) }
+        appDestination(Destination.Archive) { ArchiveScreen(vmFactory, navController, scaffoldState) }
+        appDestination(Destination.Export) { ExportScreen(vmFactory, navController) }
     }
 }
 
@@ -212,10 +227,11 @@ private fun RowScope.AppBottomNavigationItem(
     )
 }
 
-private val onDestinationChanged: (NavController, NavDestination, Bundle?) -> Unit = { _, destination, arguments ->
-    Dependencies.telemetry.leaveBreadcrumb(
-        message = destination.route ?: "no-route",
-        metadata = arguments?.let { mapOf("arguments" to it.toString()) } ?: emptyMap(),
-        type = Telemetry.BreadcrumbType.Navigation
-    )
-}
+private val onDestinationChanged: (NavController, NavDestination, Bundle?) -> Unit =
+    { _, destination, arguments ->
+        Dependencies.telemetry.leaveBreadcrumb(
+            message = destination.route ?: "no-route",
+            metadata = arguments?.let { mapOf("arguments" to it.toString()) } ?: emptyMap(),
+            type = Telemetry.BreadcrumbType.Navigation
+        )
+    }

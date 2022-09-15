@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 Olivér Falvai
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="insights_screen_title">Insights</string>
+    <string name="insights_more_info">More information</string>
+    <string name="insights_heatmap_title">Heatmap</string>
+    <string name="insights_heatmap_description">Heatmap shows you the number of habits performed each day. Darker days mean more completed habits on a given day. Tap on a day to see the actual number.</string>
+    <string name="insights_heatmap_legend_label">Number of performed habits</string>
+    <plurals name="insights_heatmap_popup_action_count">
+        <item quantity="one">%d completed habit</item>
+        <item quantity="other">%d completed habits</item>
+    </plurals>
+    <string name="insights_heatmap_error">Failed to load heatmap</string>
+    <string name="insights_heatmap_empty_label">Once you create habits and perform them, this calendar will show how successful each day was.</string>
+    <string name="insights_tophabits_title">Top habits</string>
+    <string name="insights_tophabits_description">Your most often performed habits. Shows the number of times you completed your habits. The strength bar shows the ratio of completed and missed days since the first day (the bar is full if you have a perfect streak without a missed day).</string>
+    <string name="insights_tophabits_navigate">Navigate to %s</string>
+    <string name="insights_tophabits_error">Failed to load top habits</string>
+    <string name="insights_tophabits_empty_label">Create more habits and perform them at least once to see your success rate here.</string>
+    <string name="insights_topdays_title">Top days</string>
+    <string name="insights_topdays_description">Your most successful days. The list shows the day when each habit is performed most often and the number of completed habits on the day.</string>
+    <string name="insights_topdays_error">Failed to load top days</string>
+    <string name="insights_topdays_empty_label">A bit more data is needed to display your top days. Add more habits and perform them a few times.</string>
+</resources>

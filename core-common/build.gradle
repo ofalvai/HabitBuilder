@@ -1,0 +1,23 @@
+plugins {
+    id 'habittracker.android.library'
+}
+
+android {
+    namespace 'com.ofalvai.habittracker.core.common'
+
+    buildFeatures {
+        buildConfig true
+    }
+}
+
+dependencies {
+    implementation libs.bugsnag.runtime
+    implementation libs.logcat
+    implementation libs.kotlin.immutable
+    implementation libs.kotlin.coroutines.core
+
+    testImplementation libs.junit
+    testImplementation libs.kotlin.coroutines.test
+    testImplementation libs.mockito.kotlin
+    testImplementation libs.turbine
+}
