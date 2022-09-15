@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.settings
+package com.ofalvai.habittracker.feature.misc.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -36,8 +36,9 @@ data class Dependency(
     data class License(val name: String)
 }
 
+@SuppressLint("StaticFieldLeak")
 class LicensesViewModel(
-    @SuppressLint("StaticFieldLeak") private val appContext: Context
+    private val appContext: Context
 ) : ViewModel() {
 
     val dependencies = MutableStateFlow<ImmutableList<Dependency>>(persistentListOf())

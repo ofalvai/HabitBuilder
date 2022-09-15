@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker
+package com.ofalvai.habittracker.feature.misc
 
 import app.cash.turbine.test
+import com.ofalvai.habittracker.core.common.StreamOpener
 import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.Action
 import com.ofalvai.habittracker.core.database.entity.Habit
 import com.ofalvai.habittracker.core.testing.MainCoroutineRule
-import com.ofalvai.habittracker.repo.StreamOpener
-import com.ofalvai.habittracker.ui.export.*
+import com.ofalvai.habittracker.feature.misc.export.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

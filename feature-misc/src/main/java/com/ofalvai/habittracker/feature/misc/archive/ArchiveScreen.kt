@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.archive
+package com.ofalvai.habittracker.feature.misc.archive
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
@@ -35,10 +35,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.component.ConfirmationDialog
+import com.ofalvai.habittracker.core.ui.component.ContentWithPlaceholder
 import com.ofalvai.habittracker.core.ui.component.ErrorView
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.state.asEffect
@@ -46,8 +45,8 @@ import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
-import com.ofalvai.habittracker.ui.ContentWithPlaceholder
-import com.ofalvai.habittracker.ui.model.ArchivedHabit
+import com.ofalvai.habittracker.feature.misc.R
+import com.ofalvai.habittracker.feature.misc.archive.model.ArchivedHabit
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -55,7 +54,11 @@ import java.time.Instant
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
-fun ArchiveScreen(vmFactory: ViewModelProvider.Factory, navController: NavController, scaffoldState: ScaffoldState) {
+fun ArchiveScreen(
+    vmFactory: ViewModelProvider.Factory,
+    scaffoldState: ScaffoldState,
+    navigateBack: () -> Unit
+) {
     val viewModel = viewModel<ArchiveViewModel>(factory = vmFactory)
 
     val habits by viewModel.archivedHabitList.collectAsState(initial = Result.Loading)
@@ -73,7 +76,6 @@ fun ArchiveScreen(vmFactory: ViewModelProvider.Factory, navController: NavContro
         }
     }
 
-    val onBack: () -> Unit = { navController.popBackStack() }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var pendingHabitToDelete by remember { mutableStateOf<ArchivedHabit?>(null) }
     val onDeleteRequest: (ArchivedHabit) -> Unit = {
@@ -95,7 +97,7 @@ fun ArchiveScreen(vmFactory: ViewModelProvider.Factory, navController: NavContro
         showDeleteDialog,
         onDeleteDismiss,
         onDeleteConfirm,
-        onBack,
+        navigateBack,
         onUnarchive,
         onDeleteRequest
     )
@@ -144,7 +146,7 @@ private fun ArchiveScreen(
             }
             Result.Loading -> {}
             is Result.Failure -> ErrorView(
-                label = stringResource(R.string.dashboard_error),
+                label = stringResource(R.string.archive_load_error),
                 modifier = Modifier.statusBarsPadding()
             )
         }

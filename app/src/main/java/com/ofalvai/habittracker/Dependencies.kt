@@ -22,21 +22,22 @@ import android.preference.PreferenceManager
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.room.Room
+import com.ofalvai.habittracker.core.common.AndroidStreamOpener
 import com.ofalvai.habittracker.core.common.AppPreferences
 import com.ofalvai.habittracker.core.common.OnboardingManager
 import com.ofalvai.habittracker.core.common.TelemetryImpl
 import com.ofalvai.habittracker.core.database.AppDatabase
 import com.ofalvai.habittracker.core.database.MIGRATIONS
 import com.ofalvai.habittracker.feature.insights.ui.InsightsViewModel
+import com.ofalvai.habittracker.feature.misc.archive.ArchiveViewModel
+import com.ofalvai.habittracker.feature.misc.export.ExportViewModel
+import com.ofalvai.habittracker.feature.misc.settings.AppInfo
+import com.ofalvai.habittracker.feature.misc.settings.LicensesViewModel
+import com.ofalvai.habittracker.feature.misc.settings.SettingsViewModel
 import com.ofalvai.habittracker.repo.ActionRepository
-import com.ofalvai.habittracker.repo.AndroidStreamOpener
-import com.ofalvai.habittracker.ui.archive.ArchiveViewModel
 import com.ofalvai.habittracker.ui.dashboard.AddHabitViewModel
 import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
-import com.ofalvai.habittracker.ui.export.ExportViewModel
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
-import com.ofalvai.habittracker.ui.settings.LicensesViewModel
-import com.ofalvai.habittracker.ui.settings.SettingsViewModel
 import logcat.logcat
 
 object Dependencies {
@@ -63,6 +64,14 @@ object Dependencies {
 
     private val streamOpener = AndroidStreamOpener(appContext)
 
+    private val appInfo = AppInfo(
+        versionName = BuildConfig.VERSION_NAME,
+        buildType = BuildConfig.BUILD_TYPE,
+        appId = BuildConfig.APPLICATION_ID,
+        urlPrivacyPolicy = BuildConfig.URL_PRIVACY_POLICY,
+        urlSourceCode = BuildConfig.URL_SOURCE_CODE
+    )
+
     val viewModelFactory = viewModelFactory {
         initializer { AddHabitViewModel(dao, onboardingManager, telemetry) }
         initializer {
@@ -72,7 +81,9 @@ object Dependencies {
         initializer { InsightsViewModel(dao, telemetry, onboardingManager) }
         initializer { LicensesViewModel(appContext) }
         initializer { ArchiveViewModel(dao, telemetry) }
-        initializer { SettingsViewModel(appPreferences) }
+        initializer {
+            SettingsViewModel(appPreferences, appInfo)
+        }
         initializer { ExportViewModel(streamOpener, dao, telemetry) }
     }
 }

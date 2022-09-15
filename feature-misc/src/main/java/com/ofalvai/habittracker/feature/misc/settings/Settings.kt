@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.settings
+package com.ofalvai.habittracker.feature.misc.settings
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -39,37 +40,35 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.ofalvai.habittracker.BuildConfig
-import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.gray1
-import com.ofalvai.habittracker.ui.Destination
+import com.ofalvai.habittracker.feature.misc.R
 import com.ofalvai.habittracker.core.ui.R as coreR
 
-private const val MARKET_URL = "market://details?id=${BuildConfig.APPLICATION_ID}"
-
-
+@SuppressLint("ComposableLambdaParameterNaming")
 @Composable
-fun SettingsScreen(vmFactory: ViewModelProvider.Factory, navController: NavController) {
+fun SettingsScreen(
+    vmFactory: ViewModelProvider.Factory,
+    navigateBack: () -> Unit,
+    navigateToLicenses: () -> Unit,
+    debugSettings: @Composable () -> Unit
+) {
     val viewModel = viewModel<SettingsViewModel>(factory = vmFactory)
     val context = LocalContext.current
 
-    val onBack: () -> Unit = { navController.popBackStack() }
     val onRateClick = {
-        val uri = MARKET_URL.toUri()
+        val uri = viewModel.appInfo.marketUrl.toUri()
         val intent = Intent(Intent.ACTION_VIEW).apply { data = uri }
         context.startActivity(intent)
     }
     val onSourceClick = {
-        val uri = BuildConfig.URL_SOURCE_CODE.toUri()
+        val uri = viewModel.appInfo.urlSourceCode.toUri()
         val intent = Intent(Intent.ACTION_VIEW).apply { data = uri }
         context.startActivity(intent)
     }
-    val onLicensesClick = { navController.navigate(Destination.Licenses.route) }
     val onPrivacyClick = {
-        val intent = Intent(Intent.ACTION_VIEW).apply { data = BuildConfig.URL_PRIVACY_POLICY.toUri() }
+        val intent = Intent(Intent.ACTION_VIEW).apply { data = viewModel.appInfo.urlPrivacyPolicy.toUri() }
         context.startActivity(intent)
     }
 
@@ -80,25 +79,30 @@ fun SettingsScreen(vmFactory: ViewModelProvider.Factory, navController: NavContr
     }
 
     SettingsScreen(
+        viewModel.appInfo,
         crashReportingEnabled,
-        onBack,
+        navigateBack,
         onRateClick,
         onSourceClick,
-        onLicensesClick,
+        navigateToLicenses,
         onPrivacyClick,
         onCrashReportingChange,
+        debugSettings
     )
 }
 
+@SuppressLint("ComposableLambdaParameterNaming")
 @Composable
 fun SettingsScreen(
+    appInfo: AppInfo,
     crashReportingEnabled: Boolean,
     onBack: () -> Unit,
     onRateClick: () -> Unit,
     onSourceClick: () -> Unit,
     onLicensesClick: () -> Unit,
     onPrivacyClick: () -> Unit,
-    onCrashReportingChange: (Boolean) -> Unit
+    onCrashReportingChange: (Boolean) -> Unit,
+    debugSettings: @Composable () -> Unit
 ) {
     Column(
         Modifier
@@ -128,7 +132,7 @@ fun SettingsScreen(
             SettingHeader(name = stringResource(R.string.settings_header_about))
             TextRow(
                 name = stringResource(R.string.app_name),
-                subtitle = "${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE})"
+                subtitle = "${appInfo.versionName} (${appInfo.buildType})"
             )
             NavigationSetting(
                 name = stringResource(R.string.settings_item_rate),
@@ -147,13 +151,13 @@ fun SettingsScreen(
                 onClick = onPrivacyClick
             )
 
-            DebugSettings() // no-op in release variant
+            debugSettings() // no-op in release variant
         }
     }
 }
 
 @Composable
-internal fun SettingHeader(name: String) {
+fun SettingHeader(name: String) {
     Column {
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -194,7 +198,7 @@ private fun SwitchSetting(
 }
 
 @Composable
-internal fun NavigationSetting(
+fun NavigationSetting(
     name: String,
     onClick: () -> Unit
 ) {
@@ -231,13 +235,15 @@ internal fun TextRow(name: String, subtitle: String) {
 fun PreviewSettingsScreen() {
     PreviewTheme {
         SettingsScreen(
+            appInfo = AppInfo(versionName = "1.0.0", buildType = "debug", appId = "com.ofalvai.habittracker", urlPrivacyPolicy = "", urlSourceCode = ""),
             crashReportingEnabled = true,
             onBack = {},
             onSourceClick = {},
             onLicensesClick = {},
             onPrivacyClick = {},
             onRateClick = {},
-            onCrashReportingChange = {}
+            onCrashReportingChange = {},
+            debugSettings = {}
         )
     }
 }

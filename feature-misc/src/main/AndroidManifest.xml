@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2021 Olivér Falvai
+  ~ Copyright 2022 Olivér Falvai
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,6 +15,6 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="app_name">HabitTracker Debug</string>
-</resources>
+<manifest>
+
+</manifest>

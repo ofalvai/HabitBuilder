@@ -22,6 +22,8 @@ import com.airbnb.android.showkase.annotation.ShowkaseRoot
 import com.airbnb.android.showkase.annotation.ShowkaseRootModule
 import com.airbnb.android.showkase.models.Showkase
 import com.ofalvai.habittracker.Dependencies
+import com.ofalvai.habittracker.feature.misc.settings.NavigationSetting
+import com.ofalvai.habittracker.feature.misc.settings.SettingHeader
 import kotlinx.coroutines.launch
 
 @ShowkaseRoot

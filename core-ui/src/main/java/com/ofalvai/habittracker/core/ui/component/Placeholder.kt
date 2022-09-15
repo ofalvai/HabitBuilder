@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.model
+package com.ofalvai.habittracker.core.ui.component
 
-import androidx.compose.runtime.Immutable
-import com.ofalvai.habittracker.core.model.HabitId
-import java.time.Instant
+import androidx.compose.runtime.Composable
 
-@Immutable
-data class ArchivedHabit(
-    val id: HabitId,
-    val name: String,
-    val totalActionCount: Int,
-    val lastAction: Instant?
-)
+@Composable
+fun ContentWithPlaceholder(
+    showPlaceholder: Boolean,
+    placeholder: @Composable () -> Unit,
+    content: @Composable () -> Unit
+) {
+    if (showPlaceholder) {
+        placeholder()
+    } else {
+        content()
+    }
+}

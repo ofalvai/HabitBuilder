@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Olivér Falvai
+ * Copyright 2021 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,35 +14,16 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.export
+package com.ofalvai.habittracker.feature.misc.archive.model
 
 import androidx.compose.runtime.Immutable
-import java.net.URI
+import com.ofalvai.habittracker.core.model.HabitId
 import java.time.Instant
 
 @Immutable
-data class DataSummary(
-    val habitCount: Int,
-    val actionCount: Int,
-    val lastActivity: Instant? // null if there are no actions
-)
-
-enum class ExportImportError {
-    FilePickerURIEmpty,
-    ExportFailed,
-    ImportFailed,
-    BackupVersionTooHigh
-}
-
-@Immutable
-data class ExportState(
-    val outputFileURI: URI?,
-    val error: ExportImportError?
-)
-
-@Immutable
-data class ImportState(
-    val backupFileURI: URI?,
-    val backupSummary: DataSummary?,
-    val error: ExportImportError?
+data class ArchivedHabit(
+    val id: HabitId,
+    val name: String,
+    val totalActionCount: Int,
+    val lastAction: Instant?
 )

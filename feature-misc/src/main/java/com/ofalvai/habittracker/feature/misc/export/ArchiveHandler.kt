@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.export
+package com.ofalvai.habittracker.feature.misc.export
 
 import java.io.ByteArrayOutputStream
 import java.io.InputStream

@@ -1,0 +1,26 @@
+plugins {
+    id 'habittracker.android.library'
+    id 'habittracker.android.library.compose'
+}
+
+android {
+    namespace 'com.ofalvai.habittracker.feature.misc'
+}
+
+dependencies {
+    api project(':core-common')
+    implementation project(':core-ui')
+    api project(':core-database')
+
+    implementation libs.kotlin.immutable
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.activity.compose
+
+    implementation libs.apache.csv
+
+    testImplementation project(':core-testing')
+    testImplementation libs.junit
+    testImplementation libs.kotlin.coroutines.test
+    testImplementation libs.mockito.kotlin
+    testImplementation libs.turbine
+}

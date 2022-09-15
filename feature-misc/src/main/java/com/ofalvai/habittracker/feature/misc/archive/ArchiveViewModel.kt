@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.archive
+package com.ofalvai.habittracker.feature.misc.archive
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,9 +22,9 @@ import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.HabitById
 import com.ofalvai.habittracker.core.ui.state.Result
-import com.ofalvai.habittracker.mapper.mapHabitEntityToArchivedModel
-import com.ofalvai.habittracker.ui.model.ArchivedHabit
+import com.ofalvai.habittracker.feature.misc.archive.model.ArchivedHabit
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -76,5 +76,16 @@ class ArchiveViewModel(
                 eventChannel.send(ArchiveEvent.DeleteError)
             }
         }
+    }
+
+    private fun mapHabitEntityToArchivedModel(habitsWithActions: List<HabitWithActionsEntity>): ImmutableList<ArchivedHabit> {
+        return habitsWithActions.map {
+            ArchivedHabit(
+                id = it.habit.id,
+                name = it.habit.name,
+                totalActionCount = it.actions.size,
+                lastAction = it.actions.lastOrNull()?.timestamp
+            )
+        }.toImmutableList()
     }
 }
