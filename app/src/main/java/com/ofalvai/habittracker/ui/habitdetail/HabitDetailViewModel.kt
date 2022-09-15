@@ -18,19 +18,20 @@ package com.ofalvai.habittracker.ui.habitdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.common.OnboardingManager
+import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.core.ui.state.Result
+import com.ofalvai.habittracker.feature.insights.mapper.mapHabitSingleStats
+import com.ofalvai.habittracker.feature.insights.model.SingleStats
 import com.ofalvai.habittracker.mapper.*
 import com.ofalvai.habittracker.repo.ActionRepository
-import com.ofalvai.habittracker.telemetry.Telemetry
-import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
 import com.ofalvai.habittracker.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.ui.model.ActionCountByWeek
 import com.ofalvai.habittracker.ui.model.ActionCountChart
-import com.ofalvai.habittracker.ui.model.SingleStats
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job

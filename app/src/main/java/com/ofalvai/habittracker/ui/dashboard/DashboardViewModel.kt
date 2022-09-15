@@ -18,6 +18,10 @@ package com.ofalvai.habittracker.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.common.AppPreferences
+import com.ofalvai.habittracker.core.common.OnboardingManager
+import com.ofalvai.habittracker.core.common.OnboardingState
+import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.HabitId
@@ -25,9 +29,7 @@ import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.mapper.mapHabitEntityToModel
 import com.ofalvai.habittracker.repo.ActionRepository
-import com.ofalvai.habittracker.telemetry.Telemetry
-import com.ofalvai.habittracker.ui.AppPreferences
-import com.ofalvai.habittracker.ui.model.OnboardingState
+import com.ofalvai.habittracker.ui.model.DashboardConfig
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
@@ -55,7 +57,7 @@ data class ItemMoveEvent(
 class DashboardViewModel(
     private val dao: HabitDao,
     private val actionRepository: ActionRepository,
-    appPreferences: AppPreferences,
+    private val appPreferences: AppPreferences,
     private val telemetry: Telemetry,
     private val onboardingManager: OnboardingManager
 ) : ViewModel() {
@@ -71,7 +73,11 @@ class DashboardViewModel(
             emit(Result.Failure(it))
         }
 
-    var dashboardConfig by appPreferences::dashboardConfig
+    var dashboardConfig
+        get() = parseDashboardConfig(appPreferences.dashboardConfig)
+        set(value) {
+            appPreferences.dashboardConfig = value.toString()
+        }
 
     private val eventChannel = Channel<DashboardEvent>(Channel.BUFFERED)
     val dashboardEvent = eventChannel.receiveAsFlow()
@@ -130,5 +136,12 @@ class DashboardViewModel(
                 }
             }
         }
+    }
+
+    private fun parseDashboardConfig(stringValue: String?): DashboardConfig {
+        if (stringValue == null) {
+            return DashboardConfig.FiveDay
+        }
+        return DashboardConfig.valueOf(stringValue)
     }
 }

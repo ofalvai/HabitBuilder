@@ -44,7 +44,7 @@ import com.ofalvai.habittracker.core.ui.component.HabitColorPicker
 import com.ofalvai.habittracker.core.ui.component.SingleStat
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.theme.*
-import com.ofalvai.habittracker.ui.model.SingleStats
+import com.ofalvai.habittracker.feature.insights.model.SingleStats
 import kotlin.math.roundToInt
 import com.ofalvai.habittracker.core.ui.R as coreR
 

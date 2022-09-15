@@ -33,10 +33,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.component.ConfirmationDialog
 import com.ofalvai.habittracker.core.ui.component.ErrorView
@@ -55,8 +55,8 @@ import java.time.Instant
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
-fun ArchiveScreen(navController: NavController, scaffoldState: ScaffoldState) {
-    val viewModel = viewModel<ArchiveViewModel>(factory = Dependencies.viewModelFactory)
+fun ArchiveScreen(vmFactory: ViewModelProvider.Factory, navController: NavController, scaffoldState: ScaffoldState) {
+    val viewModel = viewModel<ArchiveViewModel>(factory = vmFactory)
 
     val habits by viewModel.archivedHabitList.collectAsState(initial = Result.Loading)
 

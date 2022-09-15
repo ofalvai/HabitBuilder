@@ -50,5 +50,9 @@ object CoreIcons {
     val Export: Painter
         @Composable
         get() = painterResource(R.drawable.ic_export)
+
+    val InfoOutlined: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_info_outlined)
 }
 

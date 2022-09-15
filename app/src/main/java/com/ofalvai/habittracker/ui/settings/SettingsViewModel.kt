@@ -17,7 +17,7 @@
 package com.ofalvai.habittracker.ui.settings
 
 import androidx.lifecycle.ViewModel
-import com.ofalvai.habittracker.ui.AppPreferences
+import com.ofalvai.habittracker.core.common.AppPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SettingsViewModel(private val appPreferences: AppPreferences) : ViewModel() {

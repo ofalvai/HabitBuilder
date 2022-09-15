@@ -26,6 +26,10 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_interpunct">%1$s · %2$s</string>
 
+    <string name="menu_settings">Settings</string>
+    <string name="menu_archive">Archived habits</string>
+    <string name="menu_export">Backup and restore</string>
+
     <string name="calendar_previous_month">Previous month</string>
     <string name="calendar_next_month">Next month</string>
 </resources>

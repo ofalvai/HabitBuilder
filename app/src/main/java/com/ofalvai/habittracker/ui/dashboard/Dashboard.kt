@@ -30,10 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.core.common.OnboardingState
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitWithActions
@@ -49,15 +50,15 @@ import com.ofalvai.habittracker.ui.Destination
 import com.ofalvai.habittracker.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.ui.dashboard.view.fiveday.FiveDayHabitList
 import com.ofalvai.habittracker.ui.model.DashboardConfig
-import com.ofalvai.habittracker.ui.model.OnboardingState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
-fun DashboardScreen(navController: NavController, scaffoldState: ScaffoldState) {
-    val viewModel: DashboardViewModel = viewModel(factory = Dependencies.viewModelFactory)
+fun DashboardScreen(vmFactory: ViewModelProvider.Factory, navController: NavController, scaffoldState: ScaffoldState) {
+    val viewModel: DashboardViewModel = viewModel(factory = vmFactory)
 
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
     var configDialogOpen by remember { mutableStateOf(false) }
@@ -202,17 +203,17 @@ private fun DashboardAppBar(
         DropdownMenuItem(onClick = onArchiveClick) {
             Icon(painter = CoreIcons.Archive, contentDescription = null)
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(stringResource(R.string.menu_archive))
+            Text(stringResource(coreR.string.menu_archive))
         }
         DropdownMenuItem(onClick = onExportClick) {
             Icon(painter = CoreIcons.Export, contentDescription = null)
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(stringResource(R.string.menu_export))
+            Text(stringResource(coreR.string.menu_export))
         }
         DropdownMenuItem(onClick = onSettingsClick) {
             Icon(painter = CoreIcons.Settings, contentDescription = null)
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(stringResource(R.string.menu_settings))
+            Text(stringResource(coreR.string.menu_settings))
         }
     }
 }

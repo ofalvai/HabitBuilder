@@ -37,11 +37,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.BuildConfig
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.gray1
@@ -52,8 +52,8 @@ private const val MARKET_URL = "market://details?id=${BuildConfig.APPLICATION_ID
 
 
 @Composable
-fun SettingsScreen(navController: NavController) {
-    val viewModel = viewModel<SettingsViewModel>(factory = Dependencies.viewModelFactory)
+fun SettingsScreen(vmFactory: ViewModelProvider.Factory, navController: NavController) {
+    val viewModel = viewModel<SettingsViewModel>(factory = vmFactory)
     val context = LocalContext.current
 
     val onBack: () -> Unit = { navController.popBackStack() }

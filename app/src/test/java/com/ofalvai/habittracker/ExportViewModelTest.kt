@@ -17,12 +17,12 @@
 package com.ofalvai.habittracker
 
 import app.cash.turbine.test
+import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.Action
 import com.ofalvai.habittracker.core.database.entity.Habit
 import com.ofalvai.habittracker.core.testing.MainCoroutineRule
 import com.ofalvai.habittracker.repo.StreamOpener
-import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.export.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf

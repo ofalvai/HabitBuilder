@@ -18,11 +18,11 @@ package com.ofalvai.habittracker.ui.archive
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.HabitById
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.mapper.mapHabitEntityToArchivedModel
-import com.ofalvai.habittracker.telemetry.Telemetry
 import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.channels.Channel

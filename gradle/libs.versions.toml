@@ -6,6 +6,7 @@ compose-libs = "1.2.1"
 room = "2.4.3"
 accompanist = "0.25.1"
 showkase = "1.0.0-beta13"
+lifecycle = "2.5.1"
 
 [plugins]
 ksp = "com.google.devtools.ksp:1.7.10-1.0.6"
@@ -31,7 +32,8 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room"}
 
-androidx-lifecycle-runtime = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 
 androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
 androidx-test-rules = "androidx.test:rules:1.4.0"
