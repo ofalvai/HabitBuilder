@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.settings
+package com.ofalvai.habittracker.feature.misc.settings
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
@@ -41,13 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.ofalvai.habittracker.R
+import com.ofalvai.habittracker.feature.misc.R
 import kotlinx.collections.immutable.ImmutableList
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
-fun LicensesScreen(vmFactory: ViewModelProvider.Factory, navController: NavController) {
+fun LicensesScreen(vmFactory: ViewModelProvider.Factory, navigateBack: () -> Unit) {
     val viewModel: LicensesViewModel = viewModel(factory = vmFactory)
     val dependencies by viewModel.dependencies.collectAsState()
 
@@ -56,7 +55,7 @@ fun LicensesScreen(vmFactory: ViewModelProvider.Factory, navController: NavContr
             modifier = Modifier.statusBarsPadding(),
             title = { Text(stringResource(R.string.licenses_title)) },
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = navigateBack) {
                     Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
                 }
             },

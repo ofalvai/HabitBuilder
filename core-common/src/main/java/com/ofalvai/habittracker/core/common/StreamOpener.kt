@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.repo
+package com.ofalvai.habittracker.core.common
 
 import android.content.Context
 import java.io.InputStream

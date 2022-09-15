@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.export
+package com.ofalvai.habittracker.feature.misc.export
 
 import android.content.Intent
 import android.text.format.DateUtils
@@ -45,11 +45,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.component.SingleStat
 import com.ofalvai.habittracker.core.ui.theme.*
+import com.ofalvai.habittracker.feature.misc.R
 import java.net.URI
 import java.time.Instant
 import java.time.LocalDateTime
@@ -59,7 +58,7 @@ import com.ofalvai.habittracker.core.ui.R as commonR
 val initialSummary = DataSummary(habitCount = 0, actionCount = 0, lastActivity = null)
 
 @Composable
-fun ExportScreen(vmFactory: ViewModelProvider.Factory, navController: NavController) {
+fun ExportScreen(vmFactory: ViewModelProvider.Factory, navigateBack: () -> Unit) {
     val viewModel = viewModel<ExportViewModel>(factory = vmFactory)
 
     val summary by viewModel.dataSummary.collectAsState(initial = initialSummary)
@@ -92,7 +91,7 @@ fun ExportScreen(vmFactory: ViewModelProvider.Factory, navController: NavControl
         TopAppBar(
             title = { Text(text = stringResource(R.string.export_title)) },
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = navigateBack) {
                     Icon(Icons.Rounded.ArrowBack, stringResource(commonR.string.common_back))
                 }
             },

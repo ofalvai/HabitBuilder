@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.export
+package com.ofalvai.habittracker.feature.misc.export
 
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ofalvai.habittracker.core.common.StreamOpener
 import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.Action
-import com.ofalvai.habittracker.repo.StreamOpener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

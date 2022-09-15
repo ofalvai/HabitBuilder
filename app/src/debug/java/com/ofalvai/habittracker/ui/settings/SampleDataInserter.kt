@@ -16,41 +16,12 @@
 
 package com.ofalvai.habittracker.ui.settings
 
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.runtime.*
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.Action
 import com.ofalvai.habittracker.core.database.entity.Habit
-import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.OffsetDateTime
-
-@Composable
-fun SampleDataInserterButton() {
-    var isSuccess by remember { mutableStateOf(false) }
-    val inserter = remember { SampleDataInserter(Dependencies.dao) }
-    val coroutineScope = rememberCoroutineScope()
-
-    val onClick: () -> Unit = {
-        coroutineScope.launch {
-            inserter.insert()
-            isSuccess = true
-        }
-    }
-
-    Button(onClick) {
-        if (isSuccess) {
-            Icon(Icons.Default.Check, null)
-        }
-        Text(text = "Insert sample data")
-    }
-}
 
 class SampleDataInserter(private val dao: HabitDao) {
 

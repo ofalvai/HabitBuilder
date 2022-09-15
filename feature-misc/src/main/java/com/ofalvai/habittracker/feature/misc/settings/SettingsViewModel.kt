@@ -14,13 +14,26 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.settings
+package com.ofalvai.habittracker.feature.misc.settings
 
 import androidx.lifecycle.ViewModel
 import com.ofalvai.habittracker.core.common.AppPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class SettingsViewModel(private val appPreferences: AppPreferences) : ViewModel() {
+data class AppInfo(
+    val versionName: String,
+    val buildType: String,
+    val appId: String,
+    val urlPrivacyPolicy: String,
+    val urlSourceCode: String,
+) {
+    val marketUrl = "market://details?id=${appId}"
+}
+
+class SettingsViewModel(
+    private val appPreferences: AppPreferences,
+    val appInfo: AppInfo
+) : ViewModel() {
 
     val crashReportingEnabled = MutableStateFlow(true)
 

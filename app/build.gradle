@@ -129,6 +129,8 @@ dependencies {
     implementation project(':core-ui')
     implementation project(':core-model')
     implementation project(':feature-insights')
+    implementation project(':feature-misc')
+
     coreLibraryDesugaring libs.android.tools.desugar
 
     implementation libs.bundles.compose
@@ -139,17 +141,14 @@ dependencies {
     implementation libs.kotlin.immutable
 
     implementation libs.androidx.navigation.compose
-    implementation libs.androidx.activity.compose
 
     implementation libs.androidx.room.runtime
 
     implementation libs.logcat
     implementation libs.calendarview
-    implementation(libs.reorderable)
+    implementation libs.reorderable
     implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.navigation
-
-    implementation libs.apache.csv
 
     // Required by layout inspector
     debugRuntimeOnly libs.kotlin.reflect

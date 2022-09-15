@@ -46,13 +46,14 @@ import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.ui.theme.AppTheme
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.feature.insights.ui.InsightsScreen
-import com.ofalvai.habittracker.ui.archive.ArchiveScreen
+import com.ofalvai.habittracker.feature.misc.archive.ArchiveScreen
+import com.ofalvai.habittracker.feature.misc.export.ExportScreen
+import com.ofalvai.habittracker.feature.misc.settings.LicensesScreen
+import com.ofalvai.habittracker.feature.misc.settings.SettingsScreen
 import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
 import com.ofalvai.habittracker.ui.dashboard.DashboardScreen
-import com.ofalvai.habittracker.ui.export.ExportScreen
 import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
-import com.ofalvai.habittracker.ui.settings.LicensesScreen
-import com.ofalvai.habittracker.ui.settings.SettingsScreen
+import com.ofalvai.habittracker.ui.settings.DebugSettings
 
 class MainActivity : ComponentActivity() {
 
@@ -101,6 +102,7 @@ private fun Screens(
     padding: PaddingValues
 ) {
     val vmFactory = Dependencies.viewModelFactory
+    val navigateBack: () -> Unit = { navController.popBackStack() }
 
     AnimatedNavHost(
         navController,
@@ -128,23 +130,25 @@ private fun Screens(
                 navController = navController
             )
         }
-        appDestination(Destination.Settings) { SettingsScreen(vmFactory, navController) }
-        appDestination(Destination.Licenses) { LicensesScreen(vmFactory, navController) }
-        appDestination(Destination.Archive) { ArchiveScreen(vmFactory, navController, scaffoldState) }
-        appDestination(Destination.Export) { ExportScreen(vmFactory, navController) }
-    }
-}
-
-@Composable
-fun ContentWithPlaceholder(
-    showPlaceholder: Boolean,
-    placeholder: @Composable () -> Unit,
-    content: @Composable () -> Unit
-) {
-    if (showPlaceholder) {
-        placeholder()
-    } else {
-        content()
+        appDestination(Destination.Settings) {
+            SettingsScreen(
+                vmFactory,
+                navigateBack,
+                navigateToLicenses = { navController.navigate(Destination.Licenses.route) },
+                debugSettings = { DebugSettings() }
+            )
+        }
+        appDestination(Destination.Licenses) {
+            LicensesScreen(vmFactory, navigateBack = { navController.popBackStack() })
+        }
+        appDestination(Destination.Archive) {
+            ArchiveScreen(
+                vmFactory,
+                scaffoldState,
+                navigateBack
+            )
+        }
+        appDestination(Destination.Export) { ExportScreen(vmFactory, navigateBack) }
     }
 }
 

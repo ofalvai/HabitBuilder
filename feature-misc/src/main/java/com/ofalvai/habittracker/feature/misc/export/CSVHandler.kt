@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.ui.export
+package com.ofalvai.habittracker.feature.misc.export
 
 import com.ofalvai.habittracker.core.database.entity.Action
 import com.ofalvai.habittracker.core.database.entity.Habit

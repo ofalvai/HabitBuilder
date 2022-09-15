@@ -18,7 +18,6 @@ package com.ofalvai.habittracker.mapper
 
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitWithActions
-import com.ofalvai.habittracker.ui.model.ArchivedHabit
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import com.ofalvai.habittracker.core.database.entity.Habit as HabitEntity
@@ -31,17 +30,6 @@ fun mapHabitEntityToModel(habitsWithActions: List<HabitWithActionsEntity>): Immu
             actions = actionsToRecentDays(it.actions),
             totalActionCount = it.actions.size,
             actionHistory = actionsToHistory(it.actions)
-        )
-    }.toImmutableList()
-}
-
-fun mapHabitEntityToArchivedModel(habitsWithActions: List<HabitWithActionsEntity>): ImmutableList<ArchivedHabit> {
-    return habitsWithActions.map {
-        ArchivedHabit(
-            id = it.habit.id,
-            name = it.habit.name,
-            totalActionCount = it.actions.size,
-            lastAction = it.actions.lastOrNull()?.timestamp
         )
     }.toImmutableList()
 }
