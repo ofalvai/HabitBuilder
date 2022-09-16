@@ -29,7 +29,7 @@ import com.ofalvai.habittracker.core.common.TelemetryImpl
 import com.ofalvai.habittracker.core.database.AppDatabase
 import com.ofalvai.habittracker.core.database.MIGRATIONS
 import com.ofalvai.habittracker.feature.dashboard.repo.ActionRepository
-import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.AddHabitViewModel
+import com.ofalvai.habittracker.feature.dashboard.ui.addhabit.AddHabitViewModel
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.DashboardViewModel
 import com.ofalvai.habittracker.feature.dashboard.ui.habitdetail.HabitDetailViewModel
 import com.ofalvai.habittracker.feature.insights.ui.InsightsViewModel

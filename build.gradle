@@ -18,8 +18,6 @@ plugins {
     alias(libs.plugins.gradle.buildtimetracker)
     alias(libs.plugins.gradle.cachefix) apply false // Applied in convention plugins
     alias(libs.plugins.dependencyanalysis)
-    id 'com.android.library' version '7.3.0-rc01' apply false
-    id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
 }
 
 doctor {

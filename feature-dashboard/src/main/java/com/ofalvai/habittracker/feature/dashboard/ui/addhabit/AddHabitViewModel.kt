@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.feature.dashboard.ui.dashboard
+package com.ofalvai.habittracker.feature.dashboard.ui.addhabit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

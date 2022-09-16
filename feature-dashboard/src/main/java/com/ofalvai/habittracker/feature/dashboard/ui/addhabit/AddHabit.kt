@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.feature.dashboard.ui.dashboard
+package com.ofalvai.habittracker.feature.dashboard.ui.addhabit
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -114,7 +114,7 @@ fun AddHabitForm(
             )
         }
 
-        Suggestions(habits = Suggestions.habits, onSelect = {
+        Suggestions(habits = com.ofalvai.habittracker.feature.dashboard.ui.dashboard.Suggestions.habits, onSelect = {
             name = it
             nameFocusRequester.requestFocus()
         })
@@ -216,6 +216,6 @@ fun PreviewAddHabit() {
 @Composable
 fun PreviewSuggestions() {
     PreviewTheme {
-        Suggestions(habits = Suggestions.habits, onSelect = {})
+        Suggestions(habits = com.ofalvai.habittracker.feature.dashboard.ui.dashboard.Suggestions.habits, onSelect = {})
     }
 }

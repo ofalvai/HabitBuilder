@@ -46,7 +46,7 @@ import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.theme.AppTheme
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
-import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.AddHabitScreen
+import com.ofalvai.habittracker.feature.dashboard.ui.addhabit.AddHabitScreen
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.DashboardScreen
 import com.ofalvai.habittracker.feature.dashboard.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.feature.insights.ui.InsightsScreen
