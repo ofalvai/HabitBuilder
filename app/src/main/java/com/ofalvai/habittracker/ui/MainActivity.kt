@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,16 +43,17 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.common.Telemetry
+import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.theme.AppTheme
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
+import com.ofalvai.habittracker.feature.dashboard.ui.addhabit.AddHabitScreen
+import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.DashboardScreen
+import com.ofalvai.habittracker.feature.dashboard.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.feature.insights.ui.InsightsScreen
 import com.ofalvai.habittracker.feature.misc.archive.ArchiveScreen
 import com.ofalvai.habittracker.feature.misc.export.ExportScreen
 import com.ofalvai.habittracker.feature.misc.settings.LicensesScreen
 import com.ofalvai.habittracker.feature.misc.settings.SettingsScreen
-import com.ofalvai.habittracker.ui.dashboard.AddHabitScreen
-import com.ofalvai.habittracker.ui.dashboard.DashboardScreen
-import com.ofalvai.habittracker.ui.habitdetail.HabitDetailScreen
 import com.ofalvai.habittracker.ui.settings.DebugSettings
 
 class MainActivity : ComponentActivity() {
@@ -103,31 +104,45 @@ private fun Screens(
 ) {
     val vmFactory = Dependencies.viewModelFactory
     val navigateBack: () -> Unit = { navController.popBackStack() }
+    val navigateToSettings: () -> Unit = { navController.navigate(Destination.Settings.route) }
+    val navigateToArchive: () -> Unit = { navController.navigate(Destination.Archive.route) }
+    val navigateToExport: () -> Unit = { navController.navigate(Destination.Export.route) }
+    val navigateToHabitDetails: (HabitId) -> Unit = { habitId ->
+        val route = Destination.HabitDetails.buildRoute(habitId = habitId)
+        navController.navigate(route)
+    }
 
     AnimatedNavHost(
         navController,
         startDestination = Destination.Dashboard.route,
         modifier = Modifier.padding(padding).fillMaxSize()
     ) {
-        appDestination(Destination.Dashboard) { DashboardScreen(vmFactory, navController, scaffoldState) }
+        appDestination(Destination.Dashboard) {
+            DashboardScreen(
+                vmFactory,
+                scaffoldState,
+                navigateToHabitDetails,
+                navigateToAddHabit = { navController.navigate(Destination.AddHabit.route) },
+                navigateToSettings,
+                navigateToArchive,
+                navigateToExport
+            )
+        }
         appDestination(Destination.Insights) {
             InsightsScreen(
                 vmFactory,
-                navigateToArchive = { navController.navigate(Destination.Archive.route) },
-                navigateToSettings = { navController.navigate(Destination.Settings.route) },
-                navigateToExport = { navController.navigate(Destination.Export.route) },
-                navigateToHabitDetails = { habitId ->
-                    val route = Destination.HabitDetails.buildRoute(habitId = habitId)
-                    navController.navigate(route)
-                }
+                navigateToArchive = navigateToArchive,
+                navigateToSettings = navigateToSettings,
+                navigateToExport = navigateToExport,
+                navigateToHabitDetails = navigateToHabitDetails
             )
         }
-        appDestination(Destination.AddHabit) { AddHabitScreen(vmFactory, navController) }
+        appDestination(Destination.AddHabit) { AddHabitScreen(vmFactory, navigateBack) }
         appDestination(Destination.HabitDetails) { backStackEntry ->
             HabitDetailScreen(
                 vmFactory,
                 habitId = Destination.HabitDetails.idFrom(backStackEntry.arguments),
-                navController = navController
+                navigateBack
             )
         }
         appDestination(Destination.Settings) {
@@ -149,21 +164,6 @@ private fun Screens(
             )
         }
         appDestination(Destination.Export) { ExportScreen(vmFactory, navigateBack) }
-    }
-}
-
-@Composable
-fun TextFieldError(
-    modifier: Modifier = Modifier,
-    textError: String
-) {
-    Row(modifier = modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = textError,
-            modifier = Modifier.fillMaxWidth(),
-            style = LocalTextStyle.current.copy(color = MaterialTheme.colors.error)
-        )
     }
 }
 

@@ -26,8 +26,4 @@ object AppIcons {
     val Insights: Painter
         @Composable
         get() = painterResource(R.drawable.ic_insights)
-
-    val DashboardLayout: Painter
-        @Composable
-        get() = painterResource(R.drawable.ic_dashboard_layout)
 }

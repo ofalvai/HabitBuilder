@@ -44,6 +44,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 defaultConfig {
                     minSdk = Constants.MIN_SDK
                     targetSdk = Constants.TARGET_SDK
+
+                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 }
 
                 compileOptions {

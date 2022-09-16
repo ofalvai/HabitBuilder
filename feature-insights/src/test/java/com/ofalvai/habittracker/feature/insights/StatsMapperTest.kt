@@ -16,20 +16,22 @@
 
 package com.ofalvai.habittracker.feature.insights
 
-import com.ofalvai.habittracker.core.database.entity.*
+import com.ofalvai.habittracker.core.database.entity.HabitActionCount
+import com.ofalvai.habittracker.core.database.entity.HabitTopDay
+import com.ofalvai.habittracker.core.database.entity.SumActionCountByDay
 import com.ofalvai.habittracker.feature.insights.mapper.mapHabitActionCount
-import com.ofalvai.habittracker.feature.insights.mapper.mapHabitSingleStats
 import com.ofalvai.habittracker.feature.insights.mapper.mapHabitTopDay
 import com.ofalvai.habittracker.feature.insights.mapper.mapSumActionCountByDay
 import com.ofalvai.habittracker.feature.insights.model.HeatmapMonth
-import com.ofalvai.habittracker.feature.insights.model.SingleStats
 import com.ofalvai.habittracker.feature.insights.model.TopDayItem
 import com.ofalvai.habittracker.feature.insights.model.TopHabitItem
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.time.*
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.YearMonth
 import java.util.*
 
 class StatsMapperTest {
@@ -412,129 +414,6 @@ class StatsMapperTest {
             progress = 0.1632653f
         )
         assertEquals(expected, topHabitItem)
-    }
-
-    @Test
-    fun `Given habit with no actions When single stats are mapped Then stats are empty`() {
-        // Given
-        val now = LocalDate.now()
-        val locale = Locale("hu", "hu")
-        val completionRate = ActionCompletionRate(
-            first_day = Instant.EPOCH,
-            action_count = 0
-        )
-        val weeklyActionCountList = emptyList<ActionCountByWeek>()
-
-        // When
-        val singleStats = mapHabitSingleStats(completionRate, weeklyActionCountList, now, locale)
-
-        // Then
-        val expected = SingleStats(
-            firstDay = null,
-            actionCount = 0,
-            weeklyActionCount = 0,
-            completionRate = 0f
-        )
-        assertEquals(expected, singleStats)
-    }
-
-    @Test
-    fun `Given habit with single action today When single stats are mapped Then stats are correct`() {
-        // Given
-        val now = LocalDate.of(2021, 5, 24)
-        val locale = Locale("hu", "hu")
-        val completionRate = ActionCompletionRate(
-            first_day = now.atTime(9, 24).toInstant(OffsetDateTime.now().offset),
-            action_count = 1
-        )
-        val weeklyActionCountList = persistentListOf(
-            ActionCountByWeek(
-                year = 2021,
-                week = 21,
-                1
-            )
-        )
-
-        // When
-        val singleStats = mapHabitSingleStats(completionRate, weeklyActionCountList, now, locale)
-
-        // Then
-        val expected = SingleStats(
-            firstDay = LocalDate.of(2021, 5, 24),
-            actionCount = 1,
-            weeklyActionCount = 1,
-            completionRate = 1f
-        )
-        assertEquals(expected, singleStats)
-    }
-
-    @Test
-    fun `Given habit with actions last week and this week When single stats are mapped Then stats are correct`() {
-        // Given
-        val now = LocalDate.of(2021, 5, 24)
-        val locale = Locale("hu", "hu")
-        val completionRate = ActionCompletionRate(
-            first_day = LocalDateTime
-                .of(2021, 5, 18, 9, 24)
-                .toInstant(OffsetDateTime.now().offset),
-            action_count = 5
-        )
-        val weeklyActionCountList = persistentListOf(
-            ActionCountByWeek(
-                year = 2021,
-                week = 20,
-                action_count = 4
-            ),
-            ActionCountByWeek(
-                year = 2021,
-                week = 21,
-                action_count = 1
-            )
-        )
-
-        // When
-        val singleStats = mapHabitSingleStats(completionRate, weeklyActionCountList, now, locale)
-
-        // Then
-        val expected = SingleStats(
-            firstDay = LocalDate.of(2021, 5, 18),
-            actionCount = 5,
-            weeklyActionCount = 1,
-            completionRate = 0.7142857143f
-        )
-        assertEquals(expected, singleStats)
-    }
-
-    @Test
-    fun `Given habit with actions last week When single stats are mapped Then stats are correct`() {
-        // Given
-        val now = LocalDate.of(2021, 5, 24)
-        val locale = Locale("hu", "hu")
-        val completionRate = ActionCompletionRate(
-            first_day = LocalDateTime
-                .of(2021, 5, 18, 9, 24)
-                .toInstant(OffsetDateTime.now().offset),
-            action_count = 4
-        )
-        val weeklyActionCountList = persistentListOf(
-            ActionCountByWeek(
-                year = 2021,
-                week = 20,
-                action_count = 4
-            )
-        )
-
-        // When
-        val singleStats = mapHabitSingleStats(completionRate, weeklyActionCountList, now, locale)
-
-        // Then
-        val expected = SingleStats(
-            firstDay = LocalDate.of(2021, 5, 18),
-            actionCount = 4,
-            weeklyActionCount = 0,
-            completionRate = 0.5714285714f
-        )
-        assertEquals(expected, singleStats)
     }
 
     @Test
