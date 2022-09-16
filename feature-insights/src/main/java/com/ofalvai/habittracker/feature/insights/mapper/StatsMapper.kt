@@ -16,42 +16,21 @@
 
 package com.ofalvai.habittracker.feature.insights.mapper
 
-import com.ofalvai.habittracker.core.database.entity.ActionCompletionRate
 import com.ofalvai.habittracker.core.database.entity.HabitActionCount
 import com.ofalvai.habittracker.core.database.entity.HabitTopDay
 import com.ofalvai.habittracker.core.database.entity.SumActionCountByDay
-import com.ofalvai.habittracker.feature.insights.model.*
+import com.ofalvai.habittracker.feature.insights.model.BucketIndex
+import com.ofalvai.habittracker.feature.insights.model.HeatmapMonth
+import com.ofalvai.habittracker.feature.insights.model.TopDayItem
+import com.ofalvai.habittracker.feature.insights.model.TopHabitItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
-import java.time.*
+import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
-import java.time.temporal.WeekFields
 import java.util.*
 import kotlin.math.min
-import com.ofalvai.habittracker.core.database.entity.ActionCountByWeek as ActionCountByWeekEntity
-
-fun mapHabitSingleStats(
-    completionRate: ActionCompletionRate,
-    actionCountByWeekEntity: List<ActionCountByWeekEntity>,
-    now: LocalDate,
-    locale: Locale
-): SingleStats {
-    val firstDayDate = LocalDateTime.ofInstant(
-        completionRate.first_day, ZoneId.systemDefault()
-    ).toLocalDate()
-    val lastWeekActions = actionCountByWeekEntity.lastOrNull {
-        val weekFields = WeekFields.of(locale)
-        it.year == now.year && it.week == now.get(weekFields.weekOfWeekBasedYear())
-    }
-
-    return SingleStats(
-        firstDay = if (completionRate.first_day == Instant.EPOCH) null else firstDayDate,
-        actionCount = completionRate.action_count,
-        weeklyActionCount = lastWeekActions?.action_count ?: 0,
-        completionRate = completionRate.rateAsOf(now)
-    )
-}
 
 private const val maxBucketCount = 5
 

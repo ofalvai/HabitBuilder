@@ -22,7 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.testing.BaseInstrumentedTest
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.ui.dashboard.AddHabitForm
+import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.AddHabitForm
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule

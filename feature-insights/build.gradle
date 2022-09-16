@@ -3,6 +3,8 @@ plugins {
     id 'habittracker.android.library.compose'
 }
 
+apply plugin: 'com.google.devtools.ksp'
+
 android {
     namespace 'com.ofalvai.habittracker.feature.insights'
 }
@@ -15,6 +17,9 @@ dependencies {
     implementation libs.kotlin.immutable
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.calendarview
+
+    implementation libs.showkase.annotation
+    kspDebug libs.showkase.processor
 
     testImplementation project(':core-testing')
     testImplementation libs.junit

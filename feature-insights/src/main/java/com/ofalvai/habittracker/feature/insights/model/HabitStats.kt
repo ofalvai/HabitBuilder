@@ -24,14 +24,6 @@ import kotlinx.collections.immutable.ImmutableMap
 import java.time.LocalDate
 import java.time.YearMonth
 
-@Immutable
-data class SingleStats(
-    val firstDay: LocalDate?,
-    val actionCount: Int,
-    val weeklyActionCount: Int,
-    @FloatRange(from = 0.0, to = 1.0) val completionRate: Float,
-)
-
 typealias BucketIndex = Int
 
 @Immutable

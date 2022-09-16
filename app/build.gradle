@@ -127,7 +127,7 @@ dependencies {
     implementation project(':core-common')
     implementation project(':core-database')
     implementation project(':core-ui')
-    implementation project(':core-model')
+    implementation project(':feature-dashboard')
     implementation project(':feature-insights')
     implementation project(':feature-misc')
 
@@ -137,31 +137,21 @@ dependencies {
     implementation libs.compose.ui.toolingpreview
     debugImplementation libs.compose.ui.tooling
 
-    implementation libs.kotlin.coroutines.core
-    implementation libs.kotlin.immutable
-
     implementation libs.androidx.navigation.compose
 
     implementation libs.androidx.room.runtime
 
     implementation libs.logcat
-    implementation libs.calendarview
-    implementation libs.reorderable
     implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.navigation
 
     // Required by layout inspector
     debugRuntimeOnly libs.kotlin.reflect
 
-    implementation libs.showkase.annotation
     debugImplementation libs.showkase.full
     kspDebug libs.showkase.processor
 
-    testImplementation project(':core-testing')
-    testImplementation libs.junit
     testImplementation libs.kotlin.coroutines.test
-    testImplementation libs.mockito.kotlin
-    testImplementation libs.turbine
 
     androidTestImplementation project(':core-testing')
     androidTestImplementation libs.kotlin.coroutines.test
