@@ -20,32 +20,29 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ofalvai.habittracker.Dependencies
-import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.theme.AppTheme
-import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.feature.dashboard.ui.addhabit.AddHabitScreen
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.DashboardScreen
 import com.ofalvai.habittracker.feature.dashboard.ui.habitdetail.HabitDetailScreen
@@ -104,9 +101,9 @@ private fun Screens(
 ) {
     val vmFactory = Dependencies.viewModelFactory
     val navigateBack: () -> Unit = { navController.popBackStack() }
-    val navigateToSettings: () -> Unit = { navController.navigate(Destination.Settings.route) }
-    val navigateToArchive: () -> Unit = { navController.navigate(Destination.Archive.route) }
-    val navigateToExport: () -> Unit = { navController.navigate(Destination.Export.route) }
+    val navigateToSettings: () -> Unit = { navController.navigate(Destination.Settings) }
+    val navigateToArchive: () -> Unit = { navController.navigate(Destination.Archive) }
+    val navigateToExport: () -> Unit = { navController.navigate(Destination.Export) }
     val navigateToHabitDetails: (HabitId) -> Unit = { habitId ->
         val route = Destination.HabitDetails.buildRoute(habitId = habitId)
         navController.navigate(route)
@@ -165,70 +162,6 @@ private fun Screens(
         }
         appDestination(Destination.Export) { ExportScreen(vmFactory, navigateBack) }
     }
-}
-
-@Composable
-private fun AppBottomNavigation(navController: NavController) {
-    // Recreating the BottomNavigation() composable because window insets and elevation don't play
-    // nice together. We need to apply a background (behind the navbar), padding, and elevation
-    // in the correct order. Otherwise the elevation bottom shadow will be rendered on top of the
-    // background behind the navbar.
-    Surface(
-        color = MaterialTheme.colors.surface,
-        elevation = 8.dp,
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .height(56.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-
-            AppBottomNavigationItem(
-                rootScreen = Destination.Dashboard,
-                content = { Icon(CoreIcons.Habits, stringResource(R.string.tab_dashboard)) },
-                label = stringResource(R.string.tab_dashboard),
-                currentDestination = currentDestination,
-                navController = navController
-            )
-            AppBottomNavigationItem(
-                rootScreen = Destination.Insights,
-                content = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
-                label = stringResource(R.string.tab_insights),
-                currentDestination = currentDestination,
-                navController = navController
-            )
-        }
-    }
-}
-
-@Composable
-private fun RowScope.AppBottomNavigationItem(
-    rootScreen: Screen,
-    label: String,
-    currentDestination: NavDestination?,
-    navController: NavController,
-    content: @Composable () -> Unit
-) {
-    BottomNavigationItem(
-        icon = content,
-        selected = currentDestination?.hierarchy?.any { it.route == rootScreen.route } == true,
-        onClick = {
-            navController.navigate(rootScreen.route) {
-                // Pop up to the start destination of the graph to
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id)
-                // Avoid multiple copies of the same destination when
-                // re-selecting the same item
-                launchSingleTop = true
-            }
-        },
-        label = { Text(label) }
-    )
 }
 
 private val onDestinationChanged: (NavController, NavDestination, Bundle?) -> Unit =

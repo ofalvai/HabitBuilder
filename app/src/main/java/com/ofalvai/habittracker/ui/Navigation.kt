@@ -48,6 +48,10 @@ fun NavGraphBuilder.appDestination(
     )
 }
 
+fun NavController.navigate(destination: Screen) {
+    navigate(destination.route)
+}
+
 object Destination {
     object Dashboard : Screen(
         route = "dashboard",
