@@ -1,9 +1,22 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
+        google()
+        mavenCentral()
         gradlePluginPortal()
     }
 }
 
+enableFeaturePreview "STABLE_CONFIGURATION_CACHE"
+
 rootProject.name = "HabitTracker"
+
 include ':app'
-enableFeaturePreview("VERSION_CATALOGS")
+include ':core-common'
+include ':core-database'
+include ':core-model'
+include ':core-testing'
+include ':core-ui'
+include ':feature-insights'
+include ':feature-misc'
+include ':feature-dashboard'

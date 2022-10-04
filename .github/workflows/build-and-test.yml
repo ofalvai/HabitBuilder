@@ -17,10 +17,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        
+        uses: actions/checkout@v3
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: adopt
           java-version: 11
@@ -34,17 +33,15 @@ jobs:
           arguments: lintDebug
         
       - name: Upload lint report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-debug.html'
-      
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: testDebugUnitTest
-      
       - name: Upload test reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-reports
           path: '**/build/reports/tests/'

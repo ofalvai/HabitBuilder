@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2022 Olivér Falvai
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- Lint issue index: http://googlesamples.github.io/android-custom-lint-rules/checks/vendors.md.html -->
+<lint>
+    <issue id="FrequentlyChangedStateReadInComposition" severity="error" />
+    <issue id="ComposableLambdaParameterNaming" severity="error" />
+    <issue id="ComposableLambdaParameterPosition" severity="error" />
+    <issue id="ComposableNaming" severity="error" />
+    <issue id="MutableCollectionMutableState" severity="error" />
+    <issue id="ComposableModifierFactory" severity="error" />
+    <issue id="ModifierFactoryExtensionFunction" severity="error" />
+    <issue id="UnnecessaryComposedModifier" severity="error" />
+    <issue id="InvalidColorHexValue" severity="error" />
+    <issue id="MissingColorAlphaChannel" severity="error" />
+
+    <issue id="DuplicateStrings" severity="warning" />
+    <issue id="NewerVersionAvailable" severity="warning" />
+</lint>

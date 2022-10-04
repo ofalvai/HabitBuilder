@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 Olivér Falvai
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="onboarding_step_create_title">First habit</string>
+    <string name="onboarding_step_create_subtitle">Your habits will be listed here. Now, create your first.</string>
+    <string name="onboarding_step_longpress_title">A circle each day</string>
+    <string name="onboarding_step_longpress_subtitle">Mark the habit as completed by tapping and holding today\'s circle. You will see a nice streak of progress after a few days.</string>
+    <string name="onboarding_step_details_title">Habit details</string>
+    <string name="onboarding_step_details_subtitle">Tap on a habit to see stats and other details.</string>
+    <string name="onboarding_step_insights_title">Tap Insights on the bottom</string>
+    <string name="onboarding_step_insights_subtitle">See your progress once you create more habits and practice them every day. Use the charts and statistics to analyze your progress.</string>
+</resources>

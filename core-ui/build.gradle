@@ -1,0 +1,22 @@
+plugins {
+    id 'habittracker.android.library'
+    id 'habittracker.android.library.compose'
+}
+
+apply plugin: 'com.google.devtools.ksp'
+
+android {
+    namespace 'com.ofalvai.habittracker.core.ui'
+}
+
+dependencies {
+    api project(':core-model')
+
+    api libs.compose.ui.ui
+    implementation libs.compose.ui.googlefonts
+    implementation libs.androidx.lifecycle.runtime
+    implementation libs.kotlin.coroutines.core
+
+    implementation libs.showkase.annotation
+    kspDebug libs.showkase.processor
+}

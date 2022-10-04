@@ -1,0 +1,36 @@
+plugins {
+    id 'habittracker.android.library'
+    id 'habittracker.android.library.compose'
+}
+
+apply plugin: 'com.google.devtools.ksp'
+
+android {
+    namespace 'com.ofalvai.habittracker.feature.dashboard'
+}
+
+dependencies {
+    api project(':core-common')
+    api project(':core-database')
+    api project(':core-model')
+    implementation project(':core-ui')
+
+    implementation libs.kotlin.immutable
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.calendarview
+    implementation libs.reorderable
+
+    implementation libs.showkase.annotation
+    kspDebug libs.showkase.processor
+
+    testImplementation project(':core-testing')
+    testImplementation libs.junit
+    testImplementation libs.kotlin.coroutines.test
+    testImplementation libs.mockito.kotlin
+    testImplementation libs.turbine
+
+    androidTestImplementation project(':core-testing')
+    androidTestImplementation libs.androidx.espresso
+    androidTestImplementation libs.compose.ui.test
+    debugRuntimeOnly libs.compose.ui.test.manifest
+}

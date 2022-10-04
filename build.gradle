@@ -1,6 +1,3 @@
-import com.android.build.gradle.api.AndroidBasePlugin
-
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
         google()
@@ -11,19 +8,21 @@ buildscript {
         classpath libs.kotlin.gradle
         classpath libs.licensee
         classpath libs.bugsnag.gradle
-        classpath(libs.ruler)
+        classpath libs.ruler
     }
 }
 
 plugins {
-    id "com.osacky.doctor" version "0.7.3"
-    id "com.asarkar.gradle.build-time-tracker" version "3.0.1"
-    id "com.google.devtools.ksp" version "1.5.31-1.0.0"
-    id "org.gradle.android.cache-fix" version "2.4.4" apply false
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.gradle.doctor)
+    alias(libs.plugins.gradle.buildtimetracker)
+    alias(libs.plugins.gradle.cachefix) apply false // Applied in convention plugins
+    alias(libs.plugins.dependencyanalysis)
 }
 
 doctor {
     javaHome {
+        ensureJavaHomeIsSet = false
         failOnError.set(false)
     }
 }
@@ -32,7 +31,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://kotlin.bintray.com/kotlinx" } // kotlinx artifacts required by Compose Runtime
         maven { url "https://jitpack.io" }
     }
 }
@@ -41,8 +39,44 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-subprojects {
-    plugins.withType(AndroidBasePlugin) {
-        project.apply plugin: "org.gradle.android.cache-fix"
+dependencyAnalysis {
+    issues {
+        all {
+            ignoreKtx(true)
+            onUnusedDependencies {
+                severity("fail")
+                exclude(
+                        "androidx.compose.ui:ui-tooling", // Required for IDE previews
+                        "org.burnoutcrew.composereorderable:reorderable", // False positive
+                        "androidx.compose.ui:ui-test-manifest", // Required for device testing
+                )
+            }
+            onIncorrectConfiguration {
+                severity("fail")
+            }
+            onUnusedAnnotationProcessors {
+                severity("fail")
+            }
+            onRedundantPlugins {
+                severity("fail")
+            }
+        }
+    }
+    dependencies {
+        bundle("compose-ui") {
+            includeGroup("androidx.compose.ui")
+            includeGroup("androidx.compose.runtime")
+            includeDependency("androidx.compose.foundation:foundation")
+            includeDependency("androidx.compose.foundation:foundation-layout")
+        }
+        bundle("compose-animation") {
+            includeGroup("androidx.compose.animation")
+        }
+        bundle("compose-runtime") {
+            includeGroup("androidx.compose.runtime")
+        }
+        bundle("compose-material") {
+            includeGroup("androidx.compose.material")
+        }
     }
 }

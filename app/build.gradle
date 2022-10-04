@@ -1,56 +1,82 @@
+/*
+ * Copyright 2022 Olivér Falvai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id("com.spotify.ruler")
+    id 'com.spotify.ruler'
+    id 'habittracker.android.app'
 }
 
 apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'app.cash.licensee'
-apply plugin: 'jacoco'
 apply plugin: 'com.bugsnag.android.gradle'
 
 ext {
     PACKAGE_NAME = "com.ofalvai.habittracker"
-    VERSION_CODE = 1
-    VERSION_NAME = "0.1.0"
     API_KEY_BUGSNAG = "2e13a542ae3ed09ad42a5c82444925af"
+    URL_PRIVACY_POLICY = "https://habit-builder-97708.web.app/privacy-policy.html"
+    URL_SOURCE_CODE = "https://github.com/ofalvai/HabitTracker"
 }
 
-android {
-    compileSdk 31
+def useReleaseKeystore = rootProject.file("release/app-release.jks").exists()
 
+android {
+    namespace PACKAGE_NAME
     defaultConfig {
         applicationId PACKAGE_NAME
-        minSdk 21
-        targetSdk 30
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        javaCompileOptions {
-            ksp {
-                arg("room.incremental", "true")
-                arg("room.schemaLocation", "$projectDir/schemas".toString())
-            }
-        }
-
-        manifestPlaceholders = [api_key_bugsnag: "${API_KEY_BUGSNAG}"]
+        manifestPlaceholders += ["api_key_bugsnag": "${API_KEY_BUGSNAG}"]
+        buildConfigField("String", "URL_PRIVACY_POLICY", "\"$URL_PRIVACY_POLICY\"")
+        buildConfigField("String", "URL_SOURCE_CODE", "\"$URL_SOURCE_CODE\"")
     }
 
-    lintOptions {
-        enable "DuplicateStrings", "NewerVersionAvailable"
+    lint {
+        abortOnError true
+        ignoreTestSources true
+        checkDependencies true
+    }
+
+    signingConfigs {
+        release {
+            if (useReleaseKeystore) {
+                storeFile rootProject.file("release/app-release.jks")
+                storePassword System.getenv("RELEASE_STORE_PASSWORD")
+                keyAlias System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword System.getenv("RELEASE_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            testCoverageEnabled true
         }
 
         release {
-            signingConfig = debug.signingConfig
+            if (useReleaseKeystore) {
+                signingConfig signingConfigs.release
+            } else {
+                // Otherwise just use the debug keystore (this is mainly for PR CI builds)
+                signingConfig signingConfigs.debug
+            }
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -58,40 +84,27 @@ android {
         coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
-        useIR = true
-        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+        freeCompilerArgs += '-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'
     }
     buildFeatures {
+        buildConfig true
         compose true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.get()
+         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
-
     packagingOptions {
-        exclude "META-INF/licenses/**"
-        exclude "META-INF/AL2.0"
-        exclude "META-INF/LGPL2.1"
-        exclude "**/attach_hotspot_windows.dll"
+        jniLibs {
+            excludes += ['META-INF/licenses/**']
+        }
+        resources {
+            excludes += ['META-INF/licenses/**', 'META-INF/AL2.0', 'META-INF/LGPL2.1', '**/attach_hotspot_windows.dll']
+        }
     }
 
     testOptions {
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
-    }
-}
-
-jacoco {
-    toolVersion = "0.8.7"
-}
-
-afterEvaluate {
-    tasks.withType(Test) {
-        jacoco.excludes = ['jdk.internal.*']
+        animationsDisabled = true
     }
 }
 
@@ -102,112 +115,41 @@ ruler {
     sdkVersion.set(27)
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-    def fileFilter = [
-            '**/R.class',
-            '**/R$*.class',
-            '**/Manifest*.*',
-            'android/**/*.*',
-            '**/BuildConfig.*',
-            '**/*$ViewBinder*.*',
-            '**/*$ViewInjector*.*',
-            '**/Lambda$*.class',
-            '**/Lambda.class',
-            '**/*Lambda.class',
-            '**/*Lambda*.class',
-            '**/*Module.*',
-            '**/*Dagger*.*',
-            '**/*_MembersInjector.class',
-            '**/Dagger*Component*.class',
-            '**/Dagger*Subcomponent*.class',
-            '**/*Subcomponent$Builder.class',
-            '**/*Module_*Factory.class',
-            '**/*Dao_Impl.*'
-    ]
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/app_classes/debug").matching {
-        exclude fileFilter
-    }
-
-    sourceDirectories.setFrom(files([
-            android.sourceSets.main.java.srcDirs,
-            "$project.projectDir/src/main/java"
-    ]))
-    classDirectories.setFrom(files([debugTree]))
-    executionData.setFrom(fileTree(dir: "$buildDir", includes: [
-            "outputs/unit_test_code_coverage/debugUnitTest/*.exec",
-            "outputs/code_coverage/debugAndroidTest/connected/*coverage.ec"
-    ]))
-}
-
 licensee {
     allow("Apache-2.0")
     allow("MIT")
-    allowDependency('org.jetbrains', 'annotations', '16.0.3') {
-        because 'Apache-2.0, but typo in license URL fixed in newer versions'
-    }
-    allowDependency("com.github.kizitonwose", "CalendarView", "1.0.4") {
+    allowDependency("com.github.kizitonwose", "CalendarView", "1.1.0") {
         because "Artifact declares no licenses, but it's MIT according to GitHub"
     }
 }
 
-// https://www.zacsweers.dev/kapts-hidden-test-costs/
-tasks
-    .matching {
-        it.name.startsWith("ksp") && it.name.endsWith("TestKotlin")
-    }
-    .configureEach { it.enabled = false }
-
-kotlin {
-    sourceSets.all {
-        languageSettings {
-            languageVersion = '1.6' // Exhaustive when statements
-        }
-    }
-}
-
 dependencies {
+    implementation project(':core-common')
+    implementation project(':core-database')
+    implementation project(':core-ui')
+    implementation project(':feature-dashboard')
+    implementation project(':feature-insights')
+    implementation project(':feature-misc')
+
     coreLibraryDesugaring libs.android.tools.desugar
 
     implementation libs.bundles.compose
+    implementation libs.compose.ui.toolingpreview
+    debugImplementation libs.compose.ui.tooling
+
     implementation libs.androidx.navigation.compose
-    implementation libs.androidx.activity.compose
 
-    implementation libs.androidx.lifecycle.runtime
+    implementation libs.androidx.room.runtime
 
-    implementation libs.androidx.room.ktx
-    ksp libs.androidx.room.compiler
-
-    implementation libs.timber
-    implementation libs.calendarview
-    implementation libs.accompanist.insets
+    implementation libs.logcat
     implementation libs.accompanist.systemuicontroller
-
-    implementation (libs.bugsnag.runtime) {
-        exclude group: "com.bugsnag", module: "bugsnag-plugin-android-anr"
-        exclude group: "com.bugsnag", module: "bugsnag-plugin-android-ndk"
-    }
+    implementation libs.accompanist.navigation
 
     // Required by layout inspector
-    debugImplementation libs.kotlin.reflect
+    debugRuntimeOnly libs.kotlin.reflect
 
-    testImplementation libs.junit
+    debugImplementation libs.showkase.full
+    kspDebug libs.showkase.processor
+
     testImplementation libs.kotlin.coroutines.test
-    testImplementation libs.mockito.kotlin
-    testImplementation libs.turbine
-
-    androidTestImplementation libs.kotlin.coroutines.test
-    androidTestImplementation libs.androidx.junit.ext
-    androidTestImplementation libs.androidx.espresso
-    androidTestImplementation libs.androidx.core.testing
-    androidTestImplementation libs.androidx.test.rules
-    androidTestImplementation libs.mockito.kotlin
-    androidTestImplementation libs.mockito.android
-    androidTestImplementation libs.turbine
-    androidTestImplementation libs.compose.ui.test
 }

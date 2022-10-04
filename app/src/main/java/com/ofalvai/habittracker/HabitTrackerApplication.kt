@@ -17,7 +17,8 @@
 package com.ofalvai.habittracker
 
 import android.app.Application
-import timber.log.Timber
+import logcat.AndroidLogcatLogger
+import logcat.LogPriority
 
 class HabitTrackerApplication : Application() {
 
@@ -32,8 +33,6 @@ class HabitTrackerApplication : Application() {
 
         Dependencies.telemetry.initialize()
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+        AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
     }
 }

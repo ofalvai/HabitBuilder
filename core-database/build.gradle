@@ -1,0 +1,33 @@
+plugins {
+    id 'habittracker.android.library'
+}
+
+apply plugin: 'com.google.devtools.ksp'
+
+android {
+    namespace 'com.ofalvai.habittracker.core.database'
+
+    defaultConfig {
+        javaCompileOptions {
+            ksp {
+                arg("room.incremental", "true")
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
+    }
+}
+
+dependencies {
+    api libs.androidx.room.runtime
+    api libs.kotlin.coroutines.core
+    implementation libs.androidx.room.ktx
+    ksp libs.androidx.room.compiler
+
+    testImplementation libs.junit
+
+    androidTestImplementation project(':core-testing')
+    androidTestImplementation libs.kotlin.coroutines.test
+    androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.androidx.junit.ext
+    androidTestImplementation libs.turbine
+}

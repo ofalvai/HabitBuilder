@@ -14,11 +14,7 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ofalvai.habittracker">
-
-    <uses-permission android:name="android.permission.VIBRATE" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:name=".HabitTrackerApplication"
@@ -27,12 +23,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/HabitTrackerTheme"
-        tools:ignore="AllowBackup">
+        android:theme="@style/HabitTrackerTheme">
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

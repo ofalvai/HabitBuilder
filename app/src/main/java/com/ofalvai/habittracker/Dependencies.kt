@@ -18,37 +18,40 @@
 
 package com.ofalvai.habittracker
 
-import android.content.Context
 import android.preference.PreferenceManager
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.room.Room
-import com.ofalvai.habittracker.persistence.AppDatabase
-import com.ofalvai.habittracker.persistence.HabitDao
-import com.ofalvai.habittracker.persistence.MIGRATIONS
-import com.ofalvai.habittracker.telemetry.Telemetry
-import com.ofalvai.habittracker.telemetry.TelemetryImpl
-import com.ofalvai.habittracker.ui.AppPreferences
-import com.ofalvai.habittracker.ui.dashboard.AddHabitViewModel
-import com.ofalvai.habittracker.ui.dashboard.DashboardViewModel
-import com.ofalvai.habittracker.ui.dashboard.OnboardingManager
-import com.ofalvai.habittracker.ui.habitdetail.HabitDetailViewModel
-import com.ofalvai.habittracker.ui.insights.InsightsViewModel
-import com.ofalvai.habittracker.ui.settings.LicensesViewModel
-import timber.log.Timber
+import com.ofalvai.habittracker.core.common.AndroidStreamOpener
+import com.ofalvai.habittracker.core.common.AppPreferences
+import com.ofalvai.habittracker.core.common.OnboardingManager
+import com.ofalvai.habittracker.core.common.TelemetryImpl
+import com.ofalvai.habittracker.core.database.AppDatabase
+import com.ofalvai.habittracker.core.database.MIGRATIONS
+import com.ofalvai.habittracker.feature.dashboard.repo.ActionRepository
+import com.ofalvai.habittracker.feature.dashboard.ui.addhabit.AddHabitViewModel
+import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.DashboardViewModel
+import com.ofalvai.habittracker.feature.dashboard.ui.habitdetail.HabitDetailViewModel
+import com.ofalvai.habittracker.feature.insights.ui.InsightsViewModel
+import com.ofalvai.habittracker.feature.misc.archive.ArchiveViewModel
+import com.ofalvai.habittracker.feature.misc.export.ExportViewModel
+import com.ofalvai.habittracker.feature.misc.settings.AppInfo
+import com.ofalvai.habittracker.feature.misc.settings.LicensesViewModel
+import com.ofalvai.habittracker.feature.misc.settings.SettingsViewModel
+import logcat.logcat
 
 object Dependencies {
 
     private val appContext = HabitTrackerApplication.INSTANCE.applicationContext
 
-    private val db = Room.databaseBuilder(
-        appContext,
-        AppDatabase::class.java,
-        "app-db"
-    )
+    private val db = Room.databaseBuilder(appContext, AppDatabase::class.java, "app-db")
         .setQueryCallback(::roomQueryLogCallback, Runnable::run)
         .addMigrations(*MIGRATIONS)
         .build()
+
+    val dao = db.habitDao()
+
+    private val actionRepository = ActionRepository(dao)
 
     private val sharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(HabitTrackerApplication.INSTANCE)
@@ -57,44 +60,37 @@ object Dependencies {
 
     private val onboardingManager = OnboardingManager(appPreferences)
 
-    val telemetry = TelemetryImpl(appContext)
+    val telemetry = TelemetryImpl(appContext, appPreferences)
 
-    val viewModelFactory = AppViewModelFactory(db.habitDao(), appPreferences, appContext, telemetry, onboardingManager)
-}
+    private val streamOpener = AndroidStreamOpener(appContext)
 
-private fun roomQueryLogCallback(sqlQuery: String, bindArgs: List<Any>) {
-    Timber.tag("RoomQueryLog")
-    Timber.d("Query: %s", sqlQuery)
-    if (bindArgs.isNotEmpty()) {
-        Timber.tag("RoomQueryLog")
-        Timber.d("Args: %s", bindArgs.toString())
+    private val appInfo = AppInfo(
+        versionName = BuildConfig.VERSION_NAME,
+        buildType = BuildConfig.BUILD_TYPE,
+        appId = BuildConfig.APPLICATION_ID,
+        urlPrivacyPolicy = BuildConfig.URL_PRIVACY_POLICY,
+        urlSourceCode = BuildConfig.URL_SOURCE_CODE
+    )
+
+    val viewModelFactory = viewModelFactory {
+        initializer { AddHabitViewModel(dao, onboardingManager, telemetry) }
+        initializer {
+            DashboardViewModel(dao, actionRepository, appPreferences, telemetry, onboardingManager)
+        }
+        initializer { HabitDetailViewModel(dao, actionRepository, telemetry, onboardingManager) }
+        initializer { InsightsViewModel(dao, telemetry, onboardingManager) }
+        initializer { LicensesViewModel(appContext) }
+        initializer { ArchiveViewModel(dao, telemetry) }
+        initializer {
+            SettingsViewModel(appPreferences, appInfo)
+        }
+        initializer { ExportViewModel(streamOpener, dao, telemetry) }
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class AppViewModelFactory(
-    private val habitDao: HabitDao,
-    private val appPreferences: AppPreferences,
-    private val appContext: Context,
-    private val telemetry: Telemetry,
-    private val onboardingManager: OnboardingManager
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (AddHabitViewModel::class.java.isAssignableFrom(modelClass)) {
-            return AddHabitViewModel(habitDao, onboardingManager) as T
-        }
-        if (DashboardViewModel::class.java.isAssignableFrom(modelClass)) {
-            return DashboardViewModel(habitDao, appPreferences, telemetry, onboardingManager) as T
-        }
-        if (HabitDetailViewModel::class.java.isAssignableFrom(modelClass)) {
-            return HabitDetailViewModel(habitDao, telemetry, onboardingManager) as T
-        }
-        if (InsightsViewModel::class.java.isAssignableFrom(modelClass)) {
-            return InsightsViewModel(habitDao, telemetry, onboardingManager) as T
-        }
-        if (LicensesViewModel::class.java.isAssignableFrom(modelClass)) {
-            return LicensesViewModel(appContext) as T
-        }
-        throw IllegalArgumentException("No matching ViewModel for ${modelClass.canonicalName}")
+private fun roomQueryLogCallback(sqlQuery: String, bindArgs: List<Any>) {
+    logcat("RoomQueryLog") { "Query: $sqlQuery" }
+    if (bindArgs.isNotEmpty()) {
+        logcat("RoomQueryLog") { "Args: $bindArgs" }
     }
 }
