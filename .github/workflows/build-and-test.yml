@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      CACHE_DEBUG_ENABLED: true
+      CACHE_DEBUG_ENABLED: false
 
     steps:
       - name: Checkout
