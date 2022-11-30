@@ -30,7 +30,6 @@ dependencies {
     testImplementation libs.turbine
 
     androidTestImplementation project(':core-testing')
-    androidTestImplementation libs.androidx.espresso
     androidTestImplementation libs.compose.ui.test
     debugRuntimeOnly libs.compose.ui.test.manifest
 }
