@@ -131,7 +131,7 @@ dependencies {
     implementation project(':feature-insights')
     implementation project(':feature-misc')
 
-    coreLibraryDesugaring libs.android.tools.desugar
+    coreLibraryDesugaring libs.gradle.android.desugar
 
     implementation libs.bundles.compose
     implementation libs.compose.ui.toolingpreview

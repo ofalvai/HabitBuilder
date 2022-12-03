@@ -43,7 +43,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
                 defaultConfig {
                     minSdk = Constants.MIN_SDK
-                    targetSdk = Constants.TARGET_SDK
 
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 }
@@ -65,7 +64,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             dependencies {
-                add("coreLibraryDesugaring", libs.findLibrary("android.tools.desugar").get())
+                add("coreLibraryDesugaring", libs.findLibrary("gradle.android.desugar").get())
             }
         }
     }
