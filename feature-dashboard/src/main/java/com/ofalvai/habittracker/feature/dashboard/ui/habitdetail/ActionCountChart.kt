@@ -23,8 +23,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -79,9 +79,9 @@ fun ActionCountChart(
                             modifier = Modifier.width(BarWidth).padding(top = 8.dp, bottom = 4.dp),
                             text = value.toString(),
                             textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.caption
+                            style = MaterialTheme.typography.bodySmall
                         )
-                        val background = if (isEven) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant
+                        val background = if (isEven) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                         Box(
                             modifier = Modifier
                                 .background(background, shape = RoundedCornerShape(4.dp))
@@ -93,7 +93,7 @@ fun ActionCountChart(
                         modifier = Modifier.width(BarWidth).padding(top = 4.dp),
                         text = chartItem.label,
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.caption
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }

@@ -16,13 +16,14 @@
 
 package com.ofalvai.habittracker.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -32,53 +33,37 @@ import com.ofalvai.habittracker.R
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 
 @Composable
-fun AppBottomNavigation(navController: NavController) {
-    // Recreating the BottomNavigation() composable because window insets and elevation don't play
-    // nice together. We need to apply a background (behind the navbar), padding, and elevation
-    // in the correct order. Otherwise the elevation bottom shadow will be rendered on top of the
-    // background behind the navbar.
-    Surface(
-        color = MaterialTheme.colors.surface,
-        elevation = 8.dp,
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .height(56.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
+fun AppNavigationBar(navController: NavController) {
+    NavigationBar {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
 
-            AppBottomNavigationItem(
-                rootScreen = Destination.Dashboard,
-                content = { Icon(CoreIcons.Habits, stringResource(R.string.tab_dashboard)) },
-                label = stringResource(R.string.tab_dashboard),
-                currentDestination = currentDestination,
-                navController = navController
-            )
-            AppBottomNavigationItem(
-                rootScreen = Destination.Insights,
-                content = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
-                label = stringResource(R.string.tab_insights),
-                currentDestination = currentDestination,
-                navController = navController
-            )
-        }
+        AppNavigationItem(
+            rootScreen = Destination.Dashboard,
+            content = { Icon(CoreIcons.Habits, stringResource(R.string.tab_dashboard)) },
+            label = stringResource(R.string.tab_dashboard),
+            currentDestination = currentDestination,
+            navController = navController
+        )
+        AppNavigationItem(
+            rootScreen = Destination.Insights,
+            content = { Icon(AppIcons.Insights, stringResource(R.string.tab_insights)) },
+            label = stringResource(R.string.tab_insights),
+            currentDestination = currentDestination,
+            navController = navController
+        )
     }
 }
 
 @Composable
-private fun RowScope.AppBottomNavigationItem(
+private fun RowScope.AppNavigationItem(
     rootScreen: Screen,
     label: String,
     currentDestination: NavDestination?,
     navController: NavController,
     content: @Composable () -> Unit
 ) {
-    BottomNavigationItem(
-        icon = content,
+    NavigationBarItem(
         selected = currentDestination?.hierarchy?.any { it.route == rootScreen.route } == true,
         onClick = {
             navController.navigate(rootScreen.route) {
@@ -91,6 +76,7 @@ private fun RowScope.AppBottomNavigationItem(
                 launchSingleTop = true
             }
         },
-        label = { Text(label) }
+        label = { Text(label) },
+        icon = content,
     )
 }

@@ -18,17 +18,38 @@ package com.ofalvai.habittracker.feature.misc.archive
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
+import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
 import com.ofalvai.habittracker.core.ui.component.ConfirmationDialog
 import com.ofalvai.habittracker.core.ui.component.ContentWithPlaceholder
 import com.ofalvai.habittracker.core.ui.component.ErrorView
@@ -44,7 +66,6 @@ import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.feature.misc.R
 import com.ofalvai.habittracker.feature.misc.archive.model.ArchivedHabit
 import kotlinx.collections.immutable.ImmutableList
@@ -56,7 +77,7 @@ import com.ofalvai.habittracker.core.ui.R as coreR
 @Composable
 fun ArchiveScreen(
     vmFactory: ViewModelProvider.Factory,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     navigateBack: () -> Unit
 ) {
     val viewModel = viewModel<ArchiveViewModel>(factory = vmFactory)
@@ -72,7 +93,7 @@ fun ArchiveScreen(
             ArchiveEvent.DeleteError -> errorDelete
         }
         snackbarCoroutineScope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(message)
+            snackbarHostState.showSnackbar(message)
         }
     }
 
@@ -123,17 +144,14 @@ private fun ArchiveScreen(
     )
 
 
-    Column(Modifier.background(MaterialTheme.colors.background)) {
-        TopAppBar(
-            modifier = Modifier.statusBarsPadding(),
+    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
+        AppDefaultAppBar(
             title = { Text(stringResource(R.string.archive_title)) },
             navigationIcon = {
                 IconButton(onClick = onBack) {
                     Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
                 }
-            },
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp
+            }
         )
 
         when (habits) {
@@ -146,8 +164,7 @@ private fun ArchiveScreen(
             }
             Result.Loading -> {}
             is Result.Failure -> ErrorView(
-                label = stringResource(R.string.archive_load_error),
-                modifier = Modifier.statusBarsPadding()
+                label = stringResource(R.string.archive_load_error)
             )
         }
     }
@@ -184,16 +201,16 @@ private fun ArchivedHabitItem(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceVariant, shape = MaterialTheme.shapes.medium)
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
             Text(
                 text = habit.name,
-                style = AppTextStyle.habitSubtitle
+                style = AppTextStyle.habitTitle
             )
             HabitSummary(habit)
             Row(Modifier.padding(top = 16.dp)) {
-                OutlinedButton(onClick = { onUnarchive(habit) }) {
+                Button(onClick = { onUnarchive(habit) }) {
                     Text(stringResource(R.string.archive_action_unarchive))
                 }
                 Spacer(Modifier.width(16.dp))
@@ -224,7 +241,7 @@ private fun HabitSummary(habit: ArchivedHabit) {
 
     Text(
         text = mergedLabel,
-        style = MaterialTheme.typography.subtitle2
+        style = MaterialTheme.typography.bodyMedium
     )
 }
 
@@ -240,7 +257,7 @@ private fun EmptyView() {
         Text(
             modifier = Modifier.fillMaxWidth().padding(32.dp),
             text = stringResource(R.string.archive_empty),
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )
     }

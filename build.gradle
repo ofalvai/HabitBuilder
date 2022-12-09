@@ -53,6 +53,12 @@ dependencyAnalysis {
             }
             onIncorrectConfiguration {
                 severity("fail")
+                exclude(
+                        // Material3 is declared as an `api` dependency in the convention plugin,
+                        // which is true for 99% of the modules (since at least a Compose screen is
+                        // part of the public API)
+                        "androidx.compose.material3:material3"
+                )
             }
             onUnusedAnnotationProcessors {
                 severity("fail")

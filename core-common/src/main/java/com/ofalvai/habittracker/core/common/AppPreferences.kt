@@ -17,6 +17,8 @@
 package com.ofalvai.habittracker.core.common
 
 import android.content.SharedPreferences
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 private const val KEY_DASHBOARD_CONFIG = "dashboard_config"
 private const val KEY_ONBOARDING_FIRST_HABIT_CREATED = "onboarding_first_habit_created"
@@ -24,6 +26,7 @@ private const val KEY_ONBOARDING_FIRST_ACTION_COMPLETED = "onboarding_first_acti
 private const val KEY_ONBOARDING_HABIT_DETAILS_OPENED = "onboarding_habit_details_opened"
 private const val KEY_ONBOARDING_INSIGHTS_OPENED = "onboarding_insights_opened"
 private const val KEY_CRASH_REPORTING = "crash_reporting"
+private const val KEY_DYNAMIC_COLOR = "dynamic_color"
 
 class AppPreferences(
     private val sharedPreferences: SharedPreferences
@@ -55,4 +58,16 @@ class AppPreferences(
     var crashReportingEnabled: Boolean
         get() = sharedPreferences.getBoolean(KEY_CRASH_REPORTING, true)
         set(value) = sharedPreferences.edit().putBoolean(KEY_CRASH_REPORTING, value).apply()
+    
+    // This preference is observable so that the app theme can be recomposed instantly
+    // TODO: it would be nice to migrate to DataStore, which supports observability out of the box
+    private val _dynamicColorEnabled = MutableStateFlow(sharedPreferences.getBoolean(KEY_DYNAMIC_COLOR, false))
+    val dynamicColorEnabled: StateFlow<Boolean> = _dynamicColorEnabled
+    
+    fun setDynamicColorEnabled(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean(KEY_DYNAMIC_COLOR, enabled).apply()
+        _dynamicColorEnabled.value = enabled
+    }
+
+
 }

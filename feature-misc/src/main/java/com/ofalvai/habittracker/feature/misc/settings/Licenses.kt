@@ -18,19 +18,31 @@ package com.ofalvai.habittracker.feature.misc.settings
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -41,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
 import com.ofalvai.habittracker.feature.misc.R
 import kotlinx.collections.immutable.ImmutableList
 import com.ofalvai.habittracker.core.ui.R as coreR
@@ -50,17 +63,14 @@ fun LicensesScreen(vmFactory: ViewModelProvider.Factory, navigateBack: () -> Uni
     val viewModel: LicensesViewModel = viewModel(factory = vmFactory)
     val dependencies by viewModel.dependencies.collectAsState()
 
-    Column {
-        TopAppBar(
-            modifier = Modifier.statusBarsPadding(),
+    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
+        AppDefaultAppBar(
             title = { Text(stringResource(R.string.licenses_title)) },
             navigationIcon = {
                 IconButton(onClick = navigateBack) {
                     Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
                 }
-            },
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp
+            }
         )
 
         DependencyList(dependencies)
@@ -83,7 +93,7 @@ private fun DependencyList(dependencies: ImmutableList<Dependency>) {
         item {
             Text(
                 text = stringResource(R.string.licenses_description),
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
             )
         }
@@ -101,13 +111,13 @@ private fun DependencyList(dependencies: ImmutableList<Dependency>) {
                     Column {
                         Text(
                             text = dependency.group,
-                            style = MaterialTheme.typography.caption.copy(
+                            style = MaterialTheme.typography.bodySmall.copy(
                                 fontFamily = FontFamily.Monospace
                             )
                         )
                         Text(
                             text = dependency.artifact,
-                            style = MaterialTheme.typography.body2.copy(
+                            style = MaterialTheme.typography.bodyMedium.copy(
                                 fontFamily = FontFamily.Monospace,
                                 fontWeight = FontWeight.Bold
                             )
@@ -115,7 +125,7 @@ private fun DependencyList(dependencies: ImmutableList<Dependency>) {
                     }
                     Text(
                         text = dependency.license?.name ?: stringResource(R.string.licenses_unknown_license),
-                        style = MaterialTheme.typography.caption,
+                        style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.End,
                         modifier = Modifier.align(Alignment.CenterVertically).fillMaxWidth()
                     )
@@ -124,7 +134,7 @@ private fun DependencyList(dependencies: ImmutableList<Dependency>) {
                 AnimatedVisibility(visible = isExpanded && dependency.url != null) {
                     Text(
                         text = dependency.url!!,
-                        style = MaterialTheme.typography.caption.copy(
+                        style = MaterialTheme.typography.bodySmall.copy(
                             fontFamily = FontFamily.Monospace
                         ),
                         textDecoration = TextDecoration.Underline,

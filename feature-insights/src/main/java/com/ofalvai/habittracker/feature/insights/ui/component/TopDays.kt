@@ -16,11 +16,18 @@
 
 package com.ofalvai.habittracker.feature.insights.ui.component
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -99,14 +106,14 @@ private fun TopDaysRow(
             modifier = Modifier.weight(0.50f).padding(start = 4.dp),
             overflow = TextOverflow.Ellipsis,
             softWrap = false,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyMedium,
         )
 
         Text(
             text = item.dayLabel,
             modifier = Modifier.weight(0.30f),
             textAlign = TextAlign.End,
-            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
             overflow = TextOverflow.Ellipsis,
             softWrap = false
         )
@@ -116,7 +123,7 @@ private fun TopDaysRow(
         Text(
             text = item.count.toString(),
             textAlign = TextAlign.End,
-            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier
         )
 

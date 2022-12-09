@@ -19,12 +19,25 @@ package com.ofalvai.habittracker.feature.dashboard.ui.dashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -35,9 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.ui.component.HorizontalGrid
+import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.gray1
-import com.ofalvai.habittracker.core.ui.theme.gray2
 import com.ofalvai.habittracker.feature.dashboard.R
 import com.ofalvai.habittracker.feature.dashboard.ui.model.DashboardConfig
 import com.ofalvai.habittracker.core.ui.R as coreR
@@ -56,7 +68,7 @@ fun DashboardConfigDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colors.background)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 DialogContent(config, onConfigSelected, onDismissed)
             }
@@ -75,7 +87,7 @@ private fun DialogContent(
     Column(Modifier.padding(16.dp)) {
         Text(
             text = stringResource(R.string.dashboard_config_dialog_title),
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.titleLarge
         )
         Spacer(Modifier.height(32.dp))
         ConfigOption(
@@ -88,7 +100,7 @@ private fun DialogContent(
             Column {
                 Text(
                     text = stringResource(R.string.dashboard_config_dialog_fiveday),
-                    style = MaterialTheme.typography.subtitle2,
+                    style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Spacer(Modifier.height(8.dp))
@@ -106,7 +118,7 @@ private fun DialogContent(
             Column {
                 Text(
                     text = stringResource(R.string.dashboard_config_dialog_compact),
-                    style = MaterialTheme.typography.subtitle2,
+                    style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Spacer(Modifier.height(8.dp))
@@ -134,7 +146,7 @@ private fun ConfigOption(
         .then(
             if (isSelected) Modifier.border(
                 width = 2.dp,
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.medium
             ) else Modifier
         )
@@ -152,7 +164,7 @@ private fun FiveDayOutline() {
             .border(
                 width = 1.dp,
                 shape = MaterialTheme.shapes.medium,
-                color = MaterialTheme.colors.gray2
+                color = LocalAppColors.current.gray2
             )
             .padding(12.dp)
     ) {
@@ -179,7 +191,7 @@ private fun FiveDayOutlineCircle(toggled: Boolean) {
             .then(
                 if (toggled) Modifier.placeholderBackground() else Modifier.border(
                     1.dp,
-                    MaterialTheme.colors.gray2,
+                    LocalAppColors.current.gray2,
                     CircleShape
                 )
             )
@@ -206,7 +218,7 @@ private fun CompactOutline() {
 }
 
 private fun Modifier.placeholderBackground() = this.composed {
-    this.background(MaterialTheme.colors.gray2)
+    this.background(LocalAppColors.current.gray2)
 }
 
 @Composable
@@ -216,10 +228,10 @@ private fun CompactOutlineBox(toggled: Boolean) {
             .aspectRatio(1f)
             .then(
                 if (toggled) Modifier.placeholderBackground() else Modifier.background(
-                    MaterialTheme.colors.gray1
+                    LocalAppColors.current.gray1
                 )
             )
-            .border(1.dp, MaterialTheme.colors.background)
+            .border(1.dp, MaterialTheme.colorScheme.background)
     )
 }
 

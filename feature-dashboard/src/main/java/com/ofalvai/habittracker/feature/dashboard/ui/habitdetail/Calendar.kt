@@ -22,7 +22,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
@@ -44,7 +44,7 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.ZoneId
 import java.time.temporal.WeekFields
-import java.util.*
+import java.util.Locale
 
 @Composable
 fun HabitCalendar(
@@ -54,8 +54,8 @@ fun HabitCalendar(
     onDayToggle: (LocalDate, Action) -> Unit
 ) {
     val context = LocalContext.current
-    val textColor = MaterialTheme.colors.onSurface
-    val textColorActive = MaterialTheme.colors.surface
+    val textColor = MaterialTheme.colorScheme.onSurface
+    val textColorActive = MaterialTheme.colorScheme.inverseOnSurface
 
     val view = remember {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek

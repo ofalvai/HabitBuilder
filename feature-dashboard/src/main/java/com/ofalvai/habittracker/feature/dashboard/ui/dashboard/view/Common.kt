@@ -27,10 +27,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -105,7 +109,6 @@ private fun CreateHabitButton(
         OutlinedButton(
             modifier = Modifier.padding(16.dp),
             onClick = onClick,
-            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colors.background)
         ) {
             Icon(Icons.Rounded.Add, null, Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
@@ -141,12 +144,12 @@ private fun DayLabel(
         Text(
             text = day.dayOfMonth.toString(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.bodySmall
         )
         Text(
             text = day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
         )
     }
 }

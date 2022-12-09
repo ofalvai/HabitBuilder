@@ -16,13 +16,16 @@
 
 package com.ofalvai.habittracker.feature.insights.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,7 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ofalvai.habittracker.core.model.HabitId
-import com.ofalvai.habittracker.core.ui.component.AppBar
+import com.ofalvai.habittracker.core.ui.component.AppBarOverflowMenuAction
+import com.ofalvai.habittracker.core.ui.component.AppDefaultRootAppBar
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.feature.insights.ui.component.Heatmap
@@ -49,7 +53,7 @@ fun InsightsScreen(
 ) {
     val viewModel: InsightsViewModel = viewModel(factory = vmFactory)
 
-    Column(Modifier.statusBarsPadding()) {
+    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         InsightsAppBar(
             onSettingsClick = navigateToSettings,
             onArchiveClick = navigateToArchive,
@@ -77,29 +81,31 @@ private fun InsightsAppBar(
     onArchiveClick: () -> Unit,
     onExportClick: () -> Unit
 ) {
-    AppBar(
+    AppDefaultRootAppBar(
         title = {
             Text(
                 text = stringResource(insightsR.string.insights_screen_title),
                 style = AppTextStyle.screenTitle
             )
         },
-        dropdownMenuItems = {
-            DropdownMenuItem(onClick = onArchiveClick) {
-                Icon(painter = CoreIcons.Archive, contentDescription = null)
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(stringResource(coreR.string.menu_archive))
+        actions = {
+            AppBarOverflowMenuAction {
+                DropdownMenuItem(
+                    onClick = onArchiveClick,
+                    text = { Text(stringResource(coreR.string.menu_archive)) },
+                    leadingIcon = { Icon(painter = CoreIcons.Archive, contentDescription = null) }
+                )
+                DropdownMenuItem(
+                    onClick = onExportClick,
+                    text = { Text(stringResource(coreR.string.menu_export)) },
+                    leadingIcon = { Icon(painter = CoreIcons.Export, contentDescription = null) }
+                )
+                DropdownMenuItem(
+                    onClick = onSettingsClick,
+                    text = { Text(stringResource(coreR.string.menu_settings)) },
+                    leadingIcon = { Icon(painter = CoreIcons.Settings, contentDescription = null) }
+                )
             }
-            DropdownMenuItem(onClick = onExportClick) {
-                Icon(painter = CoreIcons.Export, contentDescription = null)
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(stringResource(coreR.string.menu_export))
-            }
-            DropdownMenuItem(onClick = onSettingsClick) {
-                Icon(painter = CoreIcons.Settings, contentDescription = null)
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(stringResource(coreR.string.menu_settings))
-            }
-        }
+        },
     )
 }
