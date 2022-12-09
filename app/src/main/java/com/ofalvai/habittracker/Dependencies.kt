@@ -56,7 +56,7 @@ object Dependencies {
     private val sharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(HabitTrackerApplication.INSTANCE)
 
-    private val appPreferences = AppPreferences(sharedPreferences)
+    val appPreferences = AppPreferences(sharedPreferences)
 
     private val onboardingManager = OnboardingManager(appPreferences)
 

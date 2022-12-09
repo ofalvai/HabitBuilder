@@ -45,7 +45,9 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("api", libs.findBundle("compose").get())
+                add("api", libs.findLibrary("compose.material3").get())
+                add("implementation", libs.findLibrary("compose.ui.ui").get())
+                add("implementation", libs.findLibrary("compose.animation").get())
                 add("implementation", libs.findLibrary("compose.ui.toolingpreview").get())
                 add("debugImplementation", libs.findLibrary("compose.ui.tooling").get())
                 add("implementation", libs.findLibrary("showkase.annotation").get())

@@ -16,7 +16,10 @@
 
 package com.ofalvai.habittracker.core.ui.component
 
-import androidx.compose.material.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ofalvai.habittracker.core.ui.R
@@ -35,30 +38,17 @@ fun ConfirmationDialog(
         AlertDialog(
             onDismissRequest = { onDismiss() },
             confirmButton = {
-                TextButton(
-                    onClick = onConfirm,
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.error)
-                ) {
+                FilledTonalButton(onClick = onConfirm) {
                     Text(text = confirmText)
                 }
             },
             dismissButton = {
-                TextButton(onClick = { onDismiss() }) {
+                TextButton(onClick = onDismiss) {
                     Text(text = dismissText)
                 }
             },
-            title = {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.h6
-                )
-            },
-            text = {
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.body1
-                )
-            }
+            title = { Text(text = title) },
+            text = { Text(text = description) }
         )
     }
 }

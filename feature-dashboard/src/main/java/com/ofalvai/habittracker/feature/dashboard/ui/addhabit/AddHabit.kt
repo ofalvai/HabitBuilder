@@ -16,23 +16,27 @@
 
 package com.ofalvai.habittracker.feature.dashboard.ui.addhabit
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -42,12 +46,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
 import com.ofalvai.habittracker.core.ui.component.HabitColorPicker
 import com.ofalvai.habittracker.core.ui.component.TextFieldError
 import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.feature.dashboard.R
+import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.Suggestions
 import kotlinx.collections.immutable.ImmutableList
 import com.ofalvai.habittracker.core.ui.R as coreR
 
@@ -59,12 +64,13 @@ fun AddHabitScreen(vmFactory: ViewModelProvider.Factory, navigateBack: () -> Uni
 
     val onSave: (Habit) -> Unit = { viewModel.addHabit(it) }
 
-    Column(Modifier.statusBarsPadding().verticalScroll(rememberScrollState())) {
+    Column(Modifier.verticalScroll(rememberScrollState())) {
         AddHabitAppBar(onBack = navigateBack)
         AddHabitForm(onSave)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddHabitForm(
     onSave: (Habit) -> Unit
@@ -114,7 +120,7 @@ fun AddHabitForm(
             )
         }
 
-        Suggestions(habits = com.ofalvai.habittracker.feature.dashboard.ui.dashboard.Suggestions.habits, onSelect = {
+        Suggestions(habits = Suggestions.habits, onSelect = {
             name = it
             nameFocusRequester.requestFocus()
         })
@@ -133,7 +139,7 @@ fun AddHabitForm(
         Text(
             modifier = Modifier.padding(horizontal = 32.dp),
             text = stringResource(R.string.addhabit_notes_description),
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.bodySmall
         )
 
         HabitColorPicker(color = color, onColorPick = { color = it })
@@ -141,7 +147,6 @@ fun AddHabitForm(
         Button(
             modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
             onClick = onSaveClick,
-            elevation = ButtonDefaults.elevation(defaultElevation = 0.dp, pressedElevation = 0.dp)
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -151,6 +156,7 @@ fun AddHabitForm(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Suggestions(habits: ImmutableList<String>, onSelect: (String) -> Unit) {
     LazyRow(
@@ -159,45 +165,24 @@ private fun Suggestions(habits: ImmutableList<String>, onSelect: (String) -> Uni
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(habits) {
-            SuggestionChip(habit = it, onClick = { onSelect(it) })
+            SuggestionChip(
+                onClick = { onSelect(it) },
+                label = { Text(it) }
+            )
         }
     }
 }
 
 @Composable
 private fun AddHabitAppBar(onBack: () -> Unit) {
-    TopAppBar(
+    AppDefaultAppBar(
         title = { Text(stringResource(R.string.addhabit_appbar_title)) },
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
             }
-        },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
+        }
     )
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun SuggestionChip(habit: String, onClick: () -> Unit) {
-    val shape = RoundedCornerShape(percent = 50)
-    Surface(
-        shape = shape,
-        onClick = onClick,
-        border = BorderStroke(
-            1.dp,
-            // Match the OutlinedTextField border color1
-            MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
-        ),
-        color = MaterialTheme.colors.surfaceVariant
-    ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            text = habit,
-            style = MaterialTheme.typography.body2
-        )
-    }
 }
 
 @Preview
@@ -216,6 +201,6 @@ fun PreviewAddHabit() {
 @Composable
 fun PreviewSuggestions() {
     PreviewTheme {
-        Suggestions(habits = com.ofalvai.habittracker.feature.dashboard.ui.dashboard.Suggestions.habits, onSelect = {})
+        Suggestions(habits = Suggestions.habits, onSelect = {})
     }
 }

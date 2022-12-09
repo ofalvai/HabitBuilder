@@ -18,14 +18,26 @@ package com.ofalvai.habittracker.feature.dashboard.ui.habitdetail
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,10 +60,13 @@ import com.ofalvai.habittracker.feature.dashboard.ui.model.SingleStats
 import kotlin.math.roundToInt
 import com.ofalvai.habittracker.core.ui.R as coreR
 
+private const val SCROLL_COLLAPSE_THRESHOLD = 100
+
 @Composable
 internal fun HabitDetailHeader(
     habitDetailState: Result<HabitWithActions>,
     singleStats: SingleStats,
+    scrollState: ScrollState,
     onBack: () -> Unit,
     onSave: (Habit) -> Unit,
     onArchive: (Habit) -> Unit
@@ -61,13 +76,11 @@ internal fun HabitDetailHeader(
     val backgroundColor by animateColorAsState(
         targetValue = when (habitDetailState) {
             is Result.Success -> {
-                if (isEditing) MaterialTheme.colors.surface else {
-                    if (MaterialTheme.colors.isLight) {
-                        habitDetailState.value.habit.color.composeColor.copy(alpha = 0.4f)
-                    } else MaterialTheme.colors.surfaceVariant
+                if (isEditing) MaterialTheme.colorScheme.surface else {
+                    habitDetailState.value.habit.color.composeContainerColor
                 }
             }
-            else -> MaterialTheme.colors.background
+            else -> MaterialTheme.colorScheme.background
         },
         animationSpec = tween(durationMillis = 900, delayMillis = 150)
     )
@@ -76,10 +89,7 @@ internal fun HabitDetailHeader(
         when (habitDetailState) {
             Result.Loading -> HabitDetailLoadingAppBar(onBack)
             is Result.Failure -> {
-                ErrorView(
-                    label = stringResource(R.string.habitdetails_error),
-                    modifier = Modifier.statusBarsPadding()
-                )
+                ErrorView(label = stringResource(R.string.habitdetails_error))
             }
             is Result.Success -> {
                 AnimatedVisibility(
@@ -102,6 +112,7 @@ internal fun HabitDetailHeader(
                     HabitHeaderContent(
                         habitDetails = habitDetailState.value,
                         singleStats = singleStats,
+                        scrollState = scrollState,
                         onBack = onBack,
                         onEdit = { isEditing = true }
                     )
@@ -111,6 +122,7 @@ internal fun HabitDetailHeader(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HabitHeaderEditingContent(
     habitDetails: HabitWithActions,
@@ -137,11 +149,7 @@ private fun HabitHeaderEditingContent(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .padding(bottom = 32.dp)
-            .statusBarsPadding()
-    ) {
+    Column(Modifier.padding(bottom = 32.dp)) {
         HabitDetailEditingAppBar(
             onBack = onBack,
             onSave = onSaveClick,
@@ -181,37 +189,39 @@ private fun HabitHeaderEditingContent(
 private fun HabitHeaderContent(
     habitDetails: HabitWithActions,
     singleStats: SingleStats,
+    scrollState: ScrollState,
     onBack: () -> Unit,
     onEdit: () -> Unit
 ) {
-    Column(
-        Modifier
-            .padding(bottom = 32.dp)
-            .statusBarsPadding()
-    ) {
-        HabitDetailAppBar(
-            onBack = onBack,
-            onEdit = onEdit,
-        )
-        Text(
-            text = habitDetails.habit.name,
-            modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
-            style = AppTextStyle.habitTitle,
-            textAlign = TextAlign.Center
-        )
-        if (habitDetails.habit.notes.isNotBlank()) {
-            Text(
-                text = habitDetails.habit.notes,
-                modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
-                style = MaterialTheme.typography.body2,
-                textAlign = TextAlign.Center
+    val bottomPadding by animateDpAsState(targetValue = if (scrollState.value < SCROLL_COLLAPSE_THRESHOLD) 32.dp else 8.dp)
+    Column(Modifier.padding(bottom = bottomPadding)) {
+        val contentColor = habitDetails.habit.color.composeOnContainerColor
+        CompositionLocalProvider(LocalContentColor provides contentColor) {
+            HabitDetailAppBar(habitDetails, scrollState, onBack, onEdit)
+            AnimatedVisibility(visible = scrollState.value < SCROLL_COLLAPSE_THRESHOLD) {
+                Column(Modifier.padding(bottom = 32.dp)) {
+                    Text(
+                        text = habitDetails.habit.name,
+                        modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
+                        style = AppTextStyle.habitDisplay,
+                        textAlign = TextAlign.Center
+                    )
+                    if (habitDetails.habit.notes.isNotBlank()) {
+                        Text(
+                            text = habitDetails.habit.notes,
+                            modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+            SingleStatRow(
+                totalCount = singleStats.actionCount,
+                weeklyCount = singleStats.weeklyActionCount,
+                completionRate = singleStats.completionRate,
             )
         }
-        SingleStatRow(
-            totalCount = singleStats.actionCount,
-            weeklyCount = singleStats.weeklyActionCount,
-            completionRate = singleStats.completionRate
-        )
     }
 }
 
@@ -224,7 +234,7 @@ private fun SingleStatRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 32.dp, end = 16.dp, top = 32.dp),
+            .padding(start = 32.dp, end = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         SingleStat(
@@ -245,30 +255,40 @@ private fun SingleStatRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HabitDetailAppBar(
+    habitDetails: HabitWithActions,
+    scrollState: ScrollState,
     onBack: () -> Unit,
     onEdit: () -> Unit,
 ) {
     TopAppBar(
-        title = { },
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
+        title = {
+            AnimatedVisibility(
+                visible = scrollState.value > SCROLL_COLLAPSE_THRESHOLD,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Text(
+                    text = habitDetails.habit.name,
+                    style = AppTextStyle.screenTitle
+                )
             }
+        },
+        navigationIcon = {
+            IconButton(onClick = onBack) { TopAppBarNavIcon() }
         },
         actions = {
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                IconButton(onClick = onEdit) {
-                    Icon(Icons.Rounded.Edit, stringResource(coreR.string.common_edit))
-                }
+            IconButton(onClick = onEdit) {
+                Icon(Icons.Rounded.Edit, stringResource(coreR.string.common_edit))
             }
         },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
+        colors = topAppBarColors(habitDetails.habit.color),
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HabitDetailEditingAppBar(
     onBack: () -> Unit,
@@ -278,37 +298,43 @@ private fun HabitDetailEditingAppBar(
     TopAppBar(
         title = { },
         navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
-            }
+            IconButton(onClick = onBack) { TopAppBarNavIcon() }
         },
         actions = {
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                IconButton(onClick = onSave) {
-                    Icon(Icons.Rounded.Check, stringResource(coreR.string.common_save))
-                }
-                IconButton(onClick = onArchive) {
-                    Icon(CoreIcons.Archive, stringResource(coreR.string.common_archive))
-                }
+            IconButton(onClick = onSave) {
+                Icon(Icons.Rounded.Check, stringResource(coreR.string.common_save))
+            }
+            IconButton(onClick = onArchive) {
+                Icon(CoreIcons.Archive, stringResource(coreR.string.common_archive))
             }
         },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
+        colors = topAppBarColors(),
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
+    TopAppBar(
+        title = { },
+        navigationIcon = {
+            IconButton(onClick = onBack) { TopAppBarNavIcon() }
+        },
+        colors = topAppBarColors(),
     )
 }
 
 @Composable
-private fun HabitDetailLoadingAppBar(onBack: () -> Unit) {
-    TopAppBar(
-        modifier = Modifier.statusBarsPadding(),
-        title = { },
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
-            }
-        },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
+private fun TopAppBarNavIcon() = Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun topAppBarColors(habitColor: Habit.Color? = null): TopAppBarColors {
+    val contentColor = habitColor?.composeOnContainerColor ?: MaterialTheme.colorScheme.onSurface
+    return TopAppBarDefaults.smallTopAppBarColors(
+        containerColor = Color.Transparent,
+        actionIconContentColor = contentColor,
+        navigationIconContentColor = contentColor
     )
 }
 

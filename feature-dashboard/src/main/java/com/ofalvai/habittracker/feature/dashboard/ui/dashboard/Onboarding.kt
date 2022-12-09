@@ -20,11 +20,17 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProgressIndicatorDefaults
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,7 +43,6 @@ import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.common.OnboardingData
 import com.ofalvai.habittracker.core.common.OnboardingState
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import kotlin.math.roundToInt
 
 @Composable
@@ -47,7 +52,7 @@ fun Onboarding(state: OnboardingState) {
             .animateContentSize(animationSpec = tween(500))
             .padding(16.dp)
             .fillMaxWidth()
-            .background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceVariant, shape = MaterialTheme.shapes.medium)
             .padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -60,7 +65,7 @@ fun Onboarding(state: OnboardingState) {
                 CircularProgressIndicator(
                     progress = 1f,
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.surface
+                    color = MaterialTheme.colorScheme.surface
                 )
                 CircularProgressIndicator(
                     progress = animatedProgress,
@@ -69,7 +74,7 @@ fun Onboarding(state: OnboardingState) {
                 Text(
                     text = "${(progress * 100).roundToInt()}%",
                     modifier = Modifier.align(Alignment.Center),
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -77,12 +82,12 @@ fun Onboarding(state: OnboardingState) {
             Column(Modifier.padding(start = 24.dp)) {
                 Text(
                     text = stringResource(state.step.title),
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 Text(
                     text = stringResource(state.step.subtitle),
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }

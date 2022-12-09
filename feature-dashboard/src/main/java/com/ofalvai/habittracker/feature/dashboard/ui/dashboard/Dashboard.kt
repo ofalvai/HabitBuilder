@@ -18,13 +18,33 @@ package com.ofalvai.habittracker.feature.dashboard.ui.dashboard
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -37,7 +57,8 @@ import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.model.HabitWithActions
-import com.ofalvai.habittracker.core.ui.component.AppBar
+import com.ofalvai.habittracker.core.ui.component.AppBarOverflowMenuAction
+import com.ofalvai.habittracker.core.ui.component.AppDefaultRootAppBar
 import com.ofalvai.habittracker.core.ui.component.ContentWithPlaceholder
 import com.ofalvai.habittracker.core.ui.component.ErrorView
 import com.ofalvai.habittracker.core.ui.state.Result
@@ -58,7 +79,7 @@ import com.ofalvai.habittracker.core.ui.R as coreR
 @Composable
 fun DashboardScreen(
     vmFactory: ViewModelProvider.Factory,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     navigateToDetails: (HabitId) -> Unit,
     navigateToAddHabit: () -> Unit,
     navigateToSettings: () -> Unit,
@@ -73,7 +94,7 @@ fun DashboardScreen(
     val onboardingState by viewModel.onboardingState.collectAsState()
 
     val snackbarCoroutineScope = rememberCoroutineScope()
-    DisplaySnackbarEvents(viewModel.dashboardEvent, snackbarCoroutineScope, scaffoldState)
+    DisplaySnackbarEvents(viewModel.dashboardEvent, snackbarCoroutineScope, snackbarHostState)
 
     val onActionToggle: (Action, Habit, Int) -> Unit = { action, habit, daysInPast ->
         viewModel.toggleAction(habit.id, action, daysInPast)
@@ -108,10 +129,7 @@ fun DashboardScreen(
                 onMove
             )
         }
-        is Result.Failure -> ErrorView(
-            label = stringResource(R.string.dashboard_error),
-            modifier = Modifier.statusBarsPadding()
-        )
+        is Result.Failure -> ErrorView(label = stringResource(R.string.dashboard_error))
         Result.Loading -> {}
     }
 }
@@ -120,7 +138,7 @@ fun DashboardScreen(
 private fun DisplaySnackbarEvents(
     dashboardEvent: Flow<DashboardEvent>,
     snackbarCoroutineScope: CoroutineScope,
-    scaffoldState: ScaffoldState
+    snackbarHostState: SnackbarHostState
 ) {
     val errorToggleAction = stringResource(R.string.dashboard_error_toggle_action)
     val errorItemMove = stringResource(R.string.dashboard_error_item_move)
@@ -132,7 +150,7 @@ private fun DisplaySnackbarEvents(
             DashboardEvent.ActionPerformed -> eventAction
         }
         snackbarCoroutineScope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
+            snackbarHostState.showSnackbar(message = errorMessage)
         }
     }
 }
@@ -151,7 +169,7 @@ private fun LoadedDashboard(
     onExportClick: () -> Unit,
     onMove: (ItemMoveEvent) -> Unit
 ) {
-    Column(Modifier.fillMaxSize().statusBarsPadding()) {
+    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         DashboardAppBar(onConfigClick, onSettingsClick, onArchiveClick, onExportClick)
 
         if (onboardingState != null) {
@@ -187,35 +205,36 @@ private fun DashboardAppBar(
     onArchiveClick: () -> Unit,
     onExportClick: () -> Unit
 ) {
-    AppBar(
+    AppDefaultRootAppBar(
         title = {
             Text(
                 text = stringResource(R.string.dashboard_title),
                 style = AppTextStyle.screenTitle
             )
         },
-        iconActions = {
+        actions = {
             IconButton(onClick = onConfigClick) {
                 Icon(DashboardIcons.DashboardLayout, stringResource(R.string.dashboard_change_layout))
             }
+            AppBarOverflowMenuAction {
+                DropdownMenuItem(
+                    onClick = onArchiveClick,
+                    text = { Text(stringResource(coreR.string.menu_archive)) },
+                    leadingIcon = { Icon(painter = CoreIcons.Archive, contentDescription = null) },
+                )
+                DropdownMenuItem(
+                    onClick = onExportClick,
+                    text = { Text(stringResource(coreR.string.menu_export)) },
+                    leadingIcon = { Icon(painter = CoreIcons.Export, contentDescription = null) },
+                )
+                DropdownMenuItem(
+                    onClick = onSettingsClick,
+                    text = { Text(stringResource(coreR.string.menu_settings)) },
+                    leadingIcon = { Icon(painter = CoreIcons.Settings, contentDescription = null) },
+                )
+            }
         }
-    ) {
-        DropdownMenuItem(onClick = onArchiveClick) {
-            Icon(painter = CoreIcons.Archive, contentDescription = null)
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(stringResource(coreR.string.menu_archive))
-        }
-        DropdownMenuItem(onClick = onExportClick) {
-            Icon(painter = CoreIcons.Export, contentDescription = null)
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(stringResource(coreR.string.menu_export))
-        }
-        DropdownMenuItem(onClick = onSettingsClick) {
-            Icon(painter = CoreIcons.Settings, contentDescription = null)
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(stringResource(coreR.string.menu_settings))
-        }
-    }
+    )
 }
 
 @Composable
@@ -237,13 +256,12 @@ private fun DashboardPlaceholder(onAddHabitClick: () -> Unit) {
 
         Text(
             text = stringResource(R.string.dashboard_empty_label),
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyMedium
         )
 
         Button(
             modifier = Modifier.padding(16.dp),
-            onClick = onAddHabitClick,
-            elevation = ButtonDefaults.elevation(defaultElevation = 0.dp, pressedElevation = 0.dp)
+            onClick = onAddHabitClick
         ) {
             Icon(Icons.Rounded.Add, null, Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))

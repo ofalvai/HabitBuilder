@@ -24,15 +24,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,8 +44,9 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
+import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.gray1
+import com.ofalvai.habittracker.core.ui.theme.isDynamicThemeAvailable
 import com.ofalvai.habittracker.feature.misc.R
 import com.ofalvai.habittracker.core.ui.R as coreR
 
@@ -77,16 +81,22 @@ fun SettingsScreen(
         viewModel.setCrashReportingEnabled(it)
         Toast.makeText(context, R.string.settings_crash_reporting_restart_message, Toast.LENGTH_LONG).show()
     }
+    val dynamicColorEnabled by viewModel.dynamicColor.collectAsState()
+    val onDynamicColorChange: (Boolean) -> Unit = {
+        viewModel.setDynamicColorEnabled(it)
+    }
 
     SettingsScreen(
         viewModel.appInfo,
         crashReportingEnabled,
+        dynamicColorEnabled,
         navigateBack,
         onRateClick,
         onSourceClick,
         navigateToLicenses,
         onPrivacyClick,
         onCrashReportingChange,
+        onDynamicColorChange,
         debugSettings
     )
 }
@@ -96,33 +106,37 @@ fun SettingsScreen(
 fun SettingsScreen(
     appInfo: AppInfo,
     crashReportingEnabled: Boolean,
+    dynamicColorEnabled: Boolean,
     onBack: () -> Unit,
     onRateClick: () -> Unit,
     onSourceClick: () -> Unit,
     onLicensesClick: () -> Unit,
     onPrivacyClick: () -> Unit,
     onCrashReportingChange: (Boolean) -> Unit,
+    onDynamicColorChange: (Boolean) -> Unit,
     debugSettings: @Composable () -> Unit
 ) {
     Column(
-        Modifier
-            .background(MaterialTheme.colors.background)
-            .statusBarsPadding()
-            .fillMaxSize()
+        Modifier.background(MaterialTheme.colorScheme.background).fillMaxSize()
     ) {
-        TopAppBar(
+        AppDefaultAppBar(
             title = { Text(stringResource(R.string.settings_title)) },
             navigationIcon = {
                 IconButton(onClick = onBack) {
                     Icon(Icons.Rounded.ArrowBack, stringResource(coreR.string.common_back))
                 }
-            },
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp
+            }
         )
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState()).fillMaxSize()
         ) {
+            if (isDynamicThemeAvailable()) {
+                SwitchSetting(
+                    name = stringResource(R.string.settings_item_dynamic_color),
+                    checked = dynamicColorEnabled,
+                    onCheckedChange = onDynamicColorChange
+                )
+            }
             SwitchSetting(
                 name = stringResource(R.string.settings_item_crash_reporting),
                 checked = crashReportingEnabled,
@@ -162,14 +176,14 @@ fun SettingHeader(name: String) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .height(1.dp)
-            .background(MaterialTheme.colors.gray1))
+            .background(MaterialTheme.colorScheme.outlineVariant))
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 72.dp, end = 16.dp, bottom = 2.dp, top = 16.dp),
             text = name,
-            style = MaterialTheme.typography.body2,
-            color = MaterialTheme.colors.secondaryVariant
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.tertiary
         )
     }
 
@@ -189,11 +203,11 @@ private fun SwitchSetting(
     ) {
         Text(
             text = name,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(top = 20.dp, bottom = 20.dp, start = 56.dp)
         )
         Spacer(Modifier.weight(1f))
-        Switch(checked, onCheckedChange = onCheckedChange)
+        Switch(checked, onCheckedChange)
     }
 }
 
@@ -208,7 +222,7 @@ fun NavigationSetting(
             .clickable { onClick() }
             .padding(start = 72.dp, end = 16.dp, top = 20.dp, bottom = 20.dp),
         text = name,
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.bodyMedium
     )
 }
 
@@ -218,12 +232,12 @@ internal fun TextRow(name: String, subtitle: String) {
         Text(
             modifier = Modifier.fillMaxWidth().padding(start = 56.dp),
             text = name,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyMedium
         )
         Spacer(Modifier.height(4.dp))
         Text(
             text = subtitle,
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.fillMaxWidth().padding(start = 56.dp)
         )
     }
@@ -237,12 +251,14 @@ fun PreviewSettingsScreen() {
         SettingsScreen(
             appInfo = AppInfo(versionName = "1.0.0", buildType = "debug", appId = "com.ofalvai.habittracker", urlPrivacyPolicy = "", urlSourceCode = ""),
             crashReportingEnabled = true,
+            dynamicColorEnabled = true,
             onBack = {},
             onSourceClick = {},
             onLicensesClick = {},
             onPrivacyClick = {},
             onRateClick = {},
             onCrashReportingChange = {},
+            onDynamicColorChange = {},
             debugSettings = {}
         )
     }

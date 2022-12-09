@@ -31,24 +31,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -61,12 +59,11 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
+import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
 import com.ofalvai.habittracker.core.ui.component.SingleStat
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
+import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.errorContainer
-import com.ofalvai.habittracker.core.ui.theme.successContainer
-import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.feature.misc.R
 import java.net.URI
 import java.time.Instant
@@ -102,20 +99,15 @@ fun ExportScreen(vmFactory: ViewModelProvider.Factory, navigateBack: () -> Unit)
     }
 
     Column(
-        modifier = Modifier
-            .background(MaterialTheme.colors.background)
-            .fillMaxSize()
-            .statusBarsPadding()
+        modifier = Modifier.background(MaterialTheme.colorScheme.background).fillMaxSize()
     ) {
-        TopAppBar(
+        AppDefaultAppBar(
             title = { Text(text = stringResource(R.string.export_title)) },
             navigationIcon = {
                 IconButton(onClick = navigateBack) {
                     Icon(Icons.Rounded.ArrowBack, stringResource(commonR.string.common_back))
                 }
-            },
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp
+            }
         )
 
         Column(modifier = Modifier
@@ -179,16 +171,16 @@ private fun ExportImportError(error: ExportImportError, modifier: Modifier = Mod
 
     Column(
         modifier = modifier
-            .background(MaterialTheme.colors.errorContainer, MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.errorContainer, MaterialTheme.shapes.medium)
             .fillMaxWidth()
             .padding(16.dp)
     ) {
         Text(
             text = stringResource(id = commonR.string.common_something_went_wrong),
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodySmall
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = errorMessage, style = MaterialTheme.typography.body2)
+        Text(text = errorMessage, style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -196,7 +188,7 @@ private fun ExportImportError(error: ExportImportError, modifier: Modifier = Mod
 private fun BackupInfo(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
-            .surfaceBackground()
+            .background(LocalAppColors.current.successContainer, shape = MaterialTheme.shapes.medium)
             .fillMaxWidth()
             .padding(16.dp)
     ) {
@@ -208,7 +200,7 @@ private fun BackupInfo(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.size(16.dp))
         Text(
             text = stringResource(R.string.export_backup_info),
-            style = MaterialTheme.typography.body2
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }
@@ -228,12 +220,12 @@ private fun Exporter(
     ) {
         Text(
             text = stringResource(R.string.export_widget_export_title),
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.titleMedium
         )
 
         Text(
             text = stringResource(R.string.export_widget_export_description),
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(top = 8.dp)
         )
 
@@ -252,14 +244,14 @@ private fun Exporter(
             Box(
                 modifier = Modifier
                     .padding(top = 16.dp)
-                    .background(MaterialTheme.colors.successContainer, MaterialTheme.shapes.medium)
+                    .background(LocalAppColors.current.successContainer, MaterialTheme.shapes.medium)
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
                 Column {
                     Text(
                         text = stringResource(R.string.export_widget_export_success_title),
-                        style = MaterialTheme.typography.body1
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
                         modifier = Modifier.padding(vertical = 8.dp),
@@ -267,7 +259,7 @@ private fun Exporter(
                             R.string.export_widget_export_success_path,
                             state.outputFileURI!!.path
                         ),
-                        style = MaterialTheme.typography.caption
+                        style = MaterialTheme.typography.bodySmall
                     )
                     OutlinedButton(onClick = { onShareClick(state.outputFileURI) }) {
                         Text(text = stringResource(R.string.export_widget_export_success_share_button))
@@ -293,12 +285,12 @@ private fun Importer(
     ) {
         Text(
             text = stringResource(R.string.export_widget_import_title),
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.titleMedium
         )
 
         Text(
             text = stringResource(R.string.export_widget_import_description),
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(top = 8.dp)
         )
 
@@ -311,7 +303,7 @@ private fun Importer(
         }
 
         AnimatedVisibility(visible = state.backupFileURI != null) {
-            OutlinedButton(onClick = { onConfirmImport(state.backupFileURI!!) }) {
+            Button(onClick = { onConfirmImport(state.backupFileURI!!) }) {
                 Text(text = stringResource(R.string.export_widget_import_restore_button))
             }
         }
@@ -333,7 +325,7 @@ private fun BackupSummary(state: ImportState) {
         val boldStyle = SpanStyle(fontWeight = FontWeight.Bold)
         if (state.backupFileURI != null) {
             Text(
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 text = buildAnnotatedString {
                     withStyle(boldStyle) {
                         append(stringResource(R.string.export_widget_import_file_path))
@@ -345,7 +337,7 @@ private fun BackupSummary(state: ImportState) {
         }
         if (state.backupSummary != null) {
             Text(
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 text = buildAnnotatedString {
                     withStyle(boldStyle) {
                         append(stringResource(R.string.export_widget_import_habit_count))
@@ -379,7 +371,7 @@ private fun BackupSummary(state: ImportState) {
 }
 
 private fun Modifier.surfaceBackground() = composed {
-    this.background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
+    this.background(MaterialTheme.colorScheme.surfaceVariant, shape = MaterialTheme.shapes.medium)
 }
 
 @Preview

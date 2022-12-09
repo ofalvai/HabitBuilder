@@ -25,11 +25,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,9 +49,11 @@ import com.ofalvai.habittracker.core.model.ActionHistory
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
+import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.composeColor
-import com.ofalvai.habittracker.core.ui.theme.gray2
+import com.ofalvai.habittracker.core.ui.theme.composeContainerColor
+import com.ofalvai.habittracker.core.ui.theme.composeOnContainerColor
 import com.ofalvai.habittracker.feature.dashboard.R
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.satisfyingToggleable
 import kotlinx.collections.immutable.ImmutableList
@@ -59,7 +61,7 @@ import kotlinx.collections.immutable.toImmutableList
 import java.time.Instant
 import com.ofalvai.habittracker.core.ui.R as coreR
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitCard(
     habit: Habit,
@@ -73,15 +75,16 @@ fun HabitCard(
 ) {
     val isDragging = dragOffset != 0f
     val backgroundColor = if (isDragging) {
-        MaterialTheme.colors.surface
+        MaterialTheme.colorScheme.surface
     } else {
-        habit.color.composeColor.copy(alpha = 0.1f)
+        habit.color.composeContainerColor
     }
     Card(
         onClick = { onDetailClick(habit.id) },
-        elevation = 0.dp,
-        shape = RoundedCornerShape(16.dp),
-        backgroundColor = backgroundColor,
+        colors = CardDefaults.cardColors(
+            containerColor = backgroundColor,
+            contentColor = habit.color.composeOnContainerColor
+        ),
         border = if (isDragging) BorderStroke(1.dp, habit.color.composeColor) else null,
         modifier = modifier
             .padding(horizontal = 16.dp)
@@ -91,7 +94,7 @@ fun HabitCard(
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
             Text(
                 text = habit.name,
-                style = AppTextStyle.habitSubtitle
+                style = AppTextStyle.habitTitle
             )
 
             ActionHistoryLabel(totalActionCount, actionHistory)
@@ -140,7 +143,7 @@ fun ActionCircles(
             Text(
                 modifier = Modifier.align(Alignment.End),
                 text = stringResource(R.string.dashboard_toggle_help),
-                style = MaterialTheme.typography.caption,
+                style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center
             )
         }
@@ -166,8 +169,8 @@ fun ActionCircle(
             )).using(SizeTransform(clip = false))
         }
     ) { targetToggled ->
-        val backgroundColor = if (targetToggled) activeColor else MaterialTheme.colors.surface
-        val borderColor = if (targetToggled) MaterialTheme.colors.gray2 else activeColor
+        val backgroundColor = if (targetToggled) activeColor else MaterialTheme.colorScheme.surface
+        val borderColor = if (targetToggled) LocalAppColors.current.gray2 else activeColor
         val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
         val rippleRadius =
             remember { Constants.CircleSize / 1.7f } // Make it a bit bigger than D / 2
@@ -216,7 +219,7 @@ fun ActionHistoryLabel(totalActionCount: Int, actionHistory: ActionHistory) {
 
     Text(
         text = mergedLabel,
-        style = MaterialTheme.typography.caption
+        style = MaterialTheme.typography.bodySmall
     )
 }
 

@@ -25,12 +25,23 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,8 +69,8 @@ import com.ofalvai.habittracker.core.ui.component.CalendarDayLegend
 import com.ofalvai.habittracker.core.ui.component.CalendarPager
 import com.ofalvai.habittracker.core.ui.component.ErrorView
 import com.ofalvai.habittracker.core.ui.state.Result
+import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.theme.gray2
 import com.ofalvai.habittracker.feature.insights.R
 import com.ofalvai.habittracker.feature.insights.model.HeatmapMonth
 import com.ofalvai.habittracker.feature.insights.ui.InsightsIcons
@@ -69,7 +80,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
-import java.util.*
+import java.util.Locale
 
 @Composable
 fun Heatmap(viewModel: InsightsViewModel) {
@@ -158,14 +169,14 @@ private fun HeatmapCalendar(
     }
 
     val context = LocalContext.current
-    val primaryColor = MaterialTheme.colors.primary
+    val highlightColor = MaterialTheme.colorScheme.tertiary
     val view = remember {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         CalendarView(context).apply {
             orientation = LinearLayout.HORIZONTAL
             scrollMode = ScrollMode.PAGED
             dayViewResource = R.layout.item_calendar_day_heatmap
-            dayBinder = HeatmapDayBinder(heatmapData, onDayClick, primaryColor)
+            dayBinder = HeatmapDayBinder(heatmapData, onDayClick, highlightColor)
             setup(startMonth = yearMonth, endMonth = yearMonth, firstDayOfWeek)
         }
     }
@@ -195,7 +206,7 @@ private fun DayPopup(
             Modifier
                 .shadow(4.dp, shape)
                 .clip(shape)
-                .background(MaterialTheme.colors.background)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(8.dp)
         ) {
             Text(
@@ -204,8 +215,8 @@ private fun DayPopup(
                     actionCount,
                     actionCount
                 ),
-                color = MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.caption
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }
@@ -219,17 +230,17 @@ private fun HeatmapLegend(
     Row(modifier) {
         Text(
             text = stringResource(R.string.insights_heatmap_legend_label),
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.padding(end = 8.dp).alignByBaseline()
         )
 
         Row(
-            Modifier.border(1.dp, MaterialTheme.colors.gray2).alignByBaseline()
+            Modifier.border(1.dp, LocalAppColors.current.gray2).alignByBaseline()
         ) {
             heatmapData.bucketMaxValues.forEach {
                 val bucketIndex = it.first
                 val maxValue = it.second
-                val backgroundColor = MaterialTheme.colors.primary.adjustToBucketIndex(
+                val backgroundColor = MaterialTheme.colorScheme.tertiary.adjustToBucketIndex(
                     bucketIndex, heatmapData.bucketCount
                 )
                 Box(
@@ -240,7 +251,7 @@ private fun HeatmapLegend(
                         color = contentColorFor(backgroundColor),
                         textAlign = TextAlign.Center,
                         fontSize = 12.sp,
-                        modifier = Modifier.fillMaxSize().padding(top = 6.dp)
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }
@@ -252,7 +263,7 @@ private fun HeatmapLegend(
 private fun EmptyView() {
     Text(
         text = stringResource(R.string.insights_heatmap_empty_label),
-        style = MaterialTheme.typography.caption.copy(fontStyle = FontStyle.Italic),
+        style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
     )
 }
@@ -264,13 +275,13 @@ private fun hasEnoughData(heatmapData: HeatmapMonth): Boolean {
 private class HeatmapDayBinder(
     var heatmapData: HeatmapMonth,
     private val onDayClick: (HeatmapMonth.BucketInfo) -> Unit,
-    private val primaryColor: Color
+    private val highlightColor: Color
 ) : DayBinder<DayViewContainer> {
     override fun create(view: View) = DayViewContainer(view, onDayClick)
 
     override fun bind(container: DayViewContainer, day: CalendarDay) {
         val dayData = heatmapData.dayMap[day.date] ?: HeatmapMonth.BucketInfo(0, 0)
-        container.bind(day, dayData, heatmapData.bucketCount, primaryColor)
+        container.bind(day, dayData, heatmapData.bucketCount, highlightColor)
     }
 }
 
@@ -297,13 +308,13 @@ private class DayViewContainer(
         day: CalendarDay,
         bucketInfo: HeatmapMonth.BucketInfo,
         bucketCount: Int,
-        primaryColor: Color
+        highlightColor: Color
     ) {
         this.day = day
         this.bucketInfo = bucketInfo
 
         val today = LocalDate.now()
-        val color = primaryColor.adjustToBucketIndex(bucketInfo.bucketIndex, bucketCount)
+        val color = highlightColor.adjustToBucketIndex(bucketInfo.bucketIndex, bucketCount)
         DrawableCompat.setTint(backgroundDrawable, color.toColorInt())
         textView.background = backgroundDrawable
 

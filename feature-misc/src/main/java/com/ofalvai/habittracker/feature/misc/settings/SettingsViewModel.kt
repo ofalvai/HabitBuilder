@@ -36,6 +36,7 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     val crashReportingEnabled = MutableStateFlow(true)
+    val dynamicColor = appPreferences.dynamicColorEnabled
 
     init {
         crashReportingEnabled.value = appPreferences.crashReportingEnabled
@@ -46,5 +47,9 @@ class SettingsViewModel(
         // Bugsnag can't be disabled at runtime, but the next app restart won't initialize it
         appPreferences.crashReportingEnabled = enabled
         crashReportingEnabled.value = enabled
+    }
+
+    fun setDynamicColorEnabled(enabled: Boolean) {
+        appPreferences.setDynamicColorEnabled(enabled)
     }
 }

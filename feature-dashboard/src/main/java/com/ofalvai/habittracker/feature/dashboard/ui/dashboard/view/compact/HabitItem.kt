@@ -20,12 +20,25 @@ import android.os.Vibrator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +56,11 @@ import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.component.HorizontalGrid
-import com.ofalvai.habittracker.core.ui.theme.*
+import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
+import com.ofalvai.habittracker.core.ui.theme.CoreIcons
+import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
+import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.feature.dashboard.R
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.satisfyingToggleable
 import kotlinx.collections.immutable.ImmutableList
@@ -63,7 +80,7 @@ fun HabitItem(
         modifier
             .fillMaxWidth()
             .draggableCard(dragOffset)
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
             .clickable(onClick = { onDetailClick(habit.id) })
             .padding(top = 4.dp)
     ) {
@@ -76,7 +93,7 @@ fun HabitItem(
                     .padding(start = 16.dp)
                     .align(Alignment.CenterVertically),
                 text = habit.name,
-                style = AppTextStyle.habitCompactTitle
+                style = AppTextStyle.habitTitleSmall
             )
             IconButton(
                 modifier = Modifier.size(36.dp),
@@ -130,7 +147,7 @@ fun ActionSquares(
                     .align(Alignment.CenterHorizontally)
                     .padding(horizontal = 16.dp),
                 text = stringResource(R.string.dashboard_toggle_help),
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
         }
@@ -144,7 +161,7 @@ fun ActionSquare(
     onToggle: (Boolean) -> Unit,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else MaterialTheme.colors.gray1
+    val color = if (toggled) activeColor else LocalAppColors.current.gray1
     val borderColor = if (toggled) activeColor.darken() else Color.Transparent
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 

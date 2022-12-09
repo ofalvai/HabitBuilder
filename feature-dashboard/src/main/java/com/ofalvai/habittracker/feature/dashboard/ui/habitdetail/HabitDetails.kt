@@ -18,15 +18,33 @@ package com.ofalvai.habittracker.feature.dashboard.ui.habitdetail
 
 import android.os.Vibrator
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +65,6 @@ import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.core.ui.theme.composeColor
-import com.ofalvai.habittracker.core.ui.theme.surfaceVariant
 import com.ofalvai.habittracker.feature.dashboard.R
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.vibrateCompat
@@ -136,10 +153,12 @@ private fun HabitDetailScreen(
     onArchive: (Habit) -> Unit,
     onDayToggle: (LocalDate, Action) -> Unit,
 ) {
-    Column(Modifier.background(MaterialTheme.colors.background).fillMaxSize()) {
-        HabitDetailHeader(habitDetailState, singleStats, onBack, onEdit, onArchive)
+    Column(Modifier.background(MaterialTheme.colorScheme.background).fillMaxSize()) {
+        val scrollState = rememberScrollState()
 
-        Column(Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
+        HabitDetailHeader(habitDetailState, singleStats, scrollState, onBack, onEdit, onArchive)
+
+        Column(Modifier.verticalScroll(scrollState).padding(16.dp)) {
             when (habitDetailState) {
                 is Result.Success -> Calendar(habitDetailState, onDayToggle)
                 Result.Loading -> {
@@ -173,21 +192,23 @@ private fun Calendar(
     onDayToggle: (LocalDate, Action) -> Unit
 ) {
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
-    Column(
-        Modifier.surfaceBackground().padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
-    ) {
-        CalendarPager(
-            yearMonth = yearMonth,
-            onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
-            onNextClick = { yearMonth = yearMonth.plusMonths(1) }
-        )
-        CalendarDayLegend()
-        HabitCalendar(
-            yearMonth = yearMonth,
-            habitColor = habitDetailState.value.habit.color.composeColor,
-            actions = habitDetailState.value.actions,
-            onDayToggle = onDayToggle
-        )
+    Card {
+        Column(
+            Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
+        ) {
+            CalendarPager(
+                yearMonth = yearMonth,
+                onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
+                onNextClick = { yearMonth = yearMonth.plusMonths(1) }
+            )
+            CalendarDayLegend()
+            HabitCalendar(
+                yearMonth = yearMonth,
+                habitColor = habitDetailState.value.habit.color.composeColor,
+                actions = habitDetailState.value.actions,
+                onDayToggle = onDayToggle
+            )
+        }
     }
 }
 
@@ -196,24 +217,25 @@ private fun HabitStats(
     chartData: ActionCountChart,
     onStatTypeChange: (ActionCountChart.Type) -> Unit
 ) {
-    Column(Modifier.padding(top = 16.dp).fillMaxWidth().surfaceBackground()) {
-        Row(Modifier.align(Alignment.End).padding(top = 8.dp, end = 16.dp)) {
+    Card(Modifier.padding(top = 16.dp)) {
+        Row(Modifier.padding(top = 8.dp, start = 16.dp)) {
             Text(
                 modifier = Modifier.align(CenterVertically),
                 text = stringResource(R.string.habitdetails_actioncount_selector_label),
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.bodyMedium
             )
             Spacer(Modifier.width(8.dp))
             ToggleButton(
                 checked = chartData.type == ActionCountChart.Type.Weekly,
-                onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
+                onCheckedChange = { onStatTypeChange(chartData.type.invert()) },
+                shape = RoundedCornerShape(topStartPercent = 50, bottomStartPercent = 50)
             ) {
                 Text(text = stringResource(R.string.habitdetails_actioncount_selector_weekly))
             }
-            Spacer(Modifier.width(8.dp))
             ToggleButton(
                 checked = chartData.type == ActionCountChart.Type.Monthly,
-                onCheckedChange = { onStatTypeChange(chartData.type.invert()) }
+                onCheckedChange = { onStatTypeChange(chartData.type.invert()) },
+                shape = RoundedCornerShape(topEndPercent = 50, bottomEndPercent = 50)
             ) {
                 Text(text = stringResource(R.string.habitdetails_actioncount_selector_monthly))
             }
@@ -230,13 +252,16 @@ private fun HabitStats(
 private fun ToggleButton(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    shape: Shape = RoundedCornerShape(percent = 50),
     content: @Composable () -> Unit
 ) {
+    // Replace with SegmentedButton once available in Compose Material3
     OutlinedButton(
         onClick = {
             if (!checked) { onCheckedChange(false) }
         },
-        colors = toggleButtonColors(checked)
+        colors = toggleButtonColors(checked),
+        shape = shape
     ) { content() }
 }
 
@@ -244,19 +269,15 @@ private fun ToggleButton(
 private fun toggleButtonColors(checked: Boolean): ButtonColors {
     return if (checked) {
         ButtonDefaults.outlinedButtonColors(
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            contentColor = MaterialTheme.colors.onPrimary
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
     } else {
         ButtonDefaults.outlinedButtonColors(
-            backgroundColor = MaterialTheme.colors.surfaceVariant,
-            contentColor = MaterialTheme.colors.onBackground
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onSurface,
         )
     }
-}
-
-private fun Modifier.surfaceBackground() = composed {
-    this.background(MaterialTheme.colors.surfaceVariant, shape = MaterialTheme.shapes.medium)
 }
 
 @Preview

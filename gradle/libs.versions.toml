@@ -42,13 +42,14 @@ androidx-espresso = "androidx.test.espresso:espresso-core:3.5.0"
 
 compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose-libs" }
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-libs" }
-compose-material = { module = "androidx.compose.material:material", version.ref = "compose-libs" }
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose-libs" }
 compose-ui-googlefonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "compose-libs" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-libs" }
 compose-ui-toolingpreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-libs" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-libs"}
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-libs" }
+
+compose-material3 = "androidx.compose.material3:material3:1.0.1"
 
 logcat = "com.squareup.logcat:logcat:0.1"
 calendarview = "com.github.kizitonwose:CalendarView:1.1.0"
@@ -73,6 +74,3 @@ turbine = "app.cash.turbine:turbine:0.10.0"
 
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.6.0"
 ruler = "com.spotify.ruler:ruler-gradle-plugin:1.4.0"
-
-[bundles]
-compose = ["compose-ui-ui", "compose-material", "compose-animation"]

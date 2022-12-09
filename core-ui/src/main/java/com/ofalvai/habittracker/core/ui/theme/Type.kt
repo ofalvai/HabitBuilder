@@ -16,13 +16,17 @@
 
 package com.ofalvai.habittracker.core.ui.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.ofalvai.habittracker.core.ui.R
 
@@ -45,27 +49,91 @@ private val patua = FontFamily(
     Font(googleFont = GoogleFont("Patua One"), fontProvider = provider)
 )
 
-val typography = Typography(
-        defaultFontFamily = lato,
-        button = TextStyle(
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            letterSpacing = 0.25.sp
-        )
+// This exists because Material3 doesn't have a default font family anymore in the Typography() constructor
+private val defaultTextStyle = TextStyle(
+    fontFamily = lato,
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None
     )
+)
+
+internal val typography = Typography(
+    displayLarge = defaultTextStyle.copy(
+        fontSize = 57.sp, lineHeight = 64.sp, letterSpacing = (-0.25).sp
+    ),
+    displayMedium = defaultTextStyle.copy(
+        fontSize = 45.sp, lineHeight = 52.sp, letterSpacing = 0.sp
+    ),
+    displaySmall = defaultTextStyle.copy(
+        fontSize = 36.sp, lineHeight = 44.sp, letterSpacing = 0.sp
+    ),
+    headlineLarge = defaultTextStyle.copy(
+        fontSize = 32.sp, lineHeight = 40.sp, letterSpacing = 0.sp
+    ),
+    headlineMedium = defaultTextStyle.copy(
+        fontSize = 28.sp, lineHeight = 36.sp, letterSpacing = 0.sp
+    ),
+    headlineSmall = defaultTextStyle.copy(
+        fontSize = 24.sp, lineHeight = 32.sp, letterSpacing = 0.sp
+    ),
+    titleLarge = defaultTextStyle.copy(
+        fontSize = 22.sp, lineHeight = 28.sp, letterSpacing = 0.sp
+    ),
+    titleMedium = defaultTextStyle.copy(
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp,
+        fontWeight = FontWeight.Bold // Lato doesn't have medium
+    ),
+    titleSmall = defaultTextStyle.copy(
+        fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp, fontWeight = FontWeight.Bold // Lato doesn't have medium
+    ),
+    labelLarge = defaultTextStyle.copy(
+        fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp, fontWeight = FontWeight.Bold // Lato doesn't have medium
+    ),
+    labelMedium = defaultTextStyle.copy(
+        fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp, fontWeight = FontWeight.Bold // Lato doesn't have medium
+    ),
+    labelSmall = defaultTextStyle.copy(
+        fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp, fontWeight = FontWeight.Bold // Lato doesn't have medium
+    ),
+    bodyLarge = defaultTextStyle.copy(
+        fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.5.sp
+    ),
+    bodyMedium = defaultTextStyle.copy(
+        fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.25.sp
+    ),
+    bodySmall = defaultTextStyle.copy(
+        fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 0.4.sp
+    ),
+)
 
 object AppTextStyle {
 
-    val screenTitle = typography.h6.copy(fontFamily = patua)
+    val screenTitle: TextStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = typography.titleLarge.copy(fontFamily = patua)
 
-    val habitTitle = typography.h4.copy(fontFamily = patua, fontSize = 36.sp)
+    val habitDisplay: TextStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = typography.displaySmall.copy(fontFamily = patua)
 
-    val habitCompactTitle = typography.subtitle2.copy(fontFamily = patua)
+    val habitTitleSmall: TextStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = typography.titleSmall.copy(fontFamily = patua)
 
-    val habitSubtitle = typography.h6.copy(fontFamily = patua)
+    val habitTitle: TextStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = typography.titleLarge.copy(fontFamily = patua)
 
-    val insightCardTitle = typography.h6.copy(fontWeight = FontWeight.Bold) // Lato doesn't have medium
-
-    val singleStatValue = typography.h5.copy(fontFamily = patua)
+    val singleStatValue
+        @Composable
+        @ReadOnlyComposable
+        get() = typography.headlineSmall.copy(fontFamily = patua)
 
 }

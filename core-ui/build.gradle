@@ -13,6 +13,7 @@ dependencies {
     api project(':core-model')
 
     api libs.compose.ui.ui
+    api libs.compose.material3
     implementation libs.compose.ui.googlefonts
     implementation libs.androidx.lifecycle.runtime
     implementation libs.kotlin.coroutines.core
