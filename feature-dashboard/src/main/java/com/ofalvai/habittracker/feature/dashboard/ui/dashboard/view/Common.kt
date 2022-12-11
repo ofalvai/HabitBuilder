@@ -70,12 +70,14 @@ fun ReorderableHabitList(
 ) {
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
-    // An in-memory copy of the Habit list to make drag reorder a bit smoother (not perfect).
+    // An in-memory copy of the Habit list to make item reorder smooth (by avoiding recomposing
+    // the entire list).
     // We update the in-memory list on every move (of distance 1), then persist to DB in the
-    // background. The cache key is the original list so that any change (eg. action completion)
-    // is reflected in the in-memory copy.
-    val inMemoryList = remember(habits) { habits.toMutableStateList() }
-    val onItemMove: (fromPos: ItemPosition, toPos: ItemPosition) -> (Unit) = { from, to ->
+    // background. The in-memory list is not recreated after the item order changes (triggered by
+    // the DB update) thanks to the invalidation key below, but it is recreated when anything
+    // other than the item order changes (such as action completion)
+    val inMemoryList = remember(habits.toSet()) { habits.toMutableStateList() }
+    val onItemMove: (ItemPosition, ItemPosition) -> (Unit) = { from, to ->
         vibrator.vibrateCompat(longArrayOf(0, 50))
         inMemoryList.move(from.index, to.index)
         onMove(ItemMoveEvent(from.key as HabitId, to.key as HabitId))
