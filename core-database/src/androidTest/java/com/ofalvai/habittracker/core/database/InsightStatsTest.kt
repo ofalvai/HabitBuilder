@@ -34,7 +34,7 @@ import java.time.Instant
 import java.time.LocalDate
 
 @RunWith(AndroidJUnit4::class)
-class OverallStatsTests : BaseInstrumentedTest() {
+class InsightStatsTest : BaseInstrumentedTest() {
 
     private object TestData {
         val habit1 = Habit(id = 875, name = "Meditation", color = Habit.Color.Green, order = 0, archived = false, notes = "")
@@ -368,5 +368,31 @@ class OverallStatsTests : BaseInstrumentedTest() {
 
         // Then
         assertEquals(emptyList<HabitTopDay>(), topDayForHabits)
+    }
+
+    @Test
+    fun testCompletedHabitsAtDate() = runTest {
+        // Given
+        habitDao.insertHabits(TestData.habits)
+        habitDao.insertActions(TestData.actions)
+
+        // When
+        val habitsAtDate = habitDao.getCompletedHabitsAt(LocalDate.of(2020, 12, 23))
+
+        // Then
+        assertEquals(listOf(TestData.habit1, TestData.habit2, TestData.habit3), habitsAtDate)
+    }
+
+    @Test
+    fun testCompletedHabitsAtEmptyDate() = runTest {
+        // Given
+        habitDao.insertHabits(TestData.habits)
+        habitDao.insertActions(TestData.actions)
+
+        // When
+        val habitsAtDate = habitDao.getCompletedHabitsAt(LocalDate.of(2022, 12, 13))
+
+        // Then
+        assertEquals(emptyList<Habit>(), habitsAtDate)
     }
 }

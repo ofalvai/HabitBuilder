@@ -21,10 +21,12 @@ import androidx.lifecycle.viewModelScope
 import com.ofalvai.habittracker.core.common.OnboardingManager
 import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.feature.insights.mapper.mapHabitActionCount
 import com.ofalvai.habittracker.feature.insights.mapper.mapHabitTopDay
 import com.ofalvai.habittracker.feature.insights.mapper.mapSumActionCountByDay
+import com.ofalvai.habittracker.feature.insights.mapper.toModel
 import com.ofalvai.habittracker.feature.insights.model.HeatmapMonth
 import com.ofalvai.habittracker.feature.insights.model.TopDayItem
 import com.ofalvai.habittracker.feature.insights.model.TopHabitItem
@@ -32,11 +34,15 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
-import java.util.*
+import java.util.Locale
 
 class InsightsViewModel(
     private val habitDao: HabitDao,
@@ -47,6 +53,7 @@ class InsightsViewModel(
     val heatmapState = MutableStateFlow<Result<HeatmapMonth>>(Result.Loading)
     val topHabits = MutableStateFlow<Result<ImmutableList<TopHabitItem>>>(Result.Loading)
     val habitTopDays = MutableStateFlow<Result<ImmutableList<TopDayItem>>>(Result.Loading)
+    val heatmapCompletedHabitsAtDate = MutableStateFlow<ImmutableList<Habit>?>(null)
 
     private val habitCount: SharedFlow<Int> = habitDao.getTotalHabitCount().shareIn(
         scope = viewModelScope,
@@ -62,6 +69,18 @@ class InsightsViewModel(
     fun fetchHeatmap(yearMonth: YearMonth) {
         viewModelScope.launch {
             reloadHeatmap(yearMonth)
+        }
+    }
+
+    fun fetchCompletedHabitsAt(date: LocalDate) {
+        viewModelScope.launch {
+            try {
+                heatmapCompletedHabitsAtDate.value = habitDao.getCompletedHabitsAt(date)
+                    .map { it.toModel() }
+                    .toImmutableList()
+            } catch (e: Throwable) {
+                telemetry.logNonFatal(e)
+            }
         }
     }
 

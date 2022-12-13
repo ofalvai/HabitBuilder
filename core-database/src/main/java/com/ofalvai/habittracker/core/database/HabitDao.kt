@@ -181,4 +181,14 @@ interface HabitDao {
             FROM habit"""
     )
     suspend fun getTopDayForHabits(): List<HabitTopDay>
+
+    @Query(
+        """SELECT habit.*
+            FROM habit
+            INNER JOIN `action` ON habit.id = `action`.habit_id
+            WHERE date(`action`.timestamp / 1000, 'unixepoch', 'localtime') = date(:date)
+            ORDER BY habit.`order` ASC
+        """
+    )
+    suspend fun getCompletedHabitsAt(date: LocalDate): List<Habit>
 }

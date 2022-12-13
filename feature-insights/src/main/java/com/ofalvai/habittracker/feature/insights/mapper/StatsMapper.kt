@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.feature.insights.mapper
 import com.ofalvai.habittracker.core.database.entity.HabitActionCount
 import com.ofalvai.habittracker.core.database.entity.HabitTopDay
 import com.ofalvai.habittracker.core.database.entity.SumActionCountByDay
+import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.feature.insights.model.BucketIndex
 import com.ofalvai.habittracker.feature.insights.model.HeatmapMonth
 import com.ofalvai.habittracker.feature.insights.model.TopDayItem
@@ -29,8 +30,9 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
-import java.util.*
+import java.util.Locale
 import kotlin.math.min
+import com.ofalvai.habittracker.core.database.entity.Habit as HabitEntity
 
 private const val maxBucketCount = 5
 
@@ -81,6 +83,22 @@ fun mapHabitTopDay(entity: HabitTopDay, locale: Locale): TopDayItem {
         },
         count = entity.action_count_on_day
     )
+}
+
+fun HabitEntity.toModel() = Habit(
+    id = id,
+    name = name,
+    color = color.toModelColor(),
+    notes = notes
+)
+
+fun HabitEntity.Color.toModelColor(): Habit.Color = when (this) {
+    HabitEntity.Color.Red -> Habit.Color.Red
+    HabitEntity.Color.Green -> Habit.Color.Green
+    HabitEntity.Color.Blue -> Habit.Color.Blue
+    HabitEntity.Color.Yellow -> Habit.Color.Yellow
+    HabitEntity.Color.Cyan -> Habit.Color.Cyan
+    HabitEntity.Color.Pink -> Habit.Color.Pink
 }
 
 private fun actionCountToBucket(totalHabitCount: Int, actionCount: Int): HeatmapMonth.BucketInfo {
