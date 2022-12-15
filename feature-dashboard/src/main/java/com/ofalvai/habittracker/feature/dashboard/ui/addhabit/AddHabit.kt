@@ -16,6 +16,7 @@
 
 package com.ofalvai.habittracker.feature.dashboard.ui.addhabit
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -25,6 +26,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -51,6 +54,7 @@ import com.ofalvai.habittracker.core.ui.component.HabitColorPicker
 import com.ofalvai.habittracker.core.ui.component.TextFieldError
 import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.feature.dashboard.R
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.Suggestions
 import kotlinx.collections.immutable.ImmutableList
@@ -88,7 +92,6 @@ fun AddHabitForm(
             onSave(habit)
         }
     }
-
     Column(Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
         val nameFocusRequester = remember { FocusRequester() }
         DisposableEffect(Unit) {
@@ -98,6 +101,12 @@ fun AddHabitForm(
             onDispose {  }
         }
 
+        val selectedHabitColor by animateColorAsState(targetValue = color.composeColor)
+        val customTextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = selectedHabitColor,
+            cursorColor = selectedHabitColor,
+            focusedLabelColor = selectedHabitColor
+        )
         OutlinedTextField(
             modifier = Modifier
                 .focusRequester(nameFocusRequester)
@@ -110,7 +119,8 @@ fun AddHabitForm(
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next
-            )
+            ),
+            colors = customTextFieldColors
         )
 
         if (!isNameValid) {
@@ -134,6 +144,7 @@ fun AddHabitForm(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.None
             ),
+            colors = customTextFieldColors
         )
 
         Text(
@@ -147,6 +158,7 @@ fun AddHabitForm(
         Button(
             modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
             onClick = onSaveClick,
+            colors = ButtonDefaults.buttonColors(containerColor = selectedHabitColor)
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
