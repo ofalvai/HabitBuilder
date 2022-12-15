@@ -24,10 +24,17 @@ import com.ofalvai.habittracker.feature.dashboard.ui.model.ActionCountChart
 import com.ofalvai.habittracker.feature.dashboard.ui.model.SingleStats
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import java.time.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.MonthDay
+import java.time.Period
+import java.time.Year
+import java.time.YearMonth
+import java.time.ZoneId
 import java.time.temporal.IsoFields
 import java.time.temporal.WeekFields
-import java.util.*
+import java.util.Locale
 import com.ofalvai.habittracker.core.database.entity.ActionCountByMonth as ActionCountByMonthEntity
 import com.ofalvai.habittracker.core.database.entity.ActionCountByWeek as ActionCountByWeekEntity
 
@@ -35,13 +42,12 @@ fun mapHabitSingleStats(
     completionRate: ActionCompletionRate,
     actionCountByWeekEntity: List<ActionCountByWeekEntity>,
     now: LocalDate,
-    locale: Locale
 ): SingleStats {
     val firstDayDate = LocalDateTime.ofInstant(
         completionRate.first_day, ZoneId.systemDefault()
     ).toLocalDate()
     val lastWeekActions = actionCountByWeekEntity.lastOrNull {
-        val weekFields = WeekFields.of(locale)
+        val weekFields = WeekFields.ISO // the DB layer uses ISO week numbers
         it.year == now.year && it.week == now.get(weekFields.weekOfWeekBasedYear())
     }
 

@@ -25,7 +25,14 @@ import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.core.ui.state.Result
-import com.ofalvai.habittracker.feature.dashboard.mapper.*
+import com.ofalvai.habittracker.feature.dashboard.mapper.actionsToHistory
+import com.ofalvai.habittracker.feature.dashboard.mapper.mapActionCountByMonth
+import com.ofalvai.habittracker.feature.dashboard.mapper.mapActionCountByMonthListToItemList
+import com.ofalvai.habittracker.feature.dashboard.mapper.mapActionCountByWeek
+import com.ofalvai.habittracker.feature.dashboard.mapper.mapActionCountByWeekListToItemList
+import com.ofalvai.habittracker.feature.dashboard.mapper.mapHabitSingleStats
+import com.ofalvai.habittracker.feature.dashboard.mapper.toEntity
+import com.ofalvai.habittracker.feature.dashboard.mapper.toUIColor
 import com.ofalvai.habittracker.feature.dashboard.repo.ActionRepository
 import com.ofalvai.habittracker.feature.dashboard.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.feature.dashboard.ui.model.ActionCountByWeek
@@ -40,7 +47,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.util.*
+import java.util.Locale
 
 private val initialSingleStats = SingleStats(null, 0, 0, 0f)
 private val initialChartData = ActionCountChart(persistentListOf(), ActionCountChart.Type.Weekly)
@@ -108,7 +115,6 @@ class HabitDetailViewModel(
                     completionRate.await(),
                     actionCountByWeekEntity.await(),
                     LocalDate.now(),
-                    Locale.getDefault()
                 )
                 actionCountByWeek.value = mapActionCountByWeek(actionCountByWeekEntity.await())
                 actionCountByMonth.value = mapActionCountByMonth(actionCountByMonthEntity.await())
