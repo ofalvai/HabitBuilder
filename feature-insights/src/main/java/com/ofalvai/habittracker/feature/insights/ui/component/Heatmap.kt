@@ -269,7 +269,7 @@ private fun HeatmapLegend(
                         color = contentColorFor(backgroundColor),
                         textAlign = TextAlign.Center,
                         fontSize = 12.sp,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize().padding(top = 5.dp)
                     )
                 }
             }
