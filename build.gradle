@@ -18,6 +18,28 @@ plugins {
     alias(libs.plugins.gradle.buildtimetracker)
     alias(libs.plugins.gradle.cachefix) apply false // Applied in convention plugins
     alias(libs.plugins.dependencyanalysis)
+    id "io.github.cdsap.talaiot.plugin.influxdb2" version "1.5.3"
+}
+
+talaiot {
+    metrics {
+        gitMetrics = false
+        performanceMetrics = false
+    }
+    filter {
+        tasks {
+            excludes = ["preBuild", "processDebugResources", "preDebugBuild"]
+            includes = ["compileDebugKotlin"]
+        }
+    }
+    publishers {
+        influxDb2Publisher {
+            token = "oB-PLH_7PXpFI0KmN4kgoR0KCPzi85jwM8uxTW-YcA22r41gqhPtG_yjsPp2Fc-aq9ltBhSbysM0Z9ZMBgkYZQ=="
+            url = "http://localhost:8086"
+            org = "bitrise"
+            bucket = "bitrise"
+        }
+    }
 }
 
 doctor {

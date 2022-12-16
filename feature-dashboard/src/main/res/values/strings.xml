@@ -26,6 +26,7 @@
     <string name="dashboard_change_layout">Change layout</string>
     <string name="dashboard_empty_label">You don\'t have any habits yet.</string>
     <string name="dashboard_toggle_help">Long press to toggle</string>
+    <string name="dashboard_toggle_label">Done</string>
     <string name="dashboard_create_habit">Create new habit</string>
     <string name="dashboard_create_habit_first">Create your first habit</string>
     <string name="dashboard_item_details">Habit details</string>
@@ -35,6 +36,7 @@
     <string name="dashboard_event_action_performed">Well done!</string>
     <string name="dashboard_config_dialog_title">Choose a layout</string>
     <string name="dashboard_config_dialog_fiveday">Five day</string>
+    <string name="dashboard_config_dialog_minicalendar">Mini calendar</string>
     <string name="dashboard_config_dialog_compact">Compact</string>
 
     <string name="habit_suggestion_meditation">Meditate</string>

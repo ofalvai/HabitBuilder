@@ -69,6 +69,7 @@ import com.ofalvai.habittracker.feature.dashboard.R
 import com.ofalvai.habittracker.feature.dashboard.ui.DashboardIcons
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.compact.CompactHabitList
 import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.fiveday.FiveDayHabitList
+import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.minicalendar.MiniCalendarHabitList
 import com.ofalvai.habittracker.feature.dashboard.ui.model.DashboardConfig
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -184,6 +185,11 @@ private fun LoadedDashboard(
                 when (it) {
                     DashboardConfig.FiveDay -> {
                         FiveDayHabitList(
+                            habits, onActionToggle, onHabitDetail, onAddHabitClick, onMove
+                        )
+                    }
+                    DashboardConfig.MiniCalendar -> {
+                        MiniCalendarHabitList(
                             habits, onActionToggle, onHabitDetail, onAddHabitClick, onMove
                         )
                     }
