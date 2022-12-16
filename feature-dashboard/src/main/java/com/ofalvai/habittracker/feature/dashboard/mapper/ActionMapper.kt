@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
-private const val RECENT_ACTIONS_PER_HABIT = 7
+private const val RECENT_ACTIONS_PER_HABIT = 30 // TODO: make this dynamic
 
 fun actionsToRecentDays(actions: List<ActionEntity>): ImmutableList<Action> {
     val lastDay = LocalDate.now()

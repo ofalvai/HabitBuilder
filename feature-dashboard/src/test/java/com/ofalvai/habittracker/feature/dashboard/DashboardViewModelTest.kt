@@ -74,7 +74,7 @@ class DashboardViewModelTest {
 
         // Then
         viewModel.habitsWithActions.test {
-            val expectedActionHistory = (1..7).map { Action(0, false, null) }.toImmutableList()
+            val expectedActionHistory = (1..30).map { Action(0, false, null) }.toImmutableList()
             val expectedHabits = listOf(
                 HabitWithActions(Habit(0, "Meditation", Habit.Color.Green, ""), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green, ""), expectedActionHistory, 0, ActionHistory.Clean),
@@ -99,7 +99,7 @@ class DashboardViewModelTest {
 
         // Then
         viewModel.habitsWithActions.test {
-            val expectedActionHistory = (1..7).map { Action(0, false, null) }.toImmutableList()
+            val expectedActionHistory = (1..30).map { Action(0, false, null) }.toImmutableList()
             val expectedHabits = listOf(
                 HabitWithActions(Habit(0, "Meditation", Habit.Color.Green, ""), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green, ""), expectedActionHistory, 0, ActionHistory.Clean),
@@ -137,7 +137,7 @@ class DashboardViewModelTest {
         viewModel.habitsWithActions.test {
             mockFlow.emit(initialHabitWithActions)
 
-            val expectedActionHistory = (1..7).map { Action(0, false, null) }.toImmutableList()
+            val expectedActionHistory = (1..30).map { Action(0, false, null) }.toImmutableList()
             val expectedHabits1 = listOf(
                 HabitWithActions(Habit(0, "Meditation", Habit.Color.Green, ""), expectedActionHistory, 0, ActionHistory.Clean),
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green, ""), expectedActionHistory, 0, ActionHistory.Clean),
@@ -148,7 +148,7 @@ class DashboardViewModelTest {
             viewModel.toggleAction(0, Action(0, true, instantNow), 0)
             mockFlow.emit(modifiedHabitWithActions)
 
-            val expectedActionHistory2 = expectedActionHistory.take(6) + Action(0, true, instantNow)
+            val expectedActionHistory2 = expectedActionHistory.take(29) + Action(0, true, instantNow)
             val expectedHabits2 = listOf(
                 HabitWithActions(Habit(0, "Meditation", Habit.Color.Green, ""), expectedActionHistory2.toImmutableList(), 1, ActionHistory.Streak(1)),
                 HabitWithActions(Habit(1, "Running", Habit.Color.Green, ""), expectedActionHistory, 0, ActionHistory.Clean),

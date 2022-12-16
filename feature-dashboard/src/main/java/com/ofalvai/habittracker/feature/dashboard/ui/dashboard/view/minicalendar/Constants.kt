@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2022 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.feature.dashboard.ui.model
+package com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.minicalendar
 
-enum class DashboardConfig {
-    FiveDay,
-    MiniCalendar,
-    Compact
+import androidx.compose.ui.unit.dp
+
+internal object Constants {
+    const val Rows = 3
+    const val ItemPerRow = 10
+    val DotPadding = 2.dp
 }
