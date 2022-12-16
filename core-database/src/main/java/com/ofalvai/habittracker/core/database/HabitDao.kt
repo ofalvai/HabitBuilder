@@ -46,7 +46,6 @@ interface HabitDao {
     @Query("SELECT count(*) FROM habit")
     fun getTotalHabitCount(): Flow<Int>
 
-    // TODO: limit by timestamp
     @Transaction
     @Query("SELECT * FROM habit WHERE archived == 0 ORDER BY `order` ASC")
     fun getActiveHabitsWithActions(): Flow<List<HabitWithActions>>

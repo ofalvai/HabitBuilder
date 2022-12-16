@@ -25,12 +25,14 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
-private const val RECENT_ACTIONS_PER_HABIT = 30 // TODO: make this dynamic
+private const val RECENT_ACTIONS_PER_HABIT = 30 // Max number of days of any dashboard configs
 
 fun actionsToRecentDays(actions: List<ActionEntity>): ImmutableList<Action> {
     val lastDay = LocalDate.now()
 
-    val sortedActions = actions.sortedByDescending { action -> action.timestamp }
+    val sortedActions = actions
+        .sortedByDescending { action -> action.timestamp }
+        .take(RECENT_ACTIONS_PER_HABIT)
     return (RECENT_ACTIONS_PER_HABIT - 1 downTo 0).map { i ->
         val targetDate = lastDay.minusDays(i.toLong())
         val actionOnDay = sortedActions.find { action ->
