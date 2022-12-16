@@ -41,7 +41,7 @@ import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWi
 class HabitMapperTest {
 
     @Test
-    fun `Given habit with actions in the last 7 days When mapped to model Then history contains the toggled actions`()  {
+    fun `Given habit with actions in the last 30 days When mapped to model Then history contains the toggled actions`()  {
         // Given
         val now = Instant.now()
         val actions = listOf(
@@ -55,7 +55,7 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = listOf(
+        val expectedActionHistory = (1..23).map { Action(id = 0, toggled = false, timestamp = null) } + listOf(
             Action(0, false, null),
             Action(0, false, null),
             Action(0, false, null),
@@ -81,11 +81,11 @@ class HabitMapperTest {
     }
 
     @Test
-    fun `Given habit with actions before the last 7 days When mapped to model Then last 7 days' actions are empty`() {
+    fun `Given habit with actions before the last 30 days When mapped to model Then last 30 days' actions are empty`() {
         // Given
         val actions = listOf(
-            ActionEntity(id = 1, habit_id = 0, timestamp = Instant.now().minus(10, ChronoUnit.DAYS)),
-            ActionEntity(id = 2, habit_id = 0, timestamp = Instant.now().minus(19, ChronoUnit.DAYS))
+            ActionEntity(id = 1, habit_id = 0, timestamp = Instant.now().minus(40, ChronoUnit.DAYS)),
+            ActionEntity(id = 2, habit_id = 0, timestamp = Instant.now().minus(49, ChronoUnit.DAYS))
         )
         val habits = listOf(givenHabitWithActions(actions))
 
@@ -93,18 +93,18 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = (1..7).map { Action(0, false, null) }
+        val expectedActionHistory = (1..30).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory.toImmutableList(),
             2,
-            ActionHistory.MissedDays(10)
+            ActionHistory.MissedDays(40)
         ))
         assertEquals(expectedHabits, mappedHabitsWithActions)
     }
 
     @Test
-    fun `Given habit with actions in last 7 days and before as well When mapped to model Then history contains actions only from last 7 days`() {
+    fun `Given habit with actions in last 30 days and before as well When mapped to model Then history contains actions only from last 30 days`() {
         // Given
         val now = Instant.now()
         val actions = listOf(
@@ -112,8 +112,8 @@ class HabitMapperTest {
             ActionEntity(id = 2, habit_id = 0, timestamp = now.minus(3, ChronoUnit.DAYS)),
             ActionEntity(id = 3, habit_id = 0, timestamp = now.minus(1, ChronoUnit.DAYS)),
             ActionEntity(id = 4, habit_id = 0, timestamp = now.minus(5, ChronoUnit.DAYS)),
-            ActionEntity(id = 5, habit_id = 0, timestamp = now.minus(19, ChronoUnit.DAYS)),
-            ActionEntity(id = 6, habit_id = 0, timestamp = now.minus(30, ChronoUnit.DAYS))
+            ActionEntity(id = 6, habit_id = 0, timestamp = now.minus(30, ChronoUnit.DAYS)),
+            ActionEntity(id = 5, habit_id = 0, timestamp = now.minus(54, ChronoUnit.DAYS)),
         )
         val habits = listOf(givenHabitWithActions(actions))
 
@@ -121,7 +121,7 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = listOf(
+        val expectedActionHistory = (1..23).map { Action(id = 0, toggled = false, timestamp = null) } + listOf(
             Action(0, false, null),
             Action(4, true, now.minus(5, ChronoUnit.DAYS)),
             Action(0, false, null),
@@ -155,7 +155,7 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = listOf(
+        val expectedActionHistory = (1..23).map { Action(id = 0, toggled = false, timestamp = null) } + listOf(
             Action(0, false, null),
             Action(0, false, null),
             Action(0, false, null),
@@ -182,7 +182,7 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = (1..7).map { Action(0, false, null) }
+        val expectedActionHistory = (1..30).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory.toImmutableList(),
@@ -205,7 +205,7 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = listOf(
+        val expectedActionHistory = (1..23).map { Action(id = 0, toggled = false, timestamp = null) } + listOf(
             Action(0, false, null),
             Action(0, false, null),
             Action(0, false, null),
@@ -236,7 +236,7 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = listOf(
+        val expectedActionHistory = (1..23).map { Action(id = 0, toggled = false, timestamp = null) } + listOf(
             Action(0, false, null),
             Action(0, false, null),
             Action(0, false, null),
@@ -267,7 +267,7 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = listOf(
+        val expectedActionHistory = (1..23).map { Action(id = 0, toggled = false, timestamp = null) } + listOf(
             Action(0, false, null),
             Action(0, false, null),
             Action(0, false, null),
@@ -298,7 +298,7 @@ class HabitMapperTest {
         val mappedHabitsWithActions = mapHabitEntityToModel(habits)
 
         // Then
-        val expectedActionHistory = (1..7).map { Action(0, false, null) }
+        val expectedActionHistory = (1..30).map { Action(0, false, null) }
         val expectedHabits = listOf(HabitWithActions(
             Habit(0, "Meditation", Habit.Color.Red, "Doing right after waking up in the living room"),
             expectedActionHistory.toImmutableList(),
