@@ -17,6 +17,4 @@
 
 <resources>
     <color name="onBackground">#FFFFFF</color>
-
-    <color name="calendarCellBackground">#13FFFFFF</color> <!-- White with 5% alpha -->
 </resources>

@@ -16,7 +16,6 @@
 
 package com.ofalvai.habittracker.feature.dashboard.mapper
 
-import com.kizitonwose.calendarview.utils.yearMonth
 import com.ofalvai.habittracker.core.database.entity.ActionCompletionRate
 import com.ofalvai.habittracker.feature.dashboard.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.feature.dashboard.ui.model.ActionCountByWeek
@@ -98,10 +97,10 @@ fun fillActionCountByMonthListWithEmptyItems(
     list: List<ActionCountByMonth>, today: LocalDate
 ): List<ActionCountByMonth> {
     // Add today's month to the end of list, even if it's missing
-    val listWithCurrentMonth = if (list.lastOrNull()?.yearMonth == today.yearMonth) {
+    val listWithCurrentMonth = if (list.lastOrNull()?.yearMonth == today.yearMonth()) {
         list
     } else {
-        list + listOf(ActionCountByMonth(today.yearMonth, 0))
+        list + listOf(ActionCountByMonth(today.yearMonth(), 0))
     }
 
     val filledList = mutableListOf<ActionCountByMonth>()
@@ -206,3 +205,5 @@ private fun ActionCountByMonth.toChartItem() = ActionCountChart.ChartItem(
     year = this.yearMonth.year,
     value = this.actionCount,
 )
+
+private fun LocalDate.yearMonth() = YearMonth.of(year, month)
