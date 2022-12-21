@@ -26,20 +26,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.kizitonwose.calendar.compose.HorizontalCalendar
-import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.ofalvai.habittracker.core.model.Action
+import com.ofalvai.habittracker.core.ui.component.HorizontalMonthCalendar
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -51,30 +47,21 @@ fun HabitCalendar(
     yearMonth: YearMonth,
     habitColor: Color,
     actions: List<Action>,
-    onDayToggle: (LocalDate, Action) -> Unit
+    onDayToggle: (LocalDate, Action) -> Unit,
+    onMonthSwipe: (YearMonth) -> Unit
 ) {
-    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
-    val state = rememberCalendarState(
-        startMonth = yearMonth.minusYears(1), // TODO
-        endMonth = yearMonth.plusYears(1),
-        firstVisibleMonth = yearMonth,
-        firstDayOfWeek = firstDayOfWeek
-    )
-    LaunchedEffect(yearMonth) {
-        state.animateScrollToMonth(yearMonth)
+    HorizontalMonthCalendar(
+        yearMonth = yearMonth,
+        onMonthSwipe = onMonthSwipe
+    ) {calendarDay ->
+        val actionOnDay = actions.find {
+            val dateOfAction = LocalDateTime
+                .ofInstant(it.timestamp, ZoneId.systemDefault())
+                .toLocalDate()
+            dateOfAction == calendarDay.date
+        } ?: Action(0, false, null)
+        DayCell(calendarDay, habitColor, actionOnDay, onDayToggle)
     }
-    HorizontalCalendar(
-        state = state,
-        dayContent = { calendarDay ->
-            val actionOnDay = actions.find {
-                val dateOfAction = LocalDateTime
-                    .ofInstant(it.timestamp, ZoneId.systemDefault())
-                    .toLocalDate()
-                dateOfAction == calendarDay.date
-            } ?: Action(0, false, null)
-            DayCell(calendarDay, habitColor, actionOnDay, onDayToggle)
-        },
-    )
 }
 
 @Composable

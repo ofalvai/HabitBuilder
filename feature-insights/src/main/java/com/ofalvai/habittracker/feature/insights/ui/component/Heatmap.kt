@@ -34,7 +34,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,15 +54,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.kizitonwose.calendar.compose.HorizontalCalendar
-import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.ui.component.CalendarDayLegend
 import com.ofalvai.habittracker.core.ui.component.CalendarPager
 import com.ofalvai.habittracker.core.ui.component.ErrorView
+import com.ofalvai.habittracker.core.ui.component.HorizontalMonthCalendar
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
@@ -87,19 +84,15 @@ fun Heatmap(viewModel: InsightsViewModel) {
     val heatmapState by viewModel.heatmapState.collectAsState()
     val completedHabitsAtDate by viewModel.heatmapCompletedHabitsAtDate.collectAsState()
 
-    val onPreviousMonth = {
-        yearMonth = yearMonth.minusMonths(1)
-        viewModel.fetchHeatmap(yearMonth)
-    }
-    val onNextMonth = {
-        yearMonth = yearMonth.plusMonths(1)
+    val onMonthChange: (YearMonth) -> Unit = {
+        yearMonth = it
         viewModel.fetchHeatmap(yearMonth)
     }
     val onLoadHabitsAt: (LocalDate) -> Unit = {
         viewModel.fetchCompletedHabitsAt(it)
     }
 
-    Heatmap(yearMonth, heatmapState, completedHabitsAtDate, onPreviousMonth, onNextMonth, onLoadHabitsAt)
+    Heatmap(yearMonth, heatmapState, completedHabitsAtDate, onMonthChange, onLoadHabitsAt)
 }
 
 @Composable
@@ -107,8 +100,7 @@ fun Heatmap(
     yearMonth: YearMonth,
     heatmapState: Result<HeatmapMonth>,
     completedHabitsAtDate: ImmutableList<Habit>?,
-    onPreviousMonth: () -> Unit,
-    onNextMonth: () -> Unit,
+    onMonthChange: (YearMonth) -> Unit,
     onLoadHabitsAt: (LocalDate) -> Unit
 ) {
     InsightCard(
@@ -119,8 +111,8 @@ fun Heatmap(
         Column {
             CalendarPager(
                 yearMonth = yearMonth,
-                onPreviousClick = onPreviousMonth,
-                onNextClick = onNextMonth
+                onPreviousClick = { onMonthChange(yearMonth.minusMonths(1)) },
+                onNextClick = { onMonthChange(yearMonth.plusMonths(1)) }
             )
 
             CalendarDayLegend()
@@ -133,7 +125,7 @@ fun Heatmap(
                     if (!enoughData) {
                         EmptyView()
                     }
-                    HeatmapCalendar(yearMonth, heatmapData, completedHabitsAtDate, onLoadHabitsAt)
+                    HeatmapCalendar(yearMonth, heatmapData, completedHabitsAtDate, onLoadHabitsAt, onMonthChange)
 
                     if (enoughData) {
                         HeatmapLegend(
@@ -145,7 +137,7 @@ fun Heatmap(
 
                 Result.Loading -> {
                     val heatmapData = loadingHeatmapMonth
-                    HeatmapCalendar(yearMonth, heatmapData, completedHabitsAtDate, onLoadHabitsAt)
+                    HeatmapCalendar(yearMonth, heatmapData, completedHabitsAtDate, onLoadHabitsAt, onMonthChange)
                     HeatmapLegend(
                         heatmapData,
                         modifier = Modifier.align(Alignment.End).padding(top = 8.dp)
@@ -164,7 +156,8 @@ private fun HeatmapCalendar(
     yearMonth: YearMonth,
     heatmapData: HeatmapMonth,
     completedHabitsAtDate: ImmutableList<Habit>?,
-    onLoadHabitsAt: (LocalDate) -> Unit
+    onLoadHabitsAt: (LocalDate) -> Unit,
+    onMonthSwipe: (YearMonth) -> Unit
 ) {
     var showPopup by remember { mutableStateOf(false) }
     val onDayClick: (LocalDate) -> Unit = {
@@ -176,24 +169,10 @@ private fun HeatmapCalendar(
         DayPopup(completedHabitsAtDate, onDismiss = { showPopup = false })
     }
 
-    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
-    val state = rememberCalendarState(
-        startMonth = yearMonth.minusYears(1), // TODO
-        endMonth = yearMonth.plusYears(1),
-        firstVisibleMonth = yearMonth,
-        firstDayOfWeek = firstDayOfWeek
-    )
-    LaunchedEffect(yearMonth) {
-        state.animateScrollToMonth(yearMonth)
+    HorizontalMonthCalendar(yearMonth, onMonthSwipe) {
+        val dayData = heatmapData.dayMap[it.date] ?: HeatmapMonth.BucketInfo(0, 0)
+        DayCell(it, dayData, heatmapData.bucketCount, onDayClick)
     }
-
-    HorizontalCalendar(
-        state = state,
-        dayContent = {
-            val dayData = heatmapData.dayMap[it.date] ?: HeatmapMonth.BucketInfo(0, 0)
-            DayCell(it, dayData, heatmapData.bucketCount, onDayClick)
-        },
-    )
 }
 
 @Composable
@@ -367,13 +346,10 @@ fun PreviewHeatmap() {
             )
         )
 
-        val onPreviousMonth = {
-            yearMonth = yearMonth.minusMonths(1)
-        }
-        val onNextMonth = {
-            yearMonth = yearMonth.plusMonths(1)
+        val onMonthChange: (YearMonth) -> Unit = {
+            yearMonth = it
         }
 
-        Heatmap(yearMonth, heatmapState, null, onPreviousMonth, onNextMonth, {})
+        Heatmap(yearMonth, heatmapState, null, onMonthChange, {})
     }
 }

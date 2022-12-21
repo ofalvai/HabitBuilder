@@ -18,6 +18,7 @@ package com.ofalvai.habittracker.core.ui.component
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,14 +34,53 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
+import com.kizitonwose.calendar.compose.HorizontalCalendar
+import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.ofalvai.habittracker.core.ui.R
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import java.time.Year
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 import java.util.*
+
+
+@Composable
+fun HorizontalMonthCalendar(
+    yearMonth: YearMonth,
+    onMonthSwipe: (YearMonth) -> Unit,
+    content: @Composable BoxScope.(CalendarDay) -> Unit
+) {
+    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
+    val state = rememberCalendarState(
+        startMonth = yearMonth.minusYears(10),
+        endMonth = yearMonth.plusYears(10),
+        firstVisibleMonth = yearMonth,
+        firstDayOfWeek = firstDayOfWeek
+    )
+
+    LaunchedEffect(state) {
+        snapshotFlow { state.layoutInfo.visibleMonthsInfo }
+            .map { visibleMonths ->
+                visibleMonths.first().month.yearMonth
+            }
+            .distinctUntilChanged()
+            .collect {
+                onMonthSwipe(it)
+            }
+    }
+
+    LaunchedEffect(yearMonth) {
+        state.animateScrollToMonth(yearMonth)
+    }
+
+    HorizontalCalendar(state = state, dayContent = content)
+}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
