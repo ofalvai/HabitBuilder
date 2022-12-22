@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
+import com.ofalvai.habittracker.core.common.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.model.HabitWithActions
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
@@ -155,8 +156,6 @@ private fun DayLabel(
         )
     }
 }
-
-val VIBRATE_PATTERN_TOGGLE = longArrayOf(0, 75, 50, 75)
 
 fun Modifier.satisfyingToggleable(
     vibrator: Vibrator,

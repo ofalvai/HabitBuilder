@@ -16,6 +16,7 @@
 
 package com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.minicalendar
 
+import android.os.Vibrator
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
@@ -40,13 +41,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.content.getSystemService
+import com.ofalvai.habittracker.core.common.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.core.model.Action
-import com.ofalvai.habittracker.core.model.ActionHistory
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
@@ -54,6 +56,7 @@ import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.core.ui.theme.composeContainerColor
 import com.ofalvai.habittracker.core.ui.theme.composeOnContainerColor
 import com.ofalvai.habittracker.feature.dashboard.R
+import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.vibrateCompat
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -67,6 +70,7 @@ fun HabitCard(
     dragOffset: Float,
     modifier: Modifier = Modifier
 ) {
+    val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
     val isDragging = dragOffset != 0f
     Card(
         onClick = { onDetailClick(habit.id) },
@@ -95,6 +99,7 @@ fun HabitCard(
                     color = habit.color,
                     toggled = todayAction.toggled,
                     onActionToggle = {
+                        vibrator.vibrateCompat(VIBRATE_PATTERN_TOGGLE)
                         val newAction = todayAction.copy(toggled = it)
                         onActionToggle(newAction, habit, 0)
                     }
