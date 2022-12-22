@@ -13,7 +13,7 @@ dependencies {
     api project(':core-common')
     api project(':core-database')
     api project(':core-model')
-    implementation project(':core-ui')
+    api project(':core-ui')
 
     implementation libs.kotlin.immutable
     implementation libs.androidx.lifecycle.viewmodel.compose
