@@ -60,7 +60,7 @@ import com.ofalvai.habittracker.feature.dashboard.ui.model.SingleStats
 import kotlin.math.roundToInt
 import com.ofalvai.habittracker.core.ui.R as coreR
 
-private const val SCROLL_COLLAPSE_THRESHOLD = 100
+private const val SCROLL_COLLAPSE_THRESHOLD = 10
 
 @Composable
 internal fun HabitDetailHeader(
