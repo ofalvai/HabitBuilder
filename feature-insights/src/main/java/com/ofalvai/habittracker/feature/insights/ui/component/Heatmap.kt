@@ -23,9 +23,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -61,19 +63,17 @@ import com.ofalvai.habittracker.core.ui.component.CalendarDayLegend
 import com.ofalvai.habittracker.core.ui.component.CalendarPager
 import com.ofalvai.habittracker.core.ui.component.ErrorView
 import com.ofalvai.habittracker.core.ui.component.HorizontalMonthCalendar
+import com.ofalvai.habittracker.core.ui.recomposition.StableHolder
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.feature.insights.R
-import com.ofalvai.habittracker.feature.insights.model.BucketIndex
 import com.ofalvai.habittracker.feature.insights.model.HeatmapMonth
 import com.ofalvai.habittracker.feature.insights.ui.InsightsIcons
 import com.ofalvai.habittracker.feature.insights.ui.InsightsViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableMap
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -92,12 +92,12 @@ fun Heatmap(viewModel: InsightsViewModel) {
         viewModel.fetchCompletedHabitsAt(it)
     }
 
-    Heatmap(yearMonth, heatmapState, completedHabitsAtDate, onMonthChange, onLoadHabitsAt)
+    Heatmap(StableHolder(yearMonth), heatmapState, completedHabitsAtDate, onMonthChange, onLoadHabitsAt)
 }
 
 @Composable
 fun Heatmap(
-    yearMonth: YearMonth,
+    yearMonth: StableHolder<YearMonth>,
     heatmapState: Result<HeatmapMonth>,
     completedHabitsAtDate: ImmutableList<Habit>?,
     onMonthChange: (YearMonth) -> Unit,
@@ -111,8 +111,8 @@ fun Heatmap(
         Column {
             CalendarPager(
                 yearMonth = yearMonth,
-                onPreviousClick = { onMonthChange(yearMonth.minusMonths(1)) },
-                onNextClick = { onMonthChange(yearMonth.plusMonths(1)) }
+                onPreviousClick = { onMonthChange(yearMonth.item.minusMonths(1)) },
+                onNextClick = { onMonthChange(yearMonth.item.plusMonths(1)) }
             )
 
             CalendarDayLegend()
@@ -136,12 +136,7 @@ fun Heatmap(
                 }
 
                 Result.Loading -> {
-                    val heatmapData = loadingHeatmapMonth
-                    HeatmapCalendar(yearMonth, heatmapData, completedHabitsAtDate, onLoadHabitsAt, onMonthChange)
-                    HeatmapLegend(
-                        heatmapData,
-                        modifier = Modifier.align(Alignment.End).padding(top = 8.dp)
-                    )
+                    Spacer(Modifier.height(280.dp))
                 }
                 is Result.Failure -> {
                     ErrorView(label = stringResource(R.string.insights_heatmap_error))
@@ -153,7 +148,7 @@ fun Heatmap(
 
 @Composable
 private fun HeatmapCalendar(
-    yearMonth: YearMonth,
+    yearMonth: StableHolder<YearMonth>,
     heatmapData: HeatmapMonth,
     completedHabitsAtDate: ImmutableList<Habit>?,
     onLoadHabitsAt: (LocalDate) -> Unit,
@@ -310,14 +305,6 @@ private fun Color.adjustToBucketIndex(index: Int, bucketCount: Int): Color {
     }
 }
 
-private val loadingHeatmapMonth = HeatmapMonth(
-    yearMonth = YearMonth.now(),
-    dayMap = emptyMap<LocalDate, HeatmapMonth.BucketInfo>().toImmutableMap(),
-    totalHabitCount = 0,
-    bucketCount = 0,
-    bucketMaxValues = emptyList<Pair<BucketIndex, Int>>().toImmutableList()
-)
-
 @Preview
 @ShowkaseComposable(name = "Heatmap", group = "Insights")
 @Composable
@@ -350,6 +337,6 @@ fun PreviewHeatmap() {
             yearMonth = it
         }
 
-        Heatmap(yearMonth, heatmapState, null, onMonthChange, {})
+        Heatmap(StableHolder(yearMonth), heatmapState, null, onMonthChange, {})
     }
 }

@@ -33,6 +33,7 @@ sealed class Screen constructor(
     val popExitTransition: AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition = exitTransition
 )
 
+@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.appDestination(
     screen: Screen,
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
@@ -57,14 +58,18 @@ object Destination {
         route = "dashboard",
         enterTransition = {
             when (initialState.destination.route) {
-                Insights.route -> AppTransition.fadeThroughEnter
+                // Re-enable transition once performance becomes acceptable
+                // Insights.route -> AppTransition.fadeThroughEnter
+                Insights.route -> EnterTransition.None
                 Settings.route, Archive.route, AddHabit.route, HabitDetails.route -> AppTransition.sharedZAxisEnterBackward
                 else -> AppTransition.defaultEnter
             }
         },
         exitTransition = {
             when (targetState.destination.route) {
-                Insights.route -> AppTransition.fadeThroughExit
+                // Re-enable transition once performance becomes acceptable
+                // Insights.route -> AppTransition.fadeThroughExit
+                Insights.route -> ExitTransition.None
                 Settings.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisExitForward
                 else -> AppTransition.defaultExit
             }
@@ -75,14 +80,18 @@ object Destination {
         route = "insights",
         enterTransition = {
             when (initialState.destination.route) {
-                Dashboard.route -> AppTransition.fadeThroughEnter
+                // Re-enable transition once performance becomes acceptable
+                // Dashboard.route -> AppTransition.fadeThroughEnter
+                Dashboard.route -> EnterTransition.None
                 Settings.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisEnterBackward
                 else -> AppTransition.defaultEnter
             }
         },
         exitTransition = {
             when (targetState.destination.route) {
-                Dashboard.route -> AppTransition.fadeThroughExit
+                // Re-enable transition once performance becomes acceptable
+                // Dashboard.route -> AppTransition.fadeThroughExit
+                Dashboard.route -> ExitTransition.None
                 Settings.route, Archive.route, HabitDetails.route -> AppTransition.sharedZAxisExitForward
                 else -> AppTransition.defaultExit
             }

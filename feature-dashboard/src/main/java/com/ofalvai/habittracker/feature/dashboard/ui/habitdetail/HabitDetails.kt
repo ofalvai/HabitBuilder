@@ -63,6 +63,7 @@ import com.ofalvai.habittracker.core.ui.component.CalendarDayLegend
 import com.ofalvai.habittracker.core.ui.component.CalendarPager
 import com.ofalvai.habittracker.core.ui.component.ConfirmationDialog
 import com.ofalvai.habittracker.core.ui.component.ErrorView
+import com.ofalvai.habittracker.core.ui.recomposition.StableHolder
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.state.asEffect
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
@@ -202,13 +203,13 @@ private fun Calendar(
             Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
         ) {
             CalendarPager(
-                yearMonth = yearMonth,
+                yearMonth = StableHolder(yearMonth),
                 onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
                 onNextClick = { yearMonth = yearMonth.plusMonths(1) }
             )
             CalendarDayLegend()
             HabitCalendar(
-                yearMonth = yearMonth,
+                yearMonth = StableHolder(yearMonth),
                 habitColor = habitDetailState.value.habit.color.composeColor,
                 actions = habitDetailState.value.actions,
                 onDayToggle = onDayToggle,

@@ -39,6 +39,7 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.ofalvai.habittracker.core.ui.R
+import com.ofalvai.habittracker.core.ui.recomposition.StableHolder
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -52,15 +53,15 @@ import java.util.*
 
 @Composable
 fun HorizontalMonthCalendar(
-    yearMonth: YearMonth,
+    yearMonth: StableHolder<YearMonth>,
     onMonthSwipe: (YearMonth) -> Unit,
     content: @Composable BoxScope.(CalendarDay) -> Unit
 ) {
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
     val state = rememberCalendarState(
-        startMonth = yearMonth.minusYears(10),
-        endMonth = yearMonth.plusYears(10),
-        firstVisibleMonth = yearMonth,
+        startMonth = yearMonth.item.minusYears(10),
+        endMonth = yearMonth.item.plusYears(10),
+        firstVisibleMonth = yearMonth.item,
         firstDayOfWeek = firstDayOfWeek
     )
 
@@ -76,7 +77,7 @@ fun HorizontalMonthCalendar(
     }
 
     LaunchedEffect(yearMonth) {
-        state.animateScrollToMonth(yearMonth)
+        state.animateScrollToMonth(yearMonth.item)
     }
 
     HorizontalCalendar(state = state, dayContent = content)
@@ -85,7 +86,7 @@ fun HorizontalMonthCalendar(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CalendarPager(
-    yearMonth: YearMonth,
+    yearMonth: StableHolder<YearMonth>,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
@@ -102,7 +103,7 @@ fun CalendarPager(
         }
 
         AnimatedContent(
-            targetState = yearMonth,
+            targetState = yearMonth.item,
             transitionSpec = pagerTransitionSpec,
             modifier = Modifier.fillMaxWidth(0.8f)
         ) { targetYearMonth ->
@@ -159,7 +160,7 @@ fun PreviewCalendarPager() {
     PreviewTheme {
         var yearMonth by remember { mutableStateOf(YearMonth.of(2022, 1)) }
         CalendarPager(
-            yearMonth = yearMonth,
+            yearMonth = StableHolder(yearMonth),
             onPreviousClick = { yearMonth = yearMonth.minusMonths(1) },
             onNextClick = { yearMonth = yearMonth.plusMonths(1) }
         )

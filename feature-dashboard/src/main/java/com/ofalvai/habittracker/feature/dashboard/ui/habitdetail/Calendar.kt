@@ -36,6 +36,7 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.ui.component.HorizontalMonthCalendar
+import com.ofalvai.habittracker.core.ui.recomposition.StableHolder
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -44,7 +45,7 @@ import java.time.ZoneId
 
 @Composable
 fun HabitCalendar(
-    yearMonth: YearMonth,
+    yearMonth: StableHolder<YearMonth>,
     habitColor: Color,
     actions: List<Action>,
     onDayToggle: (LocalDate, Action) -> Unit,
