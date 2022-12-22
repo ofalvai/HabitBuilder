@@ -118,9 +118,7 @@ ruler {
 licensee {
     allow("Apache-2.0")
     allow("MIT")
-    allowDependency("com.github.kizitonwose", "CalendarView", "1.1.0") {
-        because "Artifact declares no licenses, but it's MIT according to GitHub"
-    }
+    allowUrl("https://github.com/kizitonwose/calendar/blob/main/LICENSE.md")
 }
 
 dependencies {
