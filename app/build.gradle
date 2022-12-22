@@ -133,8 +133,6 @@ dependencies {
 
     coreLibraryDesugaring libs.gradle.android.desugar
 
-    implementation libs.compose.ui.ui
-    implementation libs.compose.ui.toolingpreview
     debugImplementation libs.compose.ui.tooling
 
     implementation libs.androidx.navigation.compose

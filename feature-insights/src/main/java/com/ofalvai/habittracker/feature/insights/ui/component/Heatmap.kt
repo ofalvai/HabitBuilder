@@ -16,22 +16,19 @@
 
 package com.ofalvai.habittracker.feature.insights.ui.component
 
-import android.graphics.Paint
-import android.graphics.Typeface
-import android.graphics.drawable.Drawable
-import android.view.View
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -54,35 +52,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.kizitonwose.calendarview.CalendarView
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.model.ScrollMode
-import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.ui.component.CalendarDayLegend
 import com.ofalvai.habittracker.core.ui.component.CalendarPager
 import com.ofalvai.habittracker.core.ui.component.ErrorView
+import com.ofalvai.habittracker.core.ui.component.HorizontalMonthCalendar
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.feature.insights.R
+import com.ofalvai.habittracker.feature.insights.model.BucketIndex
 import com.ofalvai.habittracker.feature.insights.model.HeatmapMonth
 import com.ofalvai.habittracker.feature.insights.ui.InsightsIcons
 import com.ofalvai.habittracker.feature.insights.ui.InsightsViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.temporal.WeekFields
-import java.util.Locale
 
 @Composable
 fun Heatmap(viewModel: InsightsViewModel) {
@@ -91,19 +84,15 @@ fun Heatmap(viewModel: InsightsViewModel) {
     val heatmapState by viewModel.heatmapState.collectAsState()
     val completedHabitsAtDate by viewModel.heatmapCompletedHabitsAtDate.collectAsState()
 
-    val onPreviousMonth = {
-        yearMonth = yearMonth.minusMonths(1)
-        viewModel.fetchHeatmap(yearMonth)
-    }
-    val onNextMonth = {
-        yearMonth = yearMonth.plusMonths(1)
+    val onMonthChange: (YearMonth) -> Unit = {
+        yearMonth = it
         viewModel.fetchHeatmap(yearMonth)
     }
     val onLoadHabitsAt: (LocalDate) -> Unit = {
         viewModel.fetchCompletedHabitsAt(it)
     }
 
-    Heatmap(yearMonth, heatmapState, completedHabitsAtDate, onPreviousMonth, onNextMonth, onLoadHabitsAt)
+    Heatmap(yearMonth, heatmapState, completedHabitsAtDate, onMonthChange, onLoadHabitsAt)
 }
 
 @Composable
@@ -111,8 +100,7 @@ fun Heatmap(
     yearMonth: YearMonth,
     heatmapState: Result<HeatmapMonth>,
     completedHabitsAtDate: ImmutableList<Habit>?,
-    onPreviousMonth: () -> Unit,
-    onNextMonth: () -> Unit,
+    onMonthChange: (YearMonth) -> Unit,
     onLoadHabitsAt: (LocalDate) -> Unit
 ) {
     InsightCard(
@@ -123,8 +111,8 @@ fun Heatmap(
         Column {
             CalendarPager(
                 yearMonth = yearMonth,
-                onPreviousClick = onPreviousMonth,
-                onNextClick = onNextMonth
+                onPreviousClick = { onMonthChange(yearMonth.minusMonths(1)) },
+                onNextClick = { onMonthChange(yearMonth.plusMonths(1)) }
             )
 
             CalendarDayLegend()
@@ -137,7 +125,7 @@ fun Heatmap(
                     if (!enoughData) {
                         EmptyView()
                     }
-                    HeatmapCalendar(yearMonth, heatmapData, completedHabitsAtDate, onLoadHabitsAt)
+                    HeatmapCalendar(yearMonth, heatmapData, completedHabitsAtDate, onLoadHabitsAt, onMonthChange)
 
                     if (enoughData) {
                         HeatmapLegend(
@@ -146,11 +134,14 @@ fun Heatmap(
                         )
                     }
                 }
+
                 Result.Loading -> {
-                    // Avoid emitting another HeatmapCalendar() here because it an expensive
-                    // composable (wraps an AndroidView which contains a RecyclerView)
-                    // Yes, the layout will jump when transitioning from Loading -> Success,
-                    // but it's still better than janky animations
+                    val heatmapData = loadingHeatmapMonth
+                    HeatmapCalendar(yearMonth, heatmapData, completedHabitsAtDate, onLoadHabitsAt, onMonthChange)
+                    HeatmapLegend(
+                        heatmapData,
+                        modifier = Modifier.align(Alignment.End).padding(top = 8.dp)
+                    )
                 }
                 is Result.Failure -> {
                     ErrorView(label = stringResource(R.string.insights_heatmap_error))
@@ -165,7 +156,8 @@ private fun HeatmapCalendar(
     yearMonth: YearMonth,
     heatmapData: HeatmapMonth,
     completedHabitsAtDate: ImmutableList<Habit>?,
-    onLoadHabitsAt: (LocalDate) -> Unit
+    onLoadHabitsAt: (LocalDate) -> Unit,
+    onMonthSwipe: (YearMonth) -> Unit
 ) {
     var showPopup by remember { mutableStateOf(false) }
     val onDayClick: (LocalDate) -> Unit = {
@@ -177,27 +169,42 @@ private fun HeatmapCalendar(
         DayPopup(completedHabitsAtDate, onDismiss = { showPopup = false })
     }
 
-    val context = LocalContext.current
-    val highlightColor = MaterialTheme.colorScheme.tertiary
-    val view = remember {
-        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-        CalendarView(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            scrollMode = ScrollMode.PAGED
-            dayViewResource = R.layout.item_calendar_day_heatmap
-            dayBinder = HeatmapDayBinder(heatmapData, onDayClick, highlightColor)
-            setup(startMonth = yearMonth, endMonth = yearMonth, firstDayOfWeek)
-        }
+    HorizontalMonthCalendar(yearMonth, onMonthSwipe) {
+        val dayData = heatmapData.dayMap[it.date] ?: HeatmapMonth.BucketInfo(0, 0)
+        DayCell(it, dayData, heatmapData.bucketCount, onDayClick)
     }
+}
 
-    AndroidView({ view }) { calendarView ->
-        val binder = calendarView.dayBinder as HeatmapDayBinder
-        // This recomposition happens quite often, but we should only reload when relevant data changes
-        if (heatmapData != binder.heatmapData) {
-            binder.heatmapData = heatmapData
-            calendarView.updateMonthRange(startMonth = yearMonth, endMonth = yearMonth)
-            calendarView.notifyMonthChanged(yearMonth)
-        }
+@Composable
+private fun DayCell(
+    day: CalendarDay,
+    bucketInfo: HeatmapMonth.BucketInfo,
+    bucketCount: Int,
+    onDayClick: (LocalDate) -> Unit
+) {
+    val today = LocalDate.now()
+    val color = MaterialTheme.colorScheme.tertiary
+        .adjustToBucketIndex(bucketInfo.bucketIndex, bucketCount)
+
+    val todayModifier = if (today == day.date) {
+        Modifier.border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
+    } else Modifier
+    Box(
+        modifier = Modifier
+            .padding(4.dp)
+            .then(todayModifier)
+            .clip(CircleShape)
+            .clickable { onDayClick(day.date) }
+            .aspectRatio(1f)
+            .background(color, shape = CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        val isFaded = day.position != DayPosition.MonthDate || day.date.isAfter(today)
+        Text(
+            text = day.date.dayOfMonth.toString(),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.alpha(if (isFaded) 0.5f else 1f),
+        )
     }
 }
 
@@ -290,80 +297,6 @@ private fun hasEnoughData(heatmapData: HeatmapMonth): Boolean {
     return heatmapData.totalHabitCount > 0
 }
 
-private class HeatmapDayBinder(
-    var heatmapData: HeatmapMonth,
-    private val onDayClick: (LocalDate) -> Unit,
-    private val highlightColor: Color
-) : DayBinder<DayViewContainer> {
-    override fun create(view: View) = DayViewContainer(view, onDayClick)
-
-    override fun bind(container: DayViewContainer, day: CalendarDay) {
-        val dayData = heatmapData.dayMap[day.date] ?: HeatmapMonth.BucketInfo(0, 0)
-        container.bind(day, dayData, heatmapData.bucketCount, highlightColor)
-    }
-}
-
-private class DayViewContainer(
-    view: View,
-    private val onDayClick: (LocalDate) -> Unit
-) : ViewContainer(view) {
-
-    val textView = view.findViewById<TextView>(R.id.calendarDayText)!!
-    val backgroundDrawable: Drawable = DrawableCompat.wrap(
-        ContextCompat.getDrawable(view.context, R.drawable.bg_calendar_day)!!
-    )
-
-    lateinit var day: CalendarDay
-    lateinit var bucketInfo: HeatmapMonth.BucketInfo
-
-    init {
-        textView.setOnClickListener {
-            onDayClick(day.date)
-        }
-    }
-
-    fun bind(
-        day: CalendarDay,
-        bucketInfo: HeatmapMonth.BucketInfo,
-        bucketCount: Int,
-        highlightColor: Color
-    ) {
-        this.day = day
-        this.bucketInfo = bucketInfo
-
-        val today = LocalDate.now()
-        val color = highlightColor.adjustToBucketIndex(bucketInfo.bucketIndex, bucketCount)
-        DrawableCompat.setTint(backgroundDrawable, color.toColorInt())
-        textView.background = backgroundDrawable
-
-        textView.visibility = if (day.owner == DayOwner.THIS_MONTH) {
-            View.VISIBLE
-        } else {
-            View.INVISIBLE // View.GONE would mess up the grid-like layout
-        }
-
-        textView.alpha = if (day.date.isAfter(today)) 0.5f else 1f
-
-        textView.typeface = if (day.date == today) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-
-        textView.paintFlags = if (day.date == today) {
-            textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        } else {
-            textView.paintFlags
-        }
-        textView.text = if (day.owner == DayOwner.THIS_MONTH) {
-            day.date.dayOfMonth.toString()
-        } else {
-            null
-        }
-    }
-}
-
-private fun Color.toColorInt(): Int {
-    // This isn't 100% correct, but works with SRGB color space
-    return (value shr 32).toInt()
-}
-
 @ColorInt
 private fun Color.adjustToBucketIndex(index: Int, bucketCount: Int): Color {
     if (index > 0 && index >= bucketCount) {
@@ -376,6 +309,14 @@ private fun Color.adjustToBucketIndex(index: Int, bucketCount: Int): Color {
         this.copy(alpha = index / bucketCount.toFloat())
     }
 }
+
+private val loadingHeatmapMonth = HeatmapMonth(
+    yearMonth = YearMonth.now(),
+    dayMap = emptyMap<LocalDate, HeatmapMonth.BucketInfo>().toImmutableMap(),
+    totalHabitCount = 0,
+    bucketCount = 0,
+    bucketMaxValues = emptyList<Pair<BucketIndex, Int>>().toImmutableList()
+)
 
 @Preview
 @ShowkaseComposable(name = "Heatmap", group = "Insights")
@@ -405,13 +346,10 @@ fun PreviewHeatmap() {
             )
         )
 
-        val onPreviousMonth = {
-            yearMonth = yearMonth.minusMonths(1)
-        }
-        val onNextMonth = {
-            yearMonth = yearMonth.plusMonths(1)
+        val onMonthChange: (YearMonth) -> Unit = {
+            yearMonth = it
         }
 
-        Heatmap(yearMonth, heatmapState, null, onPreviousMonth, onNextMonth, {})
+        Heatmap(yearMonth, heatmapState, null, onMonthChange, {})
     }
 }

@@ -206,7 +206,8 @@ private fun Calendar(
                 yearMonth = yearMonth,
                 habitColor = habitDetailState.value.habit.color.composeColor,
                 actions = habitDetailState.value.actions,
-                onDayToggle = onDayToggle
+                onDayToggle = onDayToggle,
+                onMonthSwipe = { yearMonth = it }
             )
         }
     }
