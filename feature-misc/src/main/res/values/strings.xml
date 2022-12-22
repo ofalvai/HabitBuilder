@@ -19,7 +19,7 @@
     <string name="settings_title">Settings</string>
     <string name="settings_header_about">About</string>
     <string name="settings_item_dynamic_color">Dynamic color</string>
-    <string name="settings_item_crash_reporting">Crash reporting</string>
+    <string name="settings_item_crash_reporting">Send crash reports</string>
     <string name="settings_item_rate">Rate app on Google Play</string>
     <string name="settings_item_view_source">View source on GitHub</string>
     <string name="settings_item_licenses">Open-source libraries</string>

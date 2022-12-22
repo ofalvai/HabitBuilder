@@ -15,9 +15,5 @@
   -->
 
 <resources>
-    <string name="app_name">Habit Builder</string>
-
-    <string name="tab_dashboard">Habits</string>
-    <string name="tab_insights">Insights</string>
-
+    <string name="app_name">Habit Builder Debug</string>
 </resources>
