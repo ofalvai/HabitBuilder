@@ -17,6 +17,7 @@
 package com.ofalvai.habittracker.feature.misc.settings
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -61,20 +62,9 @@ fun SettingsScreen(
     val viewModel = viewModel<SettingsViewModel>(factory = vmFactory)
     val context = LocalContext.current
 
-    val onRateClick = {
-        val uri = viewModel.appInfo.marketUrl.toUri()
-        val intent = Intent(Intent.ACTION_VIEW).apply { data = uri }
-        context.startActivity(intent)
-    }
-    val onSourceClick = {
-        val uri = viewModel.appInfo.urlSourceCode.toUri()
-        val intent = Intent(Intent.ACTION_VIEW).apply { data = uri }
-        context.startActivity(intent)
-    }
-    val onPrivacyClick = {
-        val intent = Intent(Intent.ACTION_VIEW).apply { data = viewModel.appInfo.urlPrivacyPolicy.toUri() }
-        context.startActivity(intent)
-    }
+    val onRateClick = { context.openUrl(viewModel.appInfo.marketUrl) }
+    val onSourceClick = { context.openUrl(viewModel.appInfo.urlSourceCode) }
+    val onPrivacyClick = { context.openUrl(viewModel.appInfo.urlPrivacyPolicy) }
 
     val crashReportingEnabled by viewModel.crashReportingEnabled.collectAsState()
     val onCrashReportingChange: (Boolean) -> Unit = {
@@ -240,6 +230,15 @@ internal fun TextRow(name: String, subtitle: String) {
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.fillMaxWidth().padding(start = 56.dp)
         )
+    }
+}
+
+private fun Context.openUrl(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW).apply { data = url.toUri() }
+    try {
+        startActivity(intent)
+    } catch (e: Throwable) {
+        // Fail silently, it's unlikely that real user devices don't have a browser
     }
 }
 
