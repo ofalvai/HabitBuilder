@@ -48,6 +48,7 @@ import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.ActionHistory
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitId
+import com.ofalvai.habittracker.core.ui.semantics.habitActionSemantics
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
@@ -126,7 +127,7 @@ fun ActionCircles(
             actions.mapIndexed { index, action ->
                 ActionCircle(
                     activeColor = habitColor.composeColor,
-                    toggled = action.toggled,
+                    action = action,
                     onToggle = { newState ->
                         singlePressCounter = 0
                         onActionToggle(
@@ -154,13 +155,13 @@ fun ActionCircles(
 @Composable
 fun ActionCircle(
     activeColor: Color,
-    toggled: Boolean,
+    action: Action,
     onToggle: (Boolean) -> Unit,
     isHighlighted: Boolean,
     onSinglePress: () -> Unit
 ) {
     AnimatedContent(
-        targetState = toggled,
+        targetState = action.toggled,
         transitionSpec = {
             (scaleIn(
                 animationSpec = tween(250, delayMillis = 250, easing = CubicBezierEasing(0.46f, 1.83f, 0.64f, 1f))
@@ -178,6 +179,7 @@ fun ActionCircle(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
+                .habitActionSemantics(action)
                 .size(Constants.CircleSize)
                 .padding(Constants.CirclePadding)
                 .satisfyingToggleable(

@@ -37,6 +37,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.ui.component.HorizontalMonthCalendar
 import com.ofalvai.habittracker.core.ui.recomposition.StableHolder
+import com.ofalvai.habittracker.core.ui.semantics.habitActionSemantics
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -84,6 +85,7 @@ private fun DayCell(
     } else Modifier
     Box(
         modifier = Modifier
+            .habitActionSemantics(action)
             .padding(4.dp)
             .then(todayModifier)
             .clip(CircleShape)

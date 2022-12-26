@@ -49,6 +49,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,6 +79,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun Heatmap(viewModel: InsightsViewModel) {
@@ -186,6 +190,9 @@ private fun DayCell(
     } else Modifier
     Box(
         modifier = Modifier
+            .semantics {
+                text = AnnotatedString(DateTimeFormatter.ofPattern("LL dd").format(day.date))
+            }
             .padding(4.dp)
             .then(todayModifier)
             .clip(CircleShape)

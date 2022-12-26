@@ -56,6 +56,7 @@ import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.component.HorizontalGrid
+import com.ofalvai.habittracker.core.ui.semantics.habitActionSemantics
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
@@ -129,7 +130,7 @@ fun ActionSquares(
             actions.mapIndexed { index, action ->
                 ActionSquare(
                     activeColor = habitColor.composeColor,
-                    toggled = action.toggled,
+                    action = action,
                     onToggle = { newState ->
                         singlePressCounter = 0
                         onActionToggle(
@@ -157,17 +158,18 @@ fun ActionSquares(
 @Composable
 fun ActionSquare(
     activeColor: Color,
-    toggled: Boolean,
+    action: Action,
     onToggle: (Boolean) -> Unit,
     onSinglePress: () -> Unit
 ) {
-    val color = if (toggled) activeColor else LocalAppColors.current.gray1
-    val borderColor = if (toggled) activeColor.darken() else Color.Transparent
+    val color = if (action.toggled) activeColor else LocalAppColors.current.gray1
+    val borderColor = if (action.toggled) activeColor.darken() else Color.Transparent
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
     Box(
         modifier = Modifier
-            .satisfyingToggleable(vibrator, Dp.Unspecified, true, toggled, onToggle, onSinglePress)
+            .habitActionSemantics(action)
+            .satisfyingToggleable(vibrator, Dp.Unspecified, true, action.toggled, onToggle, onSinglePress)
             .aspectRatio(1f)
             .padding(1.dp)
             .border(1.dp, borderColor)

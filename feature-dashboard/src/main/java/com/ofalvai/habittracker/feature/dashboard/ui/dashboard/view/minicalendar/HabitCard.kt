@@ -51,6 +51,7 @@ import com.ofalvai.habittracker.core.common.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitId
+import com.ofalvai.habittracker.core.ui.semantics.habitActionSemantics
 import com.ofalvai.habittracker.core.ui.theme.AppTextStyle
 import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.core.ui.theme.composeContainerColor
@@ -124,7 +125,7 @@ fun ActionCalendar(
             Row(modifier = Modifier.padding(vertical = Constants.DotPadding)) {
                 val row = actions.subList(rowIndex * Constants.ItemPerRow, (rowIndex + 1) * Constants.ItemPerRow)
                 row.forEach {
-                    ActionDot(toggled = it.toggled, habitColor = habitColor)
+                    ActionDot(action = it, habitColor = habitColor)
                 }
             }
         }
@@ -133,12 +134,13 @@ fun ActionCalendar(
 
 @Composable
 fun ActionDot(
-    toggled: Boolean,
+    action: Action,
     habitColor: Habit.Color
 ) {
-    val color = if (toggled) habitColor.composeColor else MaterialTheme.colorScheme.surface
+    val color = if (action.toggled) habitColor.composeColor else MaterialTheme.colorScheme.surface
     Box(
         modifier = Modifier
+            .habitActionSemantics(action)
             .padding(horizontal = Constants.DotPadding)
             .background(color, shape = RoundedCornerShape(2.dp))
             .size(12.dp)

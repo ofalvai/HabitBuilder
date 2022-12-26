@@ -32,4 +32,8 @@
 
     <string name="calendar_previous_month">Previous month</string>
     <string name="calendar_next_month">Next month</string>
+
+    <string name="action_text_no_date">No date</string>
+    <string name="action_state_not_toggled">Not toggled</string>
+    <string name="action_state_toggled">Toggled</string>
 </resources>

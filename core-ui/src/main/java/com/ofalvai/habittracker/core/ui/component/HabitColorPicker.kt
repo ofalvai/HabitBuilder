@@ -47,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -133,6 +134,8 @@ fun HabitColor(
             .size(size)
             .clickable(
                 onClick = onClick,
+                onClickLabel = color.name,
+                role = Role.RadioButton,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             )

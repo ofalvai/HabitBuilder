@@ -78,7 +78,7 @@ fun InsightHeader(
         Row(Modifier.fillMaxWidth()) {
             Icon(
                 painter = iconPainter,
-                contentDescription = title,
+                contentDescription = null,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
             Text(
