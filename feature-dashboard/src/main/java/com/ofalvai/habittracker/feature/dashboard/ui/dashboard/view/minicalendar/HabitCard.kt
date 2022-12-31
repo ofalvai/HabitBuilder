@@ -123,7 +123,10 @@ fun ActionCalendar(
     Column {
         (0 until Constants.Rows).forEach { rowIndex ->
             Row(modifier = Modifier.padding(vertical = Constants.DotPadding)) {
-                val row = actions.subList(rowIndex * Constants.ItemPerRow, (rowIndex + 1) * Constants.ItemPerRow)
+                val row = actions.subList(
+                    rowIndex * Constants.ItemPerRow,
+                    (rowIndex + 1) * Constants.ItemPerRow
+                )
                 row.forEach {
                     ActionDot(action = it, habitColor = habitColor)
                 }
@@ -160,14 +163,15 @@ fun ActionButton(
             containerColor = color.composeColor
         )
     ) {
-        AnimatedVisibility (toggled) {
+        AnimatedVisibility(toggled) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
                 modifier = Modifier.padding(end = 4.dp)
             )
         }
-        Text(text = stringResource(R.string.dashboard_toggle_label))
+        val label = stringResource(if (toggled) R.string.dashboard_toggle_label_toggled else R.string.dashboard_toggle_label_untoggled)
+        Text(text = label)
     }
 }
 
