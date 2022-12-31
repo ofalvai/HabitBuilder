@@ -2,13 +2,17 @@
 
 [![Build Status](https://app.bitrise.io/app/46845b0b84193b80/status.svg?token=SHqpol98nJjn_O5hbFPjIg&branch=main)](https://app.bitrise.io/app/46845b0b84193b80)
 
-TODO Google Play badge
+[<img src="https://user-images.githubusercontent.com/1694986/111364968-24a0fa00-864f-11eb-88aa-4b4127d8e012.png?width=100" width="200"></img>](https://play.google.com/store/apps/details?id=com.ofalvai.habittracker)
 
-TODO screenshots table
+![Header](docs/feature_graphic.png)
+
+|   |   |   |   |
+|---|---|---|---|
+| ![](docs/screenshot_1.png) | ![](docs/screenshot_2.png) | ![](docs/screenshot_3.png) | ![](docs/screenshot_4.png) |
 
 ## Motivation
 
-I needed a simple and minimal habit tracking app.
+I needed a simple and minimal habit tracking app, so I decided to create my own.
 
 This project is also a testing ground for new technologies I'd like to explore.
 
@@ -20,12 +24,12 @@ This project is also a testing ground for new technologies I'd like to explore.
   - Overall: calendar heatmap, top habits, top days for habits
 - Customizable habit list layout, reorderable list
 - All data is persisted on-device in a database
-- Export, import, archiving old items
+- Export, import, archiving of old items
 
 ## 🛠 Built with
 
 - [Compose-only](https://developer.android.com/jetpack/compose) UI:
-    - Material You-ish design (not perfect yet!)
+    - Based on Material3, supports dynamic color
     - Light and dark theme
     - Smooth and delightful animations
     - No AppCompat dependency, single Activity
@@ -44,6 +48,7 @@ This project is also a testing ground for new technologies I'd like to explore.
     - [Ruler](https://github.com/spotify/ruler): a Gradle plugin that measures app size and libraries contributing to it
     - [Gradle version catalog](https://github.com/ofalvai/HabitTracker/blob/main/gradle/libs.versions.toml)
     - [Renovate](https://github.com/ofalvai/HabitTracker/issues/10): Automating dependency update PRs (works with Gradle version catalogs!)
+    - [Gradle dependency analysis](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin): For automatically detecting unused dependencies and other common mistakes
 
 ## Development
 
@@ -57,7 +62,7 @@ This project is also a testing ground for new technologies I'd like to explore.
 ## License
 
 ```
-   Copyright 2021 Olivér Falvai
+   Copyright 2023 Olivér Falvai
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
