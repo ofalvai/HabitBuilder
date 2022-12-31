@@ -1,6 +1,4 @@
-# Habit Builder
-
-[![Build Status](https://app.bitrise.io/app/46845b0b84193b80/status.svg?token=SHqpol98nJjn_O5hbFPjIg&branch=main)](https://app.bitrise.io/app/46845b0b84193b80)
+# Habit Builder [![Build Status](https://app.bitrise.io/app/956ea5e751ec6be4/status.svg?token=WbwlLF41eOlFjQWJ5WFEMw&branch=main)](https://app.bitrise.io/app/956ea5e751ec6be4)
 
 [<img src="https://user-images.githubusercontent.com/1694986/111364968-24a0fa00-864f-11eb-88aa-4b4127d8e012.png?width=100" width="200"></img>](https://play.google.com/store/apps/details?id=com.ofalvai.habittracker)
 
