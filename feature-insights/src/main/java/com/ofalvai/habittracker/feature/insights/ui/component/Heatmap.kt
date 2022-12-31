@@ -190,7 +190,7 @@ private fun DayCell(
     } else Modifier
     Box(
         modifier = Modifier
-            .semantics {
+            .semantics(mergeDescendants = true) {
                 text = AnnotatedString(DateTimeFormatter.ofPattern("LL dd").format(day.date))
             }
             .padding(4.dp)

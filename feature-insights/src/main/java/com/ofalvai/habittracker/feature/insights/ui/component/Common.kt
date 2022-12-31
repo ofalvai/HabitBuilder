@@ -36,7 +36,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
@@ -46,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.ui.theme.CoreIcons
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
-import com.ofalvai.habittracker.core.ui.R as coreR
 import com.ofalvai.habittracker.feature.insights.R as insightsR
 
 @Composable
@@ -116,9 +114,10 @@ fun InsightHeader(
 fun EmptyView(label: String) {
     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
         Icon(
-            modifier = Modifier.size(64.dp).align(Alignment.CenterHorizontally).alpha(0.5f),
+            modifier = Modifier.size(64.dp).align(Alignment.CenterHorizontally),
             painter = painterResource(insightsR.drawable.ic_insights_placeholder),
-            contentDescription = stringResource(coreR.string.common_empty)
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.height(16.dp))
         Text(
