@@ -16,7 +16,7 @@ gradle-cachefix = "org.gradle.android.cache-fix:2.6.1"
 dependencyanalysis = "com.autonomousapps.dependency-analysis:1.17.0"
 
 [libraries]
-gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.0"
+gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.2"
 gradle-android-plugin = "com.android.tools.build:gradle:8.0.0-alpha11"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
