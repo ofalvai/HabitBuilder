@@ -18,6 +18,8 @@ dependencyanalysis = "com.autonomousapps.dependency-analysis:1.17.0"
 [libraries]
 gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.0"
 gradle-android-plugin = "com.android.tools.build:gradle:8.0.0-alpha11"
+licensee = "app.cash.licensee:licensee-gradle-plugin:1.6.0"
+ruler = "com.spotify.ruler:ruler-gradle-plugin:1.4.0"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -72,5 +74,3 @@ mockito-android = "org.mockito:mockito-android:4.10.0"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:4.1.0"
 turbine = "app.cash.turbine:turbine:0.12.1"
 
-licensee = "app.cash.licensee:licensee-gradle-plugin:1.6.0"
-ruler = "com.spotify.ruler:ruler-gradle-plugin:1.4.0"

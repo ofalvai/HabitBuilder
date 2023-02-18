@@ -128,6 +128,7 @@ dependencies {
     implementation project(':feature-dashboard')
     implementation project(':feature-insights')
     implementation project(':feature-misc')
+    implementation project(':feature-widgets')
 
     coreLibraryDesugaring libs.gradle.android.desugar
 
