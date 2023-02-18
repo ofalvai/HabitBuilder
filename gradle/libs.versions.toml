@@ -12,7 +12,7 @@ lifecycle = "2.5.1"
 ksp = "com.google.devtools.ksp:1.7.20-1.0.8"
 gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
-gradle-cachefix = "org.gradle.android.cache-fix:2.6.1"
+gradle-cachefix = "org.gradle.android.cache-fix:2.6.5"
 dependencyanalysis = "com.autonomousapps.dependency-analysis:1.17.0"
 
 [libraries]
