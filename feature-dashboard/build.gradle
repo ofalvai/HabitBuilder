@@ -1,6 +1,7 @@
 plugins {
     id 'habittracker.android.library'
     id 'habittracker.android.library.compose'
+    id "org.jetbrains.kotlin.kapt"
 }
 
 apply plugin: 'com.google.devtools.ksp'
@@ -19,6 +20,8 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.calendarview
     implementation libs.reorderable
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
 
     implementation libs.showkase.annotation
     kspDebug libs.showkase.processor

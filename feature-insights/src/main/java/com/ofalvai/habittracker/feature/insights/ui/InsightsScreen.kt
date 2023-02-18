@@ -30,8 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.component.AppBarOverflowMenuAction
 import com.ofalvai.habittracker.core.ui.component.AppDefaultRootAppBar
@@ -45,14 +43,12 @@ import com.ofalvai.habittracker.feature.insights.R as insightsR
 
 @Composable
 fun InsightsScreen(
-    vmFactory: ViewModelProvider.Factory,
+    viewModel: InsightsViewModel,
     navigateToSettings: () -> Unit,
     navigateToArchive: () -> Unit,
     navigateToExport: () -> Unit,
     navigateToHabitDetails: (HabitId) -> Unit
 ) {
-    val viewModel: InsightsViewModel = viewModel(factory = vmFactory)
-
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         InsightsAppBar(
             onSettingsClick = navigateToSettings,

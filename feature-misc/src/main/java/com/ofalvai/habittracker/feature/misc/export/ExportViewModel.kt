@@ -23,18 +23,25 @@ import com.ofalvai.habittracker.core.common.StreamOpener
 import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.Action
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.StringReader
 import java.net.URI
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
 private const val BACKUP_VERSION = 1
 
-class ExportViewModel(
+@HiltViewModel
+class ExportViewModel @Inject constructor(
     private val streamOpener: StreamOpener,
     private val habitDao: HabitDao,
     private val telemetry: Telemetry

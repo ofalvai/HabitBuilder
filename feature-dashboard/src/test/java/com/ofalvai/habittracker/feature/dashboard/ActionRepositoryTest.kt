@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.feature.dashboard
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.feature.dashboard.repo.ActionRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -80,5 +81,5 @@ class ActionRepositoryTest {
 
     }
 
-    private fun givenRepo() = ActionRepository(dao)
+    private fun givenRepo() = ActionRepository(dao, Dispatchers.IO)
 }

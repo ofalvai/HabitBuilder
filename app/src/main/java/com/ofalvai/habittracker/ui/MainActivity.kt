@@ -39,13 +39,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ofalvai.habittracker.Dependencies
+import com.ofalvai.habittracker.core.common.AppPreferences
 import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.theme.AppTheme
@@ -58,8 +59,16 @@ import com.ofalvai.habittracker.feature.misc.export.ExportScreen
 import com.ofalvai.habittracker.feature.misc.settings.LicensesScreen
 import com.ofalvai.habittracker.feature.misc.settings.SettingsScreen
 import com.ofalvai.habittracker.ui.settings.DebugSettings
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var appPreferences: AppPreferences
+    @Inject
+    lateinit var navigationTelemetryLogger: NavigationTelemetryLogger
 
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +78,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val isDynamicColor by Dependencies.appPreferences.dynamicColorEnabled.collectAsState()
+            val isDynamicColor by appPreferences.dynamicColorEnabled.collectAsState()
             AppTheme(isDynamicColor = isDynamicColor) {
                 val navController = rememberAnimatedNavController()
                 val systemUiController = rememberSystemUiController()
@@ -81,11 +90,11 @@ class MainActivity : ComponentActivity() {
                         color = Color.Transparent,
                         darkIcons = useDarkIcons
                     )
-                    onDispose {  }
+                    onDispose { }
                 }
 
                 LaunchedEffect(navController) {
-                    navController.addOnDestinationChangedListener(onDestinationChanged)
+                    navController.addOnDestinationChangedListener(navigationTelemetryLogger)
                 }
 
                 Scaffold(
@@ -112,7 +121,6 @@ private fun Screens(
     snackbarHostState: SnackbarHostState,
     padding: PaddingValues
 ) {
-    val vmFactory = Dependencies.viewModelFactory
     val navigateBack: () -> Unit = { navController.popBackStack() }
     val navigateToSettings: () -> Unit = { navController.navigate(Destination.Settings) }
     val navigateToArchive: () -> Unit = { navController.navigate(Destination.Archive) }
@@ -129,7 +137,7 @@ private fun Screens(
     ) {
         appDestination(Destination.Dashboard) {
             DashboardScreen(
-                vmFactory,
+                hiltViewModel(),
                 snackbarHostState,
                 navigateToHabitDetails,
                 navigateToAddHabit = { navController.navigate(Destination.AddHabit.route) },
@@ -140,48 +148,55 @@ private fun Screens(
         }
         appDestination(Destination.Insights) {
             InsightsScreen(
-                vmFactory,
+                hiltViewModel(),
                 navigateToArchive = navigateToArchive,
                 navigateToSettings = navigateToSettings,
                 navigateToExport = navigateToExport,
                 navigateToHabitDetails = navigateToHabitDetails
             )
         }
-        appDestination(Destination.AddHabit) { AddHabitScreen(vmFactory, navigateBack) }
+        appDestination(Destination.AddHabit) { AddHabitScreen(hiltViewModel(), navigateBack) }
         appDestination(Destination.HabitDetails) { backStackEntry ->
             HabitDetailScreen(
-                vmFactory,
+                hiltViewModel(),
                 habitId = Destination.HabitDetails.idFrom(backStackEntry.arguments),
                 navigateBack
             )
         }
         appDestination(Destination.Settings) {
             SettingsScreen(
-                vmFactory,
+                hiltViewModel(),
                 navigateBack,
                 navigateToLicenses = { navController.navigate(Destination.Licenses.route) },
                 debugSettings = { DebugSettings() }
             )
         }
         appDestination(Destination.Licenses) {
-            LicensesScreen(vmFactory, navigateBack = { navController.popBackStack() })
+            LicensesScreen(hiltViewModel(), navigateBack = { navController.popBackStack() })
         }
         appDestination(Destination.Archive) {
             ArchiveScreen(
-                vmFactory,
+                hiltViewModel(),
                 snackbarHostState,
                 navigateBack
             )
         }
-        appDestination(Destination.Export) { ExportScreen(vmFactory, navigateBack) }
+        appDestination(Destination.Export) { ExportScreen(hiltViewModel(), navigateBack) }
     }
 }
 
-private val onDestinationChanged: (NavController, NavDestination, Bundle?) -> Unit =
-    { _, destination, arguments ->
-        Dependencies.telemetry.leaveBreadcrumb(
+class NavigationTelemetryLogger @Inject constructor(
+    private val telemetry: Telemetry
+) : NavController.OnDestinationChangedListener {
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        telemetry.leaveBreadcrumb(
             message = destination.route ?: "no-route",
             metadata = arguments?.let { mapOf("arguments" to it.toString()) } ?: emptyMap(),
             type = Telemetry.BreadcrumbType.Navigation
         )
     }
+}

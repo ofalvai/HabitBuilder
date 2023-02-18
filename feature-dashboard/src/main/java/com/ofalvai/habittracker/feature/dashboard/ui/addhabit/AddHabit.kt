@@ -45,8 +45,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
@@ -61,9 +59,7 @@ import kotlinx.collections.immutable.ImmutableList
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
-fun AddHabitScreen(vmFactory: ViewModelProvider.Factory, navigateBack: () -> Unit) {
-    val viewModel: AddHabitViewModel = viewModel(factory = vmFactory)
-
+fun AddHabitScreen(viewModel: AddHabitViewModel, navigateBack: () -> Unit) {
     viewModel.backNavigationEvent.asEffect { navigateBack() }
 
     val onSave: (Habit) -> Unit = { viewModel.addHabit(it) }

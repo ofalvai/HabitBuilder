@@ -18,53 +18,49 @@
 
 package com.ofalvai.habittracker
 
+import android.app.Application
+import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.room.Room
 import com.ofalvai.habittracker.core.common.AndroidStreamOpener
 import com.ofalvai.habittracker.core.common.AppPreferences
-import com.ofalvai.habittracker.core.common.OnboardingManager
+import com.ofalvai.habittracker.core.common.StreamOpener
+import com.ofalvai.habittracker.core.common.Telemetry
 import com.ofalvai.habittracker.core.common.TelemetryImpl
 import com.ofalvai.habittracker.core.database.AppDatabase
+import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.MIGRATIONS
-import com.ofalvai.habittracker.feature.dashboard.repo.ActionRepository
-import com.ofalvai.habittracker.feature.dashboard.ui.addhabit.AddHabitViewModel
-import com.ofalvai.habittracker.feature.dashboard.ui.dashboard.DashboardViewModel
-import com.ofalvai.habittracker.feature.dashboard.ui.habitdetail.HabitDetailViewModel
-import com.ofalvai.habittracker.feature.insights.ui.InsightsViewModel
-import com.ofalvai.habittracker.feature.misc.archive.ArchiveViewModel
-import com.ofalvai.habittracker.feature.misc.export.ExportViewModel
 import com.ofalvai.habittracker.feature.misc.settings.AppInfo
-import com.ofalvai.habittracker.feature.misc.settings.LicensesViewModel
-import com.ofalvai.habittracker.feature.misc.settings.SettingsViewModel
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import logcat.logcat
 
-object Dependencies {
+@Module
+@InstallIn(SingletonComponent::class)
+internal object AppModule {
+    @Provides
+    fun provideDb(app: Application): AppDatabase {
+        return Room.databaseBuilder(app, AppDatabase::class.java, "app-db")
+            .setQueryCallback(::roomQueryLogCallback, Runnable::run)
+            .addMigrations(*MIGRATIONS)
+            .build()
+    }
 
-    private val appContext = HabitTrackerApplication.INSTANCE.applicationContext
+    @Provides
+    fun provideHabitDao(db: AppDatabase): HabitDao = db.habitDao()
 
-    private val db = Room.databaseBuilder(appContext, AppDatabase::class.java, "app-db")
-        .setQueryCallback(::roomQueryLogCallback, Runnable::run)
-        .addMigrations(*MIGRATIONS)
-        .build()
+    @Provides
+    fun provideSharedPreferences(app: Application): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
 
-    val dao = db.habitDao()
+    @Provides
+    fun provideTelemetry(app: Application, appPreferences: AppPreferences): Telemetry = TelemetryImpl(app, appPreferences)
 
-    private val actionRepository = ActionRepository(dao)
-
-    private val sharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(HabitTrackerApplication.INSTANCE)
-
-    val appPreferences = AppPreferences(sharedPreferences)
-
-    private val onboardingManager = OnboardingManager(appPreferences)
-
-    val telemetry = TelemetryImpl(appContext, appPreferences)
-
-    private val streamOpener = AndroidStreamOpener(appContext)
-
-    private val appInfo = AppInfo(
+    @Provides
+    fun provideAppInfo() = AppInfo(
         versionName = BuildConfig.VERSION_NAME,
         buildType = BuildConfig.BUILD_TYPE,
         appId = BuildConfig.APPLICATION_ID,
@@ -72,20 +68,11 @@ object Dependencies {
         urlSourceCode = BuildConfig.URL_SOURCE_CODE
     )
 
-    val viewModelFactory = viewModelFactory {
-        initializer { AddHabitViewModel(dao, onboardingManager, telemetry) }
-        initializer {
-            DashboardViewModel(dao, actionRepository, appPreferences, telemetry, onboardingManager)
-        }
-        initializer { HabitDetailViewModel(dao, actionRepository, telemetry, onboardingManager) }
-        initializer { InsightsViewModel(dao, telemetry, onboardingManager) }
-        initializer { LicensesViewModel(appContext) }
-        initializer { ArchiveViewModel(dao, telemetry) }
-        initializer {
-            SettingsViewModel(appPreferences, appInfo)
-        }
-        initializer { ExportViewModel(streamOpener, dao, telemetry) }
-    }
+    @Provides
+    fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    fun provideStreamOpener(app: Application): StreamOpener = AndroidStreamOpener(app)
 }
 
 private fun roomQueryLogCallback(sqlQuery: String, bindArgs: List<Any>) {

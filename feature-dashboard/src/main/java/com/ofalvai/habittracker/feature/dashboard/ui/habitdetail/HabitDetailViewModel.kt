@@ -38,6 +38,7 @@ import com.ofalvai.habittracker.feature.dashboard.ui.model.ActionCountByMonth
 import com.ofalvai.habittracker.feature.dashboard.ui.model.ActionCountByWeek
 import com.ofalvai.habittracker.feature.dashboard.ui.model.ActionCountChart
 import com.ofalvai.habittracker.feature.dashboard.ui.model.SingleStats
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
@@ -48,6 +49,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Locale
+import javax.inject.Inject
 
 private val initialSingleStats = SingleStats(null, 0, 0, 0f)
 private val initialChartData = ActionCountChart(persistentListOf(), ActionCountChart.Type.Weekly)
@@ -56,7 +58,8 @@ enum class HabitDetailEvent {
     BackNavigation
 }
 
-class HabitDetailViewModel(
+@HiltViewModel
+class HabitDetailViewModel @Inject constructor(
     private val dao: HabitDao,
     private val actionRepository: ActionRepository,
     private val telemetry: Telemetry,

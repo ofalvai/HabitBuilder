@@ -50,8 +50,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ofalvai.habittracker.core.common.OnboardingState
 import com.ofalvai.habittracker.core.model.Action
 import com.ofalvai.habittracker.core.model.Habit
@@ -79,7 +77,7 @@ import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
 fun DashboardScreen(
-    vmFactory: ViewModelProvider.Factory,
+    viewModel: DashboardViewModel,
     snackbarHostState: SnackbarHostState,
     navigateToDetails: (HabitId) -> Unit,
     navigateToAddHabit: () -> Unit,
@@ -87,8 +85,6 @@ fun DashboardScreen(
     navigateToArchive: () -> Unit,
     navigateToExport: () -> Unit
 ) {
-    val viewModel: DashboardViewModel = viewModel(factory = vmFactory)
-
     var config by remember { mutableStateOf(viewModel.dashboardConfig) }
     var configDialogOpen by remember { mutableStateOf(false) }
     val habits by viewModel.habitsWithActions.collectAsState(Result.Loading)

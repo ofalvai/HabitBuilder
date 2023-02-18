@@ -23,6 +23,7 @@ import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.database.entity.HabitById
 import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.feature.misc.archive.model.ArchivedHabit
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -31,6 +32,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
 enum class ArchiveEvent {
@@ -38,7 +40,8 @@ enum class ArchiveEvent {
     DeleteError
 }
 
-class ArchiveViewModel(
+@HiltViewModel
+class ArchiveViewModel @Inject constructor(
     private val dao: HabitDao,
     private val telemetry: Telemetry
 ): ViewModel() {

@@ -54,8 +54,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
 import com.ofalvai.habittracker.core.ui.component.ConfirmationDialog
@@ -76,12 +74,10 @@ import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
 fun ArchiveScreen(
-    vmFactory: ViewModelProvider.Factory,
+    viewModel: ArchiveViewModel,
     snackbarHostState: SnackbarHostState,
     navigateBack: () -> Unit
 ) {
-    val viewModel = viewModel<ArchiveViewModel>(factory = vmFactory)
-
     val habits by viewModel.archivedHabitList.collectAsState(initial = Result.Loading)
 
     val snackbarCoroutineScope = rememberCoroutineScope()

@@ -15,6 +15,7 @@ dependencies {
     implementation libs.logcat
     implementation libs.kotlin.immutable
     implementation libs.kotlin.coroutines.core
+    api libs.javax.inject
 
     testImplementation libs.junit
     testImplementation libs.kotlin.coroutines.test

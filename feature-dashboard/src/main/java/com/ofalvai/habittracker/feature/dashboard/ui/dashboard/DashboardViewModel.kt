@@ -30,12 +30,19 @@ import com.ofalvai.habittracker.core.ui.state.Result
 import com.ofalvai.habittracker.feature.dashboard.mapper.mapHabitEntityToModel
 import com.ofalvai.habittracker.feature.dashboard.repo.ActionRepository
 import com.ofalvai.habittracker.feature.dashboard.ui.model.DashboardConfig
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 import com.ofalvai.habittracker.core.database.entity.HabitWithActions as HabitWithActionsEntity
 
 enum class DashboardEvent {
@@ -54,7 +61,8 @@ data class ItemMoveEvent(
     val secondHabitId: HabitId
 )
 
-class DashboardViewModel(
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
     private val dao: HabitDao,
     private val actionRepository: ActionRepository,
     private val appPreferences: AppPreferences,

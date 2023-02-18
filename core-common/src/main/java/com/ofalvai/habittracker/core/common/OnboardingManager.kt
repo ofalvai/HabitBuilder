@@ -19,6 +19,7 @@ package com.ofalvai.habittracker.core.common
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
 object OnboardingData {
     val steps: ImmutableList<Step> = persistentListOf(
@@ -46,7 +47,7 @@ object OnboardingData {
     val totalSteps = steps.size
 }
 
-class OnboardingManager(
+class OnboardingManager @Inject constructor(
     private val appPreferences: AppPreferences
 ) {
     private var firstHabitCreated by appPreferences::onboardingFirstHabitCreated

@@ -30,6 +30,7 @@ import com.ofalvai.habittracker.feature.insights.mapper.toModel
 import com.ofalvai.habittracker.feature.insights.model.HeatmapMonth
 import com.ofalvai.habittracker.feature.insights.model.TopDayItem
 import com.ofalvai.habittracker.feature.insights.model.TopHabitItem
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
@@ -43,8 +44,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.Locale
+import javax.inject.Inject
 
-class InsightsViewModel(
+@HiltViewModel
+class InsightsViewModel @Inject constructor(
     private val habitDao: HabitDao,
     private val telemetry: Telemetry,
     onboardingManager: OnboardingManager

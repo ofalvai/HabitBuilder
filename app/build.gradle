@@ -19,6 +19,8 @@ plugins {
     id 'kotlin-android'
     id 'com.spotify.ruler'
     id 'habittracker.android.app'
+    id "org.jetbrains.kotlin.kapt"
+    id 'com.google.dagger.hilt.android'
 }
 
 apply plugin: 'com.google.devtools.ksp'
@@ -108,6 +110,15 @@ android {
     }
 }
 
+kapt {
+    // Required by Hilt
+    correctErrorTypes true
+}
+
+hilt {
+    enableAggregatingTask = true
+}
+
 ruler {
     abi.set("arm64-v8a")
     locale.set("en")
@@ -140,6 +151,10 @@ dependencies {
     implementation libs.logcat
     implementation libs.accompanist.systemuicontroller
     implementation libs.accompanist.navigation
+
+    implementation libs.hilt.android
+    implementation libs.hilt.navigation.compose
+    kapt libs.hilt.compiler
 
     // Required by layout inspector
     debugRuntimeOnly libs.kotlin.reflect
