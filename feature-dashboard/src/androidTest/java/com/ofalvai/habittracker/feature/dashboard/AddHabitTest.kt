@@ -23,6 +23,8 @@ import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.testing.BaseInstrumentedTest
 import com.ofalvai.habittracker.core.ui.theme.PreviewTheme
 import com.ofalvai.habittracker.feature.dashboard.ui.addhabit.AddHabitForm
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -30,13 +32,17 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class AddHabitTest : BaseInstrumentedTest() {
 
     @get:Rule
     val composeRule = createComposeRule()
 
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
     // https://github.com/mockito/mockito-kotlin/issues/272
-    open class OnSaveCallback: (Habit) -> Unit {
+    open class OnSaveCallback : (Habit) -> Unit {
         override fun invoke(p1: Habit) = Unit
     }
 

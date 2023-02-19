@@ -134,7 +134,7 @@ licensee {
 
 dependencies {
     implementation project(':core-common')
-    implementation project(':core-database')
+    debugImplementation project(':core-database')
     implementation project(':core-ui')
     implementation project(':feature-dashboard')
     implementation project(':feature-insights')
@@ -145,8 +145,6 @@ dependencies {
     debugImplementation libs.compose.ui.tooling
 
     implementation libs.androidx.navigation.compose
-
-    implementation libs.androidx.room.runtime
 
     implementation libs.logcat
     implementation libs.accompanist.systemuicontroller

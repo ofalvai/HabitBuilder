@@ -8,6 +8,10 @@ apply plugin: 'com.google.devtools.ksp'
 
 android {
     namespace 'com.ofalvai.habittracker.feature.dashboard'
+
+    defaultConfig {
+        testInstrumentationRunner 'com.ofalvai.habittracker.core.testing.HiltTestRunner'
+    }
 }
 
 dependencies {
@@ -17,7 +21,7 @@ dependencies {
     api project(':core-ui')
 
     implementation libs.kotlin.immutable
-    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.lifecycle.viewmodel
     implementation libs.calendarview
     implementation libs.reorderable
     implementation libs.hilt.android
@@ -34,5 +38,8 @@ dependencies {
 
     androidTestImplementation project(':core-testing')
     androidTestImplementation libs.compose.ui.test
+    androidTestImplementation libs.hilt.testing
+    androidTestImplementation libs.androidx.room.runtime
+    kaptAndroidTest libs.hilt.compiler
     debugRuntimeOnly libs.compose.ui.test.manifest
 }

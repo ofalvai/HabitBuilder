@@ -16,7 +16,7 @@ dependencies {
     api project(':core-ui')
 
     implementation libs.kotlin.immutable
-    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.lifecycle.viewmodel
     implementation libs.calendarview
     implementation libs.hilt.android
     kapt libs.hilt.compiler
