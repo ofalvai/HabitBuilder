@@ -38,11 +38,13 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import logcat.logcat
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object AppModule {
     @Provides
+    @Singleton
     fun provideDb(app: Application): AppDatabase {
         return Room.databaseBuilder(app, AppDatabase::class.java, "app-db")
             .setQueryCallback(::roomQueryLogCallback, Runnable::run)
@@ -51,15 +53,19 @@ internal object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideHabitDao(db: AppDatabase): HabitDao = db.habitDao()
 
     @Provides
+    @Singleton
     fun provideSharedPreferences(app: Application): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
 
     @Provides
+    @Singleton
     fun provideTelemetry(app: Application, appPreferences: AppPreferences): Telemetry = TelemetryImpl(app, appPreferences)
 
     @Provides
+    @Singleton
     fun provideAppInfo() = AppInfo(
         versionName = BuildConfig.VERSION_NAME,
         buildType = BuildConfig.BUILD_TYPE,
@@ -69,9 +75,11 @@ internal object AppModule {
     )
 
     @Provides
+    @Singleton
     fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
+    @Singleton
     fun provideStreamOpener(app: Application): StreamOpener = AndroidStreamOpener(app)
 }
 

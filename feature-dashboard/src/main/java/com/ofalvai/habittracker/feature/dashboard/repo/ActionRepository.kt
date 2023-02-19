@@ -25,8 +25,10 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.OffsetDateTime
 import javax.inject.Inject
+import javax.inject.Singleton
 import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
+@Singleton
 class ActionRepository @Inject constructor(
     private val dao: HabitDao,
     private val dispatcher: CoroutineDispatcher

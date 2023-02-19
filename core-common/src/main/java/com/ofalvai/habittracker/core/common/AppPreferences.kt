@@ -20,6 +20,7 @@ import android.content.SharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val KEY_DASHBOARD_CONFIG = "dashboard_config"
 private const val KEY_ONBOARDING_FIRST_HABIT_CREATED = "onboarding_first_habit_created"
@@ -29,6 +30,7 @@ private const val KEY_ONBOARDING_INSIGHTS_OPENED = "onboarding_insights_opened"
 private const val KEY_CRASH_REPORTING = "crash_reporting"
 private const val KEY_DYNAMIC_COLOR = "dynamic_color"
 
+@Singleton
 class AppPreferences @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) {
