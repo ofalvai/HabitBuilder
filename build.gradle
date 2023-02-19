@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.gradle.buildtimetracker)
     alias(libs.plugins.gradle.cachefix) apply false // Applied in convention plugins
     alias(libs.plugins.dependencyanalysis)
-    id 'com.google.dagger.hilt.android' version '2.45' apply false
+    alias(libs.plugins.hilt) apply false
 }
 
 doctor {
