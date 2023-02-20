@@ -11,6 +11,8 @@ android {
 
 dependencies {
     implementation libs.kotlin.immutable
+
+    implementation platform(libs.compose.bom)
     implementation(libs.compose.runtime) {
         because("All model classes need to be annotated with @Immutable in order to make " +
                 "downstream Composable functions skippable (because the Compose compiler " +
