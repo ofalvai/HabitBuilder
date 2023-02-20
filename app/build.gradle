@@ -161,4 +161,5 @@ dependencies {
     kspDebug libs.showkase.processor
 
     testImplementation libs.kotlin.coroutines.test
+    androidTestImplementation libs.androidx.test.runner
 }
