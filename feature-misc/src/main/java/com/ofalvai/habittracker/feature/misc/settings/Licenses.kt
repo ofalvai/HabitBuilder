@@ -51,16 +51,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
 import com.ofalvai.habittracker.feature.misc.R
 import kotlinx.collections.immutable.ImmutableList
 import com.ofalvai.habittracker.core.ui.R as coreR
 
 @Composable
-fun LicensesScreen(vmFactory: ViewModelProvider.Factory, navigateBack: () -> Unit) {
-    val viewModel: LicensesViewModel = viewModel(factory = vmFactory)
+fun LicensesScreen(viewModel: LicensesViewModel, navigateBack: () -> Unit) {
     val dependencies by viewModel.dependencies.collectAsState()
 
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {

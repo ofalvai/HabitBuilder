@@ -19,17 +19,19 @@ package com.ofalvai.habittracker.feature.dashboard.repo
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Action
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.OffsetDateTime
+import javax.inject.Inject
+import javax.inject.Singleton
 import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
-class ActionRepository(
+@Singleton
+class ActionRepository @Inject constructor(
     private val dao: HabitDao,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher
 ) {
     suspend fun toggleAction(
         habitId: Int,

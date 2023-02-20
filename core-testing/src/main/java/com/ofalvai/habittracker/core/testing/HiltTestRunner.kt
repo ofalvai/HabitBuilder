@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2023 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker
+package com.ofalvai.habittracker.core.testing
 
 import android.app.Application
-import com.ofalvai.habittracker.core.common.Telemetry
-import dagger.hilt.android.HiltAndroidApp
-import logcat.AndroidLogcatLogger
-import logcat.LogPriority
-import javax.inject.Inject
+import android.content.Context
+import androidx.test.runner.AndroidJUnitRunner
+import dagger.hilt.android.testing.HiltTestApplication
 
-@HiltAndroidApp
-class HabitTrackerApplication : Application() {
-
-    @Inject lateinit var telemetry: Telemetry
-
-    override fun onCreate() {
-        super.onCreate()
-
-        telemetry.initialize()
-
-        AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
+class HiltTestRunner: AndroidJUnitRunner() {
+    override fun newApplication(
+        cl: ClassLoader,
+        appName: String,
+        context: Context
+    ) : Application {
+        return super.newApplication(
+            cl, HiltTestApplication::class.java.name, context)
     }
 }

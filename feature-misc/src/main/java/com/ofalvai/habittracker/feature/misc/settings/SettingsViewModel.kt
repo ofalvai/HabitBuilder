@@ -18,7 +18,9 @@ package com.ofalvai.habittracker.feature.misc.settings
 
 import androidx.lifecycle.ViewModel
 import com.ofalvai.habittracker.core.common.AppPreferences
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
 data class AppInfo(
     val versionName: String,
@@ -30,7 +32,8 @@ data class AppInfo(
     val marketUrl = "market://details?id=${appId}"
 }
 
-class SettingsViewModel(
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
     val appInfo: AppInfo
 ) : ViewModel() {

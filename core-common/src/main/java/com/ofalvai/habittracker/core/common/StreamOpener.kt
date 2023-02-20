@@ -16,10 +16,11 @@
 
 package com.ofalvai.habittracker.core.common
 
-import android.content.Context
+import android.app.Application
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.URI
+import javax.inject.Inject
 
 /**
  * Abstraction over Android's Uri and ContentResolver in order to use them in ViewModels
@@ -30,14 +31,14 @@ interface StreamOpener {
     fun openOutputStream(uri: URI): OutputStream
 }
 
-class AndroidStreamOpener(private val appContext: Context): StreamOpener {
+class AndroidStreamOpener @Inject constructor(private val app: Application): StreamOpener {
 
     override fun openInputStream(uri: URI): InputStream {
-        return appContext.contentResolver.openInputStream(uri.toAndroidURI())!!
+        return app.contentResolver.openInputStream(uri.toAndroidURI())!!
     }
 
     override fun openOutputStream(uri: URI): OutputStream {
-        return appContext.contentResolver.openOutputStream(uri.toAndroidURI())!!
+        return app.contentResolver.openOutputStream(uri.toAndroidURI())!!
     }
 
     private fun URI.toAndroidURI() = android.net.Uri.parse(toString())

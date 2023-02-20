@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.gradle.buildtimetracker)
     alias(libs.plugins.gradle.cachefix) apply false // Applied in convention plugins
     alias(libs.plugins.dependencyanalysis)
+    alias(libs.plugins.hilt) apply false
 }
 
 doctor {
@@ -35,7 +36,7 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean') {
     delete rootProject.buildDir
 }
 
@@ -50,6 +51,9 @@ dependencyAnalysis {
                         "androidx.compose.ui:ui-test-manifest", // Required for device testing
                         "androidx.test:rules", // Without this, running cAT finds 0 test cases
                         "com.kizitonwose.calendar:compose", // False positive
+                        "com.google.dagger:hilt-compiler", // False positive
+                        "com.google.dagger:hilt-android", // False positive
+                        "androidx.test:runner", // False positive
                 )
             }
             onIncorrectConfiguration {
@@ -63,6 +67,9 @@ dependencyAnalysis {
             }
             onUnusedAnnotationProcessors {
                 severity("fail")
+                exclude(
+                        "com.google.dagger:hilt-compiler" // False positive
+                )
             }
             onRedundantPlugins {
                 severity("fail")

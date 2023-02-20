@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Olivér Falvai
+ * Copyright 2023 Olivér Falvai
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,30 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker
+package com.ofalvai.habittracker.core.common
 
-import com.ofalvai.habittracker.feature.misc.settings.AppInfo
+import android.app.Application
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object AppModule {
+internal object CommonModule {
 
     @Provides
     @Singleton
-    fun provideAppInfo() = AppInfo(
-        versionName = BuildConfig.VERSION_NAME,
-        buildType = BuildConfig.BUILD_TYPE,
-        appId = BuildConfig.APPLICATION_ID,
-        urlPrivacyPolicy = BuildConfig.URL_PRIVACY_POLICY,
-        urlSourceCode = BuildConfig.URL_SOURCE_CODE
-    )
-}
+    fun provideTelemetry(app: Application, appPreferences: AppPreferences): Telemetry = TelemetryImpl(app, appPreferences)
 
+    @Provides
+    @Singleton
+    fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @Singleton
+    fun provideStreamOpener(app: Application): StreamOpener = AndroidStreamOpener(app)
+}

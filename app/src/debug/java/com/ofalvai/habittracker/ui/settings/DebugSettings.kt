@@ -18,19 +18,19 @@ package com.ofalvai.habittracker.ui.settings
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.android.showkase.annotation.ShowkaseRoot
 import com.airbnb.android.showkase.annotation.ShowkaseRootModule
 import com.airbnb.android.showkase.models.Showkase
-import com.ofalvai.habittracker.Dependencies
 import com.ofalvai.habittracker.feature.misc.settings.NavigationSetting
 import com.ofalvai.habittracker.feature.misc.settings.SettingHeader
-import kotlinx.coroutines.launch
 
 @ShowkaseRoot
-class AppRootModule: ShowkaseRootModule
+class AppRootModule : ShowkaseRootModule
 
 @Composable
 fun DebugSettings() {
+    val viewModel: DebugViewModel = hiltViewModel()
     val context = LocalContext.current
     SettingHeader("Debug area \uD83D\uDC40")
 
@@ -40,14 +40,10 @@ fun DebugSettings() {
     )
 
     var isSuccess by remember { mutableStateOf(false) }
-    val inserter = remember { SampleDataInserter(Dependencies.dao) }
-    val coroutineScope = rememberCoroutineScope()
 
     val onClick: () -> Unit = {
-        coroutineScope.launch {
-            inserter.insert()
-            isSuccess = true
-        }
+        viewModel.insertSampleData()
+        isSuccess = true
     }
     NavigationSetting(
         name = "Insert sample data" + if (isSuccess) " ✅" else "",

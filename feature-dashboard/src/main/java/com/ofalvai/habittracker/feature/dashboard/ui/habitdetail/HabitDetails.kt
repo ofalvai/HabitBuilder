@@ -51,8 +51,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.common.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.core.model.Action
@@ -80,11 +78,10 @@ import java.time.YearMonth
 
 @Composable
 fun HabitDetailScreen(
-    vmFactory: ViewModelProvider.Factory,
+    viewModel: HabitDetailViewModel,
     habitId: Int,
     navigateBack: () -> Unit
 ) {
-    val viewModel: HabitDetailViewModel = viewModel(factory = vmFactory)
     val vibrator = LocalContext.current.getSystemService<Vibrator>()!!
 
     val habitDetailState by viewModel.habitWithActions.collectAsState()

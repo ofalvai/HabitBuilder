@@ -16,14 +16,15 @@
 
 package com.ofalvai.habittracker.feature.misc.settings
 
-import android.annotation.SuppressLint
-import android.content.Context
+import android.app.Application
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONArray
+import javax.inject.Inject
 
 private const val ASSET_PATH_LICENSES = "licenses.json"
 
@@ -36,9 +37,9 @@ data class Dependency(
     data class License(val name: String)
 }
 
-@SuppressLint("StaticFieldLeak")
-class LicensesViewModel(
-    private val appContext: Context
+@HiltViewModel
+class LicensesViewModel @Inject constructor(
+    private val app: Application
 ) : ViewModel() {
 
     val dependencies = MutableStateFlow<ImmutableList<Dependency>>(persistentListOf())
@@ -50,7 +51,7 @@ class LicensesViewModel(
     private fun parseDependencies(): List<Dependency> {
         val dependencies = mutableListOf<Dependency>()
 
-        val stringContent = appContext.assets.open(ASSET_PATH_LICENSES)
+        val stringContent = app.assets.open(ASSET_PATH_LICENSES)
             .bufferedReader()
             .use { it.readText() }
 

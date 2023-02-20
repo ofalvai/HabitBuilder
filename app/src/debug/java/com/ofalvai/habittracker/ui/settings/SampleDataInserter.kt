@@ -22,8 +22,9 @@ import com.ofalvai.habittracker.core.database.entity.Habit
 import java.time.Instant
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import javax.inject.Inject
 
-class SampleDataInserter(private val dao: HabitDao) {
+class SampleDataInserter @Inject constructor(private val dao: HabitDao) {
 
     suspend fun insert() {
         dao.deleteAllHabits()
