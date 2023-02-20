@@ -53,6 +53,7 @@ dependencyAnalysis {
                         "com.kizitonwose.calendar:compose", // False positive
                         "com.google.dagger:hilt-compiler", // False positive
                         "com.google.dagger:hilt-android", // False positive
+                        "androidx.test:runner", // False positive
                 )
             }
             onIncorrectConfiguration {
