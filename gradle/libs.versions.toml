@@ -21,6 +21,8 @@ gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.2"
 gradle-android-plugin = "com.android.tools.build:gradle:8.1.0-alpha05"
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.6.0"
 ruler = "com.spotify.ruler:ruler-gradle-plugin:1.4.0"
+licensee = "app.cash.licensee:licensee-gradle-plugin:1.6.0"
+ruler = "com.spotify.ruler:ruler-gradle-plugin:1.4.0"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
