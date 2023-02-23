@@ -52,17 +52,16 @@
 
     <string name="common_action_count_clean">Start today</string>
     <plurals name="common_action_count_total">
+        <item quantity="one">%d total</item>
         <item quantity="other">%d total</item>
     </plurals>
     <plurals name="common_action_count_streak">
+        <item quantity="one">%d day streak</item>
         <item quantity="other">%d day streak</item>
     </plurals>
     <plurals name="common_action_count_missed_days">
         <item quantity="one">%d missed day</item>
         <item quantity="other">%d missed days</item>
-    </plurals>
-    <plurals name="common_action_count_moving_window">
-        <item quantity="other">%1$d in last %2$d days</item>
     </plurals>
 
     <string name="habitdetails_singlestat_total">times total</string>

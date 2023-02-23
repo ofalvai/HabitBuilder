@@ -211,10 +211,10 @@ fun ActionHistoryLabel(totalActionCount: Int, actionHistory: ActionHistory) {
     val actionHistoryLabel = when (actionHistory) {
         ActionHistory.Clean -> stringResource(R.string.common_action_count_clean)
         is ActionHistory.MissedDays -> resources.getQuantityString(
-            R.plurals.common_action_count_moving_window, actionHistory.slidingWindow.actionCount, actionHistory.slidingWindow.actionCount, actionHistory.slidingWindow.windowSize
+            R.plurals.common_action_count_missed_days, actionHistory.days, actionHistory.days
         )
         is ActionHistory.Streak -> resources.getQuantityString(
-            R.plurals.common_action_count_moving_window, actionHistory.slidingWindow.actionCount, actionHistory.slidingWindow.actionCount, actionHistory.slidingWindow.windowSize
+            R.plurals.common_action_count_streak, actionHistory.days, actionHistory.days
         )
     }
     val mergedLabel = stringResource(coreR.string.common_interpunct, totalLabel, actionHistoryLabel)
@@ -269,25 +269,9 @@ fun PreviewHabitCard() {
 
     PreviewTheme {
         Column(Modifier.padding(16.dp)) {
-            HabitCard(
-                habit = habit1,
-                actions = actions1.toImmutableList(),
-                totalActionCount = 14,
-                actionHistory = ActionHistory.Clean,
-                onActionToggle = { _, _, _ -> },
-                onDetailClick = {},
-                dragOffset = 0f
-            )
+            HabitCard(habit1, actions1.toImmutableList(), 14, ActionHistory.Clean, { _, _, _ -> }, {}, 0f)
             Spacer(modifier = Modifier.height(16.dp))
-            HabitCard(
-                habit = habit2,
-                actions = actions2.toImmutableList(),
-                totalActionCount = 3,
-                actionHistory = ActionHistory.Streak(3, ActionHistory.SlidingWindow(7, 5)),
-                onActionToggle = { _, _, _ -> },
-                onDetailClick = {},
-                dragOffset = 0f
-            )
+            HabitCard(habit2, actions2.toImmutableList(), 3, ActionHistory.Streak(3), { _, _, _ -> }, {}, 0f)
         }
     }
 }

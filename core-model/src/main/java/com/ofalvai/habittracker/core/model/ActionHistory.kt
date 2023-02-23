@@ -23,9 +23,7 @@ sealed class ActionHistory {
 
     object Clean : ActionHistory()
 
-    data class SlidingWindow(val windowSize: Int, val actionCount: Int)
+    data class Streak(val days: Int) : ActionHistory()
 
-    data class Streak(val days: Int, val slidingWindow: SlidingWindow) : ActionHistory()
-
-    data class MissedDays(val days: Int, val slidingWindow: SlidingWindow) : ActionHistory()
+    data class MissedDays(val days: Int) : ActionHistory()
 }
