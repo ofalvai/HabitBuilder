@@ -26,6 +26,7 @@ import java.time.ZoneId
 import com.ofalvai.habittracker.core.database.entity.Action as ActionEntity
 
 private const val RECENT_ACTIONS_PER_HABIT = 30 // Max number of days of any dashboard configs
+private const val SLIDING_WINDOW_SIZE = 7
 
 fun actionsToRecentDays(actions: List<ActionEntity>): ImmutableList<Action> {
     val lastDay = LocalDate.now()
@@ -76,7 +77,7 @@ fun actionsToHistory(actions: List<ActionEntity>): ActionHistory {
                 break
             }
         }
-        return ActionHistory.Streak(days)
+        return ActionHistory.Streak(days, actionsToMovingWindow(sortedActions))
     } else if (firstActionDate.isBefore(LocalDate.now())) {
         // It's a missed day streak
         var days = 0
@@ -87,9 +88,20 @@ fun actionsToHistory(actions: List<ActionEntity>): ActionHistory {
             previousDate = previousDate.minusDays(1)
         }
 
-        return ActionHistory.MissedDays(days)
+        return ActionHistory.MissedDays(days, actionsToMovingWindow(sortedActions))
     } else {
         // firstActionDate is in the future. This should never happen
         return ActionHistory.Clean
     }
+}
+
+private fun actionsToMovingWindow(sortedActions: List<ActionEntity>): ActionHistory.SlidingWindow {
+    val windowStartInclusive = LocalDate.now().minusDays(SLIDING_WINDOW_SIZE.toLong())
+    return ActionHistory.SlidingWindow(
+        SLIDING_WINDOW_SIZE,
+        sortedActions.count {
+            val instant = windowStartInclusive.atStartOfDay(ZoneId.systemDefault()).toInstant()
+            it.timestamp.isAfter(instant)
+        }
+    )
 }
