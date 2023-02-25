@@ -16,11 +16,8 @@
 
 package com.ofalvai.habittracker.feature.widgets.today
 
-import android.content.Context
-import android.content.Intent
+import android.app.Application
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceComposable
@@ -40,49 +37,61 @@ import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.model.HabitDayView
 import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.feature.widgets.AppWidgetBox
 import com.ofalvai.habittracker.feature.widgets.GlanceTheme
+import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidget
+import com.ofalvai.habittracker.feature.widgets.toModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlin.random.Random
+import java.time.LocalDate
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class TodayWidgetReceiver : GlanceAppWidgetReceiver() {
+
+    @Inject lateinit var application: Application
+    @Inject lateinit var habitDao: HabitDao
+
+    override val glanceAppWidget: GlanceAppWidget get() {
+        return TodayWidget(application, habitDao).apply { initiateLoad() }
+    }
+}
+
+data class TodayData(
+    val habits: List<HabitDayView>
+)
+
+private val initialData = TodayData(emptyList())
 
 class TodayWidget(
-    private val viewModel: TodayWidgetViewModel?
-) : GlanceAppWidget() {
+    application: Application,
+    private val habitDao: HabitDao
+) : BaseGlanceAppWidget<TodayData>(initialData, application) {
+
+    override suspend fun loadData(): TodayData {
+        val habits = habitDao.getHabitDayViewsAt(LocalDate.now()).map { it.toModel() }
+        return TodayData(habits)
+    }
+
     @Composable
-    @GlanceComposable
-    override fun Content() {
+    override fun Content(data: TodayData) {
         GlanceTheme {
-            AppWidgetBox() {
-                HabitList(viewModel)
+            AppWidgetBox {
+                HabitList(data.habits)
             }
         }
     }
 }
 
+@GlanceComposable
 @Composable
-private fun HabitList(viewModel: TodayWidgetViewModel?) {
-    val habitState: MutableStateFlow<List<Habit>> = MutableStateFlow(listOf(
-        Habit(id = 1, name = "Meditation", color = Habit.Color.Red, notes = ""),
-        Habit(id = 2, name = "Test", color = Habit.Color.Yellow, notes = ""),
-        Habit(id = 3, name = "Reading", color = Habit.Color.Yellow, notes = ""),
-        Habit(id = 4, name = "Touch grass", color = Habit.Color.Blue, notes = ""),
-        Habit(id = 5, name = "Exercise", color = Habit.Color.Green, notes = ""),
-    ))
-    val habits by habitState.collectAsState()
-//    val habits = listOf(
-//        Habit(id = 1, name = "Meditation", color = Habit.Color.Red, notes = ""),
-//        Habit(id = 2, name = "Test", color = Habit.Color.Yellow, notes = ""),
-//        Habit(id = 3, name = "Reading", color = Habit.Color.Yellow, notes = ""),
-//        Habit(id = 4, name = "Touch grass", color = Habit.Color.Blue, notes = ""),
-//        Habit(id = 5, name = "Exercise", color = Habit.Color.Green, notes = ""),
-//    )
-    HabitCircle(toggled = Random.nextBoolean(), habit = Habit(id = 1, name = "Meditation", color = Habit.Color.Red, notes = ""))
+private fun HabitList(habits: List<HabitDayView>) {
     LazyColumn {
-        items(habits, itemId = { it.id.toLong() }) {
-            HabitCircle(toggled = Random.nextBoolean(), habit = it)
+        items(habits, itemId = { it.habit.id.toLong() }) {
+            HabitCircle(toggled = it.toggled, habit = it.habit)
         }
     }
 }
@@ -127,14 +136,3 @@ private fun HabitCircle(toggled: Boolean, habit: Habit) {
 
 }
 
-@AndroidEntryPoint
-class TodayWidgetReceiver : GlanceAppWidgetReceiver() {
-
-//    @Inject lateinit var viewModel: TodayWidgetViewModel
-
-    override val glanceAppWidget = TodayWidget(null)
-
-    override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-    }
-}

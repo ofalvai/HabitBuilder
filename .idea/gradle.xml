@@ -34,6 +34,7 @@
             <option value="$PROJECT_DIR$/feature-dashboard" />
             <option value="$PROJECT_DIR$/feature-insights" />
             <option value="$PROJECT_DIR$/feature-misc" />
+            <option value="$PROJECT_DIR$/feature-widgets" />
           </set>
         </option>
       </GradleProjectSettings>

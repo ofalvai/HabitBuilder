@@ -190,4 +190,18 @@ interface HabitDao {
         """
     )
     suspend fun getCompletedHabitsAt(date: LocalDate): List<Habit>
+
+    @Query(
+        """SELECT
+                habit.*,
+                today_action.timestamp
+            FROM habit
+            LEFT JOIN (
+                SELECT * FROM `action` WHERE date(`action`.timestamp / 1000, 'unixepoch', 'localtime') = date(:date)
+            ) AS today_action ON habit.id = today_action.habit_id
+            GROUP BY habit.id
+            ORDER BY habit.`order` ASC
+        """
+    )
+    suspend fun getHabitDayViewsAt(date: LocalDate): List<HabitDayView>
 }

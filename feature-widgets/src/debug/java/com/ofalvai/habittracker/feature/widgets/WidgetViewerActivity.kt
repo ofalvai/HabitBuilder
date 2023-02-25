@@ -16,13 +16,14 @@
 
 package com.ofalvai.habittracker.feature.widgets
 
+import android.app.Application
 import androidx.glance.appwidget.ExperimentalGlanceRemoteViewsApi
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import com.google.android.glance.tools.viewer.GlanceSnapshot
 import com.google.android.glance.tools.viewer.GlanceViewerActivity
+import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.feature.widgets.today.TodayWidget
 import com.ofalvai.habittracker.feature.widgets.today.TodayWidgetReceiver
-import com.ofalvai.habittracker.feature.widgets.today.TodayWidgetViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -30,15 +31,15 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class WidgetViewerActivity : GlanceViewerActivity() {
 
-    @Inject lateinit var todayWidgetViewModel: TodayWidgetViewModel
+    @Inject lateinit var app: Application
+    @Inject lateinit var habitDao: HabitDao
 
     override suspend fun getGlanceSnapshot(
         receiver: Class<out GlanceAppWidgetReceiver>
     ): GlanceSnapshot {
         return when (receiver) {
             TodayWidgetReceiver::class.java -> GlanceSnapshot(
-                instance = TodayWidget(todayWidgetViewModel),
-//                state = mutablePreferencesOf(intPreferencesKey("state") to value)
+                instance = TodayWidget(app, habitDao).apply { initiateLoad() },
             )
 
             else -> throw IllegalArgumentException()
