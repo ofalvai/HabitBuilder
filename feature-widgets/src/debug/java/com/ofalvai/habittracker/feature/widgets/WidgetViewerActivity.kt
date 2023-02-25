@@ -22,6 +22,9 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import com.google.android.glance.tools.viewer.GlanceSnapshot
 import com.google.android.glance.tools.viewer.GlanceViewerActivity
 import com.ofalvai.habittracker.core.database.HabitDao
+import com.ofalvai.habittracker.core.model.Habit
+import com.ofalvai.habittracker.core.model.HabitDayView
+import com.ofalvai.habittracker.feature.widgets.today.TodayData
 import com.ofalvai.habittracker.feature.widgets.today.TodayWidget
 import com.ofalvai.habittracker.feature.widgets.today.TodayWidgetReceiver
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +42,16 @@ class WidgetViewerActivity : GlanceViewerActivity() {
     ): GlanceSnapshot {
         return when (receiver) {
             TodayWidgetReceiver::class.java -> GlanceSnapshot(
-                instance = TodayWidget(app, habitDao).apply { initiateLoad() },
+                instance = TodayWidget(
+                    initialData = TodayData(habits = listOf(
+                        HabitDayView(Habit(name = "Meditate", color = Habit.Color.Yellow, notes = ""), toggled = true),
+                        HabitDayView(Habit(name = "Exercise for 10 min", color = Habit.Color.Blue, notes = ""), toggled = false),
+                        HabitDayView(Habit(name = "Read for 20 min", color = Habit.Color.Red, notes = ""), toggled = false),
+                        HabitDayView(Habit(name = "Plan my day", color = Habit.Color.Green, notes = ""), toggled = true)
+                    )),
+                    application = app,
+                    habitDao = habitDao
+                )
             )
 
             else -> throw IllegalArgumentException()

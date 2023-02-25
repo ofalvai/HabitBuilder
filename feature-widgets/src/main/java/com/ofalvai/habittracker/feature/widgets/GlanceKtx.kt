@@ -17,6 +17,7 @@
 package com.ofalvai.habittracker.feature.widgets
 
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import androidx.annotation.StringRes
@@ -24,6 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
 import androidx.glance.LocalContext
+import androidx.glance.action.clickable
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
@@ -117,6 +120,12 @@ fun GlanceModifier.appWidgetInnerCornerRadius(): GlanceModifier {
     }
     return this
 }
+
+fun GlanceModifier.clickToMainScreen(context: Context): GlanceModifier {
+    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)!!
+    return this.then(clickable(actionStartActivity(intent)))
+}
+
 
 @Composable
 fun stringResource(@StringRes id: Int, vararg args: Any): String {

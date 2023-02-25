@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package com.ofalvai.habittracker.feature.widgets
+package com.ofalvai.habittracker.feature.widgets.base
 
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import androidx.compose.ui.graphics.Color
 
-@Module
-@InstallIn(SingletonComponent::class)
-object WidgetsModule {
-
-
+fun Color.toColorInt(): Int {
+    // This isn't 100% correct, but works with SRGB color space
+    return (value shr 32).toInt()
 }

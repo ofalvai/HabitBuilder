@@ -14,16 +14,16 @@
   ~ limitations under the License.
   -->
 
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:description="@string/widget_today_description"
-    android:initialLayout="@layout/today_widget_preview"
-    android:minWidth="140dp"
-    android:minHeight="110dp"
-    android:previewImage="@drawable/preview_today_widget"
-    android:previewLayout="@layout/today_widget_preview"
-    android:resizeMode="horizontal|vertical"
-    android:targetCellWidth="2"
-    android:targetCellHeight="2"
-    android:widgetCategory="home_screen"
-    tools:targetApi="S" />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="24dp"
+    android:layout_height="24dp">
+
+    <ImageView
+        android:id="@+id/action_circle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/action_circle"
+        android:importantForAccessibility="no" />
+
+</FrameLayout>

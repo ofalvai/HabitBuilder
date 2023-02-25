@@ -14,16 +14,13 @@
   ~ limitations under the License.
   -->
 
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:description="@string/widget_today_description"
-    android:initialLayout="@layout/today_widget_preview"
-    android:minWidth="140dp"
-    android:minHeight="110dp"
-    android:previewImage="@drawable/preview_today_widget"
-    android:previewLayout="@layout/today_widget_preview"
-    android:resizeMode="horizontal|vertical"
-    android:targetCellWidth="2"
-    android:targetCellHeight="2"
-    android:widgetCategory="home_screen"
-    tools:targetApi="S" />
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadiusRatio="2.5"
+    android:shape="ring"
+    android:thickness="2dp"
+    android:useLevel="false">
+    <size
+        android:width="24dp"
+        android:height="24dp" />
+    <solid android:color="@android:color/white" />
+</shape>

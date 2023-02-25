@@ -15,5 +15,5 @@
   -->
 
 <resources>
-    <string name="widget_today_description">Today widget</string>
+    <string name="widget_today_description">Today</string>
 </resources>

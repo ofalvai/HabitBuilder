@@ -17,24 +17,25 @@
 package com.ofalvai.habittracker.feature.widgets.today
 
 import android.app.Application
+import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.glance.GlanceComposable
 import androidx.glance.GlanceModifier
+import androidx.glance.LocalContext
+import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
-import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.unit.ColorProvider
-import androidx.glance.background
 import androidx.glance.layout.Alignment
-import androidx.glance.layout.Box
 import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
-import androidx.glance.layout.size
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.ofalvai.habittracker.core.database.HabitDao
@@ -43,7 +44,10 @@ import com.ofalvai.habittracker.core.model.HabitDayView
 import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.feature.widgets.AppWidgetBox
 import com.ofalvai.habittracker.feature.widgets.GlanceTheme
+import com.ofalvai.habittracker.feature.widgets.R
 import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidget
+import com.ofalvai.habittracker.feature.widgets.base.toColorInt
+import com.ofalvai.habittracker.feature.widgets.clickToMainScreen
 import com.ofalvai.habittracker.feature.widgets.toModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -56,7 +60,7 @@ class TodayWidgetReceiver : GlanceAppWidgetReceiver() {
     @Inject lateinit var habitDao: HabitDao
 
     override val glanceAppWidget: GlanceAppWidget get() {
-        return TodayWidget(application, habitDao).apply { initiateLoad() }
+        return TodayWidget(initialData, application, habitDao).apply { initiateLoad() }
     }
 }
 
@@ -67,6 +71,7 @@ data class TodayData(
 private val initialData = TodayData(emptyList())
 
 class TodayWidget(
+    initialData: TodayData,
     application: Application,
     private val habitDao: HabitDao
 ) : BaseGlanceAppWidget<TodayData>(initialData, application) {
@@ -79,7 +84,7 @@ class TodayWidget(
     @Composable
     override fun Content(data: TodayData) {
         GlanceTheme {
-            AppWidgetBox {
+            AppWidgetBox(GlanceModifier.clickToMainScreen(LocalContext.current)) {
                 HabitList(data.habits)
             }
         }
@@ -91,48 +96,44 @@ class TodayWidget(
 private fun HabitList(habits: List<HabitDayView>) {
     LazyColumn {
         items(habits, itemId = { it.habit.id.toLong() }) {
-            HabitCircle(toggled = it.toggled, habit = it.habit)
+            HabitListItem(toggled = it.toggled, habit = it.habit)
         }
     }
 }
 
 @Composable
-private fun HabitCircle(toggled: Boolean, habit: Habit) {
+private fun HabitListItem(toggled: Boolean, habit: Habit) {
     Row(
-        GlanceModifier.padding(vertical = 4.dp).fillMaxWidth(),
+        GlanceModifier.padding(vertical = 2.dp).fillMaxWidth().clickToMainScreen(LocalContext.current),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = GlanceModifier
-                .background(habit.color.composeColor)
-                .cornerRadius(24.dp)
-                .size(24.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            // TODO: replace this once GlanceModifier.border() is available
-            if (!toggled) {
-                Box(
-                    GlanceModifier
-                        .background(GlanceTheme.colors.background)
-                        .cornerRadius(20.dp)
-                        .size(20.dp)
-                ) {}
-            }
-        }
-
+        HabitCircle(toggled, habit)
         Text(
-            modifier = GlanceModifier.padding(start = 4.dp),
+            modifier = GlanceModifier.padding(start = 4.dp).clickToMainScreen(LocalContext.current),
             text = habit.name,
             style = TextStyle(
                 ColorProvider(
                     GlanceTheme.colors.onBackground,
                     GlanceTheme.colors.onBackground
-                ), // TODO
-                fontSize = 14.sp
+                ),
+                fontSize = 12.sp
             ),
             maxLines = 1
         )
     }
+}
 
+@Composable
+private fun HabitCircle(toggled: Boolean, habit: Habit) {
+    // Pure RemoteView implementation until glance.appwidget adds support for rounded corners
+    // on all SDK levels
+
+    val circle = RemoteViews(LocalContext.current.packageName, R.layout.action_circle)
+    val drawable = LocalContext.current.getDrawable(
+        if (toggled) R.drawable.action_circle_toggled else R.drawable.action_circle
+    )!!
+    DrawableCompat.setTint(drawable, habit.color.composeColor.toColorInt())
+    circle.setBitmap(R.id.action_circle, "setImageBitmap", drawable.toBitmap())
+    AndroidRemoteViews(circle)
 }
 
