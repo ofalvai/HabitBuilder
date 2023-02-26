@@ -28,7 +28,6 @@ import androidx.glance.GlanceModifier
 import androidx.glance.LocalContext
 import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.unit.ColorProvider
@@ -46,6 +45,7 @@ import com.ofalvai.habittracker.feature.widgets.AppWidgetBox
 import com.ofalvai.habittracker.feature.widgets.GlanceTheme
 import com.ofalvai.habittracker.feature.widgets.R
 import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidget
+import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidgetReceiver
 import com.ofalvai.habittracker.feature.widgets.base.toColorInt
 import com.ofalvai.habittracker.feature.widgets.clickToMainScreen
 import com.ofalvai.habittracker.feature.widgets.toModel
@@ -54,7 +54,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TodayWidgetReceiver : GlanceAppWidgetReceiver() {
+class TodayWidgetReceiver : BaseGlanceAppWidgetReceiver() {
 
     @Inject lateinit var application: Application
     @Inject lateinit var habitDao: HabitDao

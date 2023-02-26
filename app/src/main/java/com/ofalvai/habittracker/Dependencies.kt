@@ -16,11 +16,17 @@
 
 package com.ofalvai.habittracker
 
+import android.app.Application
+import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.feature.misc.settings.AppInfo
+import com.ofalvai.habittracker.feature.widgets.base.WidgetUpdater
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -36,5 +42,21 @@ internal object AppModule {
         urlPrivacyPolicy = BuildConfig.URL_PRIVACY_POLICY,
         urlSourceCode = BuildConfig.URL_SOURCE_CODE
     )
+
+    @Provides
+    @Singleton
+    @AppCoroutineScope
+    fun provideAppCoroutineScope() = CoroutineScope(SupervisorJob())
+
+    @Provides
+    @Singleton
+    fun provideWidgetUpdater(
+        app: Application,
+        habitDao: HabitDao,
+        @AppCoroutineScope scope: CoroutineScope
+    ) = WidgetUpdater(app, habitDao, scope)
 }
 
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AppCoroutineScope
