@@ -33,6 +33,7 @@ import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
 @GlanceComposable
 @Composable
 fun GlanceTheme(content: @Composable () -> Unit) {
+    // TODO: Dynamic colors
     val materialColors = if (isSystemInDarkTheme()) DarkColors else LightColors
     val appColors = if (isSystemInDarkTheme()) DarkAppColors else LightAppColors
     CompositionLocalProvider(

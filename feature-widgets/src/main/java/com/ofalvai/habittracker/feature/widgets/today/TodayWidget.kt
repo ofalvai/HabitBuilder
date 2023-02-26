@@ -33,15 +33,17 @@ import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.unit.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Row
+import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitDayView
 import com.ofalvai.habittracker.core.ui.theme.composeColor
-import com.ofalvai.habittracker.feature.widgets.AppWidgetBox
+import com.ofalvai.habittracker.feature.widgets.AppWidgetRoot
 import com.ofalvai.habittracker.feature.widgets.GlanceTheme
 import com.ofalvai.habittracker.feature.widgets.R
 import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidget
@@ -56,12 +58,15 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TodayWidgetReceiver : BaseGlanceAppWidgetReceiver() {
 
-    @Inject lateinit var application: Application
-    @Inject lateinit var habitDao: HabitDao
+    @Inject
+    lateinit var application: Application
+    @Inject
+    lateinit var habitDao: HabitDao
 
-    override val glanceAppWidget: GlanceAppWidget get() {
-        return TodayWidget(initialData, application, habitDao).apply { initiateLoad() }
-    }
+    override val glanceAppWidget: GlanceAppWidget
+        get() {
+            return TodayWidget(initialData, application, habitDao).apply { initiateLoad() }
+        }
 }
 
 data class TodayData(
@@ -83,10 +88,8 @@ class TodayWidget(
 
     @Composable
     override fun Content(data: TodayData) {
-        GlanceTheme {
-            AppWidgetBox(GlanceModifier.clickToMainScreen(LocalContext.current)) {
-                HabitList(data.habits)
-            }
+        AppWidgetRoot {
+            HabitList(data.habits)
         }
     }
 }
@@ -94,17 +97,21 @@ class TodayWidget(
 @GlanceComposable
 @Composable
 private fun HabitList(habits: List<HabitDayView>) {
-    LazyColumn {
+    LazyColumn(GlanceModifier.padding(horizontal = 16.dp)) {
+        // Poor man's contentPadding
+        item { Spacer(GlanceModifier.size(12.dp)) }
         items(habits, itemId = { it.habit.id.toLong() }) {
             HabitListItem(toggled = it.toggled, habit = it.habit)
         }
+        item { Spacer(GlanceModifier.size(12.dp)) }
     }
 }
 
 @Composable
 private fun HabitListItem(toggled: Boolean, habit: Habit) {
     Row(
-        GlanceModifier.padding(vertical = 2.dp).fillMaxWidth().clickToMainScreen(LocalContext.current),
+        GlanceModifier.padding(vertical = 2.dp).fillMaxWidth()
+            .clickToMainScreen(LocalContext.current),
         verticalAlignment = Alignment.CenterVertically
     ) {
         HabitCircle(toggled, habit)
