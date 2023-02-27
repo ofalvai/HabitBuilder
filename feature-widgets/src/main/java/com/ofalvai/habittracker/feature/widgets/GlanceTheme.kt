@@ -18,6 +18,8 @@ package com.ofalvai.habittracker.feature.widgets
 
 import android.content.res.Configuration
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -29,15 +31,28 @@ import com.ofalvai.habittracker.core.ui.theme.DarkColors
 import com.ofalvai.habittracker.core.ui.theme.LightAppColors
 import com.ofalvai.habittracker.core.ui.theme.LightColors
 import com.ofalvai.habittracker.core.ui.theme.LocalAppColors
+import com.ofalvai.habittracker.core.ui.theme.isDynamicThemeAvailable
 
 @GlanceComposable
 @Composable
 fun GlanceTheme(content: @Composable () -> Unit) {
-    // TODO: Dynamic colors
-    val materialColors = if (isSystemInDarkTheme()) DarkColors else LightColors
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+    val isDynamicThemeAvailable = isDynamicThemeAvailable()
+    val colorScheme = when {
+        isDynamicThemeAvailable && isSystemInDarkTheme -> {
+            dynamicDarkColorScheme(LocalContext.current)
+        }
+        isDynamicThemeAvailable && !isSystemInDarkTheme -> {
+            dynamicLightColorScheme(LocalContext.current)
+        }
+        isSystemInDarkTheme -> DarkColors
+        else -> LightColors
+    }
+
     val appColors = if (isSystemInDarkTheme()) DarkAppColors else LightAppColors
+
     CompositionLocalProvider(
-        LocalGlanceMaterialColors provides materialColors,
+        LocalGlanceMaterialColors provides colorScheme,
         LocalAppColors provides appColors,
     ) {
         content()

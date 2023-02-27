@@ -18,7 +18,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [libraries]
 gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.2"
-gradle-android-plugin = "com.android.tools.build:gradle:8.1.0-alpha06"
+gradle-android-plugin = "com.android.tools.build:gradle:8.1.0-alpha07"
 licensee = "app.cash.licensee:licensee-gradle-plugin:1.6.0"
 ruler = "com.spotify.ruler:ruler-gradle-plugin:1.4.0"
 

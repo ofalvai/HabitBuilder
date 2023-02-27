@@ -15,8 +15,21 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/app_widget_background"
+    android:id="@android:id/background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_app_widget">
+    android:layout_height="match_parent">
+
+    <!-- There is no way to set a programmatically tinted drawable as a background of a RemoteView,
+       so we need to have a separate ImageView as the background layer -->
+    <ImageView
+        android:id="@+id/app_widget_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_app_widget"
+        android:importantForAccessibility="no" />
+
+    <FrameLayout
+        android:id="@+id/app_widget_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>

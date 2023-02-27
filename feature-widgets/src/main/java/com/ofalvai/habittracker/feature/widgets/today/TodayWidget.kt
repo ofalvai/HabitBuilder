@@ -28,6 +28,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.LocalContext
 import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.unit.ColorProvider
@@ -42,12 +43,11 @@ import androidx.glance.text.TextStyle
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitDayView
-import com.ofalvai.habittracker.core.ui.theme.composeColor
-import com.ofalvai.habittracker.feature.widgets.AppWidgetRoot
 import com.ofalvai.habittracker.feature.widgets.GlanceTheme
+import com.ofalvai.habittracker.feature.widgets.LocalGlanceMaterialColors
 import com.ofalvai.habittracker.feature.widgets.R
+import com.ofalvai.habittracker.feature.widgets.base.AppWidgetRoot
 import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidget
-import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidgetReceiver
 import com.ofalvai.habittracker.feature.widgets.base.toColorInt
 import com.ofalvai.habittracker.feature.widgets.clickToMainScreen
 import com.ofalvai.habittracker.feature.widgets.toModel
@@ -56,7 +56,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TodayWidgetReceiver : BaseGlanceAppWidgetReceiver() {
+class TodayWidgetReceiver : GlanceAppWidgetReceiver() {
 
     @Inject
     lateinit var application: Application
@@ -120,8 +120,8 @@ private fun HabitListItem(toggled: Boolean, habit: Habit) {
             text = habit.name,
             style = TextStyle(
                 ColorProvider(
-                    GlanceTheme.colors.onBackground,
-                    GlanceTheme.colors.onBackground
+                    GlanceTheme.colors.onSurfaceVariant,
+                    GlanceTheme.colors.onSurfaceVariant
                 ),
                 fontSize = 12.sp
             ),
@@ -139,7 +139,7 @@ private fun HabitCircle(toggled: Boolean, habit: Habit) {
     val drawable = LocalContext.current.getDrawable(
         if (toggled) R.drawable.action_circle_toggled else R.drawable.action_circle
     )!!
-    DrawableCompat.setTint(drawable, habit.color.composeColor.toColorInt())
+    DrawableCompat.setTint(drawable, LocalGlanceMaterialColors.current.primary.toColorInt())
     circle.setBitmap(R.id.action_circle, "setImageBitmap", drawable.toBitmap())
     AndroidRemoteViews(circle)
 }

@@ -199,6 +199,7 @@ interface HabitDao {
             LEFT JOIN (
                 SELECT * FROM `action` WHERE date(`action`.timestamp / 1000, 'unixepoch', 'localtime') = date(:date)
             ) AS today_action ON habit.id = today_action.habit_id
+            WHERE habit.archived == 0
             GROUP BY habit.id
             ORDER BY habit.`order` ASC
         """

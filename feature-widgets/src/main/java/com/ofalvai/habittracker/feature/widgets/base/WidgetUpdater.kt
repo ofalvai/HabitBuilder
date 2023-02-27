@@ -17,8 +17,8 @@
 package com.ofalvai.habittracker.feature.widgets.base
 
 import android.app.Application
-import android.appwidget.AppWidgetManager
 import android.content.Intent
+import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.feature.widgets.today.TodayWidgetReceiver
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +43,7 @@ class WidgetUpdater @Inject constructor(
     private fun notifyWidgets() {
         UPDATABLE_WIDGETS.forEach {
             val intent = Intent(app, it).apply {
-                action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+                action = GlanceAppWidgetReceiver.ACTION_DEBUG_UPDATE
             }
             app.sendBroadcast(intent)
         }
