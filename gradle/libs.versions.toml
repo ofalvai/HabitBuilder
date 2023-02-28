@@ -42,7 +42,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 
-androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
+androidx-core-testing = "androidx.arch.core:core-testing:2.2.0"
 androidx-test-rules = "androidx.test:rules:1.5.0"
 androidx-test-runner = "androidx.test:runner:1.5.2"
 androidx-junit-ext = "androidx.test.ext:junit:1.1.5"
