@@ -2,7 +2,7 @@
 kotlin = "1.8.10"
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin#pre-release_kotlin_compatibility
 compose-compiler = "1.4.3"
-room = "2.4.3"
+room = "2.5.0"
 accompanist = "0.28.0"
 showkase = "1.0.0-beta15"
 lifecycle = "2.5.1"
