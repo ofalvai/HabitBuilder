@@ -1,15 +1,15 @@
 [versions]
-kotlin = "1.7.20"
+kotlin = "1.8.10"
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin#pre-release_kotlin_compatibility
-compose-compiler = "1.3.2"
+compose-compiler = "1.4.3"
 room = "2.4.3"
 accompanist = "0.28.0"
-showkase = "1.0.0-beta14"
+showkase = "1.0.0-beta15"
 lifecycle = "2.5.1"
 hilt = "2.45"
 
 [plugins]
-ksp = "com.google.devtools.ksp:1.7.20-1.0.8"
+ksp = "com.google.devtools.ksp:1.8.10-1.0.9"
 gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
 gradle-cachefix = "org.gradle.android.cache-fix:2.6.5"
@@ -18,7 +18,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [libraries]
 gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.2"
-gradle-android-plugin = "com.android.tools.build:gradle:8.1.0-alpha05"
+gradle-android-plugin = "com.android.tools.build:gradle:8.1.0-alpha07"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }

@@ -62,6 +62,14 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 }
             }
 
+            // JVM toolchain alignment
+            // Pending on upstream fix: https://github.com/kizitonwose/Calendar/pull/452
+//            extensions.configure<KotlinProjectExtension> {
+//                jvmToolchain {
+//                    languageVersion.set(JavaLanguageVersion.of(8))
+//                }
+//            }
+
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             dependencies {
                 add("coreLibraryDesugaring", libs.findLibrary("gradle.android.desugar").get())
