@@ -25,6 +25,9 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import shared.setAndroidJvmTarget
+import shared.setJvmTargets
+import shared.setJvmToolchain
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -48,9 +51,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 }
 
                 compileOptions {
-                    sourceCompatibility = Constants.JVM_TARGET
-                    targetCompatibility = Constants.JVM_TARGET
-                    isCoreLibraryDesugaringEnabled = true
+                    setJvmTargets()
                 }
 
                 (this as ExtensionAware).extensions.configure<KotlinJvmOptions>("kotlinOptions") {
@@ -58,17 +59,11 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                     )
 
-                    jvmTarget = Constants.JVM_TARGET.toString()
+                    setAndroidJvmTarget()
                 }
             }
 
-            // JVM toolchain alignment
-            // Pending on upstream fix: https://github.com/kizitonwose/Calendar/pull/452
-//            extensions.configure<KotlinProjectExtension> {
-//                jvmToolchain {
-//                    languageVersion.set(JavaLanguageVersion.of(8))
-//                }
-//            }
+            setJvmToolchain()
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             dependencies {
