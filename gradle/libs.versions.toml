@@ -17,7 +17,7 @@ dependencyanalysis = "com.autonomousapps.dependency-analysis:1.19.0"
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [libraries]
-gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.2"
+gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 gradle-android-plugin = "com.android.tools.build:gradle:8.1.0-alpha07"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
