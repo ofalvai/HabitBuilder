@@ -9,7 +9,7 @@ lifecycle = "2.6.1"
 hilt = "2.45"
 
 [plugins]
-ksp = "com.google.devtools.ksp:1.8.10-1.0.9"
+ksp = "com.google.devtools.ksp:1.8.20-1.0.10"
 gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
 gradle-cachefix = "org.gradle.android.cache-fix:2.7.0"
