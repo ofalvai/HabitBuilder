@@ -16,4 +16,6 @@
 
 <resources>
     <color name="background">#1E1B16</color>
+    <color name="habitYellow">#f7bd48</color>
+    <color name="onSurface">#E9E1D9</color>
 </resources>

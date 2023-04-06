@@ -22,5 +22,5 @@
     <size
         android:width="24dp"
         android:height="24dp" />
-    <solid android:color="@android:color/white" />
+    <solid android:color="@color/habitYellow" />
 </shape>

@@ -14,14 +14,51 @@
   ~ limitations under the License.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_light">
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Loading..." />
-</FrameLayout>
+    <LinearLayout style="@style/HabitItem">
+
+        <include layout="@layout/action_circle" />
+
+        <TextView
+            style="@style/HabitText"
+            android:text="@string/habit_suggestion_meditation" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/HabitItem">
+
+        <include layout="@layout/action_circle" />
+
+        <TextView
+            style="@style/HabitText"
+            android:text="@string/habit_suggestion_workout" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/HabitItem">
+
+        <include layout="@layout/action_circle" />
+
+        <TextView
+            style="@style/HabitText"
+            android:text="@string/habit_suggestion_reading" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/HabitItem">
+
+        <include layout="@layout/action_circle" />
+
+        <TextView
+            style="@style/HabitText"
+            android:text="@string/habit_suggestion_walk" />
+
+    </LinearLayout>
+
+</LinearLayout>
