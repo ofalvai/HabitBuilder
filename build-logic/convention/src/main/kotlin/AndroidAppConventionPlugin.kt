@@ -21,6 +21,9 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import shared.buildComposeMetricsParameters
+import shared.setAndroidJvmTarget
+import shared.setJvmTargets
+import shared.setJvmToolchain
 
 class AndroidAppConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -38,11 +41,21 @@ class AndroidAppConventionPlugin : Plugin<Project> {
                     versionName = Constants.VERSION_NAME
                 }
 
+                compileOptions {
+                    setJvmTargets()
+                }
+
                 // kotlinOptions { ... }
                 (this as ExtensionAware).extensions.configure<KotlinJvmOptions>("kotlinOptions") {
-                    freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
+                    freeCompilerArgs = freeCompilerArgs + listOf(
+                        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                    ) + buildComposeMetricsParameters()
+
+                    setAndroidJvmTarget()
                 }
             }
+
+            setJvmToolchain()
         }
     }
 }
