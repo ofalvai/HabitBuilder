@@ -26,4 +26,6 @@ dependencies {
 
     api libs.androidx.glance.appwidget
     debugApi libs.appwidget.viewer
+
+    androidTestImplementation libs.androidx.test.runner
 }
