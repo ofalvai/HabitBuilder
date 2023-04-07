@@ -34,7 +34,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 
-private val LightColors = lightColorScheme(
+val LightColors = lightColorScheme(
     primary = MaterialPalette.md_theme_light_primary,
     onPrimary = MaterialPalette.md_theme_light_onPrimary,
     primaryContainer = MaterialPalette.md_theme_light_primaryContainer,
@@ -66,7 +66,7 @@ private val LightColors = lightColorScheme(
     scrim = MaterialPalette.md_theme_light_scrim,
 )
 
-private val DarkColors = darkColorScheme(
+val DarkColors = darkColorScheme(
     primary = MaterialPalette.md_theme_dark_primary,
     onPrimary = MaterialPalette.md_theme_dark_onPrimary,
     primaryContainer = MaterialPalette.md_theme_dark_primaryContainer,
@@ -98,7 +98,7 @@ private val DarkColors = darkColorScheme(
     scrim = MaterialPalette.md_theme_dark_scrim,
 )
 
-private val LightAppColors = AppColors(
+val LightAppColors = AppColors(
     successContainer = AppPalette.Light.successContainer,
     gray1 = AppPalette.Light.gray1,
     gray2 = AppPalette.Light.gray2,
@@ -122,7 +122,7 @@ private val LightAppColors = AppColors(
     onHabitPinkContainer = AppPalette.light_onHabitPinkContainer,
 )
 
-private val DarkAppColors = AppColors(
+val DarkAppColors = AppColors(
     successContainer = AppPalette.Dark.successContainer,
     gray1 = AppPalette.Dark.gray1,
     gray2 = AppPalette.Dark.gray2,
