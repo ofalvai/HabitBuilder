@@ -70,7 +70,7 @@ val LocalGlanceMaterialColors = staticCompositionLocalOf { LightColors }
 
 @Composable
 @ReadOnlyComposable
-fun isSystemInDarkTheme(): Boolean {
+private fun isSystemInDarkTheme(): Boolean {
     // TODO: observe changes to configuration
     val uiMode = LocalContext.current.resources.configuration.uiMode
     return (uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES

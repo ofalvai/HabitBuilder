@@ -48,8 +48,9 @@ import com.ofalvai.habittracker.feature.widgets.GlanceTheme
 import com.ofalvai.habittracker.feature.widgets.R
 import com.ofalvai.habittracker.feature.widgets.base.AppWidgetRoot
 import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidget
+import com.ofalvai.habittracker.feature.widgets.base.clickToMainScreen
+import com.ofalvai.habittracker.feature.widgets.base.stringResource
 import com.ofalvai.habittracker.feature.widgets.base.toColorInt
-import com.ofalvai.habittracker.feature.widgets.clickToMainScreen
 import com.ofalvai.habittracker.feature.widgets.toModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -91,7 +92,7 @@ class TodayWidget(
         AppWidgetRoot {
             if (data.habits.isEmpty()) {
                 Text(
-                    text = LocalContext.current.getString(R.string.empty_state_no_habits),
+                    text = stringResource(R.string.empty_state_no_habits),
                     modifier = GlanceModifier.padding(16.dp).fillMaxWidth()
                 )
             } else {

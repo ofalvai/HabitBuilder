@@ -17,19 +17,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <receiver
-            android:name=".today.TodayWidgetReceiver"
-            android:enabled="@bool/glance_appwidget_available"
+        <activity
+            android:name=".WidgetViewerActivity"
             android:exported="true"
-            android:label="@string/widget_today_label">
+            android:label="Widget Viewer Debug">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/today_widget_info" />
-        </receiver>
+        </activity>
     </application>
 
 </manifest>
