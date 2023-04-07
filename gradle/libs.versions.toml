@@ -72,6 +72,9 @@ bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.29.0"
 
 apache-csv = "org.apache.commons:commons-csv:1.10.0"
 
+androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0-alpha05"
+appwidget-viewer = "com.google.android.glance.tools:appwidget-viewer:0.2.2"
+
 showkase-annotation = { module = "com.airbnb.android:showkase-annotation", version.ref = "showkase" }
 showkase-full = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase-processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }

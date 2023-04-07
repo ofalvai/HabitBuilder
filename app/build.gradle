@@ -128,7 +128,7 @@ licensee {
 
 dependencies {
     implementation project(':core-common')
-    debugImplementation project(':core-database')
+    implementation project(':core-database')
     implementation project(':core-ui')
     implementation project(':feature-dashboard')
     implementation project(':feature-insights')

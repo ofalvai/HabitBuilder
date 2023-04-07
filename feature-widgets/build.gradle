@@ -1,33 +1,29 @@
 plugins {
     id 'habittracker.android.library'
-    id 'habittracker.android.library.compose'
     id "org.jetbrains.kotlin.kapt"
     id 'com.google.dagger.hilt.android'
 }
 
 android {
     namespace 'com.ofalvai.habittracker.feature.widgets'
+    buildFeatures {
+        compose = true
+        composeOptions {
+            kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+        }
+    }
 }
 
 dependencies {
-    api project(':core-common')
+    implementation project(':core-common')
     api project(':core-database')
     api project(':core-model')
-    api project(':core-ui')
+    implementation project(':core-ui')
 
     implementation libs.androidx.lifecycle.viewmodel
-    implementation libs.hilt.android
+    api libs.hilt.android
     kapt libs.hilt.compiler
 
-    implementation "androidx.glance:glance-appwidget:1.0.0-alpha05"
-    implementation "com.google.android.glance.tools:appwidget-host:0.2.2"
-    debugImplementation "com.google.android.glance.tools:appwidget-viewer:0.2.2"
-    debugImplementation libs.androidx.activity.compose
-    implementation "com.google.android.glance.tools:appwidget-configuration:0.2.2"
-
-    testImplementation project(':core-testing')
-    testImplementation libs.junit
-    testImplementation libs.kotlin.coroutines.test
-    testImplementation libs.mockito.kotlin
-    testImplementation libs.turbine
+    api libs.androidx.glance.appwidget
+    debugApi libs.appwidget.viewer
 }
