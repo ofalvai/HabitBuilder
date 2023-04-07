@@ -11,3 +11,8 @@ git-of-theseus:
 # Build release app with Compose Compiler metrics/reports enabled
 compose-metrics:
     ./gradlew assembleRelease -Phabittracker.enableComposeCompilerReports=true
+
+# Run license report task and update license report asset in app
+update-licenses:
+    ./gradlew licenseeRelease --no-configuration-cache
+    cp app/build/reports/licensee/release/artifacts.json app/src/main/assets/licenses.json
