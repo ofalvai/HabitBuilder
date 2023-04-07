@@ -82,12 +82,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-    }
-    kotlinOptions {
-        freeCompilerArgs += '-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'
-    }
     buildFeatures {
         buildConfig true
         compose true
@@ -134,11 +128,12 @@ licensee {
 
 dependencies {
     implementation project(':core-common')
-    debugImplementation project(':core-database')
+    implementation project(':core-database')
     implementation project(':core-ui')
     implementation project(':feature-dashboard')
     implementation project(':feature-insights')
     implementation project(':feature-misc')
+    implementation project(':feature-widgets')
 
     coreLibraryDesugaring libs.gradle.android.desugar
 

@@ -70,6 +70,11 @@ class ExportViewModel @Inject constructor(
             )
             return
         }
+        telemetry.leaveBreadcrumb(
+            "exportToFile",
+            mapOf("uri" to uri.toString()),
+            Telemetry.BreadcrumbType.UserAction
+        )
         viewModelScope.launch {
             try {
                 val habits = habitDao.getHabits()
@@ -103,6 +108,11 @@ class ExportViewModel @Inject constructor(
             )
             return
         }
+        telemetry.leaveBreadcrumb(
+            "importFromFile",
+            mapOf("uri" to uri.toString()),
+            Telemetry.BreadcrumbType.UserAction
+        )
         viewModelScope.launch {
             try {
                 val backup = loadBackup(uri)

@@ -18,7 +18,6 @@ package com.ofalvai.habittracker.core.database.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.Instant
@@ -29,7 +28,7 @@ import java.time.Instant
             entity = Habit::class,
             parentColumns = ["id"],
             childColumns = ["habit_id"],
-            onDelete = CASCADE
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [Index("habit_id")]

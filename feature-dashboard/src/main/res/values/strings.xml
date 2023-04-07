@@ -40,16 +40,6 @@
     <string name="dashboard_config_dialog_minicalendar">Mini calendar</string>
     <string name="dashboard_config_dialog_compact">Compact</string>
 
-    <string name="habit_suggestion_meditation">Meditate</string>
-    <string name="habit_suggestion_workout">Exercise for 10 min</string>
-    <string name="habit_suggestion_reading">Read for 20 min</string>
-    <string name="habit_suggestion_walk">Go for a walk</string>
-    <string name="habit_suggestion_plan_my_day">Plan my day</string>
-    <string name="habit_suggestion_stretch">Stretch after wakeup</string>
-    <string name="habit_suggestion_go_to_bed">Go to bed early</string>
-    <string name="habit_suggestion_journal">Write in my journal</string>
-    <string name="habit_suggestion_spend_time">Spend time with…</string>
-
     <string name="common_action_count_clean">Start today</string>
     <plurals name="common_action_count_total">
         <item quantity="other">%d total</item>

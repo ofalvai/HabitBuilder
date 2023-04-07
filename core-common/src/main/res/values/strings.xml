@@ -23,4 +23,14 @@
     <string name="onboarding_step_details_subtitle">Tap on a habit to see stats and other details.</string>
     <string name="onboarding_step_insights_title">Insights tab</string>
     <string name="onboarding_step_insights_subtitle">See your progress once you create more habits and practice them every day. Use the charts and statistics to analyze your progress.</string>
+
+    <string name="habit_suggestion_meditation">Meditate</string>
+    <string name="habit_suggestion_workout">Exercise for 10 min</string>
+    <string name="habit_suggestion_reading">Read for 20 min</string>
+    <string name="habit_suggestion_walk">Go for a walk</string>
+    <string name="habit_suggestion_plan_my_day">Plan my day</string>
+    <string name="habit_suggestion_stretch">Stretch after wakeup</string>
+    <string name="habit_suggestion_go_to_bed">Go to bed early</string>
+    <string name="habit_suggestion_journal">Write in my journal</string>
+    <string name="habit_suggestion_spend_time">Spend time with…</string>
 </resources>

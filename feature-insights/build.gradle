@@ -14,6 +14,7 @@ dependencies {
     api project(':core-common')
     api project(':core-database')
     api project(':core-ui')
+    api project(':core-model')
 
     implementation libs.kotlin.immutable
     implementation libs.androidx.lifecycle.viewmodel
