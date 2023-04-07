@@ -24,7 +24,9 @@ dependencies {
     api libs.hilt.android
     kapt libs.hilt.compiler
 
-    api libs.androidx.glance.appwidget
+    api(libs.androidx.glance.appwidget) {
+        exclude group: "com.google.android.material", module: "material"
+    }
     debugApi libs.appwidget.viewer
 
     androidTestImplementation libs.androidx.test.runner
