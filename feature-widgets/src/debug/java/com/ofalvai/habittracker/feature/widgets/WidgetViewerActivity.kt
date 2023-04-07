@@ -21,6 +21,7 @@ import androidx.glance.appwidget.ExperimentalGlanceRemoteViewsApi
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import com.google.android.glance.tools.viewer.GlanceSnapshot
 import com.google.android.glance.tools.viewer.GlanceViewerActivity
+import com.ofalvai.habittracker.core.common.R
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitDayView
@@ -44,10 +45,10 @@ class WidgetViewerActivity : GlanceViewerActivity() {
             TodayWidgetReceiver::class.java -> GlanceSnapshot(
                 instance = TodayWidget(
                     initialData = TodayData(habits = listOf(
-                        HabitDayView(Habit(name = "Meditate", color = Habit.Color.Yellow, notes = ""), toggled = true),
-                        HabitDayView(Habit(name = "Exercise for 10 min", color = Habit.Color.Blue, notes = ""), toggled = false),
-                        HabitDayView(Habit(name = "Read for 20 min", color = Habit.Color.Red, notes = ""), toggled = false),
-                        HabitDayView(Habit(name = "Plan my day", color = Habit.Color.Green, notes = ""), toggled = true)
+                        HabitDayView(Habit(name = getString(R.string.habit_suggestion_meditation), color = Habit.Color.Yellow, notes = ""), toggled = true),
+                        HabitDayView(Habit(name = getString(R.string.habit_suggestion_workout), color = Habit.Color.Blue, notes = ""), toggled = false),
+                        HabitDayView(Habit(name = getString(R.string.habit_suggestion_reading), color = Habit.Color.Red, notes = ""), toggled = false),
+                        HabitDayView(Habit(name = getString(R.string.habit_suggestion_plan_my_day), color = Habit.Color.Green, notes = ""), toggled = true)
                     )),
                     application = app,
                     habitDao = habitDao

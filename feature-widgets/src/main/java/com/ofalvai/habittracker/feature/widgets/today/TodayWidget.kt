@@ -43,8 +43,8 @@ import androidx.glance.text.TextStyle
 import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitDayView
+import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.feature.widgets.GlanceTheme
-import com.ofalvai.habittracker.feature.widgets.LocalGlanceMaterialColors
 import com.ofalvai.habittracker.feature.widgets.R
 import com.ofalvai.habittracker.feature.widgets.base.AppWidgetRoot
 import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidget
@@ -89,7 +89,14 @@ class TodayWidget(
     @Composable
     override fun Content(data: TodayData) {
         AppWidgetRoot {
-            HabitList(data.habits)
+            if (data.habits.isEmpty()) {
+                Text(
+                    text = LocalContext.current.getString(R.string.empty_state_no_habits),
+                    modifier = GlanceModifier.padding(16.dp).fillMaxWidth()
+                )
+            } else {
+                HabitList(data.habits)
+            }
         }
     }
 }
@@ -139,7 +146,8 @@ private fun HabitCircle(toggled: Boolean, habit: Habit) {
     val drawable = LocalContext.current.getDrawable(
         if (toggled) R.drawable.action_circle_toggled else R.drawable.action_circle
     )!!
-    DrawableCompat.setTint(drawable, LocalGlanceMaterialColors.current.primary.toColorInt())
+
+    DrawableCompat.setTint(drawable, habit.color.composeColor.toColorInt())
     circle.setBitmap(R.id.action_circle, "setImageBitmap", drawable.toBitmap())
     AndroidRemoteViews(circle)
 }

@@ -58,7 +58,7 @@ fun AppWidgetRoot(
             val remoteViews = RemoteViews(LocalContext.current.packageName, R.layout.app_widget_root)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val backgroundColor = LocalGlanceMaterialColors.current.surfaceVariant.toColorInt()
+                val backgroundColor = LocalGlanceMaterialColors.current.background.toColorInt()
                 remoteViews.setColorStateList(R.id.app_widget_background, "setImageTintList", ColorStateList.valueOf(backgroundColor))
             }
             // On lower API levels we take the day/night background colors defined in colors.xml

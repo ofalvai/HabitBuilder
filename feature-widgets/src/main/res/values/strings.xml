@@ -15,5 +15,7 @@
   -->
 
 <resources>
-    <string name="widget_today_description">Today</string>
+    <string name="widget_today_label">Today</string>
+    <string name="widget_today_description">Display all habits and their current status</string>
+    <string name="empty_state_no_habits">No habits yet</string>
 </resources>
