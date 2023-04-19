@@ -1,7 +1,7 @@
 [versions]
-kotlin = "1.8.10"
+kotlin = "1.8.20"
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin#pre-release_kotlin_compatibility
-compose-compiler = "1.4.3"
+compose-compiler = "1.4.5"
 room = "2.5.1"
 accompanist = "0.30.1"
 showkase = "1.0.0-beta15"
@@ -9,7 +9,7 @@ lifecycle = "2.6.1"
 hilt = "2.45"
 
 [plugins]
-ksp = "com.google.devtools.ksp:1.8.10-1.0.9"
+ksp = "com.google.devtools.ksp:1.8.20-1.0.11"
 gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
 gradle-cachefix = "org.gradle.android.cache-fix:2.7.1"
