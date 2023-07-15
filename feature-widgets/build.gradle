@@ -1,0 +1,33 @@
+plugins {
+    id 'habittracker.android.library'
+    id "org.jetbrains.kotlin.kapt"
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    namespace 'com.ofalvai.habittracker.feature.widgets'
+    buildFeatures {
+        compose = true
+        composeOptions {
+            kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+        }
+    }
+}
+
+dependencies {
+    implementation project(':core-common')
+    api project(':core-database')
+    api project(':core-model')
+    implementation project(':core-ui')
+
+    implementation libs.androidx.lifecycle.viewmodel
+    api libs.hilt.android
+    kapt libs.hilt.compiler
+
+    api(libs.androidx.glance.appwidget) {
+        exclude group: "com.google.android.material", module: "material"
+    }
+    debugApi libs.appwidget.viewer
+
+    androidTestImplementation libs.androidx.test.runner
+}
