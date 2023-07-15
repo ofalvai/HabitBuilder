@@ -58,13 +58,13 @@ abstract class BaseGlanceAppWidget<T>(
         }
     }
 
-    @Composable
-    override fun Content() {
-        glanceId = LocalGlanceId.current
-        size = LocalSize.current
-
-        Content(data)
-    }
+//    @Composable
+//    override fun Content() {
+//        glanceId = LocalGlanceId.current
+//        size = LocalSize.current
+//
+//        Content(data)
+//    }
 
     @Composable
     abstract fun Content(data: T)
