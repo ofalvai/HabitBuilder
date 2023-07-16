@@ -1,9 +1,10 @@
 # TODO:
 # pre-bake Gradle wrapper
+# figure out Java 11 vs 17
 # 
 
 VERSION 0.7
-FROM eclipse-temurin:17
+FROM ubuntu:23.04
 WORKDIR /gradle-workdir
 
 setup-jdk11:
@@ -15,19 +16,27 @@ setup-jdk17:
     SAVE ARTIFACT /opt/java/openjdk
     
 setup-android:
-    ENV ANDROID_HOME "/home/circleci/android-sdk"
+    ENV JAVA_HOME_11=/opt/java/openjdk11
+    COPY +setup-jdk11/openjdk $JAVA_HOME_11
+
+    ENV JAVA_HOME_17=/opt/java/openjdk17
+    COPY +setup-jdk17/openjdk $JAVA_HOME_17
+
+    ENV JAVA_HOME $JAVA_HOME_17
+
+    ENV ANDROID_HOME "/home/ci/android-sdk"
     ENV ANDROID_SDK_ROOT $ANDROID_HOME
     ENV CMDLINE_TOOLS_ROOT "${ANDROID_HOME}/cmdline-tools/latest/bin"
     ENV ADB_INSTALL_TIMEOUT 120
     ENV PATH "${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:${PATH}"
 
-    RUN apt-get update && apt-get install unzip
+    RUN apt-get update && apt-get install -y unzip curl
 
-    RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-mac-9477386_latest.zip" && \
+    RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip" && \
         mkdir -p ${ANDROID_HOME}/cmdline-tools && \
         mkdir ${ANDROID_HOME}/platforms && \
         mkdir ${ANDROID_HOME}/ndk && \
-        wget -O /tmp/cmdline-tools.zip -t 5 "${SDK_TOOLS_URL}" && \
+        curl -L -o /tmp/cmdline-tools.zip "${SDK_TOOLS_URL}" && \
         unzip -q /tmp/cmdline-tools.zip -d ${ANDROID_HOME}/cmdline-tools && \
         rm /tmp/cmdline-tools.zip && \
         mv ${ANDROID_HOME}/cmdline-tools/cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
@@ -36,7 +45,7 @@ setup-android:
     COPY fake_emulator_package.xml /tmp/package.xml
     RUN FAKE_EMULATOR_URL="https://redirector.gvt1.com/edgedl/android/repository/emulator-linux_x64-9536276.zip" && \
          mkdir -p ${ANDROID_HOME}/emulator && \
-         wget -O /tmp/fake-emulator.zip -t 5 "${FAKE_EMULATOR_URL}" && \
+         curl -L -o /tmp/fake-emulator.zip "${FAKE_EMULATOR_URL}" && \
          unzip -q /tmp/fake-emulator.zip -d ${ANDROID_HOME}/emulator && \
          rm /tmp/fake-emulator.zip && \
          mv /tmp/package.xml ${ANDROID_HOME}/emulator/package.xml
@@ -48,13 +57,10 @@ setup-android:
     RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-33"
 
 deps:
+    # Run a Gradle build with the bare minimum files so that this Docker layer can be cached
+    # and not get invalidated when project files change
+
     FROM +setup-android
-
-    ENV JAVA_HOME_11=/opt/java/openjdk11
-    COPY +setup-jdk11/openjdk $JAVA_HOME_11
-
-    ENV JAVA_HOME_17=/opt/java/openjdk17
-    COPY +setup-jdk17/openjdk $JAVA_HOME_17
 
     COPY gradle.properties ./gradle.properties
     COPY gradle/wrapper ./gradle/wrapper
@@ -63,15 +69,9 @@ deps:
     COPY gradlew ./gradlew
     COPY lint.xml ./lint.xml
     COPY settings.gradle ./settings.gradle
-
     COPY build-logic ./build-logic
 
-
-    # RUN ./gradlew -q javaToolchains || true
-
-    RUN --mount=type=cache,target=/root/.gradle/caches \
-        --mount=type=cache,target=/root/.gradle/wrapper \
-        ./gradlew
+    RUN ./gradlew --no-daemon
 
 build:
     FROM +deps
@@ -87,5 +87,5 @@ build:
     COPY feature-misc ./feature-misc
     COPY feature-widgets ./feature-widgets
 
-    RUN ./gradlew assembleDebug
+    RUN ./gradlew assembleDebug --no-daemon
     SAVE ARTIFACT app/build/outputs/apk
