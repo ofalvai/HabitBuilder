@@ -19,9 +19,10 @@ pipeline:
             steps:
               - step:
                   identifier: echo
-                  name: echo
+                  name: build
                   spec:
-                    command: echo hello world
+                    shell: Sh
+                    command: ./gradlew assembleDebug
                   timeout: ""
                   type: Run
           platform:
