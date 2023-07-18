@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_HabitBuilder_1689679095510-pr-trigger-input-set
+  identifier: Build_HabitBuilder_1689679095510prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_HabitBuilder_1689679095510
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
