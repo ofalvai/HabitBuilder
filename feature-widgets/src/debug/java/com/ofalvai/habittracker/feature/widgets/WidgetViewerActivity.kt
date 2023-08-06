@@ -16,7 +16,6 @@
 
 package com.ofalvai.habittracker.feature.widgets
 
-import android.app.Application
 import androidx.glance.appwidget.ExperimentalGlanceRemoteViewsApi
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import com.google.android.glance.tools.viewer.GlanceSnapshot
@@ -35,7 +34,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class WidgetViewerActivity : GlanceViewerActivity() {
 
-    @Inject lateinit var app: Application
     @Inject lateinit var habitDao: HabitDao
 
     override suspend fun getGlanceSnapshot(
@@ -50,7 +48,6 @@ class WidgetViewerActivity : GlanceViewerActivity() {
                         HabitDayView(Habit(name = getString(R.string.habit_suggestion_reading), color = Habit.Color.Red, notes = ""), toggled = false),
                         HabitDayView(Habit(name = getString(R.string.habit_suggestion_plan_my_day), color = Habit.Color.Green, notes = ""), toggled = true)
                     )),
-                    application = app,
                     habitDao = habitDao
                 )
             )

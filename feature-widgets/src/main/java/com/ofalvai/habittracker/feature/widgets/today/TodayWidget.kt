@@ -16,7 +16,6 @@
 
 package com.ofalvai.habittracker.feature.widgets.today
 
-import android.app.Application
 import android.content.Context
 import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.glance.ExperimentalGlanceApi
 import androidx.glance.GlanceComposable
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -53,14 +53,12 @@ import com.ofalvai.habittracker.core.ui.theme.composeColor
 import com.ofalvai.habittracker.feature.widgets.GlanceTheme
 import com.ofalvai.habittracker.feature.widgets.R
 import com.ofalvai.habittracker.feature.widgets.base.AppWidgetRoot
-import com.ofalvai.habittracker.feature.widgets.base.BaseGlanceAppWidget
 import com.ofalvai.habittracker.feature.widgets.base.clickToMainScreen
 import com.ofalvai.habittracker.feature.widgets.base.stringResource
 import com.ofalvai.habittracker.feature.widgets.base.toColorInt
 import com.ofalvai.habittracker.feature.widgets.toModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -68,14 +66,12 @@ import javax.inject.Inject
 class TodayWidgetReceiver : GlanceAppWidgetReceiver() {
 
     @Inject
-    lateinit var application: Application
-    @Inject
     lateinit var habitDao: HabitDao
 
-    override val glanceAppWidget: GlanceAppWidget
-        get() {
-            return TodayWidget(initialData, application, habitDao)
-        }
+    override val glanceAppWidget: GlanceAppWidget get() = TodayWidget(initialData, habitDao)
+
+    @ExperimentalGlanceApi
+    override val coroutineContext = Dispatchers.IO
 }
 
 data class TodayData(
@@ -86,7 +82,6 @@ private val initialData = TodayData(emptyList())
 
 class TodayWidget(
     initialData: TodayData,
-    application: Application,
     private val habitDao: HabitDao
 ): GlanceAppWidget() {
 
@@ -98,9 +93,7 @@ class TodayWidget(
     }
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        withContext(Dispatchers.IO) {
-            data = loadData()
-        }
+        data = loadData()
 
         provideContent {
             AppWidgetRoot {
@@ -130,6 +123,7 @@ private fun HabitList(habits: List<HabitDayView>) {
     }
 }
 
+@GlanceComposable
 @Composable
 private fun HabitListItem(toggled: Boolean, habit: Habit) {
     Row(
@@ -153,6 +147,7 @@ private fun HabitListItem(toggled: Boolean, habit: Habit) {
     }
 }
 
+@GlanceComposable
 @Composable
 private fun HabitCircle(toggled: Boolean, habit: Habit) {
     // Pure RemoteView implementation until glance.appwidget adds support for rounded corners

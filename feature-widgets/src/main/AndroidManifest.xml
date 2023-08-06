@@ -24,6 +24,7 @@
             android:label="@string/widget_today_label">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="androidx.glance.appwidget.DEBUG_UPDATE" />
             </intent-filter>
 
             <meta-data
