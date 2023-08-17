@@ -11,43 +11,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    env:
+      CACHE_DEBUG_ENABLED: false
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-        
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: adopt
           java-version: 17
       
-      - name: Debug build
-        run: ./gradlew assembleDebug --stacktrace
-        
-# https://github.com/JakeWharton/timber/issues/408
-#       - name: Debug lint
-#         run: ./gradlew lintDebug
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: assembleDebug
+          gradle-home-cache-cleanup: true
+          cache-read-only: false
+      
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: lintDebug
         
       - name: Upload lint report
         uses: actions/upload-artifact@v3
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-debug.html'
-      
-      - name: Unit test (all modules)
-        run: ./gradlew test --stacktrace
-      
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: testDebugUnitTest
       - name: Upload test reports
         uses: actions/upload-artifact@v3
         with:
