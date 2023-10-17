@@ -18,7 +18,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [libraries]
 gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
-gradle-android-plugin = "com.android.tools.build:gradle:8.1.0"
+gradle-android-plugin = "com.android.tools.build:gradle:8.1.2"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -72,7 +72,7 @@ bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.31.0"
 
 apache-csv = "org.apache.commons:commons-csv:1.10.0"
 
-androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0-rc01"
+androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0"
 appwidget-viewer = "com.google.android.glance.tools:appwidget-viewer:0.2.2"
 
 showkase-annotation = { module = "com.airbnb.android:showkase-annotation", version.ref = "showkase" }

@@ -94,3 +94,4 @@ lint/tmp/
 *.hprof
 
 .git-of-theseus
+.bitrise.secrets.yml
