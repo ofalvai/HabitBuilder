@@ -16,10 +16,20 @@
 
 package com.ofalvai.habittracker.feature.dashboard.ui.habitdetail
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,7 +52,6 @@ import kotlin.math.max
 private const val MinBarHeight = 0.02f
 private val BarWidth = 32.dp
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ActionCountChart(
     values: ImmutableList<ActionCountChart.ChartItem>,
@@ -56,8 +65,15 @@ fun ActionCountChart(
 
     AnimatedContent(
         targetState = reversedItems,
-        transitionSpec = { fadeIn(animationSpec = tween(300, delayMillis = 150)) with fadeOut() },
-        contentAlignment = Alignment.BottomCenter
+        transitionSpec = {
+            fadeIn(
+                animationSpec = tween(
+                    300,
+                    delayMillis = 150
+                )
+            ) togetherWith fadeOut()
+        },
+        contentAlignment = Alignment.BottomCenter, label = "ActionCountChart"
     ) { items ->
         val maxValue = items.maxByOrNull { it.value }!!.value
         LazyRow(

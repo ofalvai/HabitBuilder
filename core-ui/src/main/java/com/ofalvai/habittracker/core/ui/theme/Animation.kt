@@ -16,14 +16,16 @@
 
 package com.ofalvai.habittracker.core.ui.theme
 
-import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 
 /**
  * Navigation transitions mirroring the Material spec and the non-Compose Material Design Components
  */
-@OptIn(ExperimentalAnimationApi::class)
 object AppTransition {
     val defaultEnter = fadeIn()
     val defaultExit = fadeOut()
