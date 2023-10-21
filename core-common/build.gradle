@@ -1,6 +1,6 @@
 plugins {
     id 'habittracker.android.library'
-    id "org.jetbrains.kotlin.kapt"
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -19,7 +19,7 @@ dependencies {
 
     api libs.javax.inject
     implementation libs.hilt.android
-    kapt libs.hilt.compiler
+    ksp libs.hilt.compiler
 
     testImplementation libs.junit
     testImplementation libs.kotlin.coroutines.test

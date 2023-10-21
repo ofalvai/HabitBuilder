@@ -1,7 +1,8 @@
 plugins {
     id 'habittracker.android.library'
-    id "org.jetbrains.kotlin.kapt"
 }
+
+apply plugin: 'com.google.devtools.ksp'
 
 android {
     namespace 'com.ofalvai.habittracker.feature.widgets'
@@ -13,10 +14,6 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes true
-}
-
 dependencies {
     implementation project(':core-common')
     api project(':core-database')
@@ -24,7 +21,7 @@ dependencies {
     implementation project(':core-ui')
 
     api libs.hilt.android
-    kapt libs.hilt.compiler
+    ksp libs.hilt.compiler
 
     api(libs.androidx.glance.appwidget) {
         exclude group: "com.google.android.material", module: "material"

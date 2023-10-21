@@ -1,7 +1,6 @@
 plugins {
     id 'habittracker.android.library'
     id 'habittracker.android.library.compose'
-    id "org.jetbrains.kotlin.kapt"
 }
 
 apply plugin: 'com.google.devtools.ksp'
@@ -18,7 +17,7 @@ dependencies {
     implementation libs.kotlin.immutable
     implementation libs.androidx.activity.compose
     implementation libs.hilt.android
-    kapt libs.hilt.compiler
+    ksp libs.hilt.compiler
 
     implementation libs.apache.csv
 
