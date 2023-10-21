@@ -16,7 +16,14 @@
 
 package com.ofalvai.habittracker.core.ui.component
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
@@ -26,7 +33,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -48,7 +61,7 @@ import java.time.Year
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
-import java.util.*
+import java.util.Locale
 
 
 @Composable
@@ -83,7 +96,6 @@ fun HorizontalMonthCalendar(
     HorizontalCalendar(state = state, dayContent = content)
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CalendarPager(
     yearMonth: StableHolder<YearMonth>,
@@ -105,7 +117,7 @@ fun CalendarPager(
         AnimatedContent(
             targetState = yearMonth.item,
             transitionSpec = pagerTransitionSpec,
-            modifier = Modifier.fillMaxWidth(0.8f)
+            modifier = Modifier.fillMaxWidth(0.8f), label = "CalendarPager"
         ) { targetYearMonth ->
             val month = targetYearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
             val year = targetYearMonth.year
@@ -126,14 +138,13 @@ fun CalendarPager(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
-private val pagerTransitionSpec: AnimatedContentScope<YearMonth>.() -> ContentTransform = {
+private val pagerTransitionSpec: AnimatedContentTransitionScope<YearMonth>.() -> ContentTransform = {
     if (targetState.isAfter(initialState)) {
         // Slide in from right, slide out to left
-        slideInHorizontally { it } + fadeIn() with slideOutHorizontally { -it } + fadeOut()
+        (slideInHorizontally { it } + fadeIn()).togetherWith(slideOutHorizontally { -it } + fadeOut())
     } else {
         // Slide in from left, slide out to right
-        slideInHorizontally { -it } + fadeIn() with slideOutHorizontally { it } + fadeOut()
+        (slideInHorizontally { -it } + fadeIn()).togetherWith(slideOutHorizontally { it } + fadeOut())
     }
 }
 

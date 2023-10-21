@@ -19,13 +19,11 @@ package com.ofalvai.habittracker.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -43,8 +41,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ofalvai.habittracker.core.common.AppPreferences
 import com.ofalvai.habittracker.core.common.Telemetry
@@ -62,15 +60,14 @@ import com.ofalvai.habittracker.ui.settings.DebugSettings
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint(ComponentActivity::class)
+class MainActivity : Hilt_MainActivity() {
 
     @Inject
     lateinit var appPreferences: AppPreferences
     @Inject
     lateinit var navigationTelemetryLogger: NavigationTelemetryLogger
 
-    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,7 +77,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val isDynamicColor by appPreferences.dynamicColorEnabled.collectAsState()
             AppTheme(isDynamicColor = isDynamicColor) {
-                val navController = rememberAnimatedNavController()
+                val navController = rememberNavController()
                 val systemUiController = rememberSystemUiController()
                 val useDarkIcons = !isSystemInDarkTheme()
                 val snackbarHostState = remember { SnackbarHostState() }
@@ -114,7 +111,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun Screens(
     navController: NavHostController,
@@ -130,7 +126,7 @@ private fun Screens(
         navController.navigate(route)
     }
 
-    AnimatedNavHost(
+    NavHost(
         navController,
         startDestination = Destination.Dashboard.route,
         modifier = Modifier.padding(padding).fillMaxSize()

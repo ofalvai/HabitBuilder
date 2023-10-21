@@ -18,22 +18,30 @@
 package com.ofalvai.habittracker.ui
 
 import android.os.Bundle
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
-import androidx.navigation.*
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.composable
 import com.ofalvai.habittracker.core.ui.theme.AppTransition
 
 sealed class Screen constructor(
     val route: String,
     val arguments: List<NamedNavArgument> = emptyList(),
-    val enterTransition: AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition = { AppTransition.defaultEnter },
-    val exitTransition: AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition = { AppTransition.defaultExit },
-    val popEnterTransition: AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition = enterTransition,
-    val popExitTransition: AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition = exitTransition
+    val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = { AppTransition.defaultEnter },
+    val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = { AppTransition.defaultExit },
+    val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = enterTransition,
+    val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = exitTransition
 )
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.appDestination(
     screen: Screen,
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit

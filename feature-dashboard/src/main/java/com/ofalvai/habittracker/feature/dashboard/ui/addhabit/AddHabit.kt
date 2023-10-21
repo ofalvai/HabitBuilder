@@ -32,9 +32,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -97,11 +97,11 @@ fun AddHabitForm(
             onDispose {  }
         }
 
-        val selectedHabitColor by animateColorAsState(targetValue = color.composeColor)
-        val customTextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = selectedHabitColor,
+        val selectedHabitColor by animateColorAsState(targetValue = color.composeColor, label = "AddHabitForm")
+        val customTextFieldColors = OutlinedTextFieldDefaults.colors(
             cursorColor = selectedHabitColor,
-            focusedLabelColor = selectedHabitColor
+            focusedBorderColor = selectedHabitColor,
+            focusedLabelColor = selectedHabitColor,
         )
         OutlinedTextField(
             modifier = Modifier
@@ -164,7 +164,6 @@ fun AddHabitForm(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Suggestions(habits: ImmutableList<String>, onSelect: (String) -> Unit) {
     LazyRow(

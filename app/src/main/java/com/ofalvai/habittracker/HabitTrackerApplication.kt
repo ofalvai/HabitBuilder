@@ -24,8 +24,8 @@ import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import javax.inject.Inject
 
-@HiltAndroidApp
-class HabitTrackerApplication : Application() {
+@HiltAndroidApp(Application::class)
+class HabitTrackerApplication : Hilt_HabitTrackerApplication() {
 
     @Inject lateinit var telemetry: Telemetry
     @Inject lateinit var widgetUpdater: WidgetUpdater

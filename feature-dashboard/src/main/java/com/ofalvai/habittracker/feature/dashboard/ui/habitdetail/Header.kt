@@ -82,7 +82,7 @@ internal fun HabitDetailHeader(
             }
             else -> MaterialTheme.colorScheme.background
         },
-        animationSpec = tween(durationMillis = 900, delayMillis = 150)
+        animationSpec = tween(durationMillis = 900, delayMillis = 150), label = "HabitDetailHeader"
     )
 
     Surface(color = backgroundColor) {
@@ -122,7 +122,6 @@ internal fun HabitDetailHeader(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HabitHeaderEditingContent(
     habitDetails: HabitWithActions,
@@ -193,7 +192,9 @@ private fun HabitHeaderContent(
     onBack: () -> Unit,
     onEdit: () -> Unit
 ) {
-    val bottomPadding by animateDpAsState(targetValue = if (scrollState.value < SCROLL_COLLAPSE_THRESHOLD) 32.dp else 8.dp)
+    val bottomPadding by animateDpAsState(targetValue = if (scrollState.value < SCROLL_COLLAPSE_THRESHOLD) 32.dp else 8.dp,
+        label = "HeaderContent"
+    )
     Column(Modifier.padding(bottom = bottomPadding)) {
         val contentColor = habitDetails.habit.color.composeOnContainerColor
         CompositionLocalProvider(LocalContentColor provides contentColor) {
@@ -331,7 +332,7 @@ private fun TopAppBarNavIcon() = Icon(Icons.Rounded.ArrowBack, stringResource(co
 @Composable
 private fun topAppBarColors(habitColor: Habit.Color? = null): TopAppBarColors {
     val contentColor = habitColor?.composeOnContainerColor ?: MaterialTheme.colorScheme.onSurface
-    return TopAppBarDefaults.smallTopAppBarColors(
+    return TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Transparent,
         actionIconContentColor = contentColor,
         navigationIconContentColor = contentColor
