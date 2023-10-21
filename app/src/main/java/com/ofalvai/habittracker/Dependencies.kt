@@ -16,7 +16,10 @@
 
 package com.ofalvai.habittracker
 
+import android.app.Application
+import com.ofalvai.habittracker.core.database.HabitDao
 import com.ofalvai.habittracker.feature.misc.settings.AppInfo
+import com.ofalvai.habittracker.feature.widgets.base.WidgetUpdater
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,13 +48,13 @@ internal object AppModule {
     @AppCoroutineScope
     fun provideAppCoroutineScope() = CoroutineScope(SupervisorJob())
 
-//    @Provides
-//    @Singleton
-//    fun provideWidgetUpdater(
-//        app: Application,
-//        habitDao: HabitDao,
-//        @AppCoroutineScope scope: CoroutineScope
-//    ) = WidgetUpdater(app, habitDao, scope)
+    @Provides
+    @Singleton
+    fun provideWidgetUpdater(
+        app: Application,
+        habitDao: HabitDao,
+        @AppCoroutineScope scope: CoroutineScope
+    ) = WidgetUpdater(app, habitDao, scope)
 }
 
 @Qualifier

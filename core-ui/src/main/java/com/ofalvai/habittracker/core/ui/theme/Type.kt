@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,21 +29,18 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.ofalvai.habittracker.core.ui.R
 
-@OptIn(ExperimentalTextApi::class)
 private val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
     providerPackage = "com.google.android.gms",
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-@OptIn(ExperimentalTextApi::class)
 private val lato = FontFamily(
     Font(googleFont = GoogleFont("Lato"), fontProvider = provider),
     Font(googleFont = GoogleFont("Lato"), fontProvider = provider, weight = FontWeight.Medium),
     Font(googleFont = GoogleFont("Lato"), fontProvider = provider, weight = FontWeight.Bold)
 )
 
-@OptIn(ExperimentalTextApi::class)
 private val patua = FontFamily(
     Font(googleFont = GoogleFont("Patua One"), fontProvider = provider)
 )

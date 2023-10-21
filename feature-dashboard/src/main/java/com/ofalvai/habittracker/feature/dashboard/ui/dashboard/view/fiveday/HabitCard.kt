@@ -18,7 +18,6 @@ package com.ofalvai.habittracker.feature.dashboard.ui.dashboard.view.fiveday
 
 import android.os.Vibrator
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
@@ -45,7 +44,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -137,7 +136,7 @@ fun ActionCircles(
     habitColor: Habit.Color,
     onActionToggle: (Action, Int) -> Unit
 ) {
-    var singlePressCounter by remember { mutableStateOf(0) }
+    var singlePressCounter by remember { mutableIntStateOf(0) }
 
     Column(modifier) {
         Row {
@@ -168,7 +167,6 @@ fun ActionCircles(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ActionCircle(
     activeColor: Color,

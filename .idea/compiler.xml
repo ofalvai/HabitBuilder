@@ -12,9 +12,11 @@
       <module name="HabitTracker.feature-dashboard" target="17" />
       <module name="HabitTracker.feature-insights" target="17" />
       <module name="HabitTracker.feature-widgets" target="17" />
+      <module name="Personal.projects.HabitTracker.core-ui" target="17" />
       <module name="projects.HabitTracker.core-testing" target="17" />
       <module name="projects.HabitTracker.core-ui" target="17" />
       <module name="projects.HabitTracker.feature-misc" target="17" />
+      <module name="projects.HabitTracker.feature-widgets" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

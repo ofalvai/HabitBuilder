@@ -18,6 +18,7 @@ package com.ofalvai.habittracker
 
 import android.app.Application
 import com.ofalvai.habittracker.core.common.Telemetry
+import com.ofalvai.habittracker.feature.widgets.base.WidgetUpdater
 import dagger.hilt.android.HiltAndroidApp
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
@@ -27,7 +28,7 @@ import javax.inject.Inject
 class HabitTrackerApplication : Hilt_HabitTrackerApplication() {
 
     @Inject lateinit var telemetry: Telemetry
-//    @Inject lateinit var widgetUpdater: WidgetUpdater
+    @Inject lateinit var widgetUpdater: WidgetUpdater
 
     override fun onCreate() {
         super.onCreate()
