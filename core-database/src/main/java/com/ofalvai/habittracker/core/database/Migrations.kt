@@ -24,11 +24,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
  * Fixes the issue when deleting a Habit would leave its Actions in the DB and cause weird stats.
  */
 internal val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("CREATE TABLE IF NOT EXISTS `_new_Action` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `habit_id` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, FOREIGN KEY(`habit_id`) REFERENCES `Habit`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
-        database.execSQL("INSERT INTO `_new_Action` (habit_id,id,timestamp) SELECT habit_id,id,timestamp FROM `Action`")
-        database.execSQL("DROP TABLE `Action`")
-        database.execSQL("ALTER TABLE `_new_Action` RENAME TO `Action`")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS `_new_Action` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `habit_id` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, FOREIGN KEY(`habit_id`) REFERENCES `Habit`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        db.execSQL("INSERT INTO `_new_Action` (habit_id,id,timestamp) SELECT habit_id,id,timestamp FROM `Action`")
+        db.execSQL("DROP TABLE `Action`")
+        db.execSQL("ALTER TABLE `_new_Action` RENAME TO `Action`")
     }
 }
 
@@ -36,8 +36,8 @@ internal val MIGRATION_1_2 = object : Migration(1, 2) {
  * Adds index to foreign key column to avoid full table scan when the parent table changes
  */
 internal val MIGRATION_2_3 = object : Migration(2, 3) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("CREATE INDEX IF NOT EXISTS `index_Action_habit_id` ON `Action` (`habit_id`)")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_Action_habit_id` ON `Action` (`habit_id`)")
     }
 }
 
@@ -45,21 +45,21 @@ internal val MIGRATION_2_3 = object : Migration(2, 3) {
  * Adds order column to Habit table and use Habit ID as initial order value
  */
 internal val MIGRATION_3_4 = object : Migration(3, 4) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE `Habit` ADD COLUMN `order` INTEGER NOT NULL DEFAULT 0")
-        database.execSQL("UPDATE `Habit` SET `order` = `id`")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `Habit` ADD COLUMN `order` INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("UPDATE `Habit` SET `order` = `id`")
     }
 }
 
 internal val MIGRATION_4_5 = object : Migration(4, 5) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE `Habit` ADD COLUMN `archived` INTEGER NOT NULL DEFAULT 0")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `Habit` ADD COLUMN `archived` INTEGER NOT NULL DEFAULT 0")
     }
 }
 
 internal val MIGRATION_5_6 = object : Migration(5, 6) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE `Habit` ADD COLUMN `notes` TEXT NOT NULL DEFAULT ''")
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `Habit` ADD COLUMN `notes` TEXT NOT NULL DEFAULT ''")
     }
 }
 
