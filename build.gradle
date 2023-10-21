@@ -46,13 +46,8 @@ dependencyAnalysis {
             onUnusedDependencies {
                 severity("fail")
                 exclude(
-                        "androidx.compose.ui:ui-tooling", // Required for IDE previews
-                        "androidx.compose.ui:ui-test-manifest", // Required for device testing
-                        "androidx.test:rules", // Without this, running cAT finds 0 test cases
                         "com.kizitonwose.calendar:compose", // False positive
-                        "com.google.dagger:hilt-compiler", // False positive
                         "com.google.dagger:hilt-android", // False positive
-                        "androidx.test:runner", // False positive
                 )
             }
             onIncorrectConfiguration {
@@ -66,9 +61,6 @@ dependencyAnalysis {
             }
             onUnusedAnnotationProcessors {
                 severity("fail")
-                exclude(
-                        "com.google.dagger:hilt-compiler" // False positive
-                )
             }
             onRedundantPlugins {
                 severity("fail")
