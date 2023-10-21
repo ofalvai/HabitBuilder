@@ -21,9 +21,9 @@ gradle-android-plugin = "com.android.tools.build:gradle:8.1.2"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
-kotlin-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-kotlin-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
-kotlin-immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
+kotlin-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+kotlin-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
+kotlin-immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6"
 
 javax-inject = "javax.inject:javax.inject:1"
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
