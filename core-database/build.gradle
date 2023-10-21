@@ -9,6 +9,7 @@ android {
     namespace 'com.ofalvai.habittracker.core.database'
 
     defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             ksp {
                 arg("room.incremental", "true")

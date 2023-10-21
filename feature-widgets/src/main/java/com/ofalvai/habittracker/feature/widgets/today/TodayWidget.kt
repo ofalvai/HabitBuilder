@@ -62,8 +62,8 @@ import kotlinx.coroutines.Dispatchers
 import java.time.LocalDate
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class TodayWidgetReceiver : GlanceAppWidgetReceiver() {
+@AndroidEntryPoint(GlanceAppWidgetReceiver::class)
+class TodayWidgetReceiver : Hilt_TodayWidgetReceiver() {
 
     @Inject
     lateinit var habitDao: HabitDao

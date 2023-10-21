@@ -20,7 +20,6 @@ plugins {
     id 'com.spotify.ruler'
     id 'habittracker.android.app'
     id "org.jetbrains.kotlin.kapt"
-    id 'com.google.dagger.hilt.android'
 }
 
 apply plugin: 'com.google.devtools.ksp'
@@ -107,10 +106,6 @@ android {
 kapt {
     // Required by Hilt
     correctErrorTypes true
-}
-
-hilt {
-    enableAggregatingTask = true
 }
 
 ruler {

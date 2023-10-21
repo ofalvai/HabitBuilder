@@ -62,8 +62,8 @@ import com.ofalvai.habittracker.ui.settings.DebugSettings
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint(ComponentActivity::class)
+class MainActivity : Hilt_MainActivity() {
 
     @Inject
     lateinit var appPreferences: AppPreferences

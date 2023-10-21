@@ -6,7 +6,7 @@ room = "2.5.2"
 accompanist = "0.32.0"
 showkase = "1.0.0-beta15"
 lifecycle = "2.6.1"
-hilt = "2.47"
+hilt = "2.48.1"
 
 [plugins]
 ksp = "com.google.devtools.ksp:1.8.20-1.0.11"
@@ -14,7 +14,6 @@ gradle-doctor = "com.osacky.doctor:0.8.1"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
 gradle-cachefix = "org.gradle.android.cache-fix:2.7.3"
 dependencyanalysis = "com.autonomousapps.dependency-analysis:1.19.0"
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [libraries]
 gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
@@ -73,7 +72,6 @@ bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.31.0"
 apache-csv = "org.apache.commons:commons-csv:1.10.0"
 
 androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0"
-appwidget-viewer = "com.google.android.glance.tools:appwidget-viewer:0.2.2"
 
 showkase-annotation = { module = "com.airbnb.android:showkase-annotation", version.ref = "showkase" }
 showkase-full = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
