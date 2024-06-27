@@ -67,7 +67,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist"}
 
 bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:8.1.0"
-bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.31.2"
+bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.32.3"
 
 apache-csv = "org.apache.commons:commons-csv:1.10.0"
 
