@@ -133,7 +133,6 @@ dependencies {
 
     implementation libs.logcat
     implementation libs.accompanist.systemuicontroller
-    implementation libs.accompanist.navigation
 
     implementation libs.hilt.android
     implementation libs.hilt.navigation.compose
