@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11">
-      <module name="build-logic.convention" target="17" />
-      <module name="build-logic.convention.main" target="17" />
-      <module name="build-logic.convention.test" target="17" />
-      <module name="HabitTracker.app" target="17" />
-      <module name="HabitTracker.core-common" target="17" />
-      <module name="HabitTracker.core-database" target="17" />
-      <module name="HabitTracker.core-model" target="17" />
-      <module name="HabitTracker.feature-dashboard" target="17" />
-      <module name="HabitTracker.feature-insights" target="17" />
-      <module name="HabitTracker.feature-widgets" target="17" />
+    <bytecodeTargetLevel target="17">
       <module name="Personal.projects.HabitTracker.core-ui" target="17" />
       <module name="projects.HabitTracker.core-model" target="17" />
       <module name="projects.HabitTracker.core-testing" target="17" />
