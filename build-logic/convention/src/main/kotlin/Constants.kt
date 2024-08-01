@@ -22,6 +22,6 @@ object Constants {
     const val TARGET_SDK = 35
     val javaToolchainVersion: JavaLanguageVersion = JavaLanguageVersion.of(17)
 
-    const val VERSION_CODE = 5
-    const val VERSION_NAME = "1.1.2"
+    const val VERSION_CODE = 6
+    const val VERSION_NAME = "1.1.3"
 }
