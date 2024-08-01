@@ -17,7 +17,7 @@ dependencyanalysis = "com.autonomousapps.dependency-analysis:1.25.0"
 
 [libraries]
 gradle-android-desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
-gradle-android-plugin = "com.android.tools.build:gradle:8.1.2"
+gradle-android-plugin = "com.android.tools.build:gradle:8.5.1"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
