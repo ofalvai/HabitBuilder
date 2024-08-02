@@ -81,5 +81,5 @@ mockito-android = "org.mockito:mockito-android:5.12.0"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:5.4.0"
 turbine = "app.cash.turbine:turbine:1.0.0"
 
-licensee = "app.cash.licensee:licensee-gradle-plugin:1.8.0"
+licensee = "app.cash.licensee:licensee-gradle-plugin:1.11.0"
 ruler = "com.spotify.ruler:ruler-gradle-plugin:1.4.0"
