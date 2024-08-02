@@ -42,7 +42,7 @@ androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmode
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 
 androidx-core-testing = "androidx.arch.core:core-testing:2.2.0"
-androidx-test-rules = "androidx.test:rules:1.5.0"
+androidx-test-rules = "androidx.test:rules:1.6.1"
 androidx-test-runner = "androidx.test:runner:1.6.1"
 androidx-junit-ext = "androidx.test.ext:junit:1.1.5"
 androidx-espresso = "androidx.test.espresso:espresso-core:3.6.1"
