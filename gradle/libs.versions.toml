@@ -61,7 +61,7 @@ compose-material3 = {module = "androidx.compose.material3:material3" }
 
 logcat = "com.squareup.logcat:logcat:0.1"
 calendarview = "com.kizitonwose.calendar:compose:2.4.0"
-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.8.1"
+reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.6"
 
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
