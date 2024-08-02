@@ -40,7 +40,7 @@ jobs:
 #         run: ./gradlew lintDebug
         
       - name: Upload lint report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-debug.html'
@@ -49,7 +49,7 @@ jobs:
         run: ./gradlew test --stacktrace
       
       - name: Upload test reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: '**/build/reports/tests/'
