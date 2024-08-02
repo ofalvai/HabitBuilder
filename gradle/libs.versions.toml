@@ -68,7 +68,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 bugsnag-gradle = "com.bugsnag:bugsnag-android-gradle-plugin:8.1.0"
 bugsnag-runtime = "com.bugsnag:bugsnag-android-core:5.32.3"
 
-apache-csv = "org.apache.commons:commons-csv:1.10.0"
+apache-csv = "org.apache.commons:commons-csv:1.11.0"
 
 androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.1.0"
 
