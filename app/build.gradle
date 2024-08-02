@@ -111,8 +111,9 @@ ruler {
 
 licensee {
     allow("Apache-2.0")
-    allow("MIT")
+    allow("BSD-3-Clause")
     allowUrl("https://github.com/kizitonwose/calendar/blob/main/LICENSE.md")
+    allowUrl("https://opensource.org/licenses/MIT")
 }
 
 dependencies {
