@@ -4,7 +4,7 @@ kotlin = "1.9.10"
 compose-compiler = "1.5.3"
 room = "2.6.1"
 accompanist = "0.32.0"
-showkase = "1.0.0-beta15"
+showkase = "1.0.3"
 lifecycle = "2.6.2"
 hilt = "2.51.1"
 
