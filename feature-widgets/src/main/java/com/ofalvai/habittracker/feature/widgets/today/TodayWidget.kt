@@ -41,6 +41,7 @@ import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
@@ -113,7 +114,7 @@ class TodayWidget(
 @GlanceComposable
 @Composable
 private fun HabitList(habits: List<HabitDayView>) {
-    LazyColumn(GlanceModifier.padding(horizontal = 16.dp)) {
+    LazyColumn(GlanceModifier.padding(horizontal = 16.dp).fillMaxSize()) {
         // Poor man's contentPadding
         item { Spacer(GlanceModifier.size(12.dp)) }
         items(habits, itemId = { it.habit.id.toLong() }) {
@@ -160,6 +161,6 @@ private fun HabitCircle(toggled: Boolean, habit: Habit) {
 
     DrawableCompat.setTint(drawable, habit.color.composeColor.toColorInt())
     circle.setBitmap(R.id.action_circle, "setImageBitmap", drawable.toBitmap())
-    AndroidRemoteViews(circle)
+    AndroidRemoteViews(circle, GlanceModifier.size(32.dp))
 }
 
