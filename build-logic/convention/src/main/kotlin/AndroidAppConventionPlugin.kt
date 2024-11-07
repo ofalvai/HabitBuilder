@@ -24,6 +24,7 @@ import shared.buildComposeMetricsParameters
 import shared.setAndroidJvmTarget
 import shared.setJvmTargets
 import shared.setJvmToolchain
+import java.util.UUID
 
 class AndroidAppConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -43,6 +44,19 @@ class AndroidAppConventionPlugin : Plugin<Project> {
 
                 compileOptions {
                     setJvmTargets()
+                }
+
+                buildTypes {
+                    val buildUuidKey = "build_uuid"
+                    getByName("debug") {
+                        addManifestPlaceholders(mapOf(buildUuidKey to "debug"))
+                    }
+                    getByName("release") {
+                        val uuid = UUID.nameUUIDFromBytes(
+                            ("github" + Constants.VERSION_CODE + Constants.VERSION_NAME).encodeToByteArray()
+                        ).toString()
+                        addManifestPlaceholders(mapOf(buildUuidKey to uuid))
+                    }
                 }
 
                 // kotlinOptions { ... }
