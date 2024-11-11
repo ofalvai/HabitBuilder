@@ -49,6 +49,8 @@ class AndroidAppConventionPlugin : Plugin<Project> {
                 buildTypes {
                     val buildUuidKey = "build_uuid"
                     getByName("debug") {
+                        // Bugsnag won't upload mappings for debug builds, but the manifest placeholder
+                        // needs to resolve to something
                         addManifestPlaceholders(mapOf(buildUuidKey to "debug"))
                     }
                     getByName("release") {
