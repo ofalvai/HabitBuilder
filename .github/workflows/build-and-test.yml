@@ -31,6 +31,19 @@ jobs:
         with:
           distribution: adopt
           java-version: 17
+
+      - name: Bitrise cache test
+        env: # Set the secret as an input
+          BITRISE_BUILD_CACHE_WORKSPACE_ID: ${{ secrets.BITRISE_BUILD_CACHE_WORKSPACE_ID }}
+          BITRISE_BUILD_CACHE_AUTH_TOKEN: ${{ secrets.BITRISE_BUILD_CACHE_AUTH_TOKEN }}
+        run: |-
+          set -euxo pipefail
+
+          # download Bitrise Build Cache CLI
+          curl -sSfL 'https://raw.githubusercontent.com/bitrise-io/bitrise-build-cache-cli/main/install/installer.sh' | sh -s -- -b /tmp/bin -d
+
+          # run the CLI to enable Bitrise build cache for Gradle
+          /tmp/bin/bitrise-build-cache enable-for gradle
       
       - name: Debug build
         run: ./gradlew assembleDebug --stacktrace
