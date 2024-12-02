@@ -28,7 +28,7 @@ kotlin-immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6"
 javax-inject = "javax.inject:javax.inject:1"
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.0.0"
+hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.2.0"
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 
 androidx-navigation-compose = "androidx.navigation:navigation-compose:2.7.7"
