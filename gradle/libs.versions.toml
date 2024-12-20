@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.9.10"
+kotlin = "1.9.25"
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin#pre-release_kotlin_compatibility
 compose-compiler = "1.5.3"
 room = "2.6.1"
@@ -9,7 +9,7 @@ lifecycle = "2.6.2"
 hilt = "2.51.1"
 
 [plugins]
-ksp = "com.google.devtools.ksp:1.9.10-1.0.13"
+ksp = "com.google.devtools.ksp:1.9.25-1.0.20"
 gradle-doctor = "com.osacky.doctor:0.10.0"
 gradle-buildtimetracker = "com.asarkar.gradle.build-time-tracker:4.3.0"
 gradle-cachefix = "org.gradle.android.cache-fix:2.8.1"
@@ -21,9 +21,9 @@ gradle-android-plugin = "com.android.tools.build:gradle:8.5.1"
 
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
-kotlin-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
-kotlin-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
-kotlin-immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6"
+kotlin-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1"
+kotlin-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1"
+kotlin-immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
 
 javax-inject = "javax.inject:javax.inject:1"
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
