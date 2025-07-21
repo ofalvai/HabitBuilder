@@ -116,6 +116,10 @@ licensee {
     allowUrl("https://opensource.org/licenses/MIT")
 }
 
+bugsnag {
+    overwrite = true
+}
+
 dependencies {
     implementation project(':core-common')
     implementation project(':core-database')
