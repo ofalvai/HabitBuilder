@@ -22,7 +22,7 @@ app:
 meta:
   bitrise.io:
     machine_type_id: g2.linux.x-large
-    stack: linux-docker-android-22.04-invalid
+    stack: linux-docker-android-22.04
 trigger_map:
 - push_branch: main
   pipeline: pr-validation
