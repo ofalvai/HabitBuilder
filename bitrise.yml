@@ -1,0 +1,1619 @@
+---
+format_version: '8'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: android
+app:
+  envs:
+  - PROJECT_LOCATION: "."
+    opts:
+      is_expand: false
+  - MODULE: app
+    opts:
+      is_expand: false
+  - VARIANT: debug
+    opts:
+      is_expand: false
+  - LOGLEVEL: DEBUG
+    opts:
+      is_expand: false
+  - GITHUB_USERNAME: ofalvai
+    opts:
+      is_expand: false
+meta:
+  bitrise.io:
+    machine_type_id: g2.linux.x-large
+    stack: linux-docker-android-22.04-invalid
+trigger_map:
+- push_branch: main
+  pipeline: pr-validation
+- pull_request_source_branch: test-pr-2
+  workflow: git-test
+- pull_request_source_branch: "*"
+  pipeline: pr-validation
+- tag: "*"
+  workflow: release
+pipelines:
+  pr-validation:
+    stages:
+    - pr-validation-stage: {}
+stages:
+  pr-validation-stage:
+    workflows:
+    - build: {}
+    - lint: {}
+    - emulator-tests: {}
+workflows:
+  _after-build:
+    steps:
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - notify_user_groups: none
+    meta:
+      bitrise.io:
+        stack: osx-xcode-15.4.x
+        machine_type_id: g2.mac.large
+  _before-build:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8: {}
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - activate-build-cache-for-gradle@2:
+        run_if: 'false'
+    - restore-gradle-cache@1: {}
+  _fix-ubuntu-22:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+  annotations:
+    steps:
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+
+            set -e
+            set -o pipefail
+            set -x
+
+            check_cpu_usage() {
+              num_cores=$(sysctl -n hw.ncpu)
+              max_cpu_usage=$((num_cores * 1000))
+
+              while true; do
+                output=$(sudo powermetrics -s tasks -n 1 --order cputime)
+                processes=$(echo "$output" | awk '/^Name/ { table_start=1; print $0; next } table_start == 1 { print } /^ALL_TASKS/ { next }')
+
+                msg=""
+                while IFS= read -r line; do
+                  if [[ "$line" =~ ^Name ]]; then
+                    continue
+                  elif [[ "$line" =~ ^ALL_TASKS ]]; then
+                    continue
+                  elif [[ -z "$line" ]]; then
+                    msg+=$'\n' # Use $'\n' for actual newlines
+                  else
+                    name=$(echo "$line" | awk '{ print $1 }')
+                    cpu_usage=$(echo "$line" | awk '{ print $3 }')
+                    cpu_usage_int=$( printf "%d" "${cpu_usage%.*}" )
+                    bar_length=$((cpu_usage_int * 50 / max_cpu_usage))
+                    bar=$(printf "%${bar_length}s" | sed 's/ /█/g')
+                    empty_bar=$(printf "%$((50 - bar_length))s" | sed 's/ /░/g')
+                    msg+=$'\n'"${bar}${empty_bar} **${name}:** ${cpu_usage} ms/s CPU time"
+                  fi
+                done <<< "$processes"
+
+                read -r -d '' to_print << EOM
+            ## CPU Usage:
+            $msg
+            EOM
+
+                bitrise :annotations annotate "$to_print" --context cpu_usage
+              done
+            }
+
+            nohup bash -c "$(declare -f check_cpu_usage); check_cpu_usage" &
+    after_run:
+    - build
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-22.04
+        machine_type_id: g2.linux.large
+  aws-agent:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sleep 999
+  build:
+    description: Builds the app module and runs unit tests
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - android-build@1:
+        inputs:
+        - variant: debug
+        - module: app
+        - arguments: -Dorg.gradle.jvmargs="-Xmx3G -Xms1G -XX:+UseParallelGC
+            -XX:MaxMetaspaceSize=1g"
+    - android-unit-test@1:
+        inputs:
+        - project_location: "$PROJECT_LOCATION"
+        - variant: debug
+        - arguments: -Dorg.gradle.jvmargs="-Xmx3G -Xms1G -XX:+UseParallelGC
+            -XX:MaxMetaspaceSize=1g"
+    - save-gradle-cache@1: {}
+  cache-tuning:
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            apt install -y file
+
+            git clone https://github.com/facebook/zstd.git
+            cd zstd
+            make
+            make check
+            make install
+    - git::https://github.com/bitrise-steplib/steps-ios-auto-provision@master: {}
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6:
+        inputs:
+        - clone_depth: '10'
+        - merge_pr: 'no'
+        - update_submodules: 'no'
+    - git::https://github.com/bitrise-steplib/bitrise-step-restore-cache.git@PLANG-2011-download-cache:
+        run_if: 'true'
+        inputs:
+        - key: '{{ .OS }}-{{ .Arch }}-gradle-cache-{{ checksum "**/*.gradle"
+            "**/gradle-wrapper.properties" }}'
+        - verbose: 'true'
+    - android-build@1:
+        inputs:
+        - variant: debug
+        - module: app
+    - script@1:
+        title: Benchmark
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            tar -cf test.tar ~/.gradle/caches ~/.gradle/wrapper
+
+            zstd -v
+
+            zstd -b3 -T0 test.tar
+
+            zstd -b3 -T0 --fast test.tar
+
+            zstd -b3 -T0 --long test.tar
+    - script@1:
+        title: Benchmark latest
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            git clone git@github.com:facebook/zstd.git
+
+            cd zstd
+
+            make
+            sudo make install
+            cd ..
+
+            zstd -v
+
+            zstd -b3 -T0 test.tar
+
+            zstd -b3 -T0 --fast test.tar
+
+            zstd -b3 -T0 --long test.tar
+    - git::https://github.com/bitrise-steplib/bitrise-step-save-cache.git@main:
+        run_if: 'true'
+        inputs:
+        - key: '{{ .OS }}-{{ .Arch }}-gradle-cache-{{ checksum "**/*.gradle"
+            "**/gradle-wrapper.properties"}}'
+        - paths: |-
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle/configuration-cache
+        - verbose: 'true'
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.2.x-ventura
+        machine_type_id: g2-m1-max.5core
+  cluster-checker:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            echo "Stack rev ID:"
+            echo $BITRISE_OSX_STACK_REV_ID
+
+            hostname
+            sw_vers
+  deploy-firebase:
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6:
+        inputs:
+        - clone_depth: '1'
+        - update_submodules: 'no'
+    - android-unit-test@1:
+        inputs:
+        - project_location: "$PROJECT_LOCATION"
+        - module: "$MODULE"
+        - cache_level: all
+        - variant: release
+        - arguments: "--profile"
+    - git::https://github.com/bitrise-steplib/steps-avd-manager.git@atd-os-tag:
+        inputs:
+        - profile: Nexus 4
+        - tag: aosp_atd
+        - emulator_channel: '3'
+        - api_level: '30'
+    - wait-for-android-emulator@1: {}
+    - gradle-runner@2.0:
+        title: Run instrumented tests
+        inputs:
+        - gradle_task: connectedAndroidTest
+        - gradlew_path: "./gradlew"
+        - gradle_options: ''
+        - gradle_file: ''
+    - android-build@1:
+        title: Build APK
+        inputs:
+        - variant: release
+        - module: "$MODULE"
+    - firebase-app-distribution@0:
+        inputs:
+        - app_path: "$BITRISE_DEPLOY_DIR/app-release.apk"
+        - app: 1:841652487542:android:5d9e1214fc03a9cb972657
+        - groups: alpha
+        - upgrade_firebase_tools: 'true'
+        - firebase_token: "$FIREBASE_TOKEN"
+    meta:
+      bitrise.io:
+        machine_type_id: g2.linux.x-large
+        stack: linux-docker-android-22.04
+  emulator_oom:
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - avd-manager@1:
+        inputs:
+        - abi: x86_64
+        - profile: pixel_3a
+        - api_level: 30
+    - gradle-runner@2.0:
+        title: Run instrumented tests
+        inputs:
+        - gradle_task: connectedDebugAndroidTest
+        - gradlew_path: "./gradlew"
+        - gradle_options: ''
+        - gradle_file: ''
+  emulator-abis:
+    steps:
+    - avd-manager@1:
+        inputs:
+        - api_level: '24'
+        - abi: armeabi-v7a
+  emulator-tests:
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - avd-manager@2:
+        inputs:
+        - abi: x86_64
+        - api_level: 35
+        - start_command_flags: "-camera-back none -camera-front none -memory 4096"
+    - wait-for-android-emulator@1: {}
+    - gradle-runner@2.0:
+        title: Run instrumented tests
+        inputs:
+        - gradle_task: connectedDebugAndroidTest
+        - gradlew_path: "./gradlew"
+        - gradle_options: ''
+        - gradle_file: ''
+  git-test:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - restore-gradle-cache@1: {}
+  go-toolkit-benchmark:
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8: {}
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            echo "Non-Go-toolkit step!"
+    - restore-gradle-cache@2: {}
+    - deploy-to-bitrise-io@2: {}
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-22.04
+        machine_type_id: g2.linux.x-large
+  govulncheck:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            echo "Stack rev ID:"
+            echo $BITRISE_OSX_STACK_REV_ID
+
+            bitrise version
+
+            go install golang.org/x/vuln/cmd/govulncheck@latest
+            asdf reshim golang
+
+            govulncheck -mode=binary ~/.bitrise/tools/envman || true
+            govulncheck -mode=binary ~/.bitrise/tools/stepman || true
+            govulncheck -mode=binary ~/bitrise-den-agent || true
+            govulncheck -mode=binary /usr/local/bin/bitrise || true
+            govulncheck -mode=binary /usr/local/bin/ngrok || true
+  lint:
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - android-lint@0:
+        inputs:
+        - variant: debug
+        - module: app
+    - gradle-runner@2:
+        title: Dependency analysis
+        inputs:
+        - gradlew_path: "./gradlew"
+        - gradle_task: buildHealth
+        - gradle_options: "--stacktrace"
+    - script@1:
+        title: Move dependency analysis to deploy dir
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            mv build/reports/dependency-analysis/build-health-report.txt $BITRISE_DEPLOY_DIR/dependency-analysis.txt
+  linux-hacking:
+    steps:
+    - activate-ssh-key@4: {}
+    - deploy-to-bitrise-io@2: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            echo "Stack rev ID:"
+            echo $BITRISE_STACK_REV_ID
+
+            asdf current
+            asdf list python
+
+            which -a envman
+            envman --help
+
+            echo $PATH
+
+
+            ls -la $PWD
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-22.04
+        machine_type_id:
+    before_run: []
+  macos-kernel-panic:
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.4.x
+        machine_type_id: g2.mac.4x-large
+    steps:
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash
+
+            # fail if any commands fails
+
+            set -e
+
+            # make pipelines' return status equal the last command to exit with
+            a non-zero status, or zero if all commands exit successfully
+
+            set -o pipefail
+
+            # debug log
+
+            set -x
+
+
+            DEVICE_OS=\"18.5\"
+
+            echo \"Current iOS version: $DEVICE_OS\"
+
+
+            # Delete all non-iOS runtimes that don't match our current OS
+            version
+
+            xcrun simctl runtime list -j | jq --arg DEVICE_OS $DEVICE_OS '.[] |
+            select(.version!=$DEVICE_OS or
+            .platformIdentifier!=\"com.apple.platform.iphonesimulator\") |
+            .identifier' | xargs -I % xcrun simctl runtime delete %
+
+
+            # Delete the simulators that are now missing the corresponding
+            runtime
+
+            xcrun simctl delete unavailable
+
+
+            sleep 10
+
+
+            xcrun simctl runtime dyld_shared_cache update --all
+
+            xcrun simctl runtime dyld_shared_cache remove --all
+
+
+            sleep 30
+
+
+            xcrun simctl boot \"Bitrise iOS default\"
+
+
+
+            sleep 60\ 
+
+            xcrun simctl shutdown all
+
+
+            # IDEAS
+
+            # - boot a simulator
+
+            # - xcodebuild\ 
+
+            # xcrun simctl boot \"\""
+  npm-cache-test:
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-restore-cache.git@main:
+        inputs:
+        - key: 'npm-cache
+
+            '
+        - verbose: 'true'
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            npm install react-native
+    - git::https://github.com/bitrise-steplib/bitrise-step-save-cache.git@main:
+        inputs:
+        - key: npm-cache
+        - paths: node_modules
+        - verbose: 'true'
+  primary-emulator:
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - android-build@1:
+        inputs:
+        - variant: debug
+        - module: app
+    - android-unit-test@1:
+        inputs:
+        - project_location: "$PROJECT_LOCATION"
+        - variant: "$VARIANT"
+    - avd-manager:
+        inputs:
+        - profile: Nexus 4
+        - tag: google_atd
+        - emulator_channel: '3'
+        - api_level: '31'
+        - abi: x86_64
+    - wait-for-android-emulator@1: {}
+    - gradle-runner@2.0:
+        title: Run instrumented tests
+        inputs:
+        - gradle_task: connectedDebugAndroidTest
+        - gradlew_path: "./gradlew"
+        - gradle_options: ''
+        - gradle_file: ''
+    - script@1:
+        title: Kill emulator
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            adb -s $BITRISE_EMULATOR_SERIAL emu kill
+    - gradle-runner@2:
+        title: Dependency analysis
+        inputs:
+        - gradle_file: ''
+        - gradlew_path: "./gradlew"
+        - gradle_options: "--stacktrace"
+        - gradle_task: buildHealth
+    - script@1:
+        title: Move dependency analysis to deploy dir
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            mv build/reports/dependency-analysis/build-health-report.txt $BITRISE_DEPLOY_DIR/dependency-analysis.txt
+    - git::https://github.com/bitrise-steplib/bitrise-step-save-cache.git@main:
+        run_if: 'true'
+        inputs:
+        - key: gradle-cache-{{ checksum "**/*.gradle" "**/gradle-wrapper.properties" }}
+        - paths: |-
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle/configuration-cache
+        - verbose: 'true'
+    - cache-push:
+        run_if: 'false'
+    - custom-test-results-export@0:
+        inputs:
+        - search_pattern: "*.xml"
+        - base_path: "$BITRISE_SOURCE_DIR/app/build/outputs/androidTest-results"
+        - verbose_log: 'yes'
+        - test_name: Instrumented tests
+  print-services-token:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            echo $BITRISEIO_BITRISE_SERVICES_ACCESS_TOKEN
+  private-step-testing:
+    steps:
+    - activate-ssh-key@4:
+        inputs:
+        - is_remove_other_identities: 'false'
+    - git::git@github.com:ofalvai/HabitBuilder.git: {}
+  release:
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6:
+        inputs:
+        - clone_depth: '10'
+        - merge_pr: 'no'
+        - update_submodules: 'no'
+    - file-downloader@1:
+        title: Download keystore
+        inputs:
+        - destination: "$BITRISE_SOURCE_DIR/release/app-release.jks"
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+    - android-unit-test@1:
+        inputs:
+        - project_location: "$PROJECT_LOCATION"
+        - variant: release
+        - arguments: -Dorg.gradle.jvmargs="-Xmx3G -Xms1G -XX:+UseParallelGC
+            -XX:MaxMetaspaceSize=1g"
+    - avd-manager:
+        inputs:
+        - profile: Nexus 4
+        - tag: google_atd
+        - emulator_channel: '3'
+        - api_level: '31'
+        - abi: x86_64
+    - wait-for-android-emulator@1: {}
+    - gradle-runner@3:
+        title: Run instrumented tests
+        inputs:
+        - gradle_task: connectedDebugAndroidTest
+        - gradlew_path: "./gradlew"
+        - gradle_options: -Dorg.gradle.jvmargs="-Xmx3G -Xms1G -XX:+UseParallelGC
+            -XX:MaxMetaspaceSize=1g"
+    - script@1:
+        title: Kill emulator
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            adb -s $BITRISE_EMULATOR_SERIAL emu kill
+    - android-build@1:
+        inputs:
+        - variant: release
+        - build_type: aab
+        - module: app
+        - arguments: -Dorg.gradle.jvmargs="-Xmx3G -Xms1G -XX:+UseParallelGC
+            -XX:MaxMetaspaceSize=1g"
+        title: Build AAB
+    - android-build@1:
+        inputs:
+        - variant: release
+        - module: app
+        - arguments: -Dorg.gradle.jvmargs="-Xmx3G -Xms1G -XX:+UseParallelGC
+            -XX:MaxMetaspaceSize=1g"
+        title: Build APK
+    - github-release@0:
+        inputs:
+        - username: "$GITHUB_USERNAME"
+        - name: "$BITRISE_GIT_TAG"
+        - files_to_upload: ''
+        - body: TODO
+        - api_token: "$GITHUB_RELEASER_TOKEN"
+  remote-access-demo:
+    before_run:
+    - _before-build
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-22.04
+        machine_type_id:
+  remote-build-cache:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@7: {}
+    - git::https://github.com/bitrise-steplib/bitrise-step-activate-gradle-remote-cache.git@main:
+        inputs:
+        - push: 'true'
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - android-build@1:
+        inputs:
+        - variant: debug
+        - module: app
+  remote-cache-benchmark:
+    description: Builds the app module and runs unit tests
+    before_run:
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - android-build@1:
+        inputs:
+        - variant: debug
+        - arguments: "-PbenchmarkRemoteCache --no-configuration-cache
+            -PrerunSourceTasksForBenchmark -PrerunLargeOutputTasksForBenchmark"
+        - module: app
+    - android-unit-test@1:
+        inputs:
+        - project_location: "$PROJECT_LOCATION"
+        - variant: debug
+    - save-gradle-cache@1: {}
+  rust-playground:
+    steps:
+    - rustup-install@0:
+        inputs:
+        - show_exported_envs: 'true'
+    - git-clone@8:
+        inputs:
+        - repository_url: https://github.com/ofalvai/homecooked
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            cargo build
+  simulator-boot:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            HOMEBREW_NO_DEPENDENTS_CHECK=1 brew install deno
+
+            deno run https://docs.deno.com/examples/scripts/color_logging.ts
+    - script@1:
+        title: Upgrade CoreSimulator
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sudo xcodebuild -runFirstLaunch -checkForNewerComponents
+        run_if: false
+    - script@1:
+        title: Disable diagnosticd
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sudo launchctl bootout system/com.apple.diagnosticd
+        run_if: 'false'
+    - script@1:
+        inputs:
+        - is_debug: 'yes'
+        - content: |-
+            #!/usr/bin/bash
+
+            set -ex
+
+            git clone https://github.com/ofalvai/simulator-diagnostics.git .
+
+            deno run --allow-run --allow-sys src/main.ts benchmark-boot \
+                --runs 3 \
+                --ios 26.0 \
+                --ios 18.5 \
+                --ios 18.4 \
+                --ios 18.3 \
+                --ios 18.2 \
+                --ios 18.1 \
+                --ios 18.0 \
+                --ios 17.5 \
+                --ios 16.4 \
+                --ios 15.5 \
+                --idle-threshold 8 \
+                --device "Bitrise iOS default" \
+                --idle-timeout 1000
+                #--spawn-after-boot "launchctl bootout system/com.apple.diagnosticd"
+                # --spawn-after-boot "launchctl bootout system/com.apple.sirittsd" \
+                # --spawn-after-boot "launchctl bootout system/com.apple.healthappd" \
+                # --spawn-after-boot "launchctl bootout system/com.apple.amsengagementd" \
+                # --spawn-after-boot "launchctl bootout system/com.apple.healthd" \
+                # --spawn-after-boot "launchctl bootout system/com.apple.siriknowledged"
+        title: Run script
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.x-large
+  ubuntu22:
+    description: Builds the app module and runs unit tests
+    before_run:
+    - _fix-ubuntu-22
+    - _before-build
+    after_run:
+    - _after-build
+    steps:
+    - android-build@1:
+        inputs:
+        - variant: debug
+        - module: app
+    - android-unit-test@1:
+        inputs:
+        - project_location: "$PROJECT_LOCATION"
+        - variant: debug
+    - save-gradle-cache@1: {}
+  nix:
+    steps:
+    - script@1.2.1:
+        title: Install Nix
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -eo pipefail
+
+            export NIX_INSTALLER_NO_CONFIRM=true
+            export NIX_INSTALLER_ENABLE_FLAKES=true
+            curl -sSf -L https://install.lix.systems/lix | sh -s -- install
+
+            echo "access-tokens = github.com=$NIX_GITHUB_TOKEN" | sudo tee -a /etc/nix/nix.conf
+
+            # Reload daemon after nix.conf file changes
+            sudo launchctl kickstart -k system/org.nixos.nix-daemon || true
+    - script@1:
+        title: Configure Attic
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+            nix run nixpkgs#attic-client -- login --set-default welmir https://attic.oliverfalvai.xyz eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Nzg4OTM4MDIsIm5iZiI6MTc0NzMzNjIwMiwic3ViIjoiYml0cmlzZS1saW51eCIsImh0dHBzOi8vand0LmF0dGljLnJzL3YxIjp7ImNhY2hlcyI6eyIqIjp7InIiOjEsInciOjEsImNjIjoxLCJjciI6MSwiY2QiOjF9fX19.aSFVBvKbjXfvWrbCJiIHzVB8ieaLdVymp2S0kycwh5hQOD2WVijUL_RqyOLCjyyu0INwnF_gZ9Ddu1crPoOSFQGrjJOnjdQDSJMzMTq-5KEeKaBc2Ohw8vSJUJHj4ioaYi6apWqFjjd0OH8eKedy0hO-sVf0Ddn9cwptWizcebwMxI0DjWZJRsrhIX6yQP3JKubznzmMf_ha8T2R28irIQ_ZSDXYzOkGUlFRzYGSqrXPViQpj6wBgj9-L72z9sDcU50yHKRcLY1M7tLLCtc52qEJKEYOvf8RvJIIkb3QPsd7PVPcrVimwehYKGMAt_-aTBOJDjMaTnWjq1Cbv3cq2MEynTr6kOqYNSL_xJ7w_8AOudPszFHT3pM8mS4J2ismfRKCvU_ASMopftZwg7A37_MWnxibTZ1dz3DJfSk6529QnUNFjNrxlDLYUv5A-Pd4FKfIEbW0Ftk1zYsYmhxQJhko2IImNcw92SOb9--At8Z3t-DOhY8V9BFK6S01j-nAynJOO6DTKwUbz6_kr9sDieOTCDT6TC0iaC0bOXjsBdKz6FNaFOWG5dUYeJyUwtGxikJukaDyWQ5o5V__neOTytL5JMaOgdojqgxsEwMUzWK5s6Q9oCY9PlTKzdTszw_WfYyx9UIIidzc7BDhCRDubogqb1qVQTkb9UqSJEzzjAA
+
+            nix run nixpkgs#attic-client --  use welmir:bitrise-linux
+            nix run nixpkgs#attic-client --  cache info welmir:bitrise-linux
+        run_if: false
+    - script@1.2.1:
+        title: Sleep
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+            nix run nixpkgs#fastfetch
+
+            sleep 14400
+    - script@1.2.1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            rm -rf $ANDROID_HOME
+            rm -rf /root/asdf
+
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+            export NIXPKGS_ALLOW_UNFREE=1
+            nix build nixpkgs#swift nixpkgs#gopls nixpkgs#qemu nixpkgs#wezterm nixpkgs#helix nixpkgs#electron nixpkgs#firefox nixpkgs#chromium \
+              --impure \
+              --option substitute false \
+              --log-format bar \
+              --option max-jobs 32 \
+              --option cores 0 \
+              --keep-going
+        title: Nix build
+        run_if: 'false'
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-22.04
+        machine_type_id: g2.linux.7x-large
+  log-viewer:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #git clone https://github.com/const-void/DOOM-fire-zig/
+            #cd DOOM-fire-zig
+            #zig build run
+
+            curl https://demo.opengist.io/ofalvai/9a7ef6ce14f549f393cd5f25f93736d0/raw/HEAD/doomfire -o output.txt
+
+            #cat output.txt
+
+            echo "This is the new renderer"
+            echo -e "\033[2J"
+            echo "This is a line after the clear sequence"
+  nix-darwin:
+    steps:
+    - script@1.2.1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -eo pipefail
+
+            export NIX_INSTALLER_NO_CONFIRM=true
+            export NIX_INSTALLER_ENABLE_FLAKES=true
+            curl -sSf -L https://install.lix.systems/lix | sh -s -- install
+
+            echo "access-tokens = github.com=$NIX_GITHUB_TOKEN" | sudo tee -a /etc/nix/nix.conf
+        title: Install Nix
+    - script@1.2.1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+            export NIXPKGS_ALLOW_UNFREE=1
+            nix build github:ofalvai/nixpkgs-testing#default \
+              --log-format multiline \
+              --option max-jobs 0 \
+              --fallback \
+              --keep-going || true
+        title: 'Nix build: fetch from cache'
+        run_if: 'false'
+    - script@1.2.1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+            export NIXPKGS_ALLOW_UNFREE=1
+            nix build github:ofalvai/nixpkgs-testing#default \
+              --log-format multiline \
+              --option max-jobs 0 \
+              --fallback \
+              --keep-going || true
+        title: 'Nix build: fetch from cache'
+        run_if: 'false'
+    - script@1.2.1:
+        inputs:
+        - content: |+
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+            nix build nixpkgs#llvm \
+              --log-format multiline-with-logs \
+              --option max-jobs 4 \
+              --option cores 0 \
+              --option log-lines 1000 \
+              --fallback \
+              --keep-going
+
+            nix build nixpkgs#llvm \
+              --log-format multiline-with-logs \
+              --option max-jobs 4 \
+              --option cores 0 \
+              --option log-lines 1000 \
+              --fallback \
+              --keep-going \
+              --rebuild
+
+        title: Temp
+    meta:
+      bitrise.io:
+        stack: osx-xcode-edge
+        machine_type_id: g2.mac.4x-large
+  jvmargs-duckduckgo:
+    steps:
+    - git-clone@8:
+        inputs:
+        - repository_url: https://github.com/duckduckgo/Android.git
+        - commit: 524e21690536cd52f24c3812023c580331a794be
+    - set-java-version@1:
+        inputs:
+        - set_java_version: 21
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sed -i 's/minifyEnabled false/minifyEnabled true/g' app/build.gradle
+        title: Patches
+        is_skippable: true
+    - set-java-version@1:
+        inputs:
+        - set_java_version: 17
+    - gradle-runner@3:
+        inputs:
+        - gradlew_path: "./gradlew"
+        - gradle_task: assemblePlayRelease
+        - gradle_options: -Dorg.gradle.jvmargs="$JVMARGS"
+        title: Warm up
+    - script@1:
+        inputs:
+        - content: "./gradlew --status"
+        title: Display Gradle daemon status
+    - gradle-runner@3:
+        inputs:
+        - gradlew_path: "./gradlew"
+        - gradle_task: assemblePlayRelease
+        - gradle_options: -Dorg.gradle.jvmargs="$JVMARGS" --rerun-tasks
+        title: Run build
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            ./gradlew --status
+            ./gradlew --version
+        title: Print JVM and Gradle info
+    envs:
+    - JVMARGS: "-Xmx3G -XX:+UseParallelGC"
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.linux.x-large
+  xcodebenchmark:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            git clone https://github.com/devMEremenko/XcodeBenchmark.git .
+        title: Clone project
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sh ./benchmark.sh
+        title: Run benchmark
+  benchmark-duckduckgo:
+    steps:
+    - git-clone@8:
+        inputs:
+        - repository_url: https://github.com/duckduckgo/Android.git
+        - commit: 524e21690536cd52f24c3812023c580331a794be
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sed -i .bak 's/minifyEnabled false/minifyEnabled true/g' app/build.gradle
+        title: Patches
+    - gradle-runner@3:
+        inputs:
+        - gradlew_path: "./gradlew"
+        - gradle_task: assemblePlayRelease
+        title: Warm-up
+    - gradle-runner@3:
+        inputs:
+        - gradlew_path: "./gradlew"
+        - gradle_task: assemblePlayRelease
+        - gradle_options: "--rerun-tasks"
+    envs:
+    - JVMARGS: "-Xmx16G -XX:+UseParallelGC"
+      opts:
+        is_expand: false
+  repro-patrontech:
+    steps:
+    - apt-get-install@0:
+        inputs:
+        - packages: zsh
+    - set-java-version@1:
+        inputs:
+        - set_java_version: 17
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env zsh
+
+            set -x
+
+            function install_homebrew() {
+              CI=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            }
+
+            max_tries=3
+            retries=0
+            brew=/home/linuxbrew/.linuxbrew/bin/brew
+
+            while ! install_homebrew && [[ $retries -lt $max_tries ]]; do
+              ((retries++)) || true
+              if [[ $retries -lt $max_tries ]]; then
+                echo "Homebrew installation failed. Attempting retry #$retries." >&2
+                sleep 2
+              fi
+            done
+
+            set -e
+
+            test -x $brew
+            eval "$($brew shellenv)"
+
+            bitrise envman add --key HOMEBREW_CELLAR --value "$HOMEBREW_CELLAR"
+            bitrise envman add --key HOMEBREW_REPOSITORY --value "$HOMEBREW_REPOSITORY"
+            bitrise envman add --key PATH --value "$PATH"
+            bitrise envman add --key MANPATH --value "$MANPATH"
+            bitrise envman add --key INFOPATH --value "$INFOPATH"
+
+            echo "Number of retries: $retries" >&2
+        title: Install Homebrew
+    - activate-ssh-key@4: {}
+  shopify-pnpm-repro:
+    steps:
+    - generate-text-file@0:
+        inputs:
+        - file_name: "$BITRISE_SOURCE_DIR/package.json"
+        - file_content: |-
+            {
+              "name": "test",
+              "version": "0.0.1",
+              "engines": {
+                "pnpm": "8.15.5"
+              },
+              "scripts": {
+                "build": "echo 'build...'"
+              }
+            }
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            asdf install nodejs 20.11.0
+            asdf global nodejs 20.11.0
+
+            asdf plugin-add pnpm
+            asdf install pnpm 8.15.5
+            asdf global pnpm 8.15.5
+            export PNPM_STORE_PATH=/bitrise/.pnpm-store/v3
+
+            # asdf reshim nodejs
+            # corepack enable
+
+            # printenv
+            # ls -la
+            # echo $GENERATED_TEXT_FILE_PATH
+
+            node --version
+            pnpm --version
+            pnpm run build
+  shopify-pnpm-repro-2:
+    steps:
+    - generate-text-file@0:
+        inputs:
+        - file_name: "$BITRISE_SOURCE_DIR/package.json"
+        - file_content: |-
+            {
+              "name": "test",
+              "version": "0.0.1",
+              "packageManager": "pnpm@8.15.5",
+              "scripts": {
+                "build": "echo 'build...'"
+              }
+            }
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            asdf install nodejs 20.11.0
+            asdf global nodejs 20.11.0
+
+            # asdf plugin-add pnpm
+            # asdf install pnpm 8.15.5
+            # asdf global pnpm 8.15.5
+            export PNPM_STORE_PATH=/bitrise/.pnpm-store/v3
+
+            asdf reshim nodejs
+            corepack enable
+
+            # printenv
+            # ls -la
+            # echo $GENERATED_TEXT_FILE_PATH
+
+            node --version
+            pnpm --version
+            pnpm run build
+  shopify-pnpm-repro-3:
+    steps:
+    - generate-text-file@0:
+        inputs:
+        - file_name: "$BITRISE_SOURCE_DIR/package.json"
+        - file_content: |-
+            {
+              "name": "test",
+              "version": "0.0.1",
+              "scripts": {
+                "build": "echo 'build...'"
+              }
+            }
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            asdf install nodejs 20.11.0
+            asdf global nodejs 20.11.0
+
+            # asdf plugin-add pnpm
+            # asdf install pnpm 8.15.5
+            # asdf global pnpm 8.15.5
+            export PNPM_STORE_PATH=/bitrise/.pnpm-store/v3
+
+            asdf reshim nodejs
+            corepack enable
+
+            node --version
+            pnpm --version
+            pnpm run build
+  primary:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+
+            printf "\033[31mThis is red text\nThis line is also red\033[0m\nThis is back to default color\n"
+
+
+
+            printenv
+            echo '---------------'
+            # cat /.env_all.yaml
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+
+            set -euxo pipefail
+            echo "SUPER MATCH"
+            env | grep "BITRISE_GIT_CHANGED_FILES"
+            # cat $BITRISEIO_ENVFILE_PATH | grep "BITRISE_GIT_CHANGED_FILES"
+        run_if: envcontain "BITRISE_GIT_CHANGED_FILES" "01F88F91"
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+
+            set -euxo pipefail
+            echo "NOOOO MATCH"
+            env | grep "BITRISE_GIT_CHANGED_FILES"
+            # cat $BITRISEIO_ENVFILE_PATH | grep "BITRISE_GIT_CHANGED_FILES"
+        run_if: (not (envcontain "BITRISE_GIT_CHANGED_FILES" "01F88F91"))
+    triggers:
+      push:
+      - branch: main
+      pull_request:
+      - source_branch: "*"
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-22.04
+        machine_type_id: g2.linux.medium
+  nix-deno:
+    steps:
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -eo pipefail
+
+            export NIX_INSTALLER_NO_CONFIRM=true
+            export NIX_INSTALLER_ENABLE_FLAKES=true
+            curl -sSf -L https://install.lix.systems/lix | sh -s -- install
+
+            echo "access-tokens = github.com=$NIX_GITHUB_TOKEN" | sudo tee -a /etc/nix/nix.conf
+            echo "trusted-users = vagrant" | sudo tee -a /etc/nix/nix.conf
+
+            # Reload daemon after nix.conf file changes
+            sudo launchctl kickstart -k system/org.nixos.nix-daemon || true
+        title: Install Nix
+    - script@1.2.1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            rm -rf $ANDROID_HOME
+            rm -rf /root/asdf
+
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+            git clone https://github.com/NixOS/nixpkgs.git --depth 1 .
+            export GITHUB_TOKEN=$NIX_GITHUB_TOKEN
+            # nix run nixpkgs#nixpkgs-review -- pr 421744
+            sleep 99999
+
+            # nix build github:ofalvai/nixpkgs/push-zzolnwsuprrl#deno \
+            #   --rebuild \
+            #   --print-build-logs \
+            #   --keep-going
+        title: Nix build
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-22.04
+        machine_type_id: g2.linux.7x-large
+  zstd-perf:
+    steps:
+    - script@1:
+        inputs:
+        - content: "#!/bin/bash
+
+            set -eo pipefail
+
+
+            folder=\"large_folder\"
+
+            num_files=218023
+
+            total_size_bytes=$((1800 * 1024 * 1024))  # 1.8 GB in bytes (approx)
+
+            avg_file_size=$(( total_size_bytes / num_files ))  # average bytes
+            per file
+
+
+            echo \"Creating folder $folder ...\"
+
+            mkdir -p \"$folder\"
+
+
+            echo \"Generating $num_files files of approx $avg_file_size bytes
+            each...\"
+
+
+            for ((i=1; i<=num_files; i++)); do
+
+            \    # Create a file with random data of avg_file_size bytes
+
+            \    head -c $avg_file_size </dev/urandom > \"$folder/file_$i.bin\"
+
+            \   \ 
+
+            \    # Small progress display
+
+            \    if (( i % 10000 == 0 )); then
+
+            \        echo \"$i files created...\"
+
+            \    fi
+
+            done
+
+
+            echo \"Finished creating files.\"
+
+
+            archive=\"large_folder.tar.zst\"
+
+
+            echo \"Compressing $folder into $archive using tar and zstd...\"
+
+
+            tar --use-compress-program=zstd -cf \"$archive\" \"$folder\"
+
+
+            echo \"Compression complete: $archive\""
+        title: Compress
+    - script@1:
+        title: Decompress
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -eo pipefail
+
+            archive="large_folder.tar.zst"
+            target_dir="$PWD"
+
+            echo "Extracting $archive to $target_dir ..."
+
+            mkdir -p "$target_dir"
+
+            tar --use-compress-program="zstd -d" -x -f "$archive" -P --directory "$target_dir"
+
+            echo "Extraction complete."
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.2.x
+        machine_type_id: g2.mac.4x-large
+  syft:
+    steps:
+    - generate-text-file@0:
+        inputs:
+        - file_name: ".syft.yaml"
+        - file_content: |-
+            source:
+              base-path: /
+
+            # note: all paths are relative to source.base-path and must start with * or ./
+            exclude:
+            - "./Users/vagrant/Library/Trial/**" # unable to read, even with sudo
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install syft
+
+            sudo SYFT_LOG_LEVEL=info syft scan / \
+                -c $GENERATED_TEXT_FILE_PATH \
+                -o spdx-json=$BITRISE_DEPLOY_DIR/sbom.json \
+                --source-name $BITRISEIO_STACK_ID \
+                --source-version $BITRISE_OSX_STACK_REV_ID
+    - deploy-to-bitrise-io@2: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.4.x
+        machine_type_id: g2.mac.4x-large
+  playground:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # xcrun simctl list
+    - xcode-test-without-building@0:
+        inputs:
+        - xctestrun: "/tmp"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.large
+  macos-hacking:
+    steps:
+    - script@1:
+        inputs:
+        - content: |
+            #!/bin/bash
+
+            set -eo pipefail
+
+            MAX_ITERATIONS=50
+            SLEEP_TIME=1
+            ERROR_MESSAGE="unavailable, liblaunch_sim.dylib could not be opened"
+
+            for i in $(seq 1 $MAX_ITERATIONS); do
+              echo "Attempt $i of $MAX_ITERATIONS..."
+              OUTPUT=$(xcrun simctl list runtimes 2>&1)
+
+              if echo "$OUTPUT" | grep -q "$ERROR_MESSAGE"; then
+                echo "Error detected: '$ERROR_MESSAGE'. Retrying in $SLEEP_TIME second(s)..."
+                sleep $SLEEP_TIME
+              else
+                echo "Error message not found. Exiting loop."
+                exit 0
+              fi
+            done
+
+            echo "Maximum iterations ($MAX_ITERATIONS) reached. The error '$ERROR_MESSAGE' was still present."
+            exit 1
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.medium
+        stack_rollback_version: 2-109-0
