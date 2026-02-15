@@ -17,10 +17,6 @@
 package com.ofalvai.habittracker.core.testing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.platform.app.InstrumentationRegistry
-import android.os.Build
-import androidx.test.rule.GrantPermissionRule
-import org.junit.Before
 import org.junit.Rule
 
 open class BaseInstrumentedTest {
