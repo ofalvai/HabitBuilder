@@ -434,4 +434,19 @@ class HabitMapperTest {
         actions = actions
     )
 
+    @Test
+    fun `Given habit with time When mapped to model Then time is present`() {
+        // Given
+        val time = java.time.LocalTime.of(10, 30)
+        val habitEntity = HabitEntity(0, "Meditation", HabitEntity.Color.Red, 0, false, "Notes", time)
+        val habits = listOf(HabitWithActionsEntity(habitEntity, emptyList()))
+
+        // When
+        val mappedHabitsWithActions = mapHabitEntityToModel(habits)
+
+        // Then
+        val expectedHabit = Habit(0, "Meditation", Habit.Color.Red, "Notes", time)
+        assertEquals(expectedHabit, mappedHabitsWithActions.first().habit)
+    }
+
 }

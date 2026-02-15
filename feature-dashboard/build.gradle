@@ -39,6 +39,8 @@ dependencies {
     androidTestImplementation libs.compose.ui.test
     androidTestImplementation libs.hilt.testing
     androidTestImplementation libs.androidx.room.runtime
+    androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.androidx.uiautomator
     kspAndroidTest libs.hilt.compiler
     debugRuntimeOnly libs.compose.ui.test.manifest
 }

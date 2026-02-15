@@ -27,11 +27,11 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-const val CSV_CONTENT_HABITS = """id,name,color,order,archived,notes
-1,Meditation,Blue,0,false,
-2,Meditation,Yellow,1,false,Notes notes notes
+const val CSV_CONTENT_HABITS = """id,name,color,order,archived,notes,time
+1,Meditation,Blue,0,false,,
+2,Meditation,Yellow,1,false,Notes notes notes,
 3,Meditation,Red,3,true,"Multi-line 
- description"
+ description",
 """
 const val CSV_CONTENT_ACTIONS = """id,habit_id,timestamp
 

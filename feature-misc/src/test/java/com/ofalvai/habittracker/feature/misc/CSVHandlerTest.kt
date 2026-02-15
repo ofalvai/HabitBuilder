@@ -39,11 +39,11 @@ class CSVHandlerTest {
         val csv = CSVHandler.exportHabitList(habits).toString()
 
         // Then
-        val expectedCSV = """id,name,color,order,archived,notes
-1,Meditation,Blue,0,false,
-2,Meditation,Yellow,1,false,Notes notes notes
+        val expectedCSV = """id,name,color,order,archived,notes,time
+1,Meditation,Blue,0,false,,
+2,Meditation,Yellow,1,false,Notes notes notes,
 3,Meditation,Red,3,true,"Multi-line 
- description"
+ description",
 """
         assertEquals(expectedCSV, csv)
     }
@@ -57,7 +57,7 @@ class CSVHandlerTest {
         val csv = CSVHandler.exportHabitList(habits).toString()
 
         // Then
-        val expectedCSV = """id,name,color,order,archived,notes
+        val expectedCSV = """id,name,color,order,archived,notes,time
 """
         assertEquals(expectedCSV, csv)
     }
@@ -170,5 +170,38 @@ class CSVHandlerTest {
 
         // Then
         assertEquals(emptyList<Action>(), actionList)
+    }
+
+    @Test
+    fun `Habit list with time export test`() {
+        // Given
+        val habits = listOf(
+            Habit(1, "Meditation", Habit.Color.Blue, 0, false, "", java.time.LocalTime.of(10, 30))
+        )
+
+        // When
+        val csv = CSVHandler.exportHabitList(habits).toString()
+
+        // Then
+        val expectedCSV = """id,name,color,order,archived,notes,time
+1,Meditation,Blue,0,false,,10:30
+"""
+        assertEquals(expectedCSV, csv)
+    }
+
+    @Test
+    fun `Habit list with time import test`() {
+        // Given
+        val csv = """id,name,color,order,archived,notes,time
+1,Meditation,Blue,0,false,,10:30
+"""
+        // When
+        val habitList = CSVHandler.importHabitList(StringReader(csv))
+
+        // Then
+        val expectedHabitList = listOf(
+            Habit(1, "Meditation", Habit.Color.Blue, 0, false, "", java.time.LocalTime.of(10, 30))
+        )
+        assertEquals(expectedHabitList, habitList)
     }
 }

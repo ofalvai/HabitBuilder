@@ -30,7 +30,8 @@ fun HabitEntity.toModel() = Habit(
     id = id,
     name = name,
     color = color.toModelColor(),
-    notes = notes
+    notes = notes,
+    time = time
 )
 
 fun HabitEntity.Color.toModelColor(): Habit.Color = when (this) {

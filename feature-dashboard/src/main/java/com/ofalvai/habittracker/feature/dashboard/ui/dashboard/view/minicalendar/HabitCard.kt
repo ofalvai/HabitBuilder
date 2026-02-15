@@ -40,6 +40,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -49,6 +50,8 @@ import androidx.compose.ui.zIndex
 import androidx.core.content.getSystemService
 import com.ofalvai.habittracker.core.common.VIBRATE_PATTERN_TOGGLE
 import com.ofalvai.habittracker.core.model.Action
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import com.ofalvai.habittracker.core.model.Habit
 import com.ofalvai.habittracker.core.model.HabitId
 import com.ofalvai.habittracker.core.ui.semantics.habitActionSemantics
@@ -86,10 +89,22 @@ fun HabitCard(
             .draggableCard(dragOffset),
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-            Text(
-                text = habit.name,
-                style = AppTextStyle.habitTitle
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = habit.name,
+                    style = AppTextStyle.habitTitle
+                )
+                if (habit.time != null) {
+                    val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+                    Text(
+                        text = habit.time!!.format(timeFormatter),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth().padding(top = 12.dp),

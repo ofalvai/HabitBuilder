@@ -48,6 +48,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     minSdk = Constants.MIN_SDK
                 }
 
+                testOptions {
+                    targetSdk = Constants.TARGET_SDK
+                }
+
                 compileOptions {
                     setJvmTargets()
                 }

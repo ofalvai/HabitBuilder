@@ -25,12 +25,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SuggestionChip
@@ -40,6 +42,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -47,6 +50,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.ofalvai.habittracker.core.model.Habit
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import com.ofalvai.habittracker.core.ui.component.AppDefaultAppBar
 import com.ofalvai.habittracker.core.ui.component.HabitColorPicker
 import com.ofalvai.habittracker.core.ui.component.TextFieldError
@@ -73,18 +79,20 @@ fun AddHabitScreen(viewModel: AddHabitViewModel, navigateBack: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddHabitForm(
-    onSave: (Habit) -> Unit
+    onSave: (Habit) -> Unit,
+    initialTime: LocalTime? = null
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var notes by rememberSaveable { mutableStateOf("") }
     var color by rememberSaveable { mutableStateOf(Habit.DEFAULT_COLOR) }
+    var time by remember { mutableStateOf(initialTime) }
     var isNameValid by remember { mutableStateOf(true) }
 
     val onSaveClick: () -> Unit = {
         if (name.isEmpty()) {
             isNameValid = false
         } else {
-            val habit = Habit(0, name, color, notes)
+            val habit = Habit(0, name, color, notes, time)
             onSave(habit)
         }
     }
@@ -148,6 +156,36 @@ fun AddHabitForm(
             text = stringResource(R.string.addhabit_notes_description),
             style = MaterialTheme.typography.bodySmall
         )
+
+        val context = LocalContext.current
+        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+
+        Row(
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    val pickerInitialTime = time ?: LocalTime.now()
+                    android.app.TimePickerDialog(
+                        context,
+                        { _, hour, minute -> time = LocalTime.of(hour, minute) },
+                        pickerInitialTime.hour,
+                        pickerInitialTime.minute,
+                        android.text.format.DateFormat.is24HourFormat(context)
+                    ).show()
+                }
+            ) {
+                Text(text = time?.format(timeFormatter) ?: "Set time (optional)")
+            }
+
+            if (time != null) {
+                OutlinedButton(onClick = { time = null }) {
+                    Icon(Icons.Rounded.Close, contentDescription = stringResource(coreR.string.common_clear))
+                }
+            }
+        }
 
         HabitColorPicker(color = color, onColorPick = { color = it })
 

@@ -22,6 +22,7 @@ import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import java.io.Reader
 import java.time.Instant
+import java.time.LocalTime
 
 private val FORMAT = CSVFormat.DEFAULT
     .builder()
@@ -39,10 +40,10 @@ internal object CSVHandler {
     fun exportHabitList(habits: List<Habit>): StringBuilder {
         val stringBuilder = StringBuilder()
         val printer = CSVPrinter(stringBuilder, FORMAT)
-        printer.printRecord("id", "name", "color", "order", "archived", "notes")
+        printer.printRecord("id", "name", "color", "order", "archived", "notes", "time")
 
         habits.forEach {
-            printer.printRecord(it.id, it.name, it.color, it.order, it.archived, it.notes)
+            printer.printRecord(it.id, it.name, it.color, it.order, it.archived, it.notes, it.time?.toString())
         }
 
         return stringBuilder
@@ -62,13 +63,17 @@ internal object CSVHandler {
 
     fun importHabitList(csvReader: Reader): List<Habit> {
         val habits = FORMAT.builder().setHeader().build().parse(csvReader).map {
+            val timeString = if (it.isMapped("time")) it.get("time") else null
+            val time = if (timeString.isNullOrBlank()) null else LocalTime.parse(timeString)
+
             Habit(
                 id = it.get("id").toInt(),
                 name = it.get("name"),
                 color = Habit.Color.valueOf(it.get("color")),
                 order = it.get("order").toInt(),
                 archived = it.get("archived").toBoolean(),
-                notes = it.get("notes")
+                notes = it.get("notes"),
+                time = time
             )
         }
         return habits

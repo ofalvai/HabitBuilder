@@ -27,6 +27,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,8 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -109,10 +112,22 @@ fun HabitCard(
             .draggableCard(dragOffset),
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-            Text(
-                text = habit.name,
-                style = AppTextStyle.habitTitle
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = habit.name,
+                    style = AppTextStyle.habitTitle
+                )
+                if (habit.time != null) {
+                    val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+                    Text(
+                        text = habit.time!!.format(timeFormatter),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
 
             ActionHistoryLabel(totalActionCount, actionHistory)
 
