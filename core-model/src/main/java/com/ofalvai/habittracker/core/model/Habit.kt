@@ -17,6 +17,7 @@
 package com.ofalvai.habittracker.core.model
 
 import androidx.compose.runtime.Immutable
+import java.time.LocalTime
 
 typealias HabitId = Int
 
@@ -25,7 +26,8 @@ data class Habit(
     val id: HabitId = 0,
     val name: String,
     val color: Color,
-    val notes: String
+    val notes: String,
+    val time: LocalTime? = null
 ) {
 
     companion object {

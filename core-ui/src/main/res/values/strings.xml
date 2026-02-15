@@ -24,6 +24,7 @@
     <string name="common_something_went_wrong">Something went wrong</string>
     <string name="common_empty">Empty</string>
     <string name="common_cancel">Cancel</string>
+    <string name="common_clear">Clear</string>
     <string name="common_interpunct">%1$s · %2$s</string>
 
     <string name="menu_settings">Settings</string>

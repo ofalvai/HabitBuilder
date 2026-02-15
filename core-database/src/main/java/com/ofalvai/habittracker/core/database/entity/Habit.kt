@@ -18,6 +18,7 @@ package com.ofalvai.habittracker.core.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalTime
 
 typealias HabitId = Int
 
@@ -28,7 +29,8 @@ data class Habit(
     val color: Color,
     val order: Int,
     val archived: Boolean,
-    val notes: String
+    val notes: String,
+    val time: LocalTime? = null
 ) {
 
     enum class Color {

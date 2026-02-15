@@ -91,7 +91,7 @@ class HabitDetailViewModel @Inject constructor(
 
                     // TODO: unify this with the regular mapping (where empty day action are filled)
                     HabitWithActions(
-                        Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor(), it.habit.notes),
+                        Habit(it.habit.id, it.habit.name, it.habit.color.toUIColor(), it.habit.notes, it.habit.time),
                         it.actions.map { action ->
                             Action(action.id, toggled = true, timestamp = action.timestamp)
                         }.toImmutableList(),

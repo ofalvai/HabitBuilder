@@ -50,4 +50,10 @@ class EntityTypeConverters {
         // then everything blows up in August...
         return Month.of(monthString.toInt())
     }
+
+    @TypeConverter
+    fun toLocalTime(timeString: String?): java.time.LocalTime? = if (timeString == null) null else java.time.LocalTime.parse(timeString)
+
+    @TypeConverter
+    fun fromLocalTime(localTime: java.time.LocalTime?): String? = localTime?.toString()
 }

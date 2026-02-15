@@ -34,6 +34,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 import java.time.Instant
+import java.time.LocalTime
 
 @RunWith(AndroidJUnit4::class)
 class HabitEntityTest : BaseInstrumentedTest() {
@@ -75,6 +76,25 @@ class HabitEntityTest : BaseInstrumentedTest() {
 
         val habits = habitDao.getHabits()
         val expected = listOf(newHabit1.copy(id = 1), newHabit2.copy(id = 2))
+        assertEquals(expected, habits)
+    }
+
+    @Test
+    fun insertAndReadHabitWithTime() = runTest {
+        val time = LocalTime.of(14, 30)
+        val newHabit = Habit(
+            name = "Habit with time",
+            color = Habit.Color.Blue,
+            order = 0,
+            archived = false,
+            notes = "",
+            time = time
+        )
+
+        habitDao.insertHabits(listOf(newHabit))
+
+        val habits = habitDao.getHabits()
+        val expected = listOf(newHabit.copy(id = 1))
         assertEquals(expected, habits)
     }
 

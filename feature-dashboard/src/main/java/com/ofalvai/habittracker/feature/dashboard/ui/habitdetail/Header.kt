@@ -26,6 +26,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,6 +39,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.platform.LocalContext
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -138,11 +144,14 @@ private fun HabitHeaderEditingContent(
     var editingColor by remember(habitDetails.habit.color) {
         mutableStateOf(habitDetails.habit.color)
     }
+    var editingTime by remember(habitDetails.habit.time) {
+        mutableStateOf(habitDetails.habit.time)
+    }
     var isNameValid by remember { mutableStateOf(true) }
     val onSaveClick = {
         if (isNameValid) {
             val newValue = habitDetails.habit.copy(
-                name = editingName, color = editingColor, notes = editingNotes
+                name = editingName, color = editingColor, notes = editingNotes, time = editingTime
             )
             onSave(newValue)
         }
@@ -177,6 +186,37 @@ private fun HabitHeaderEditingContent(
                 capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.None
             )
         )
+
+        val context = LocalContext.current
+        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+
+        Row(
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp).fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    val initialTime = editingTime ?: LocalTime.now()
+                    android.app.TimePickerDialog(
+                        context,
+                        { _, hour, minute -> editingTime = LocalTime.of(hour, minute) },
+                        initialTime.hour,
+                        initialTime.minute,
+                        android.text.format.DateFormat.is24HourFormat(context)
+                    ).show()
+                }
+            ) {
+                Text(text = editingTime?.format(timeFormatter) ?: "Set time (optional)")
+            }
+
+            if (editingTime != null) {
+                OutlinedButton(onClick = { editingTime = null }) {
+                    Icon(Icons.Rounded.Close, contentDescription = stringResource(coreR.string.common_clear))
+                }
+            }
+        }
+
         HabitColorPicker(
             color = editingColor,
             onColorPick = { editingColor = it }
@@ -210,6 +250,15 @@ private fun HabitHeaderContent(
                     if (habitDetails.habit.notes.isNotBlank()) {
                         Text(
                             text = habitDetails.habit.notes,
+                            modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    if (habitDetails.habit.time != null) {
+                        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+                        Text(
+                            text = habitDetails.habit.time!!.format(timeFormatter),
                             modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(),
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center

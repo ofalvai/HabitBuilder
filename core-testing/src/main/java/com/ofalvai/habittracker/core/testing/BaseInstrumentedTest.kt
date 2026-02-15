@@ -26,4 +26,5 @@ open class BaseInstrumentedTest {
      */
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
+
 }

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "3e6d9eda6f4aeeef34fb460a453c412e",
+    "identityHash": "6663b70081b9cf91c7d9b8ab172cc81c",
     "entities": [
       {
         "tableName": "Habit",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `color` TEXT NOT NULL, `order` INTEGER NOT NULL, `archived` INTEGER NOT NULL, `notes` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `color` TEXT NOT NULL, `order` INTEGER NOT NULL, `archived` INTEGER NOT NULL, `notes` TEXT NOT NULL, `time` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -43,6 +43,12 @@
             "columnName": "notes",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -112,7 +118,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3e6d9eda6f4aeeef34fb460a453c412e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6663b70081b9cf91c7d9b8ab172cc81c')"
     ]
   }
 }
